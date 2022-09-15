@@ -79,7 +79,7 @@ public final class Config {
     }
 
     public String getServiceIdHeaderName(String serviceName) {
-        return "X-Pangea-" + serviceName + "-Id";
+        return "X-Pangea-" + Character.toTitleCase(serviceName.charAt(0)) + serviceName.substring(1) + "-Config-Id";
     }
 
     public static Config fromEnvironment(String serviceName) {

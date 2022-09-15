@@ -5,6 +5,11 @@
 mvn compile
 ```
 
+## unit tests
+```
+mvn test
+```
+
 ## Integration tests
 
 ```

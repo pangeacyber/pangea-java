@@ -1,4 +1,4 @@
-package cloud.pangeacyber.pangea;
+package cloud.pangeacyber.pangea.enbargo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -8,14 +8,13 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.embargo.EmbargoClient;
 import cloud.pangeacyber.pangea.embargo.EmbargoSanction;
 import cloud.pangeacyber.pangea.embargo.EmbargoSanctions;
 
 
-/**
- * Unit test for simple App.
- */
 public class ITEmbargoTest 
 {
     EmbargoClient client;
@@ -26,7 +25,7 @@ public class ITEmbargoTest
     }
 
     @Test
-    public void isoCheckSanctionedCountry() throws IOException, InterruptedException {
+    public void testIsoCheckSanctionedCountry() throws IOException, InterruptedException {
         Response<EmbargoSanctions> response;
         response = client.isoCheck("CU");
 
@@ -40,7 +39,7 @@ public class ITEmbargoTest
     }
 
     @Test
-    public void isoCheckNoSanctionedCountry() throws IOException, InterruptedException {
+    public void testIsoCheckNoSanctionedCountry() throws IOException, InterruptedException {
         Response<EmbargoSanctions> response;
         response = client.isoCheck("AR");
 

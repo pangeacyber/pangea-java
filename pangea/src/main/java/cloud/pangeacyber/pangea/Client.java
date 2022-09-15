@@ -11,28 +11,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class Client {
     Config config;
-    HttpClient client;
+    HttpClient httpClient;
+    Builder httpRequestBuilder;
     String serviceName;
 
+
     protected Client(Config config, String serviceName) {
-        this.config = config;
-        this.client = getClient();
         this.serviceName = serviceName;
+        this.config = config;
+        this.httpClient = buildClient();
     }
 
-    private HttpClient getClient() {
-        
-        HttpClient client = HttpClient.newBuilder()
-            //.connectTimeout(Duration.ofSeconds(config.connectionTimeout)) // TODO
-            .build();
-        return client;
+    protected HttpClient buildClient() {
+        java.net.http.HttpClient.Builder builder = HttpClient.newBuilder();
+        if (config.connectionTimeout != null) {
+            builder.connectTimeout(config.connectionTimeout);
+        }
+        return builder.build();
     }
 
-    public <Req, ResponseType extends Response<?>> ResponseType doPost(String path, Req request, Class<ResponseType> responseClass) throws IOException, InterruptedException {
-        ObjectMapper mapper = new ObjectMapper();
-        String body = mapper.writeValueAsString(request);
-                
-        Builder builder = HttpRequest.newBuilder()
+    protected HttpRequest buildPostRequest(String path, String body) {
+        Builder builder = HttpRequest.newBuilder();
+        fillPostRequestBuilder(builder, path, body);
+        return builder.build();
+    }
+
+    protected void fillPostRequestBuilder(HttpRequest.Builder builder, String path, String body) {
+        builder
             .uri(config.getServiceUrl(serviceName, path))
             .header("Authorization", "Bearer " + config.getToken())
             .POST(HttpRequest.BodyPublishers.ofString(body));
@@ -40,10 +45,14 @@ public abstract class Client {
         if (config.getConfigId() != "") {
             builder = builder.header(config.getServiceIdHeaderName(serviceName), config.getConfigId());
         }
+    }
 
-        HttpRequest httpRequest = builder.build();
-        
-        HttpResponse<String> httpResponse = client.send(httpRequest, BodyHandlers.ofString());
+    public <Req, ResponseType extends Response<?>> ResponseType doPost(String path, Req request, Class<ResponseType> responseClass) throws IOException, InterruptedException {
+        ObjectMapper mapper = new ObjectMapper();
+        String body = mapper.writeValueAsString(request);
+
+        HttpRequest httpRequest = buildPostRequest(path, body);
+        HttpResponse<String> httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());
         body = httpResponse.body();
         ResponseType response =  mapper.readValue(body, responseClass);
         response.setHttpResponse(httpResponse);

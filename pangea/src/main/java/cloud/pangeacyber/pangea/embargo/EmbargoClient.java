@@ -2,6 +2,8 @@ package cloud.pangeacyber.pangea.embargo;
 
 import java.io.IOException;
 
+import javax.crypto.spec.IvParameterSpec;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cloud.pangeacyber.pangea.Client;
@@ -17,7 +19,17 @@ final class IsoCheckRequest {
     }
 }
 
+final class IpCheckRequest{
+    @JsonProperty("ip")
+    String ip;
+    
+    public IpCheckRequest(String ip) {
+        this.ip = ip;
+    }
+}
+
 final class IsoCheckResponse extends Response<EmbargoSanctions> {}
+final class IpCheckResponse extends Response<EmbargoSanctions> {}
 
 public class EmbargoClient extends Client {
     public static String serviceName = "embargo";
@@ -31,4 +43,11 @@ public class EmbargoClient extends Client {
         IsoCheckResponse resp = doPost("/v1/iso/check", request, IsoCheckResponse.class);
         return resp;
     }
+
+    public IpCheckResponse ipCheck(String ip) throws IOException, InterruptedException {
+        IpCheckRequest request = new IpCheckRequest(ip);
+        IpCheckResponse resp = doPost("/v1/ip/check", request, IpCheckResponse.class);
+        return resp;
+    }
+
 }

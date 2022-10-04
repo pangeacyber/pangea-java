@@ -2,6 +2,7 @@ package cloud.pangeacyber.pangea;
 
 import java.net.URI;
 import java.time.Duration;
+import cloud.pangeacyber.pangea.exceptions.ConfigException;
 
 public final class Config {
 	// The Bearer token used to authenticate requests.
@@ -82,10 +83,22 @@ public final class Config {
         return "X-Pangea-" + Character.toTitleCase(serviceName.charAt(0)) + serviceName.substring(1) + "-Config-Id";
     }
 
-    public static Config fromEnvironment(String serviceName) {
+    public static Config fromEnvironment(String serviceName) throws ConfigException{
         String token = System.getenv("PANGEA_TOKEN");
+        if(token == null || token.isEmpty()){
+            throw new ConfigException("Need to set up PANGEA_TOKEN environment variable");
+        }
+
         String configId = System.getenv(String.format("PANGEA_%s_CONFIG_ID", serviceName.toUpperCase()));
+        if(configId == null || configId.isEmpty()){
+            String envVarName = String.format("PANGEA_%s_CONFIG_ID", serviceName.toUpperCase());
+            throw new ConfigException(String.format("Need to set up %s environment variable", envVarName));
+        }
+
         String domain = System.getenv("PANGEA_DOMAIN");
+        if(domain == null || domain.isEmpty()){
+            throw new ConfigException("Need to set up PANGEA_DOMAIN environment variable");
+        }
 
         Config config = new Config(token, configId, domain);
         return config;

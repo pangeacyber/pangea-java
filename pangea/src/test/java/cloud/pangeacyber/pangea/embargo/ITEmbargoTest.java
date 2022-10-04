@@ -1,4 +1,4 @@
-package cloud.pangeacyber.pangea.enbargo;
+package cloud.pangeacyber.pangea.embargo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,9 +10,7 @@ import org.junit.Test;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Response;
-import cloud.pangeacyber.pangea.embargo.EmbargoClient;
-import cloud.pangeacyber.pangea.embargo.EmbargoSanction;
-import cloud.pangeacyber.pangea.embargo.EmbargoSanctions;
+import cloud.pangeacyber.pangea.exceptions.ConfigException;
 
 
 public class ITEmbargoTest 
@@ -21,7 +19,14 @@ public class ITEmbargoTest
 
     @Before
     public void setUp() {
-        client = new EmbargoClient(Config.fromEnvironment(EmbargoClient.serviceName));
+        Config config = null;
+        try{
+            config = Config.fromEnvironment(EmbargoClient.serviceName);    
+        } catch(ConfigException e){
+            System.out.println("Exception: " + e.toString());
+            assertTrue(false);
+        }
+        client = new EmbargoClient(config);
     }
 
     @Test
@@ -40,13 +45,30 @@ public class ITEmbargoTest
 
     @Test
     public void testIsoCheckNoSanctionedCountry() throws IOException, InterruptedException {
-        Response<EmbargoSanctions> response;
+        IsoCheckResponse response;
         response = client.isoCheck("AR");
 
         assertTrue(response.isOk());
 
         EmbargoSanctions result = response.getResult();
         assertTrue(result.getCount() == 0);
+    }
+
+    @Test
+    public void testIpCheckSanctionedCountry() throws IOException, InterruptedException {
+        IpCheckResponse response;
+        response = client.ipCheck("213.24.238.26");
+
+        assertTrue(response.isOk());
+
+        EmbargoSanctions result = response.getResult();
+        assertTrue(result.getCount() > 0);
+
+        EmbargoSanction sanction = result.getSanctions().elementAt(0);
+        assertEquals("Russia", sanction.getEmbargoedCountryName());
+        assertEquals("RU", sanction.getEmbargoedCountryISOCode());
+        assertEquals("US", sanction.getIssuingCountry());
+        assertEquals("ITAR", sanction.getListName());
     }
 
 }

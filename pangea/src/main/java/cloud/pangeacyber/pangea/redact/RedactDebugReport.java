@@ -1,17 +1,17 @@
 package cloud.pangeacyber.pangea.redact;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RedactDebugReport {
     @JsonProperty("summary_counts")
-    LinkedHashMap<String, Integer> summaryCounts;
+    Map<String, Integer> summaryCounts;
 
     @JsonProperty("recognizer_results")
     RedactRecognizerResult[] recognizerResults;
 
-    public LinkedHashMap<String, Integer> getSummaryCounts() {
+    public Map<String, Integer> getSummaryCounts() {
         return summaryCounts;
     }
 

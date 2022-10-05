@@ -22,15 +22,8 @@ public class ITRedactTest
     RedactClient client;
 
     @Before
-    public void setUp() {
-        Config config = null;
-        try{
-            config = Config.fromEnvironment(RedactClient.serviceName);
-        } catch(ConfigException e){
-            System.out.println("Exception: " + e.toString());
-            assertTrue(false);
-        }
-        client = new RedactClient(config);
+    public void setUp() throws ConfigException {
+        client = new RedactClient(Config.fromEnvironment(RedactClient.serviceName));
     }
 
     @Test

@@ -15,15 +15,8 @@ public class ITFileIntelTest {
     FileIntelClient client;
 
     @Before
-    public void setUp() {
-        Config config = null;
-        try{
-            config = Config.fromEnvironment("file_intel");    
-        } catch(ConfigException e){
-            System.out.println("Exception: " + e.toString());
-            assertTrue(false);
-        }
-        client = new FileIntelClient(config);
+    public void setUp() throws ConfigException{
+        client = new FileIntelClient(Config.fromEnvironment("file_intel"));
     }
 
     @Test

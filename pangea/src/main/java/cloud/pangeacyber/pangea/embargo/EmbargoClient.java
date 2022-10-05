@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Response;
+import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 
 final class IsoCheckRequest {
     @JsonProperty("iso_code")
@@ -36,13 +37,13 @@ public class EmbargoClient extends Client {
         super(config, serviceName);
     }
 
-    public IsoCheckResponse isoCheck(String isoCode) throws IOException, InterruptedException {
+    public IsoCheckResponse isoCheck(String isoCode) throws IOException, InterruptedException, PangeaAPIException{
         IsoCheckRequest request = new IsoCheckRequest(isoCode);
         IsoCheckResponse resp = doPost("/v1/iso/check", request, IsoCheckResponse.class);
         return resp;
     }
 
-    public IpCheckResponse ipCheck(String ip) throws IOException, InterruptedException {
+    public IpCheckResponse ipCheck(String ip) throws IOException, InterruptedException, PangeaAPIException{
         IpCheckRequest request = new IpCheckRequest(ip);
         IpCheckResponse resp = doPost("/v1/ip/check", request, IpCheckResponse.class);
         return resp;

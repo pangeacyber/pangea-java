@@ -6,8 +6,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpResponse.BodyHandlers;
+import cloud.pangeacyber.pangea.exceptions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+final class ResponseRawResult extends Response<Object> {}
 
 public abstract class Client {
     Config config;
@@ -47,15 +50,54 @@ public abstract class Client {
         }
     }
 
-    public <Req, ResponseType extends Response<?>> ResponseType doPost(String path, Req request, Class<ResponseType> responseClass) throws IOException, InterruptedException {
+    public <Req, ResponseType extends Response<?>> ResponseType doPost(String path, Req request, Class<ResponseType> responseClass) throws IOException, InterruptedException, PangeaAPIException {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(request);
 
         HttpRequest httpRequest = buildPostRequest(path, body);
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());
-        body = httpResponse.body();
-        ResponseType response =  mapper.readValue(body, responseClass);
-        response.setHttpResponse(httpResponse);
-        return response;
+
+        return checkResponse(httpResponse, responseClass);
     }
+
+    private <ResponseType extends Response<?>> ResponseType checkResponse(HttpResponse<String> httpResponse, Class<ResponseType> responseClass) throws IOException, InterruptedException, PangeaAPIException {
+        String body = httpResponse.body();
+        ObjectMapper mapper = new ObjectMapper();
+        ResponseHeader header =  mapper.readValue(body, ResponseHeader.class);
+
+        if(header.isOk()){
+            ResponseType response =  mapper.readValue(body, responseClass);
+            response.setHttpResponse(httpResponse);
+            return response;
+        }
+
+        // Process error
+        String summary = header.getSummary();
+        String status = header.getStatus();
+        ResponseError response =  mapper.readValue(body, ResponseError.class);
+        response.setHttpResponse(httpResponse);
+
+        if( status.equals(ResponseStatus.VALIDATION_ERR.toString())){
+            throw new ValidationException(summary, response);
+        } else if( status.equals(ResponseStatus.TOO_MANY_REQUESTS.toString())) {
+            throw new RateLimitException(summary, response);
+        } else if( status.equals(ResponseStatus.NO_CREDIT.toString())) {
+            throw new NoCreditException(summary, response);
+        } else if( status.equals(ResponseStatus.UNAUTHORIZED.toString())) {
+            throw new UnauthorizedException(this.serviceName, response);
+        } else if( status.equals(ResponseStatus.SERVICE_NOT_ENABLED.toString())) {
+            throw new ServiceNotEnabledException(this.serviceName, response);
+        } else if( status.equals(ResponseStatus.PROVIDER_ERR.toString())) {
+            throw new ProviderErrorException(summary, response);
+        } else if( status.equals(ResponseStatus.MISSING_CONFIG_ID_SCOPE.toString()) || status.equals(ResponseStatus.MISSING_CONFIG_ID.toString())) {
+            throw new MissingConfigID(this.serviceName, response);
+        } else if( status.equals(ResponseStatus.SERVICE_NOT_AVAILABLE.toString())) {
+            throw new ServiceNotAvailableException(summary, response);
+        } else if( status.equals(ResponseStatus.IP_NOT_FOUND.toString())) {
+            throw new EmbargoIPNotFoundException(summary, response);
+        } else {
+            throw new PangeaAPIException(String.format("%s: %s", status, summary), response);
+        }
+    }
+
 }

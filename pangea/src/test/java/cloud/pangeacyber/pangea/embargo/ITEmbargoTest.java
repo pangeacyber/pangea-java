@@ -11,6 +11,8 @@ import org.junit.Test;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
+import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
+import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
 public class ITEmbargoTest 
@@ -18,19 +20,12 @@ public class ITEmbargoTest
     EmbargoClient client;
 
     @Before
-    public void setUp() {
-        Config config = null;
-        try{
-            config = Config.fromEnvironment(EmbargoClient.serviceName);    
-        } catch(ConfigException e){
-            System.out.println("Exception: " + e.toString());
-            assertTrue(false);
-        }
-        client = new EmbargoClient(config);
+    public void setUp() throws ConfigException{
+        client = new EmbargoClient(Config.fromEnvironment(EmbargoClient.serviceName));
     }
 
     @Test
-    public void testIsoCheckSanctionedCountry() throws IOException, InterruptedException {
+    public void testIsoCheckSanctionedCountry() throws IOException, InterruptedException, PangeaAPIException {
         Response<EmbargoSanctions> response;
         response = client.isoCheck("CU");
 
@@ -44,7 +39,7 @@ public class ITEmbargoTest
     }
 
     @Test
-    public void testIsoCheckNoSanctionedCountry() throws IOException, InterruptedException {
+    public void testIsoCheckNoSanctionedCountry() throws IOException, InterruptedException, PangeaAPIException{
         IsoCheckResponse response;
         response = client.isoCheck("AR");
 
@@ -55,7 +50,7 @@ public class ITEmbargoTest
     }
 
     @Test
-    public void testIpCheckSanctionedCountry() throws IOException, InterruptedException {
+    public void testIpCheckSanctionedCountry() throws IOException, InterruptedException, PangeaAPIException{
         IpCheckResponse response;
         response = client.ipCheck("213.24.238.26");
 
@@ -69,6 +64,11 @@ public class ITEmbargoTest
         assertEquals("RU", sanction.getEmbargoedCountryISOCode());
         assertEquals("US", sanction.getIssuingCountry());
         assertEquals("ITAR", sanction.getListName());
+    }
+
+    @Test(expected = ValidationException.class)
+    public void testEmptyIP() throws IOException, InterruptedException, PangeaAPIException {
+        IpCheckResponse response = client.ipCheck("");
     }
 
 }

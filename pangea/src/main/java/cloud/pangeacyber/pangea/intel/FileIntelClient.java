@@ -51,28 +51,25 @@ public class FileIntelClient extends Client{
         super(config, serviceName);
     }
 
-    private FileLookupResponse intelPost(FileLookupRequest request) throws IOException, InterruptedException, PangeaAPIException {
+    private FileLookupResponse lookupPost(String hash, String hashType, String provider, Boolean verbose, Boolean raw) throws IOException, InterruptedException, PangeaAPIException {
+        FileLookupRequest request = new FileLookupRequest(hash, hashType, provider, verbose, raw);
         FileLookupResponse resp = doPost("/v1/lookup", request, FileLookupResponse.class);
         return resp;
     }
 
     public FileLookupResponse lookup(String hash, String hashType) throws IOException, InterruptedException, PangeaAPIException {
-        FileLookupRequest request = new FileLookupRequest(hash, hashType, null, null, null);
-        return intelPost(request);
+        return lookupPost(hash, hashType, null, null, null);
     }
 
     public FileLookupResponse lookup(String hash, String hashType, String provider) throws IOException, InterruptedException, PangeaAPIException {
-        FileLookupRequest request = new FileLookupRequest(hash, hashType, provider, null, null);
-        return intelPost(request);
+        return lookupPost(hash, hashType, provider, null, null);
     }
 
     public FileLookupResponse lookup(String hash, String hashType, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaAPIException {
-        FileLookupRequest request = new FileLookupRequest(hash, hashType, null, verbose, raw);
-        return intelPost(request);
+        return lookupPost(hash, hashType, null, verbose, raw);
     }
 
     public FileLookupResponse lookup(String hash, String hashType, String provider, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaAPIException {
-        FileLookupRequest request = new FileLookupRequest(hash, hashType, provider, verbose, raw);
-        return intelPost(request);
+        return lookupPost(hash, hashType, provider, verbose, raw);
     }
 }

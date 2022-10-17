@@ -47,28 +47,25 @@ public class UrlIntelClient extends Client{
         super(config, serviceName);
     }
 
-    private UrlLookupResponse intelPost(UrlLookupRequest request) throws IOException, InterruptedException, PangeaAPIException {
+    private UrlLookupResponse lookupPost(String url, String provider, Boolean verbose, Boolean raw) throws IOException, InterruptedException, PangeaAPIException {
+        UrlLookupRequest request = new UrlLookupRequest(url, provider, verbose, raw);
         UrlLookupResponse resp = doPost("/v1/lookup", request, UrlLookupResponse.class);
         return resp;
     }
 
     public UrlLookupResponse lookup(String url) throws IOException, InterruptedException, PangeaAPIException {
-        UrlLookupRequest request = new UrlLookupRequest(url, null, null, null);
-        return intelPost(request);
+        return lookupPost(url, null, null, null);
     }
 
     public UrlLookupResponse lookup(String url, String provider) throws IOException, InterruptedException, PangeaAPIException {
-        UrlLookupRequest request = new UrlLookupRequest(url, provider, null, null);
-        return intelPost(request);
+        return lookupPost(url, provider, null, null);
     }
 
-    public UrlLookupResponse lookup(String url, Boolean verbose, Boolean raw) throws IOException, InterruptedException, PangeaAPIException {
-        UrlLookupRequest request = new UrlLookupRequest(url, null, verbose, raw);
-        return intelPost(request);
+    public UrlLookupResponse lookup(String url, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaAPIException {
+        return lookupPost(url, null, verbose, raw);
     }
 
-    public UrlLookupResponse lookup(String url, String provider, Boolean verbose, Boolean raw) throws IOException, InterruptedException, PangeaAPIException {
-        UrlLookupRequest request = new UrlLookupRequest(url, provider, verbose, raw);
-        return intelPost(request);
+    public UrlLookupResponse lookup(String url, String provider, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaAPIException {
+        return lookupPost(url, provider, verbose, raw);
     }
 }

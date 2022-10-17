@@ -60,49 +60,44 @@ public class RedactClient extends Client {
         super(config, serviceName);
     }
 
-    private RedactTextResponse redactPost(TextRequest request)  throws IOException, InterruptedException, PangeaAPIException{
+    private RedactTextResponse redactPost(String text, Boolean debug)  throws IOException, InterruptedException, PangeaAPIException{
+        TextRequest request = new TextRequest(text, debug);
         RedactTextResponse resp = doPost("/v1/redact", request, RedactTextResponse.class);
         return resp;
     }
 
-    private RedactStructuredResponse structuredPost(StructuredRequest request)  throws IOException, InterruptedException, PangeaAPIException{
+    private RedactStructuredResponse structuredPost(Map<String, Object> data, String format, Boolean debug, String[] jsonp)  throws IOException, InterruptedException, PangeaAPIException{
+        StructuredRequest request = new StructuredRequest(data, jsonp, null, debug);
         RedactStructuredResponse resp = doPost("/v1/redact_structured", request, RedactStructuredResponse.class);
         return resp;
     }
 
     public RedactTextResponse redactText(String text) throws IOException, InterruptedException, PangeaAPIException{
-        TextRequest request = new TextRequest(text, null);
-        return redactPost(request);
+        return redactPost(text, null);
     }
 
     public RedactTextResponse redactText(String text, boolean debug) throws IOException, InterruptedException, PangeaAPIException {
-        TextRequest request = new TextRequest(text, debug);
-        return redactPost(request);
+        return redactPost(text, debug);
     }
 
     public RedactStructuredResponse redactStructured(Map<String, Object> data) throws IOException, InterruptedException, PangeaAPIException{
-        StructuredRequest request = new StructuredRequest(data, null, null, null);
-        return structuredPost(request);
+        return structuredPost(data, null, null, null);
     }
 
     public RedactStructuredResponse redactStructured(Map<String, Object> data, String format) throws IOException, InterruptedException, PangeaAPIException{
-        StructuredRequest request = new StructuredRequest(data, null, format, null);
-        return structuredPost(request);
+        return structuredPost(data, format, null, null);
     }
 
     public RedactStructuredResponse redactStructured(Map<String, Object> data, boolean debug) throws IOException, InterruptedException, PangeaAPIException{
-        StructuredRequest request = new StructuredRequest(data, null, null, debug);
-        return structuredPost(request);
+        return structuredPost(data, null, debug, null);
     }
 
     public RedactStructuredResponse redactStructured(Map<String, Object> data, String format, boolean debug) throws IOException, InterruptedException, PangeaAPIException{
-        StructuredRequest request = new StructuredRequest(data, null, format, debug);
-        return structuredPost(request);
+        return structuredPost(data, format, debug, null);
     }
 
     public RedactStructuredResponse redactStructured(Map<String, Object> data, boolean debug, String[] jsonp) throws IOException, InterruptedException, PangeaAPIException{
-        StructuredRequest request = new StructuredRequest(data, jsonp, null, debug);
-        return structuredPost(request);
+        return structuredPost(data, null, debug, jsonp);
     }
 
 }

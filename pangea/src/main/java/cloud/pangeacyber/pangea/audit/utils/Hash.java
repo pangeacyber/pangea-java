@@ -3,6 +3,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+// import javax.xml.bind.DatatypeConverter;
+import java.util.HexFormat;
 
 public class Hash {
     static public String hash(String data){
@@ -10,13 +12,8 @@ public class Hash {
     }
 
     static public byte[] unhexlify(String hex){
-        byte[] ans = new byte[hex.length() / 2];
-        for (int i = 0; i < ans.length; i++) {
-            int index = i * 2;
-            int val = Integer.parseInt(hex.substring(index, index + 2), 16);
-            ans[i] = (byte)val;
-        }
-        return ans;
+        HexFormat parser = HexFormat.of();
+        return parser.parseHex(hex);
     }
 
     static public byte[] decode(String hash){        

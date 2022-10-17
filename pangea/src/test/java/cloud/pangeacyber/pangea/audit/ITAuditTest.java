@@ -158,7 +158,7 @@ public class ITAuditTest
 
     @Test
     public void testRoot() throws IOException, InterruptedException, PangeaAPIException {
-        RootResponse response = client.root();
+        RootResponse response = client.getRoot();
         assertTrue(response.isOk());
 
         RootOutput result = response.getResult();
@@ -172,7 +172,7 @@ public class ITAuditTest
     @Test
     public void testRootWithSize() throws IOException, InterruptedException, PangeaAPIException {
         int treeSize = 2;
-        RootResponse response = client.root(treeSize);
+        RootResponse response = client.getRoot(treeSize);
         assertTrue(response.isOk());
 
         RootOutput result = response.getResult();

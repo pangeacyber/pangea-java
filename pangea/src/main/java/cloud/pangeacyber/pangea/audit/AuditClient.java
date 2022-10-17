@@ -126,7 +126,7 @@ public class AuditClient extends Client {
         String publicKey = null;
 
         if(sign && this.signer == null){
-            // trows exception
+            // TODO: trows exception
         }
         else if(sign && this.signer != null){
             ObjectMapper mapper = new ObjectMapper();
@@ -150,11 +150,11 @@ public class AuditClient extends Client {
         return doPost("/v1/root", request, RootResponse.class);        
     }
 
-    public RootResponse root() throws IOException, InterruptedException, PangeaAPIException {
+    public RootResponse getRoot() throws IOException, InterruptedException, PangeaAPIException {
         return rootPost(null);
     }
 
-    public RootResponse root(int treeSize) throws IOException, InterruptedException, PangeaAPIException {
+    public RootResponse getRoot(int treeSize) throws IOException, InterruptedException, PangeaAPIException {
         return rootPost(treeSize);
     }
 

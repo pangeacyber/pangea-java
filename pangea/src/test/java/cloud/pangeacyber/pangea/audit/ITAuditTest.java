@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
+import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
@@ -99,13 +100,13 @@ public class ITAuditTest
     }
 
     @Test(expected = ValidationException.class)
-    public void testEmptyMessage() throws IOException, InterruptedException, PangeaAPIException, CryptoException, JsonProcessingException, Exception {
+    public void testEmptyMessage() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         Event event = new Event("");
         LogResponse response = client.log(event);
     }
 
     @Test
-    public void testSearchDefault() throws IOException, InterruptedException, PangeaAPIException, CryptoException, JsonProcessingException, Exception {
+    public void testSearchDefault() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         SearchInput input = new SearchInput("message:Integration test msg");
         int limit = 10;
         input.setMaxResults(limit);
@@ -122,7 +123,7 @@ public class ITAuditTest
     }
 
     @Test
-    public void testSearchNoVerify() throws IOException, InterruptedException, PangeaAPIException, CryptoException, JsonProcessingException, Exception {
+    public void testSearchNoVerify() throws IOException, InterruptedException, PangeaAPIException, PangeaException {
         SearchInput input = new SearchInput("message:Integration test msg");
         int limit = 10;
         input.setMaxResults(limit);
@@ -139,7 +140,7 @@ public class ITAuditTest
     }
 
     @Test
-    public void testSearchVerify() throws IOException, InterruptedException, PangeaAPIException, CryptoException, JsonProcessingException, Exception {
+    public void testSearchVerify() throws IOException, InterruptedException, PangeaAPIException, PangeaException {
         SearchInput input = new SearchInput("message:Integration test msg");
         int limit = 10;
         input.setMaxResults(limit);
@@ -157,7 +158,7 @@ public class ITAuditTest
 
 
     @Test
-    public void testRoot() throws IOException, InterruptedException, PangeaAPIException {
+    public void testRoot() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         RootResponse response = client.getRoot();
         assertTrue(response.isOk());
 
@@ -170,7 +171,7 @@ public class ITAuditTest
     }
 
     @Test
-    public void testRootWithSize() throws IOException, InterruptedException, PangeaAPIException {
+    public void testRootWithSize() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         int treeSize = 2;
         RootResponse response = client.getRoot(treeSize);
         assertTrue(response.isOk());

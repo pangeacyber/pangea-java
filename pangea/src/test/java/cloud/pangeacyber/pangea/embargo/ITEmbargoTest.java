@@ -12,6 +12,7 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
+import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
@@ -25,7 +26,7 @@ public class ITEmbargoTest
     }
 
     @Test
-    public void testIsoCheckSanctionedCountry() throws IOException, InterruptedException, PangeaAPIException {
+    public void testIsoCheckSanctionedCountry() throws IOException, InterruptedException, PangeaException, PangeaException, PangeaAPIException {
         Response<EmbargoSanctions> response;
         response = client.isoCheck("CU");
 
@@ -39,7 +40,7 @@ public class ITEmbargoTest
     }
 
     @Test
-    public void testIsoCheckNoSanctionedCountry() throws IOException, InterruptedException, PangeaAPIException{
+    public void testIsoCheckNoSanctionedCountry() throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         IsoCheckResponse response;
         response = client.isoCheck("AR");
 
@@ -50,7 +51,7 @@ public class ITEmbargoTest
     }
 
     @Test
-    public void testIpCheckSanctionedCountry() throws IOException, InterruptedException, PangeaAPIException{
+    public void testIpCheckSanctionedCountry() throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         IpCheckResponse response;
         response = client.ipCheck("213.24.238.26");
 
@@ -67,7 +68,7 @@ public class ITEmbargoTest
     }
 
     @Test(expected = ValidationException.class)
-    public void testEmptyIP() throws IOException, InterruptedException, PangeaAPIException {
+    public void testEmptyIP() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         IpCheckResponse response = client.ipCheck("");
     }
 

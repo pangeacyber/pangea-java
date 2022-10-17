@@ -6,12 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.bouncycastle.crypto.CryptoException;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cloud.pangeacyber.pangea.Client;
@@ -22,6 +19,8 @@ import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
 import cloud.pangeacyber.pangea.audit.utils.Hash;
 import cloud.pangeacyber.pangea.exceptions.AuditException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
+import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.exceptions.SignerException;
 
 
 final class SearchResultRequest{
@@ -102,7 +101,6 @@ public class AuditClient extends Client {
     public static String serviceName = "audit";
     LogSigner signer;
     Map<Integer, PublishedRoot> publishedRoots;
-    // TODO: declare signer here, and initialize it in null
 
     public AuditClient(Config config) {
         super(config, serviceName);
@@ -116,49 +114,56 @@ public class AuditClient extends Client {
         publishedRoots = new HashMap<Integer, PublishedRoot>();
     }
 
-    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey)  throws IOException, InterruptedException, PangeaAPIException{
+    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey)  throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         LogRequest request = new LogRequest(event, verbose, signature, publicKey);
         return doPost("/v1/log", request, LogResponse.class);
     }
 
-    private LogResponse doLog(Event event, boolean sign, Boolean verbose) throws IOException, InterruptedException, PangeaAPIException, CryptoException, JsonProcessingException, Exception{
+    private LogResponse doLog(Event event, boolean sign, Boolean verbose) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         String signature = null;
         String publicKey = null;
-
+    
         if(sign && this.signer == null){
-            // TODO: trows exception
+            throw new SignerException("Signer not initialized");
         }
         else if(sign && this.signer != null){
             ObjectMapper mapper = new ObjectMapper();
-            String canEvent = mapper.writeValueAsString(event);
+            String canEvent;
+            try{
+                canEvent = mapper.writeValueAsString(event);
+            } catch(Exception e){
+                throw new SignerException("Failed to convert event to string");
+            }
+
             signature = this.signer.sign(canEvent);
             publicKey = this.signer.getPublicKey();
         }
+
         return logPost(event, verbose, signature, publicKey);
     }
 
-    public LogResponse log(Event event) throws IOException, InterruptedException, PangeaAPIException, CryptoException, JsonProcessingException, Exception{
+    public LogResponse log(Event event) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         return doLog(event, false, null);
     }
 
-    public LogResponse log(Event event, boolean sign, boolean verbose) throws IOException, InterruptedException, PangeaAPIException, CryptoException, JsonProcessingException, Exception {
+    public LogResponse log(Event event, boolean sign, boolean verbose) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException {
         return doLog(event, sign, verbose);
     }
 
-    private RootResponse rootPost(Integer treeSize) throws IOException, InterruptedException, PangeaAPIException {
+    private RootResponse rootPost(Integer treeSize) throws IOException, PangeaException, InterruptedException, PangeaAPIException {
         RootRequest request = new RootRequest(treeSize);
         return doPost("/v1/root", request, RootResponse.class);        
     }
 
-    public RootResponse getRoot() throws IOException, InterruptedException, PangeaAPIException {
+    public RootResponse getRoot() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return rootPost(null);
     }
 
-    public RootResponse getRoot(int treeSize) throws IOException, InterruptedException, PangeaAPIException {
+    public RootResponse getRoot(int treeSize) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return rootPost(treeSize);
     }
 
-    private SearchResponse handleSearchResponse(SearchResponse response, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaAPIException, AuditException{
+    private SearchResponse handleSearchResponse(SearchResponse response, boolean verifyConsistency, boolean verifyEvents) throws PangeaAPIException, AuditException{
 
         if(verifyEvents){
             for(SearchEvent searchEvent : response.getResult().getEvents()){
@@ -222,17 +227,17 @@ public class AuditClient extends Client {
 
     }
 
-    private SearchResponse searchPost(SearchInput request, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaAPIException, AuditException{
+    private SearchResponse searchPost(SearchInput request, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         SearchResponse response = doPost("/v1/search", request, SearchResponse.class);
         return handleSearchResponse(response, verifyConsistency, verifyEvents);
     }
 
-    public SearchResponse search(SearchInput input) throws IOException, InterruptedException, PangeaAPIException, AuditException{
+    public SearchResponse search(SearchInput input) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         input.setIncludeMembershipProof(true);
         return searchPost(input, true, true);
     }
 
-    public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaAPIException, AuditException {
+    public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException {
         if(verifyConsistency){
             input.setIncludeMembershipProof(true);
         }

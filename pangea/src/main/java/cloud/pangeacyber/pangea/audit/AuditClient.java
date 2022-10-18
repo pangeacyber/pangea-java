@@ -142,10 +142,47 @@ public class AuditClient extends Client {
         return logPost(event, verbose, signature, publicKey);
     }
 
+    /**
+     * @summary Log an event to Audit Secure Log
+     * @description Log an event to Audit Secure Log. By default does not sign event and verbose is left as server default
+     * @param event - event to log
+     * @return LogResponse
+     * @throws IOException
+     * @throws InterruptedException 
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @throws AuditException
+     * @example
+     * ```java
+     *  String msg = "Event's message";
+     *  Event event = new Event(msg);
+     *  LogResponse response = client.log(event);
+     * ```
+     */
+
     public LogResponse log(Event event) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         return doLog(event, false, null);
     }
 
+    /**
+     * @summary Log an event to Audit Secure Log
+     * @description Log an event to Audit Secure Log. Can select sign event or not and verbosity of the response.
+     * @param event - event to log
+     * @param sign - true to sign event
+     * @param verbose - true to more verbose response
+     * @return LogResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @throws AuditException
+     * @example
+     * ```java
+     *  String msg = "Event's message";
+     *  Event event = new Event(msg);
+     *  LogResponse response = client.log(event, true, true);
+     * ```
+     */
     public LogResponse log(Event event, boolean sign, boolean verbose) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException {
         return doLog(event, sign, verbose);
     }
@@ -155,10 +192,37 @@ public class AuditClient extends Client {
         return doPost("/v1/root", request, RootResponse.class);        
     }
 
+    /**
+     * @summary Get root from Pangea Server
+     * @description Get last root from Pangea Server
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example 
+     * ```java
+     * RootResponse response = client.getRoot();
+     * ```
+     */
     public RootResponse getRoot() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return rootPost(null);
     }
 
+    /**
+     * @summary Get root from Pangea Server
+     * @description Get root from three of treeSize from Pangea Server
+     * @param treeSize - tree size to get root
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example
+     * ```java
+     * RootResponse response = client.getRoot(treeSize);
+     * ```
+     */
     public RootResponse getRoot(int treeSize) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return rootPost(treeSize);
     }
@@ -232,11 +296,47 @@ public class AuditClient extends Client {
         return handleSearchResponse(response, verifyConsistency, verifyEvents);
     }
 
+    /**
+     * @summary Perform a search of Audit Secure logs 
+     * @description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
+     * @param input - query filters to perform search
+     * @return SearchResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @throws AuditException
+     * @example
+     * ```java
+     *  SearchInput input = new SearchInput("message:Integration test msg");
+     *  input.setMaxResults(10);
+     *  SearchResponse response = client.search(input);
+     * ```
+     */
     public SearchResponse search(SearchInput input) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         input.setIncludeMembershipProof(true);
         return searchPost(input, true, true);
     }
 
+    /**
+     * @summary Perfomr a search of Audit Secure logs
+     * @description Perform a search of logs according to input param. Allow to select to verify or nor consistency proof and events.
+     * @param input - query filters to perfom search
+     * @param verifyConsistency - true to verify logs consistency proofs
+     * @param verifyEvents - true to verify logs hash and signature
+     * @return SearchResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @throws AuditException
+     * @example
+     * ```java
+     *  SearchInput input = new SearchInput("message:Integration test msg");
+     *  input.setMaxResults(10);
+     *  SearchResponse response = client.search(input);
+     * ```
+     */
     public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException {
         if(verifyConsistency){
             input.setIncludeMembershipProof(true);

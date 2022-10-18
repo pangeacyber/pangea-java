@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -27,9 +26,7 @@ public class ITEmbargoTest
 
     @Test
     public void testIsoCheckSanctionedCountry() throws IOException, InterruptedException, PangeaException, PangeaException, PangeaAPIException {
-        Response<EmbargoSanctions> response;
-        response = client.isoCheck("CU");
-
+        IsoCheckResponse response = client.isoCheck("CU");
         assertTrue(response.isOk());
 
         EmbargoSanctions result = response.getResult();
@@ -41,9 +38,7 @@ public class ITEmbargoTest
 
     @Test
     public void testIsoCheckNoSanctionedCountry() throws IOException, InterruptedException, PangeaException, PangeaAPIException{
-        IsoCheckResponse response;
-        response = client.isoCheck("AR");
-
+        IsoCheckResponse response = client.isoCheck("AR");
         assertTrue(response.isOk());
 
         EmbargoSanctions result = response.getResult();
@@ -52,9 +47,7 @@ public class ITEmbargoTest
 
     @Test
     public void testIpCheckSanctionedCountry() throws IOException, InterruptedException, PangeaException, PangeaAPIException{
-        IpCheckResponse response;
-        response = client.ipCheck("213.24.238.26");
-
+        IpCheckResponse response = client.ipCheck("213.24.238.26");
         assertTrue(response.isOk());
 
         EmbargoSanctions result = response.getResult();

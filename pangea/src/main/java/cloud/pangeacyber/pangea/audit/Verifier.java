@@ -9,7 +9,6 @@ import org.bouncycastle.crypto.signers.Ed25519Signer;
 
 public class Verifier {
     public EventVerification verify(String pubKeyBase64, String signatureBase64, String message){
-        // TODO: handle exception and throw Audit Exception if fails
         // verify the signature
         Signer verifier = new Ed25519Signer();
         Ed25519PublicKeyParameters pubKey = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(pubKeyBase64));
@@ -17,7 +16,7 @@ public class Verifier {
         byte[] byteMessage;
         try{
             byteMessage = message.getBytes("utf-8");
-        } catch( UnsupportedEncodingException e){
+        } catch(UnsupportedEncodingException e){
             return EventVerification.FAILED;
         }
 

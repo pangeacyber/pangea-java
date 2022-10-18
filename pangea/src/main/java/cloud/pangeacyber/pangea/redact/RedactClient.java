@@ -73,30 +73,145 @@ public class RedactClient extends Client {
         return resp;
     }
 
+    /**
+     * @summary Redact
+     * @description Redact sensitive information from provided text.
+     * @param text - The text data to redact.
+     * @return RedactTextResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example 
+     * ```java
+     * RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309");
+     * ```
+     */
     public RedactTextResponse redactText(String text) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         return redactPost(text, null);
     }
 
+    /**
+     * @summary Redact
+     * @description Redact sensitive information from provided text.
+     * @param text - The text data to redact.
+     * @param debug - Setting this value to true will provide a detailed analysis of the redacted data and the rules that caused redaction.
+     * @return RedactTextResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example 
+     * ```java
+     * RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", true);
+     * ```
+     */
     public RedactTextResponse redactText(String text, boolean debug) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return redactPost(text, debug);
     }
 
+    /**
+     * @summary Redact structured
+     * @description Redact sensitive information from structured data (e.g., JSON).
+     * @param data - Structured data to redact
+     * @return RedactStructuredResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example
+     * ```java
+     *  Map<String, Object> data = new LinkedHashMap<String, Object>();
+     *  data.put("Name", "Jenny Jenny");
+     *  data.put("Phone", "This is its number: 415-867-5309");
+     *  RedactStructuredResponse response = client.redactStructured(data);
+     */
     public RedactStructuredResponse redactStructured(Map<String, Object> data) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         return structuredPost(data, null, null, null);
     }
 
+    /**
+     * @summary Redact structured
+     * @description Redact sensitive information from structured data (e.g., JSON).
+     * @param data - Structured data to redact
+     * @param format - format of data. Support "json"
+     * @return RedactStructuredResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example
+     * ```java
+     *  Map<String, Object> data = new LinkedHashMap<String, Object>();
+     *  data.put("Name", "Jenny Jenny");
+     *  data.put("Phone", "This is its number: 415-867-5309");
+     *  RedactStructuredResponse response = client.redactStructured(data, "json");
+     */
     public RedactStructuredResponse redactStructured(Map<String, Object> data, String format) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         return structuredPost(data, format, null, null);
     }
 
+    /**
+     * @summary Redact structured
+     * @description Redact sensitive information from structured data (e.g., JSON).
+     * @param data - Structured data to redact
+     * @param debug - Setting this value to true will provide a detailed analysis of the redacted data and the rules that caused redaction.
+     * @return RedactStructuredResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example
+     * ```java
+     *  Map<String, Object> data = new LinkedHashMap<String, Object>();
+     *  data.put("Name", "Jenny Jenny");
+     *  data.put("Phone", "This is its number: 415-867-5309");
+     *  RedactStructuredResponse response = client.redactStructured(data, true);
+     */
     public RedactStructuredResponse redactStructured(Map<String, Object> data, boolean debug) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         return structuredPost(data, null, debug, null);
     }
 
+    /**
+     * @summary Redact structured
+     * @description Redact sensitive information from structured data (e.g., JSON).
+     * @param data - Structured data to redact
+     * @param format - format of data. Support "json"
+     * @param debug - Setting this value to true will provide a detailed analysis of the redacted data and the rules that caused redaction.
+     * @return RedactStructuredResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example
+     * ```java
+     *  Map<String, Object> data = new LinkedHashMap<String, Object>();
+     *  data.put("Name", "Jenny Jenny");
+     *  data.put("Phone", "This is its number: 415-867-5309");
+     *  RedactStructuredResponse response = client.redactStructured(data, "json", true);
+     */
     public RedactStructuredResponse redactStructured(Map<String, Object> data, String format, boolean debug) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         return structuredPost(data, format, debug, null);
     }
 
+    /**
+     * @summary Redact structured
+     * @description Redact sensitive information from structured data (e.g., JSON).
+     * @param data - Structured data to redact
+     * @param debug - Setting this value to true will provide a detailed analysis of the redacted data and the rules that caused redaction.
+     * @param jsonp - JSON path(s) used to identify the specific JSON fields to redact in the structured data. Note: data parameter must be in JSON format.
+     * @return RedactStructuredResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example
+     * ```java
+     *  Map<String, Object> data = new LinkedHashMap<String, Object>();
+     *  data.put("Name", "Jenny Jenny");
+     *  data.put("Phone", "This is its number: 415-867-5309");
+     *  RedactStructuredResponse response = client.redactStructured(data, true, new String[] {"Phone"});
+     */
     public RedactStructuredResponse redactStructured(Map<String, Object> data, boolean debug, String[] jsonp) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         return structuredPost(data, null, debug, jsonp);
     }

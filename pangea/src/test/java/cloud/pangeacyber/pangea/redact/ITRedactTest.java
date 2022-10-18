@@ -30,40 +30,31 @@ public class ITRedactTest
 
     @Test
     public void testRedact_1() throws IOException, InterruptedException, PangeaException, PangeaAPIException{
-        RedactTextResponse response;
-        response = client.redactText("Jenny Jenny... 415-867-5309");
-
+        RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309");
         assertTrue(response.isOk());
 
         RedactTextOutput result = response.getResult();
         assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
-
         assertNull(result.getReport());
     }
 
     @Test
     public void testRedact_2() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
-        RedactTextResponse response;
-        response = client.redactText("Jenny Jenny... 415-867-5309", true);
-
+        RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", true);
         assertTrue(response.isOk());
 
         RedactTextOutput result = response.getResult();
         assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
-
         assertNotNull(result.getReport());
     }
 
     @Test
     public void testRedact_3() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
-        RedactTextResponse response;
-        response = client.redactText("Jenny Jenny... 415-867-5309", false);
-
+        RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", false);
         assertTrue(response.isOk());
 
         RedactTextOutput result = response.getResult();
         assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
-
         assertNull(result.getReport());
     }
 
@@ -73,9 +64,7 @@ public class ITRedactTest
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
 
-        RedactStructuredResponse response;
-        response = client.redactStructured(data);
-
+        RedactStructuredResponse response = client.redactStructured(data);
         assertTrue(response.isOk());
 
         RedactStructuredOutput result = response.getResult();
@@ -94,9 +83,7 @@ public class ITRedactTest
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
 
-        RedactStructuredResponse response;
-        response = client.redactStructured(data, "json");
-
+        RedactStructuredResponse response = client.redactStructured(data, "json");
         assertTrue(response.isOk());
 
         RedactStructuredOutput result = response.getResult();
@@ -115,9 +102,7 @@ public class ITRedactTest
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
 
-        RedactStructuredResponse response;
-        response = client.redactStructured(data, true);
-
+        RedactStructuredResponse response = client.redactStructured(data, true);
         assertTrue(response.isOk());
 
         RedactStructuredOutput result = response.getResult();
@@ -136,9 +121,7 @@ public class ITRedactTest
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
 
-        RedactStructuredResponse response;
-        response = client.redactStructured(data, false);
-
+        RedactStructuredResponse response = client.redactStructured(data, false);
         assertTrue(response.isOk());
 
         RedactStructuredOutput result = response.getResult();
@@ -157,9 +140,7 @@ public class ITRedactTest
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
 
-        RedactStructuredResponse response;
-        response = client.redactStructured(data, "json", true);
-
+        RedactStructuredResponse response = client.redactStructured(data, "json", true);
         assertTrue(response.isOk());
 
         RedactStructuredOutput result = response.getResult();
@@ -178,9 +159,7 @@ public class ITRedactTest
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
 
-        RedactStructuredResponse response;
-        response = client.redactStructured(data, true, new String[] {"Phone"});
-
+        RedactStructuredResponse response = client.redactStructured(data, true, new String[] {"Phone"});
         assertTrue(response.isOk());
 
         RedactStructuredOutput result = response.getResult();

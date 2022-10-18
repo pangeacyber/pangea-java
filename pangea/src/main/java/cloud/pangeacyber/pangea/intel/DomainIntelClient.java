@@ -54,18 +54,77 @@ public class DomainIntelClient extends Client{
         return resp;
     }
 
+    /**
+     * @summary Lookup
+     * @description Retrieve domain reputation from a default provider.
+     * @param domain - domain address to be looked up
+     * @return DomainLookupResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example
+     * ```java
+     * DomainLookupResponse response = client.lookup("737updatesboeing.com");
+     * ```
+     */
     public DomainLookupResponse lookup(String domain) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return lookupPost(domain, null, null, null);
     }
 
+    /**
+     * @summary Lookup
+     * @description Retrieve domain reputation for a particular provider
+     * @param domain - domain address to be looked up
+     * @param provider - provider to get reputation from
+     * @return DomainLookupResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * ```java
+     * DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools");
+     * ```
+     */
     public DomainLookupResponse lookup(String domain, String provider) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return lookupPost(domain, provider, null, null);
     }
 
+    /**
+     * @summary Lookup
+     * @description Retrieve domain reputation from a default provider.
+     * @param domain - domain address to be looked up
+     * @param verbose - select a more verbose response
+     * @param raw - if true response include provider raw response. This should vary from one provider to another one.
+     * @return DomainLookupResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * ```java
+     * DomainLookupResponse response = client.lookup("737updatesboeing.com", true, true);
+     * ```
+     */
     public DomainLookupResponse lookup(String domain, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return lookupPost(domain, null, verbose, raw);
     }
 
+    /**
+     * @summary Lookup
+     * @description Retrieve domain reputation for a particular provider
+     * @param domain - domain address to be looked up
+     * @param provider - provider to get reputation from
+     * @param verbose - select a more verbose response
+     * @param raw - if true response include provider raw response. This should vary from one provider to another one.
+     * @return DomainLookupResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * ```java
+     * DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools", true, true);
+     * ```
+     */
     public DomainLookupResponse lookup(String domain, String provider, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return lookupPost(domain, provider, verbose, raw);
     }

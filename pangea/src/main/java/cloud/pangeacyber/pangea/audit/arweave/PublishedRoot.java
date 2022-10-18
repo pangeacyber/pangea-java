@@ -26,6 +26,17 @@ public class PublishedRoot {
     @JsonIgnore
     String source = "unknown";
 
+    public PublishedRoot() {
+    }
+
+    public PublishedRoot(int size, String rootHash, String publishedAt, String[] consistencyProof, String source) {
+        this.size = size;
+        this.rootHash = rootHash;
+        this.publishedAt = publishedAt;
+        this.consistencyProof = consistencyProof;
+        this.source = source;
+    }
+
     public void setSource(String source) {
         this.source = source;
     }

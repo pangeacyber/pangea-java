@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RootOutput {
     @JsonProperty("data")
-    Root data;
+    Root root;
 
-    public Root getData() {
-        return data;
+    public Root getRoot() {
+        return root;
     }
 }

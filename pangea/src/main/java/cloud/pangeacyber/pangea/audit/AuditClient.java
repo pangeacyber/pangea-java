@@ -101,6 +101,7 @@ public class AuditClient extends Client {
     public static String serviceName = "audit";
     LogSigner signer;
     Map<Integer, PublishedRoot> publishedRoots;
+    boolean allowServerRoots = true;    // In case of Arweave failure, ask the server for the roots
 
     public AuditClient(Config config) {
         super(config, serviceName);
@@ -241,9 +242,7 @@ public class AuditClient extends Client {
 
         Root root = response.getResult().getRoot();
 
-        if(verifyConsistency && root != null){
-            // if there is no root, we don't have any record migrated to cold. We cannot verify any proof
-
+        if(verifyConsistency && root != null){  // if there is no root, we don't have any record migrated to cold. We cannot verify any proof
             updatePublishedRoots(response.getResult());
             for(SearchEvent searchEvent: response.getResult().getEvents()){
                 searchEvent.verifyMembershipProof(Hash.decode(root.getRootHash()));
@@ -274,9 +273,8 @@ public class AuditClient extends Client {
         Map<Integer, PublishedRoot> arweaveRoots;
         if( !treeSizes.isEmpty()){
             Arweave arweave = new Arweave(root.getTreeName());
-            arweaveRoots = arweave.getPublishedRoots(treeSizes.toArray(sizes));
+            arweaveRoots = arweave.getPublishedRoots(treeSizes.toArray(sizes)); //FIXME: This should be just 'sizes'?
         } else {
-            // TODO: Check this when accept local roots
             return;
         }
 
@@ -285,8 +283,17 @@ public class AuditClient extends Client {
                 PublishedRoot pubRoot = arweaveRoots.get(treeSize);
                 pubRoot.setSource("arweave");
                 this.publishedRoots.put(treeSize, pubRoot);
+            } else if(this.allowServerRoots){
+                RootResponse response;
+                try{
+                    response = this.getRoot(treeSize);
+                    root = response.getResult().getRoot();
+                    PublishedRoot pubRoot = new PublishedRoot(root.getSize(), root.getRootHash(), root.getPublishedAt(), root.getConsistencyProof(), "pangea");
+                    this.publishedRoots.put(treeSize, pubRoot);
+                } catch(Exception e){
+                    break;
+                }
             }
-            // TODO: else check pangea roots
         }
 
     }

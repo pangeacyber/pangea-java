@@ -163,11 +163,11 @@ public class ITAuditTest
         assertTrue(response.isOk());
 
         RootOutput result = response.getResult();
-        Root data = result.getData();
-        assertNotNull(data);
-        assertNotNull(data.getSize());
-        assertNotNull(data.getTreeName());
-        assertNotNull(data.getRootHash());
+        Root root = result.getRoot();
+        assertNotNull(root);
+        assertNotNull(root.getSize());
+        assertNotNull(root.getTreeName());
+        assertNotNull(root.getRootHash());
     }
 
     @Test
@@ -177,12 +177,12 @@ public class ITAuditTest
         assertTrue(response.isOk());
 
         RootOutput result = response.getResult();
-        Root data = result.getData();
-        assertNotNull(data);
-        assertNotNull(data.getSize());
-        assertNotNull(data.getTreeName());
-        assertNotNull(data.getRootHash());
-        assertEquals(treeSize, data.getSize());
+        Root root = result.getRoot();
+        assertNotNull(root);
+        assertNotNull(root.getSize());
+        assertNotNull(root.getTreeName());
+        assertNotNull(root.getRootHash());
+        assertEquals(treeSize, root.getSize());
     }
 
 }

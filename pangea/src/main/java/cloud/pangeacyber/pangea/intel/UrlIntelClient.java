@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
+import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
 
 final class UrlLookupRequest {
@@ -47,25 +48,25 @@ public class UrlIntelClient extends Client{
         super(config, serviceName);
     }
 
-    private UrlLookupResponse lookupPost(String url, String provider, Boolean verbose, Boolean raw) throws IOException, InterruptedException, PangeaAPIException {
+    private UrlLookupResponse lookupPost(String url, String provider, Boolean verbose, Boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         UrlLookupRequest request = new UrlLookupRequest(url, provider, verbose, raw);
         UrlLookupResponse resp = doPost("/v1/lookup", request, UrlLookupResponse.class);
         return resp;
     }
 
-    public UrlLookupResponse lookup(String url) throws IOException, InterruptedException, PangeaAPIException {
+    public UrlLookupResponse lookup(String url) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return lookupPost(url, null, null, null);
     }
 
-    public UrlLookupResponse lookup(String url, String provider) throws IOException, InterruptedException, PangeaAPIException {
+    public UrlLookupResponse lookup(String url, String provider) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return lookupPost(url, provider, null, null);
     }
 
-    public UrlLookupResponse lookup(String url, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaAPIException {
+    public UrlLookupResponse lookup(String url, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return lookupPost(url, null, verbose, raw);
     }
 
-    public UrlLookupResponse lookup(String url, String provider, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaAPIException {
+    public UrlLookupResponse lookup(String url, String provider, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return lookupPost(url, provider, verbose, raw);
     }
 }

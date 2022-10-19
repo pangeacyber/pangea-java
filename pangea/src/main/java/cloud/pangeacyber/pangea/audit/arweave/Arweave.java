@@ -105,14 +105,10 @@ public class Arweave {
         try{
             httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());
         } catch(Exception e) {
-            // TODO: Remove this log
-            System.out.printf("Cannot connect to arweave: %s \n", e.toString());
             return null;
         }
 
         if(httpResponse.statusCode() != 200){
-            System.out.printf("Request body: %s \n", body);
-            System.out.printf("Cannot connect to arweave %s. Body: %s. Error code: %d\n", getGraphqlURL(), httpResponse.body(), httpResponse.statusCode());
             return null;
         }
 
@@ -121,8 +117,6 @@ public class Arweave {
         try{
             response =  mapper.readValue(body, GraphqlOutput.class);
         } catch(Exception e){
-            // TODO: remove this log
-            System.out.printf("GetGraphql. Failed to parse arweave response: %s\n", body);
             return null;
         }
         return response;
@@ -140,18 +134,15 @@ public class Arweave {
         try{
             httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());
         } catch(Exception e) {
-            System.out.println("Cannot connect to : " + url);
             return null;
         }
 
         if(httpResponse.statusCode() == 302){
             String newUrl = httpResponse.headers().map().get("Location").get(0);
-            // System.out.printf("%s redirects to: %s.\n",url, newUrl);
             return doGet(newUrl);
         }
 
         if(httpResponse.statusCode() != 200){
-            System.out.printf("Cannot connect to arweave %s. Error code: %d.\n", url, httpResponse.statusCode());
             return null;
         }
 
@@ -166,8 +157,6 @@ public class Arweave {
         try{
             root =  mapper.readValue(body, PublishedRoot.class);
         } catch(Exception e){
-            // TODO: remove this log
-            System.out.printf("GetRoot. Failed to parse arweave response: %s\n", body);
             return null;
         }
 
@@ -182,7 +171,6 @@ public class Arweave {
 
         GraphqlOutput response = doPostGraphql(treeSizes);
         if(response == null){
-            System.out.println("Got empty response from doPostGRaphql");
             return publishedRoots;
         } 
 
@@ -199,15 +187,11 @@ public class Arweave {
             if(value != null){
                 PublishedRoot root = doGetRoot(nodeID);
                 if(root != null){
-                    // System.out.printf("Arweave. Adding root %s \n", value);
                     try{
                         publishedRoots.put(Integer.valueOf((String)value), root);
                     }catch(Exception e){
-                        System.out.println("Failed to add root size");
                     }
                 }
-            } else {
-                System.out.println("Not value in tags");
             }
         }
 

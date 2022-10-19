@@ -6,12 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.bouncycastle.crypto.CryptoException;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cloud.pangeacyber.pangea.Client;
@@ -22,6 +19,8 @@ import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
 import cloud.pangeacyber.pangea.audit.utils.Hash;
 import cloud.pangeacyber.pangea.exceptions.AuditException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
+import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.exceptions.SignerException;
 
 
 final class SearchResultRequest{
@@ -102,7 +101,7 @@ public class AuditClient extends Client {
     public static String serviceName = "audit";
     LogSigner signer;
     Map<Integer, PublishedRoot> publishedRoots;
-    // TODO: declare signer here, and initialize it in null
+    boolean allowServerRoots = true;    // In case of Arweave failure, ask the server for the roots
 
     public AuditClient(Config config) {
         super(config, serviceName);
@@ -116,49 +115,120 @@ public class AuditClient extends Client {
         publishedRoots = new HashMap<Integer, PublishedRoot>();
     }
 
-    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey)  throws IOException, InterruptedException, PangeaAPIException{
+    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey)  throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         LogRequest request = new LogRequest(event, verbose, signature, publicKey);
         return doPost("/v1/log", request, LogResponse.class);
     }
 
-    private LogResponse doLog(Event event, boolean sign, Boolean verbose) throws IOException, InterruptedException, PangeaAPIException, CryptoException, JsonProcessingException, Exception{
+    private LogResponse doLog(Event event, boolean sign, Boolean verbose) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         String signature = null;
         String publicKey = null;
-
+    
         if(sign && this.signer == null){
-            // TODO: trows exception
+            throw new SignerException("Signer not initialized");
         }
         else if(sign && this.signer != null){
             ObjectMapper mapper = new ObjectMapper();
-            String canEvent = mapper.writeValueAsString(event);
+            String canEvent;
+            try{
+                canEvent = mapper.writeValueAsString(event);
+            } catch(Exception e){
+                throw new SignerException("Failed to convert event to string");
+            }
+
             signature = this.signer.sign(canEvent);
             publicKey = this.signer.getPublicKey();
         }
+
         return logPost(event, verbose, signature, publicKey);
     }
 
-    public LogResponse log(Event event) throws IOException, InterruptedException, PangeaAPIException, CryptoException, JsonProcessingException, Exception{
+    /**
+     * @summary Log an event to Audit Secure Log
+     * @description Log an event to Audit Secure Log. By default does not sign event and verbose is left as server default
+     * @param event - event to log
+     * @return LogResponse
+     * @throws IOException
+     * @throws InterruptedException 
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @throws AuditException
+     * @example
+     * ```java
+     *  String msg = "Event's message";
+     *  Event event = new Event(msg);
+     *  LogResponse response = client.log(event);
+     * ```
+     */
+
+    public LogResponse log(Event event) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         return doLog(event, false, null);
     }
 
-    public LogResponse log(Event event, boolean sign, boolean verbose) throws IOException, InterruptedException, PangeaAPIException, CryptoException, JsonProcessingException, Exception {
+    /**
+     * @summary Log an event to Audit Secure Log
+     * @description Log an event to Audit Secure Log. Can select sign event or not and verbosity of the response.
+     * @param event - event to log
+     * @param sign - true to sign event
+     * @param verbose - true to more verbose response
+     * @return LogResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @throws AuditException
+     * @example
+     * ```java
+     *  String msg = "Event's message";
+     *  Event event = new Event(msg);
+     *  LogResponse response = client.log(event, true, true);
+     * ```
+     */
+    public LogResponse log(Event event, boolean sign, boolean verbose) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException {
         return doLog(event, sign, verbose);
     }
 
-    private RootResponse rootPost(Integer treeSize) throws IOException, InterruptedException, PangeaAPIException {
+    private RootResponse rootPost(Integer treeSize) throws IOException, PangeaException, InterruptedException, PangeaAPIException {
         RootRequest request = new RootRequest(treeSize);
         return doPost("/v1/root", request, RootResponse.class);        
     }
 
-    public RootResponse getRoot() throws IOException, InterruptedException, PangeaAPIException {
+    /**
+     * @summary Get root from Pangea Server
+     * @description Get last root from Pangea Server
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example 
+     * ```java
+     * RootResponse response = client.getRoot();
+     * ```
+     */
+    public RootResponse getRoot() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return rootPost(null);
     }
 
-    public RootResponse getRoot(int treeSize) throws IOException, InterruptedException, PangeaAPIException {
+    /**
+     * @summary Get root from Pangea Server
+     * @description Get root from three of treeSize from Pangea Server
+     * @param treeSize - tree size to get root
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example
+     * ```java
+     * RootResponse response = client.getRoot(treeSize);
+     * ```
+     */
+    public RootResponse getRoot(int treeSize) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         return rootPost(treeSize);
     }
 
-    private SearchResponse handleSearchResponse(SearchResponse response, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaAPIException, AuditException{
+    private SearchResponse handleSearchResponse(SearchResponse response, boolean verifyConsistency, boolean verifyEvents) throws PangeaAPIException, AuditException{
 
         if(verifyEvents){
             for(SearchEvent searchEvent : response.getResult().getEvents()){
@@ -172,9 +242,7 @@ public class AuditClient extends Client {
 
         Root root = response.getResult().getRoot();
 
-        if(verifyConsistency && root != null){
-            // if there is no root, we don't have any record migrated to cold. We cannot verify any proof
-
+        if(verifyConsistency && root != null){  // if there is no root, we don't have any record migrated to cold. We cannot verify any proof
             updatePublishedRoots(response.getResult());
             for(SearchEvent searchEvent: response.getResult().getEvents()){
                 searchEvent.verifyMembershipProof(Hash.decode(root.getRootHash()));
@@ -205,9 +273,8 @@ public class AuditClient extends Client {
         Map<Integer, PublishedRoot> arweaveRoots;
         if( !treeSizes.isEmpty()){
             Arweave arweave = new Arweave(root.getTreeName());
-            arweaveRoots = arweave.getPublishedRoots(treeSizes.toArray(sizes));
+            arweaveRoots = arweave.getPublishedRoots(treeSizes.toArray(sizes)); //FIXME: This should be just 'sizes'?
         } else {
-            // TODO: Check this when accept local roots
             return;
         }
 
@@ -216,23 +283,68 @@ public class AuditClient extends Client {
                 PublishedRoot pubRoot = arweaveRoots.get(treeSize);
                 pubRoot.setSource("arweave");
                 this.publishedRoots.put(treeSize, pubRoot);
+            } else if(this.allowServerRoots){
+                RootResponse response;
+                try{
+                    response = this.getRoot(treeSize);
+                    root = response.getResult().getRoot();
+                    PublishedRoot pubRoot = new PublishedRoot(root.getSize(), root.getRootHash(), root.getPublishedAt(), root.getConsistencyProof(), "pangea");
+                    this.publishedRoots.put(treeSize, pubRoot);
+                } catch(Exception e){
+                    break;
+                }
             }
-            // TODO: else check pangea roots
         }
 
     }
 
-    private SearchResponse searchPost(SearchInput request, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaAPIException, AuditException{
+    private SearchResponse searchPost(SearchInput request, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         SearchResponse response = doPost("/v1/search", request, SearchResponse.class);
         return handleSearchResponse(response, verifyConsistency, verifyEvents);
     }
 
-    public SearchResponse search(SearchInput input) throws IOException, InterruptedException, PangeaAPIException, AuditException{
+    /**
+     * @summary Perform a search of Audit Secure logs 
+     * @description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
+     * @param input - query filters to perform search
+     * @return SearchResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @throws AuditException
+     * @example
+     * ```java
+     *  SearchInput input = new SearchInput("message:Integration test msg");
+     *  input.setMaxResults(10);
+     *  SearchResponse response = client.search(input);
+     * ```
+     */
+    public SearchResponse search(SearchInput input) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         input.setIncludeMembershipProof(true);
         return searchPost(input, true, true);
     }
 
-    public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaAPIException, AuditException {
+    /**
+     * @summary Perfomr a search of Audit Secure logs
+     * @description Perform a search of logs according to input param. Allow to select to verify or nor consistency proof and events.
+     * @param input - query filters to perfom search
+     * @param verifyConsistency - true to verify logs consistency proofs
+     * @param verifyEvents - true to verify logs hash and signature
+     * @return SearchResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @throws AuditException
+     * @example
+     * ```java
+     *  SearchInput input = new SearchInput("message:Integration test msg");
+     *  input.setMaxResults(10);
+     *  SearchResponse response = client.search(input);
+     * ```
+     */
+    public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException {
         if(verifyConsistency){
             input.setIncludeMembershipProof(true);
         }

@@ -153,8 +153,6 @@ public class SearchEvent {
         PublishedRoot currRoot = publishedRoots.get(leafIndex+1);
         PublishedRoot prevRoot = publishedRoots.get(leafIndex);
 
-        // TODO: validate if can use pangea server roots
-
         byte[] currRootHash = Hash.decode(currRoot.getRootHash());
         byte[] prevRootHash = Hash.decode(prevRoot.getRootHash());
         ConsistencyProof proof = SearchEvent.decodeConsistencyProof(currRoot.getConsistencyProof());

@@ -8,6 +8,7 @@ import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
+import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
 final class IsoCheckRequest {
     @JsonProperty("iso_code")
@@ -37,13 +38,36 @@ public class EmbargoClient extends Client {
         super(config, serviceName);
     }
 
-    public IsoCheckResponse isoCheck(String isoCode) throws IOException, InterruptedException, PangeaAPIException{
+    /**
+     * @summary Embargo
+     * @description Check a country code against known sanction and trade embargo lists.
+     * @param isoCode - Check the  country against code the enabled embargo lists.
+     * @return IsoCheckResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     */
+    public IsoCheckResponse isoCheck(String isoCode) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         IsoCheckRequest request = new IsoCheckRequest(isoCode);
         IsoCheckResponse resp = doPost("/v1/iso/check", request, IsoCheckResponse.class);
         return resp;
     }
-
-    public IpCheckResponse ipCheck(String ip) throws IOException, InterruptedException, PangeaAPIException{
+    /**
+     * @summary Embargo
+     * @description Check an IP against known sanction and trade embargo lists.
+     * @param isoCode - Geolocate this IP and check the corresponding country against the enabled embargo lists.
+     * @return IpCheckResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @example
+     * ```java
+     * IpCheckResponse response = client.ipCheck("213.24.238.26");
+     * ```
+     */
+    public IpCheckResponse ipCheck(String ip) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
         IpCheckRequest request = new IpCheckRequest(ip);
         IpCheckResponse resp = doPost("/v1/ip/check", request, IpCheckResponse.class);
         return resp;

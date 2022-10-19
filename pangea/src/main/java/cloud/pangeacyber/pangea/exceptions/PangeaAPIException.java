@@ -10,4 +10,8 @@ public class PangeaAPIException extends PangeaException {
         super(message);
         this.response = response;
     }
+
+    public Response<PangeaErrors> getResponse() {
+        return response;
+    }
 }

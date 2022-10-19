@@ -8,6 +8,7 @@ import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpResponse.BodyHandlers;
 import cloud.pangeacyber.pangea.exceptions.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 final class ResponseRawResult extends Response<Object> {}
@@ -50,31 +51,55 @@ public abstract class Client {
         }
     }
 
-    public <Req, ResponseType extends Response<?>> ResponseType doPost(String path, Req request, Class<ResponseType> responseClass) throws IOException, InterruptedException, PangeaAPIException {
+    public <Req, ResponseType extends Response<?>> ResponseType doPost(String path, Req request, Class<ResponseType> responseClass) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
         ObjectMapper mapper = new ObjectMapper();
-        String body = mapper.writeValueAsString(request);
+        String body;
+        try{
+            body = mapper.writeValueAsString(request);
+        } catch(JsonProcessingException e){
+            throw new PangeaException(e.getMessage());
+        }
 
         HttpRequest httpRequest = buildPostRequest(path, body);
+
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());
 
         return checkResponse(httpResponse, responseClass);
     }
 
-    private <ResponseType extends Response<?>> ResponseType checkResponse(HttpResponse<String> httpResponse, Class<ResponseType> responseClass) throws IOException, InterruptedException, PangeaAPIException {
+    private <ResponseType extends Response<?>> ResponseType checkResponse(HttpResponse<String> httpResponse, Class<ResponseType> responseClass) throws PangeaException, PangeaAPIException {
         String body = httpResponse.body();
         ObjectMapper mapper = new ObjectMapper();
-        ResponseHeader header =  mapper.readValue(body, ResponseHeader.class);
+        ResponseHeader header;
+
+        try{
+            header =  mapper.readValue(body, ResponseHeader.class);
+        } catch(Exception e){
+            throw new PangeaException("Failed to parse response header");
+        }
+
+        ResponseType resultResponse;
 
         if(header.isOk()){
-            ResponseType response =  mapper.readValue(body, responseClass);
-            response.setHttpResponse(httpResponse);
-            return response;
+            try{
+                resultResponse =  mapper.readValue(body, responseClass);
+            } catch(Exception e) {
+                throw new ParseResultFailed("Failed to parse response result", header, body);
+            }
+            resultResponse.setHttpResponse(httpResponse);
+            return resultResponse;
         }
 
         // Process error
         String summary = header.getSummary();
         String status = header.getStatus();
-        ResponseError response =  mapper.readValue(body, ResponseError.class);
+        ResponseError response;
+        try{
+            response =  mapper.readValue(body, ResponseError.class);
+        } catch(Exception e){
+            throw new ParseResultFailed("Failed to parse response errors", header, body);
+        }
+
         response.setHttpResponse(httpResponse);
 
         if( status.equals(ResponseStatus.VALIDATION_ERR.toString())){

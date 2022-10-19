@@ -95,8 +95,8 @@ public class ITAuditTest
         assertNotNull(result.getHash());
         assertEquals(msg, result.getEventEnvelope().getEvent().getMessage());
         assertEquals("lvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=", result.getEventEnvelope().getPublicKey());
-        // FIXME: Signature is not working yet
-        // assertEquals("dg7Wg+E8QzZzhECzQoH3v3pbjWObR8ve7SHREAyA9JlFOusKPHVb16t5D3rbscnv80ry/aWzfMTscRNSYJFzDA==", result.getEventEnvelope().getSignature());
+        assertEquals("dg7Wg+E8QzZzhECzQoH3v3pbjWObR8ve7SHREAyA9JlFOusKPHVb16t5D3rbscnv80ry/aWzfMTscRNSYJFzDA==", result.getEventEnvelope().getSignature());
+
     }
 
     @Test(expected = ValidationException.class)

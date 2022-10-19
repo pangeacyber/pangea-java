@@ -38,13 +38,19 @@ public class EventEnvelope {
     }
 
     public EventVerification verifySignature(){
-        if(this.signature.isEmpty() && this.publicKey.isEmpty()){
+        // If does not have signature information, it's not verified 
+        if(this.signature == null && this.publicKey == null){
             return EventVerification.NOT_VERIFIED;
         }
-        ObjectMapper mapper = new ObjectMapper();
+
+        // But if one field is missing, it's verification failed
+        if(this.signature == null || this.publicKey == null){
+            return EventVerification.FAILED;
+        }
+
         String canonicalJson;
         try{
-            canonicalJson = mapper.writeValueAsString(this.event);
+            canonicalJson = Event.canonicalize(this.event);
         } catch(JsonProcessingException e){
             return EventVerification.FAILED;
         }

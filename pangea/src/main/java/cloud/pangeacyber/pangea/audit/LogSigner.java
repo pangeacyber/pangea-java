@@ -36,12 +36,10 @@ public class LogSigner {
             throw new SignerException("Failed to convert message to sign. Encoding not supported");
         }
 
-        System.out.printf("Signing: .%s. \n", data);
         signer.reset();
         signer.init(true, this.privateKey);
         signer.update(message, 0, message.length);
         byte[] signature;
-        // FIXME: Signature is not the same as in Go SDK
         try{
             signature = signer.generateSignature();
         } catch(Exception e){
@@ -52,7 +50,6 @@ public class LogSigner {
     }
 
     private void loadKeys() throws SignerException{
-        System.out.println("Loading keys...");
         String key;
         try{
             key = new String(Files.readAllBytes(Paths.get(this.privateKeyFilename)));

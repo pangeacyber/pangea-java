@@ -3,6 +3,9 @@ package cloud.pangeacyber.pangea.audit;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Event {
     @JsonInclude(Include.NON_NULL)
@@ -132,4 +135,9 @@ public class Event {
         this.timestamp = timestamp;
     }
 
+    static public String canonicalize(Event event) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        return mapper.writeValueAsString(event);
+    }
 }

@@ -132,8 +132,8 @@ public class SearchEvent {
             String[] parts = item.split(",", 2);
             String[] hashParts = parts[0].split(":");
             byte[] hash = Hash.decode(hashParts[1]);
-            MembershipProof memProof = SearchEvent.decodeMembershipProof(parts[1]);
 
+            MembershipProof memProof = SearchEvent.decodeMembershipProof(parts[1]);
             proof.add(new ConsistencyProofItem(hash, memProof));
         }
 
@@ -213,7 +213,6 @@ public class SearchEvent {
         }
         return Arrays.equals(nodeHash, rootHash);
     }
-
 
     static private MembershipProof decodeMembershipProof(String memProof){
         MembershipProof proof = new MembershipProof();

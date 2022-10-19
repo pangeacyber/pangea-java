@@ -132,8 +132,8 @@ public class SearchEvent {
             String[] parts = item.split(",", 2);
             String[] hashParts = parts[0].split(":");
             byte[] hash = Hash.decode(hashParts[1]);
-            MembershipProof memProof = SearchEvent.decodeMembershipProof(parts[1]);
 
+            MembershipProof memProof = SearchEvent.decodeMembershipProof(parts[1]);
             proof.add(new ConsistencyProofItem(hash, memProof));
         }
 
@@ -167,14 +167,12 @@ public class SearchEvent {
             try{
                 rootHash = Hash.hash(it.next().getHash(), rootHash);
             } catch(IOException e){
-                System.out.println("Consistency. Failed to hash pair");
                 this.consistencyVerification = EventVerification.FAILED;
                 return; 
             }
         }
 
         if(!Arrays.equals(rootHash, prevRootHash)){
-            System.out.println("Consistency. Failed to compare hash");
             this.consistencyVerification = EventVerification.FAILED;
             return; 
         }
@@ -183,7 +181,6 @@ public class SearchEvent {
         while(it.hasNext()){
             ConsistencyProofItem item = it.next();
             if(!SearchEvent.verifyMembershipProof(currRootHash, item.getHash(), item.getProof())){
-                System.out.println("Consistency. Failed membership");
                 this.consistencyVerification = EventVerification.FAILED;
                 return;
             }
@@ -207,13 +204,11 @@ public class SearchEvent {
             try{
                 nodeHash = item.getSide().equals("left")? Hash.hash(item.getHash(), nodeHash) : Hash.hash(nodeHash, item.getHash());
             } catch(IOException e){
-                System.out.println("Failed to hash proof hash and node hash");
                 return false;
             }
         }
         return Arrays.equals(nodeHash, rootHash);
     }
-
 
     static private MembershipProof decodeMembershipProof(String memProof){
         MembershipProof proof = new MembershipProof();

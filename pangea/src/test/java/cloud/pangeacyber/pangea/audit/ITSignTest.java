@@ -20,7 +20,6 @@ public class ITSignTest {
         String pubKey = signer.getPublicKey();
 
         assertEquals("lvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=", pubKey);
-        // FIXME: check signature generation
-        // assertEquals("dg7Wg+E8QzZzhECzQoH3v3pbjWObR8ve7SHREAyA9JlFOusKPHVb16t5D3rbscnv80ry/aWzfMTscRNSYJFzDA==", signature);
+        assertEquals("IYmIUBKWu5yLHM1u3bAw7dvVg1MPc7FLDWSz6d9oqn4FoCu9Bk6ta/lXvvXZUpa7hCm6RhU0VdBzh53x3mKiDQ==", signature);
     }
 }

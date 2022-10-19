@@ -9,7 +9,6 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
@@ -128,10 +127,9 @@ public class AuditClient extends Client {
             throw new SignerException("Signer not initialized");
         }
         else if(sign && this.signer != null){
-            ObjectMapper mapper = new ObjectMapper();
             String canEvent;
             try{
-                canEvent = mapper.writeValueAsString(event);
+                canEvent = Event.canonicalize(event);
             } catch(Exception e){
                 throw new SignerException("Failed to convert event to string");
             }
@@ -232,11 +230,8 @@ public class AuditClient extends Client {
 
         if(verifyEvents){
             for(SearchEvent searchEvent : response.getResult().getEvents()){
-                // verify event hash
                 searchEvent.verifyHash();
-
-                // TODO: Not working yet
-                // searchEvent.verifySignature();
+                searchEvent.verifySignature();
             }
         }
 

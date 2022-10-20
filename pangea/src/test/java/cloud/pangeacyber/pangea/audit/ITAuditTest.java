@@ -107,18 +107,23 @@ public class ITAuditTest
 
     @Test
     public void testSearchDefault() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
-        SearchInput input = new SearchInput("message:Integration test msg");
-        int limit = 10;
+        SearchInput input = new SearchInput("message:sigtest100");
+        int limit = 4;
+        int maxResults = 6;
         input.setMaxResults(limit);
-        input.setOrder("asc");
+        input.setMaxResults(maxResults);
+        input.setOrder("desc");
 
         SearchResponse response = client.search(input);
         assertTrue(response.isOk());
-        assertTrue(response.getResult().getCount() <= limit);
+        assertTrue(response.getResult().getCount() <= maxResults);
 
         for(SearchEvent event: response.getResult().getEvents()){
-            assertEquals(event.getConsistencyVerification(), EventVerification.SUCCESS);
-            assertEquals(event.getMembershipVerification(), EventVerification.SUCCESS);
+            assertTrue(event.getConsistencyVerification() != EventVerification.FAILED);     // This could be NOT_VERIFIED or SUCCESS is they have data or not
+            assertTrue(event.getMembershipVerification() != EventVerification.FAILED);
+            assertTrue(event.getSignatureVerification() != EventVerification.FAILED);
+            assertNotNull(event.getEventEnvelope());
+            assertNotNull(event.getHash());
         }
     }
 
@@ -136,6 +141,7 @@ public class ITAuditTest
         for(SearchEvent event: response.getResult().getEvents()){
             assertEquals(EventVerification.NOT_VERIFIED, event.getConsistencyVerification());
             assertEquals(EventVerification.NOT_VERIFIED, event.getMembershipVerification());
+            assertEquals(EventVerification.NOT_VERIFIED, event.getSignatureVerification());
         }
     }
 

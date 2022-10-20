@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class EventEnvelope {
@@ -56,5 +57,11 @@ public class EventEnvelope {
         }
         Verifier verifier = new Verifier();
         return verifier.verify(this.publicKey, this.signature, canonicalJson);
+    }
+
+    static public String canonicalize(EventEnvelope envelope) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        return mapper.writeValueAsString(envelope);
     }
 }

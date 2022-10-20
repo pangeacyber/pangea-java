@@ -105,10 +105,9 @@ public class SearchEvent {
     }
 
     public void verifyHash() throws VerificationFailed {
-        ObjectMapper mapper = new ObjectMapper();
         String canonicalJson;
         try{
-            canonicalJson = mapper.writeValueAsString(this.eventEnvelope);
+            canonicalJson = EventEnvelope.canonicalize(this.eventEnvelope);
         } catch(JsonProcessingException e){
             throw new VerificationFailed("Error: Failed to canonicalize envelope in hash verification", this.hash);
         }
@@ -191,7 +190,7 @@ public class SearchEvent {
 
 
     public void verifyMembershipProof(byte[] rootHash){
-        if(this.membershipProof.isEmpty()){
+        if(this.membershipProof == null || this.membershipProof.isEmpty()){
             return;
         }
         byte[] nodeHash = Hash.decode(this.hash);

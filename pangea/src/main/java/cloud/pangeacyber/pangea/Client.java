@@ -43,7 +43,7 @@ public abstract class Client {
         builder
             .uri(config.getServiceUrl(serviceName, path))
             .header("Authorization", "Bearer " + config.getToken())
-            .header("User-Agent", "Pangea Java " + Version.version)
+            .header("User-Agent", "Pangea Java " + Version.VERSION)
             .POST(HttpRequest.BodyPublishers.ofString(body));
 
         if (config.getConfigId() != "") {

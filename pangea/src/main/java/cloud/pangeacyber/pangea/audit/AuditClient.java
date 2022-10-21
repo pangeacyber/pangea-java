@@ -22,19 +22,9 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.SignerException;
 
 
-final class SearchResultRequest{
+final class ResultsRequest{
     @JsonProperty("id")
     String id;
-
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("include_membership_proof")
-    Boolean IncludeMembershipProof;
-
-    @JsonProperty("include_hash")   // Will be removed soon
-    Boolean includeHash = true;
-
-    @JsonProperty("include_root")
-    Boolean includeRoot = true;     // Will be removed soon, and return by default
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("limit")
@@ -44,9 +34,8 @@ final class SearchResultRequest{
     @JsonProperty("offset")
     Integer offset = 0;
 
-    public SearchResultRequest(String id, Boolean includeMembershipProof, Integer limit, Integer offset) {
+    public ResultsRequest(String id, Integer limit, Integer offset) {
         this.id = id;
-        IncludeMembershipProof = includeMembershipProof;
         this.limit = limit;
         this.offset = offset;
     }
@@ -93,7 +82,7 @@ final class LogRequest{
 
 final class LogResponse extends Response<LogOutput> {}
 final class SearchResponse extends Response<SearchOutput> {}
-final class ResultResponse extends Response<SearchResultOutput> {}
+final class ResultsResponse extends Response<ResultsOutput> {}
 final class RootResponse extends Response<RootOutput> {}
 
 public class AuditClient extends Client {
@@ -226,28 +215,27 @@ public class AuditClient extends Client {
         return rootPost(treeSize);
     }
 
-    private SearchResponse handleSearchResponse(SearchResponse response, boolean verifyConsistency, boolean verifyEvents) throws PangeaAPIException, AuditException{
+    private void processSearchResult(ResultsOutput result, boolean verifyConsistency, boolean verifyEvents) throws PangeaAPIException, AuditException{
 
         if(verifyEvents){
-            for(SearchEvent searchEvent : response.getResult().getEvents()){
+            for(SearchEvent searchEvent : result.getEvents()){
                 searchEvent.verifyHash();
                 searchEvent.verifySignature();
             }
         }
 
-        Root root = response.getResult().getRoot();
+        Root root = result.getRoot();
 
         if(verifyConsistency && root != null){  // if there is no root, we don't have any record migrated to cold. We cannot verify any proof
-            updatePublishedRoots(response.getResult());
-            for(SearchEvent searchEvent: response.getResult().getEvents()){
+            updatePublishedRoots(result);
+            for(SearchEvent searchEvent: result.getEvents()){
                 searchEvent.verifyMembershipProof(Hash.decode(root.getRootHash()));
                 searchEvent.verifyConsistency(publishedRoots);    
             }
         }
-        return response;
     }
 
-    private void updatePublishedRoots(SearchOutput result){
+    private void updatePublishedRoots(ResultsOutput result){
         Set<Integer> treeSizes = new HashSet<Integer>();
         for(SearchEvent searchEvent: result.getEvents()){
             int leafIndex = searchEvent.getLeafIndex();
@@ -295,11 +283,12 @@ public class AuditClient extends Client {
 
     private SearchResponse searchPost(SearchInput request, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
         SearchResponse response = doPost("/v1/search", request, SearchResponse.class);
-        return handleSearchResponse(response, verifyConsistency, verifyEvents);
+        processSearchResult(response.getResult(), verifyConsistency, verifyEvents);
+        return response;
     }
 
     /**
-     * @summary Perform a search of Audit Secure logs 
+     * @summary Search
      * @description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
      * @param input - query filters to perform search
      * @return SearchResponse
@@ -321,7 +310,7 @@ public class AuditClient extends Client {
     }
 
     /**
-     * @summary Perfomr a search of Audit Secure logs
+     * @summary Search
      * @description Perform a search of logs according to input param. Allow to select to verify or nor consistency proof and events.
      * @param input - query filters to perfom search
      * @param verifyConsistency - true to verify logs consistency proofs
@@ -344,6 +333,47 @@ public class AuditClient extends Client {
             input.setIncludeMembershipProof(true);
         }
         return searchPost(input, verifyConsistency, verifyEvents);
+    }
+
+    private ResultsResponse resultPost(String id, Integer limit, Integer offset, boolean verifyConsistency, boolean verifyEvents)  throws IOException, InterruptedException, PangeaException, PangeaAPIException{
+        ResultsRequest request = new ResultsRequest(id, limit, offset);
+        ResultsResponse response = doPost("/v1/results", request, ResultsResponse.class);
+        processSearchResult(response.getResult(), verifyConsistency, verifyEvents);
+        return response;
+    }
+
+    /**
+     * @summary Results
+     * @description Return result's page from search id.
+     * @param id - A search results identifier returned by the search call. By default verify events and do not verify consistency.
+     * @param limit - Number of audit records to include in a single set of results.
+     * @param offset - Offset from the start of the result set to start returning results from.
+     * @return ResultsResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     */
+    public ResultsResponse results(String id, Integer limit, Integer offset) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
+        return resultPost(id, limit, offset, false, true);
+    }
+
+    /**
+     * @summary Results
+     * @description Return result's page from search id. Allow to select to verify or nor consistency proof and events.
+     * @param id - A search results identifier returned by the search call.
+     * @param limit - Number of audit records to include in a single set of results.
+     * @param offset - Offset from the start of the result set to start returning results from.
+     * @param verifyConsistency - true to verify logs consistency proofs
+     * @param verifyEvents - true to verify logs hash and signature
+     * @return ResultsResponse
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     */
+    public ResultsResponse results(String id, Integer limit, Integer offset, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
+        return resultPost(id, limit, offset, verifyConsistency, verifyEvents);
     }
 
 }

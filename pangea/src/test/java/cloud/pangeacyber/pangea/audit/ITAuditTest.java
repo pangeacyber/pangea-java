@@ -162,6 +162,50 @@ public class ITAuditTest
         }
     }
 
+    @Test
+    public void testResultsDefault() throws IOException, InterruptedException, PangeaAPIException, PangeaException {
+        SearchInput input = new SearchInput("message:");
+        int searchLimit = 100;
+        input.setMaxResults(searchLimit);
+        input.setOrder("desc");
+
+        SearchResponse searchResponse = client.search(input, true, true);
+        assertTrue(searchResponse.isOk());
+        assertTrue(searchResponse.getResult().getCount() <= searchLimit);
+
+        int resultsLimit = 10;
+        ResultsResponse resultsResponse = client.results(searchResponse.getRequestId(), resultsLimit, 0);
+        assertTrue(resultsResponse.getResult().getCount() <= resultsLimit);
+        for(SearchEvent event: resultsResponse.getResult().getEvents()){
+            assertEquals(EventVerification.NOT_VERIFIED, event.getConsistencyVerification());
+            assertTrue(event.getMembershipVerification() != EventVerification.FAILED);
+            assertTrue(event.getSignatureVerification() != EventVerification.FAILED);       //By default verify signatures. If does not have signature is NOT_VERIFIED
+        }
+    }
+
+    @Test
+    public void testResultsNoVerify() throws IOException, InterruptedException, PangeaAPIException, PangeaException {
+        SearchInput input = new SearchInput("message:");
+        int searchLimit = 100;
+        input.setMaxResults(searchLimit);
+        input.setOrder("desc");
+
+        SearchResponse searchResponse = client.search(input, true, true);
+        assertTrue(searchResponse.isOk());
+        assertTrue(searchResponse.getResult().getCount() <= searchLimit);
+
+        int resultsLimit = 10;
+        // Skip verifications
+        ResultsResponse resultsResponse = client.results(searchResponse.getRequestId(), resultsLimit, 0, false, false);
+        assertTrue(resultsResponse.getResult().getCount() <= resultsLimit);
+        for(SearchEvent event: resultsResponse.getResult().getEvents()){
+            // This should be NOT_VERIFIED
+            assertEquals(EventVerification.NOT_VERIFIED, event.getConsistencyVerification());
+            assertEquals(EventVerification.NOT_VERIFIED, event.getMembershipVerification());
+            assertEquals(EventVerification.NOT_VERIFIED, event.getSignatureVerification());
+        }
+    }
+
 
     @Test
     public void testRoot() throws IOException, InterruptedException, PangeaException, PangeaAPIException {

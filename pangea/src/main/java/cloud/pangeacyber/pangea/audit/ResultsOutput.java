@@ -2,7 +2,7 @@ package cloud.pangeacyber.pangea.audit;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SearchResultOutput {
+public class ResultsOutput {
     @JsonProperty("count")
     int count;
 

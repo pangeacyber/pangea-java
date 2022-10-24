@@ -1,17 +1,15 @@
 package cloud.pangeacyber.pangea.redact;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RedactStructuredOutput {
     @JsonProperty("redacted_data")
-    Map<String, Object> redactedData;
+    Object redactedData;
 
     @JsonProperty("report")
     RedactDebugReport report;
 
-    public Map<String, Object> getRedactedData() {
+    public Object getRedactedData() {
         return redactedData;
     }
 

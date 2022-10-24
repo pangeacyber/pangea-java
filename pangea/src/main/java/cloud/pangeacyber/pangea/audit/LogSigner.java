@@ -33,7 +33,7 @@ public class LogSigner {
         try{
             message = data.getBytes("utf-8");
         } catch(UnsupportedEncodingException e){
-            throw new SignerException("Failed to convert message to sign. Encoding not supported");
+            throw new SignerException("Failed to convert message to sign. Encoding not supported", e);
         }
 
         signer.reset();
@@ -43,7 +43,7 @@ public class LogSigner {
         try{
             signature = signer.generateSignature();
         } catch(Exception e){
-            throw new SignerException("Failed to generate signature");
+            throw new SignerException("Failed to generate signature", e);
         }
 
         return new String(Base64.getEncoder().encode(signature));
@@ -54,7 +54,7 @@ public class LogSigner {
         try{
             key = new String(Files.readAllBytes(Paths.get(this.privateKeyFilename)));
         } catch(IOException e){
-            throw new SignerException("Failed to load keys from file: " + this.privateKeyFilename);
+            throw new SignerException("Failed to load keys from file: " + this.privateKeyFilename, e);
         }
 
         String privateKeyPEM = key

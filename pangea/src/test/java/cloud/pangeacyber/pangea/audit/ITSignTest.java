@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import cloud.pangeacyber.pangea.exceptions.PangeaException;
+
 public class ITSignTest {
     LogSigner signer;
 
@@ -14,7 +16,7 @@ public class ITSignTest {
     }
 
     @Test
-    public void testSigner() throws InterruptedException, Exception {
+    public void testSigner() throws PangeaException {
         String msg = "Hello signed world";
         String signature = signer.sign(msg);
         String pubKey = signer.getPublicKey();

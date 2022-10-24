@@ -48,7 +48,7 @@ public class DomainIntelClient extends Client{
         super(config, serviceName);
     }
 
-    private DomainLookupResponse lookupPost(String domain, String provider, Boolean verbose, Boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
+    private DomainLookupResponse lookupPost(String domain, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException{
         DomainLookupRequest request = new DomainLookupRequest(domain, provider, verbose, raw);
         DomainLookupResponse resp = doPost("/v1/lookup", request, DomainLookupResponse.class);
         return resp;
@@ -68,7 +68,7 @@ public class DomainIntelClient extends Client{
      * DomainLookupResponse response = client.lookup("737updatesboeing.com");
      * ```
      */
-    public DomainLookupResponse lookup(String domain) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public DomainLookupResponse lookup(String domain) throws PangeaException, PangeaAPIException {
         return lookupPost(domain, null, null, null);
     }
 
@@ -86,7 +86,7 @@ public class DomainIntelClient extends Client{
      * DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools");
      * ```
      */
-    public DomainLookupResponse lookup(String domain, String provider) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public DomainLookupResponse lookup(String domain, String provider) throws PangeaException, PangeaAPIException {
         return lookupPost(domain, provider, null, null);
     }
 
@@ -105,7 +105,7 @@ public class DomainIntelClient extends Client{
      * DomainLookupResponse response = client.lookup("737updatesboeing.com", true, true);
      * ```
      */
-    public DomainLookupResponse lookup(String domain, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public DomainLookupResponse lookup(String domain, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(domain, null, verbose, raw);
     }
 
@@ -125,7 +125,7 @@ public class DomainIntelClient extends Client{
      * DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools", true, true);
      * ```
      */
-    public DomainLookupResponse lookup(String domain, String provider, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public DomainLookupResponse lookup(String domain, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(domain, provider, verbose, raw);
     }
 }

@@ -3,7 +3,10 @@ package cloud.pangeacyber.pangea.exceptions;
 import java.lang.Exception;
 
 public class PangeaException extends Exception {
-    public PangeaException(String message){
+    Throwable casue;
+
+    public PangeaException(String message, Throwable cause){
         super(message);
+        this.casue = cause;
     }
 }

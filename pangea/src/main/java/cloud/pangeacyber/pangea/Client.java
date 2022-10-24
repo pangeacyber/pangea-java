@@ -1,6 +1,5 @@
 package cloud.pangeacyber.pangea;
 
-import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -45,24 +44,25 @@ public abstract class Client {
             .uri(config.getServiceUrl(serviceName, path))
             .header("Authorization", "Bearer " + config.getToken())
             .POST(HttpRequest.BodyPublishers.ofString(body));
-
-        if (config.getConfigId() != "") {
-            builder = builder.header(config.getServiceIdHeaderName(serviceName), config.getConfigId());
-        }
     }
 
-    public <Req, ResponseType extends Response<?>> ResponseType doPost(String path, Req request, Class<ResponseType> responseClass) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public <Req, ResponseType extends Response<?>> ResponseType doPost(String path, Req request, Class<ResponseType> responseClass) throws PangeaException, PangeaAPIException {
         ObjectMapper mapper = new ObjectMapper();
         String body;
         try{
             body = mapper.writeValueAsString(request);
         } catch(JsonProcessingException e){
-            throw new PangeaException(e.getMessage());
+            throw new PangeaException("Failed to write request", e);
         }
 
         HttpRequest httpRequest = buildPostRequest(path, body);
+        HttpResponse<String> httpResponse;
 
-        HttpResponse<String> httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());
+        try{
+            httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());        
+        } catch(Exception e){
+            throw new PangeaException("Failed to send request", e);
+        }
 
         return checkResponse(httpResponse, responseClass);
     }
@@ -75,7 +75,7 @@ public abstract class Client {
         try{
             header =  mapper.readValue(body, ResponseHeader.class);
         } catch(Exception e){
-            throw new PangeaException("Failed to parse response header");
+            throw new PangeaException("Failed to parse response header", e);
         }
 
         ResponseType resultResponse;
@@ -84,7 +84,7 @@ public abstract class Client {
             try{
                 resultResponse =  mapper.readValue(body, responseClass);
             } catch(Exception e) {
-                throw new ParseResultFailed("Failed to parse response result", header, body);
+                throw new ParseResultFailed("Failed to parse response result", e, header, body);
             }
             resultResponse.setHttpResponse(httpResponse);
             return resultResponse;
@@ -97,7 +97,7 @@ public abstract class Client {
         try{
             response =  mapper.readValue(body, ResponseError.class);
         } catch(Exception e){
-            throw new ParseResultFailed("Failed to parse response errors", header, body);
+            throw new ParseResultFailed("Failed to parse response errors", e, header, body);
         }
 
         response.setHttpResponse(httpResponse);

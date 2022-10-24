@@ -6,11 +6,10 @@ import java.net.http.HttpRequest;
 import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 class TestClient extends Client {
     public TestClient() {
-        super(new Config("token", "config-id", "domain.com"), "test");
+        super(new Config("token", "domain.com"), "test");
     }
     
     @Override
@@ -36,7 +35,6 @@ public class ClientTest {
         
         client.fillPostRequestBuilder(builder, "/path", "body");
 
-        verify(builder).header("X-Pangea-Test-Config-Id", "config-id");
         verify(builder).header("Authorization", "Bearer token");
         verify(builder).uri(URI.create("https://test.domain.com/path"));
     }

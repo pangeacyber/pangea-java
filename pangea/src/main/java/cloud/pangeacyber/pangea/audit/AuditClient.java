@@ -1,6 +1,5 @@
 package cloud.pangeacyber.pangea.audit;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -16,25 +15,14 @@ import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.audit.arweave.Arweave;
 import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
 import cloud.pangeacyber.pangea.audit.utils.Hash;
-import cloud.pangeacyber.pangea.exceptions.AuditException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.SignerException;
 
 
-final class SearchResultRequest{
+final class ResultsRequest{
     @JsonProperty("id")
     String id;
-
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("include_membership_proof")
-    Boolean IncludeMembershipProof;
-
-    @JsonProperty("include_hash")   // Will be removed soon
-    Boolean includeHash = true;
-
-    @JsonProperty("include_root")
-    Boolean includeRoot = true;     // Will be removed soon, and return by default
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("limit")
@@ -44,9 +32,8 @@ final class SearchResultRequest{
     @JsonProperty("offset")
     Integer offset = 0;
 
-    public SearchResultRequest(String id, Boolean includeMembershipProof, Integer limit, Integer offset) {
+    public ResultsRequest(String id, Integer limit, Integer offset) {
         this.id = id;
-        IncludeMembershipProof = includeMembershipProof;
         this.limit = limit;
         this.offset = offset;
     }
@@ -93,7 +80,7 @@ final class LogRequest{
 
 final class LogResponse extends Response<LogOutput> {}
 final class SearchResponse extends Response<SearchOutput> {}
-final class ResultResponse extends Response<SearchResultOutput> {}
+final class ResultsResponse extends Response<ResultsOutput> {}
 final class RootResponse extends Response<RootOutput> {}
 
 public class AuditClient extends Client {
@@ -114,24 +101,24 @@ public class AuditClient extends Client {
         publishedRoots = new HashMap<Integer, PublishedRoot>();
     }
 
-    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey)  throws IOException, InterruptedException, PangeaException, PangeaAPIException{
+    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey)  throws PangeaException, PangeaAPIException{
         LogRequest request = new LogRequest(event, verbose, signature, publicKey);
         return doPost("/v1/log", request, LogResponse.class);
     }
 
-    private LogResponse doLog(Event event, boolean sign, Boolean verbose) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
+    private LogResponse doLog(Event event, boolean sign, Boolean verbose) throws PangeaException, PangeaAPIException{
         String signature = null;
         String publicKey = null;
     
         if(sign && this.signer == null){
-            throw new SignerException("Signer not initialized");
+            throw new SignerException("Signer not initialized", null);
         }
         else if(sign && this.signer != null){
             String canEvent;
             try{
                 canEvent = Event.canonicalize(event);
             } catch(Exception e){
-                throw new SignerException("Failed to convert event to string");
+                throw new SignerException("Failed to convert event to string", e);
             }
 
             signature = this.signer.sign(canEvent);
@@ -146,11 +133,8 @@ public class AuditClient extends Client {
      * @description Log an event to Audit Secure Log. By default does not sign event and verbose is left as server default
      * @param event - event to log
      * @return LogResponse
-     * @throws IOException
-     * @throws InterruptedException 
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @throws AuditException
      * @example
      * ```java
      *  String msg = "Event's message";
@@ -159,7 +143,7 @@ public class AuditClient extends Client {
      * ```
      */
 
-    public LogResponse log(Event event) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
+    public LogResponse log(Event event) throws PangeaException, PangeaAPIException{
         return doLog(event, false, null);
     }
 
@@ -170,11 +154,8 @@ public class AuditClient extends Client {
      * @param sign - true to sign event
      * @param verbose - true to more verbose response
      * @return LogResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @throws AuditException
      * @example
      * ```java
      *  String msg = "Event's message";
@@ -182,11 +163,11 @@ public class AuditClient extends Client {
      *  LogResponse response = client.log(event, true, true);
      * ```
      */
-    public LogResponse log(Event event, boolean sign, boolean verbose) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException {
+    public LogResponse log(Event event, boolean sign, boolean verbose) throws PangeaException, PangeaAPIException {
         return doLog(event, sign, verbose);
     }
 
-    private RootResponse rootPost(Integer treeSize) throws IOException, PangeaException, InterruptedException, PangeaAPIException {
+    private RootResponse rootPost(Integer treeSize) throws PangeaException, PangeaAPIException {
         RootRequest request = new RootRequest(treeSize);
         return doPost("/v1/root", request, RootResponse.class);        
     }
@@ -195,8 +176,6 @@ public class AuditClient extends Client {
      * @summary Get root from Pangea Server
      * @description Get last root from Pangea Server
      * @return
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
      * @example 
@@ -204,7 +183,7 @@ public class AuditClient extends Client {
      * RootResponse response = client.getRoot();
      * ```
      */
-    public RootResponse getRoot() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public RootResponse getRoot() throws PangeaException, PangeaAPIException {
         return rootPost(null);
     }
 
@@ -212,9 +191,7 @@ public class AuditClient extends Client {
      * @summary Get root from Pangea Server
      * @description Get root from three of treeSize from Pangea Server
      * @param treeSize - tree size to get root
-     * @return
-     * @throws IOException
-     * @throws InterruptedException
+     * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
      * @example
@@ -222,32 +199,31 @@ public class AuditClient extends Client {
      * RootResponse response = client.getRoot(treeSize);
      * ```
      */
-    public RootResponse getRoot(int treeSize) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public RootResponse getRoot(int treeSize) throws PangeaException, PangeaAPIException {
         return rootPost(treeSize);
     }
 
-    private SearchResponse handleSearchResponse(SearchResponse response, boolean verifyConsistency, boolean verifyEvents) throws PangeaAPIException, AuditException{
+    private void processSearchResult(ResultsOutput result, boolean verifyConsistency, boolean verifyEvents) throws PangeaException, PangeaAPIException{
 
         if(verifyEvents){
-            for(SearchEvent searchEvent : response.getResult().getEvents()){
+            for(SearchEvent searchEvent : result.getEvents()){
                 searchEvent.verifyHash();
                 searchEvent.verifySignature();
             }
         }
 
-        Root root = response.getResult().getRoot();
+        Root root = result.getRoot();
 
         if(verifyConsistency && root != null){  // if there is no root, we don't have any record migrated to cold. We cannot verify any proof
-            updatePublishedRoots(response.getResult());
-            for(SearchEvent searchEvent: response.getResult().getEvents()){
+            updatePublishedRoots(result);
+            for(SearchEvent searchEvent: result.getEvents()){
                 searchEvent.verifyMembershipProof(Hash.decode(root.getRootHash()));
                 searchEvent.verifyConsistency(publishedRoots);    
             }
         }
-        return response;
     }
 
-    private void updatePublishedRoots(SearchOutput result){
+    private void updatePublishedRoots(ResultsOutput result){
         Set<Integer> treeSizes = new HashSet<Integer>();
         for(SearchEvent searchEvent: result.getEvents()){
             int leafIndex = searchEvent.getLeafIndex();
@@ -293,21 +269,19 @@ public class AuditClient extends Client {
 
     }
 
-    private SearchResponse searchPost(SearchInput request, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
+    private SearchResponse searchPost(SearchInput request, boolean verifyConsistency, boolean verifyEvents) throws PangeaException, PangeaAPIException{
         SearchResponse response = doPost("/v1/search", request, SearchResponse.class);
-        return handleSearchResponse(response, verifyConsistency, verifyEvents);
+        processSearchResult(response.getResult(), verifyConsistency, verifyEvents);
+        return response;
     }
 
     /**
-     * @summary Perform a search of Audit Secure logs 
+     * @summary Search
      * @description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
      * @param input - query filters to perform search
      * @return SearchResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @throws AuditException
      * @example
      * ```java
      *  SearchInput input = new SearchInput("message:Integration test msg");
@@ -315,23 +289,20 @@ public class AuditClient extends Client {
      *  SearchResponse response = client.search(input);
      * ```
      */
-    public SearchResponse search(SearchInput input) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException{
+    public SearchResponse search(SearchInput input) throws PangeaException, PangeaAPIException{
         input.setIncludeMembershipProof(true);
         return searchPost(input, true, true);
     }
 
     /**
-     * @summary Perfomr a search of Audit Secure logs
+     * @summary Search
      * @description Perform a search of logs according to input param. Allow to select to verify or nor consistency proof and events.
      * @param input - query filters to perfom search
      * @param verifyConsistency - true to verify logs consistency proofs
      * @param verifyEvents - true to verify logs hash and signature
      * @return SearchResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @throws AuditException
      * @example
      * ```java
      *  SearchInput input = new SearchInput("message:Integration test msg");
@@ -339,11 +310,48 @@ public class AuditClient extends Client {
      *  SearchResponse response = client.search(input);
      * ```
      */
-    public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws IOException, InterruptedException, PangeaException, PangeaAPIException, AuditException {
+    public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws PangeaException, PangeaAPIException {
         if(verifyConsistency){
             input.setIncludeMembershipProof(true);
         }
         return searchPost(input, verifyConsistency, verifyEvents);
+    }
+
+    private ResultsResponse resultPost(String id, Integer limit, Integer offset, boolean verifyConsistency, boolean verifyEvents)  throws PangeaException, PangeaAPIException{
+        ResultsRequest request = new ResultsRequest(id, limit, offset);
+        ResultsResponse response = doPost("/v1/results", request, ResultsResponse.class);
+        processSearchResult(response.getResult(), verifyConsistency, verifyEvents);
+        return response;
+    }
+
+    /**
+     * @summary Results
+     * @description Return result's page from search id.
+     * @param id - A search results identifier returned by the search call. By default verify events and do not verify consistency.
+     * @param limit - Number of audit records to include in a single set of results.
+     * @param offset - Offset from the start of the result set to start returning results from.
+     * @return ResultsResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     */
+    public ResultsResponse results(String id, Integer limit, Integer offset) throws PangeaException, PangeaAPIException{
+        return resultPost(id, limit, offset, false, true);
+    }
+
+    /**
+     * @summary Results
+     * @description Return result's page from search id. Allow to select to verify or nor consistency proof and events.
+     * @param id - A search results identifier returned by the search call.
+     * @param limit - Number of audit records to include in a single set of results.
+     * @param offset - Offset from the start of the result set to start returning results from.
+     * @param verifyConsistency - true to verify logs consistency proofs
+     * @param verifyEvents - true to verify logs hash and signature
+     * @return ResultsResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     */
+    public ResultsResponse results(String id, Integer limit, Integer offset, boolean verifyConsistency, boolean verifyEvents) throws PangeaException, PangeaAPIException{
+        return resultPost(id, limit, offset, verifyConsistency, verifyEvents);
     }
 
 }

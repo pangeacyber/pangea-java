@@ -8,9 +8,6 @@ public final class Config {
 	// The Bearer token used to authenticate requests.
     String token;
 
-    // The Config ID token of the service.
-    String configId;
-
     // Base domain for API requests.
     String domain;
 
@@ -20,9 +17,8 @@ public final class Config {
     // Timeout for connections
     Duration connectionTimeout;
 
-    public Config(String token, String configId, String domain) {
+    public Config(String token, String domain) {
         this.token = token;
-        this.configId = configId;
         this.domain = domain;
 
         this.insecure = false;
@@ -35,14 +31,6 @@ public final class Config {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public String getConfigId() {
-        return configId;
-    }
-
-    public void setConfigId(String configId) {
-        this.configId = configId;
     }
 
     public String getDomain() {
@@ -79,20 +67,12 @@ public final class Config {
         return URI.create(b.toString());
     }
 
-    public String getServiceIdHeaderName(String serviceName) {
-        return "X-Pangea-" + Character.toTitleCase(serviceName.charAt(0)) + serviceName.substring(1) + "-Config-Id";
-    }
-
     public static Config fromEnvironment(String serviceName) throws ConfigException{
-        String token = System.getenv("PANGEA_TOKEN");
+        String tokenEnvVarName = "PANGEA_" + serviceName.toUpperCase() + "_TOKEN";
+        tokenEnvVarName = tokenEnvVarName.replace('-', '_');
+        String token = System.getenv(tokenEnvVarName);
         if(token == null || token.isEmpty()){
-            throw new ConfigException("Need to set up PANGEA_TOKEN environment variable");
-        }
-
-        String configId = System.getenv(String.format("PANGEA_%s_CONFIG_ID", serviceName.toUpperCase()));
-        if(configId == null || configId.isEmpty()){
-            String envVarName = String.format("PANGEA_%s_CONFIG_ID", serviceName.toUpperCase());
-            throw new ConfigException(String.format("Need to set up %s environment variable", envVarName));
+            throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
         }
 
         String domain = System.getenv("PANGEA_DOMAIN");
@@ -100,7 +80,7 @@ public final class Config {
             throw new ConfigException("Need to set up PANGEA_DOMAIN environment variable");
         }
 
-        Config config = new Config(token, configId, domain);
+        Config config = new Config(token, domain);
         return config;
     }
 }

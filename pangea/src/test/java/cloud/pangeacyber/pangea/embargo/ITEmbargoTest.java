@@ -3,8 +3,6 @@ package cloud.pangeacyber.pangea.embargo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +23,7 @@ public class ITEmbargoTest
     }
 
     @Test
-    public void testIsoCheckSanctionedCountry() throws IOException, InterruptedException, PangeaException, PangeaException, PangeaAPIException {
+    public void testIsoCheckSanctionedCountry() throws PangeaException, PangeaException, PangeaAPIException {
         IsoCheckResponse response = client.isoCheck("CU");
         assertTrue(response.isOk());
 
@@ -37,7 +35,7 @@ public class ITEmbargoTest
     }
 
     @Test
-    public void testIsoCheckNoSanctionedCountry() throws IOException, InterruptedException, PangeaException, PangeaAPIException{
+    public void testIsoCheckNoSanctionedCountry() throws PangeaException, PangeaAPIException{
         IsoCheckResponse response = client.isoCheck("AR");
         assertTrue(response.isOk());
 
@@ -46,7 +44,7 @@ public class ITEmbargoTest
     }
 
     @Test
-    public void testIpCheckSanctionedCountry() throws IOException, InterruptedException, PangeaException, PangeaAPIException{
+    public void testIpCheckSanctionedCountry() throws PangeaException, PangeaAPIException{
         IpCheckResponse response = client.ipCheck("213.24.238.26");
         assertTrue(response.isOk());
 
@@ -61,7 +59,7 @@ public class ITEmbargoTest
     }
 
     @Test(expected = ValidationException.class)
-    public void testEmptyIP() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testEmptyIP() throws PangeaException, PangeaAPIException {
         IpCheckResponse response = client.ipCheck("");
     }
 

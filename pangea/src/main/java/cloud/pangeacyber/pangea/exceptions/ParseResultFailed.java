@@ -5,8 +5,8 @@ public class ParseResultFailed extends PangeaException {
     ResponseHeader header;
     String body;
 
-    public ParseResultFailed(String message, ResponseHeader header, String body) {
-        super(message);
+    public ParseResultFailed(String message, Throwable cause, ResponseHeader header, String body) {
+        super(message, cause);
         this.header = header;
     }    
 }

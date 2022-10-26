@@ -9,7 +9,6 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
 import cloud.pangeacyber.pangea.audit.utils.Hash;
@@ -105,24 +104,23 @@ public class SearchEvent {
     }
 
     public void verifyHash() throws VerificationFailed {
-        ObjectMapper mapper = new ObjectMapper();
         String canonicalJson;
         try{
-            canonicalJson = mapper.writeValueAsString(this.eventEnvelope);
+            canonicalJson = EventEnvelope.canonicalize(this.eventEnvelope);
         } catch(JsonProcessingException e){
-            throw new VerificationFailed("Error: Failed to canonicalize envelope in hash verification", this.hash);
+            throw new VerificationFailed("Failed to canonicalize envelope in hash verification. Event hash: " + this.hash, e, this.hash);
         }
 
         String hash = Hash.hash(canonicalJson);
         if(!hash.equals(this.hash)){
-            throw new VerificationFailed("Error: Failed event hash verification", this.hash);
+            throw new VerificationFailed("Failed hash verification. Calculated and received hash are not equals. Event hash: " + this.hash, null, this.hash);
         }
     }
 
     public void verifySignature() throws VerificationFailed {
         this.signatureVerification = this.eventEnvelope.verifySignature();
         if(this.signatureVerification == EventVerification.FAILED){
-            throw new VerificationFailed("Event signature verification failed", this.hash);
+            throw new VerificationFailed("Event signature verification failed. Calculated and received signatures are not equals.  Event hash: " + this.hash, null, this.hash);
         }
     }
 
@@ -191,7 +189,7 @@ public class SearchEvent {
 
 
     public void verifyMembershipProof(byte[] rootHash){
-        if(this.membershipProof.isEmpty()){
+        if(this.membershipProof == null || this.membershipProof.isEmpty()){
             return;
         }
         byte[] nodeHash = Hash.decode(this.hash);

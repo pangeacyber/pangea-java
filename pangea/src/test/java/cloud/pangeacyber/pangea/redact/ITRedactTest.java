@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +27,7 @@ public class ITRedactTest
     }
 
     @Test
-    public void testRedact_1() throws IOException, InterruptedException, PangeaException, PangeaAPIException{
+    public void testRedact_1() throws PangeaException, PangeaAPIException{
         RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309");
         assertTrue(response.isOk());
 
@@ -39,7 +37,7 @@ public class ITRedactTest
     }
 
     @Test
-    public void testRedact_2() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testRedact_2() throws PangeaException, PangeaAPIException {
         RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", true);
         assertTrue(response.isOk());
 
@@ -49,7 +47,7 @@ public class ITRedactTest
     }
 
     @Test
-    public void testRedact_3() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testRedact_3() throws PangeaException, PangeaAPIException {
         RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", false);
         assertTrue(response.isOk());
 
@@ -59,7 +57,7 @@ public class ITRedactTest
     }
 
     @Test
-    public void testStructured_1() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testStructured_1() throws PangeaException, PangeaAPIException {
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
@@ -78,7 +76,7 @@ public class ITRedactTest
     }
 
     @Test
-    public void testStructured_2() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testStructured_2() throws PangeaException, PangeaAPIException {
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
@@ -97,7 +95,7 @@ public class ITRedactTest
     }
 
     @Test
-    public void testStructured_3() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testStructured_3() throws PangeaException, PangeaAPIException {
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
@@ -116,7 +114,7 @@ public class ITRedactTest
     }
 
     @Test
-    public void testStructured_4() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testStructured_4() throws PangeaException, PangeaAPIException {
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
@@ -135,7 +133,7 @@ public class ITRedactTest
     }
 
     @Test
-    public void testStructured_5() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testStructured_5() throws PangeaException, PangeaAPIException {
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");
@@ -154,7 +152,7 @@ public class ITRedactTest
     }
 
     @Test
-    public void testStructured_6() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testStructured_6() throws PangeaException, PangeaAPIException {
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         data.put("Name", "Jenny Jenny");
         data.put("Phone", "This is its number: 415-867-5309");

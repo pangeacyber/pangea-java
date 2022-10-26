@@ -1,7 +1,4 @@
 package cloud.pangeacyber.pangea.intel;
-
-import java.io.IOException;
-
 import cloud.pangeacyber.pangea.Client;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -48,25 +45,25 @@ public class UrlIntelClient extends Client{
         super(config, serviceName);
     }
 
-    private UrlLookupResponse lookupPost(String url, String provider, Boolean verbose, Boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    private UrlLookupResponse lookupPost(String url, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
         UrlLookupRequest request = new UrlLookupRequest(url, provider, verbose, raw);
         UrlLookupResponse resp = doPost("/v1/lookup", request, UrlLookupResponse.class);
         return resp;
     }
 
-    public UrlLookupResponse lookup(String url) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public UrlLookupResponse lookup(String url) throws PangeaException, PangeaAPIException {
         return lookupPost(url, null, null, null);
     }
 
-    public UrlLookupResponse lookup(String url, String provider) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public UrlLookupResponse lookup(String url, String provider) throws PangeaException, PangeaAPIException {
         return lookupPost(url, provider, null, null);
     }
 
-    public UrlLookupResponse lookup(String url, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public UrlLookupResponse lookup(String url, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(url, null, verbose, raw);
     }
 
-    public UrlLookupResponse lookup(String url, String provider, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public UrlLookupResponse lookup(String url, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(url, provider, verbose, raw);
     }
 }

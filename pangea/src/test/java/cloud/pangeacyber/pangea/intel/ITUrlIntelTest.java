@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,11 +19,11 @@ public class ITUrlIntelTest {
 
     @Before
     public void setUp() throws ConfigException{
-        client = new UrlIntelClient(Config.fromEnvironment("url_intel"));
+        client = new UrlIntelClient(Config.fromEnvironment(UrlIntelClient.serviceName));
     }
 
     @Test
-    public void testUrlLookupMalicious_1() throws IOException, InterruptedException, PangeaException, PangeaException, PangeaAPIException {
+    public void testUrlLookupMalicious_1() throws PangeaException, PangeaException, PangeaAPIException {
         // Default provider, not verbose by default, not raw by default;
         UrlLookupResponse response = client.lookup("http://113.235.101.11:54384");
         assertTrue(response.isOk());
@@ -37,7 +35,7 @@ public class ITUrlIntelTest {
     }
 
     @Test
-    public void testUrlLookupMalicious_2() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testUrlLookupMalicious_2() throws PangeaException, PangeaAPIException {
         // With provider, not verbose by default, not raw by default;
         UrlLookupResponse response = client.lookup("http://113.235.101.11:54384", "crowdstrike");
         assertTrue(response.isOk());
@@ -49,7 +47,7 @@ public class ITUrlIntelTest {
     }
 
     @Test
-    public void testUrlLookupMalicious_3() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testUrlLookupMalicious_3() throws PangeaException, PangeaAPIException {
         // Default provider, no verbose, no raw;
         UrlLookupResponse response = client.lookup("http://113.235.101.11:54384", false, false);
         assertTrue(response.isOk());
@@ -61,7 +59,7 @@ public class ITUrlIntelTest {
     }
 
     @Test
-    public void testUrlLookupMalicious_4() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testUrlLookupMalicious_4() throws PangeaException, PangeaAPIException {
         // Default provider, verbose, no raw;
         UrlLookupResponse response = client.lookup("http://113.235.101.11:54384", true, false);
         assertTrue(response.isOk());
@@ -73,7 +71,7 @@ public class ITUrlIntelTest {
     }
 
     @Test
-    public void testUrlLookupMalicious_5() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testUrlLookupMalicious_5() throws PangeaException, PangeaAPIException {
         // Default provider, no verbose, raw;
         UrlLookupResponse response = client.lookup("http://113.235.101.11:54384", false, true);
         assertTrue(response.isOk());
@@ -85,7 +83,7 @@ public class ITUrlIntelTest {
     }
 
     @Test
-    public void testUrlLookupMalicious_6() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testUrlLookupMalicious_6() throws PangeaException, PangeaAPIException {
         // Default provider, verbose, raw;
         UrlLookupResponse response = client.lookup("http://113.235.101.11:54384", true, true);
         assertTrue(response.isOk());
@@ -97,7 +95,7 @@ public class ITUrlIntelTest {
     }
 
     @Test
-    public void testUrlLookupMalicious_7() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testUrlLookupMalicious_7() throws PangeaException, PangeaAPIException {
         // Provider, no verbose, no raw
         UrlLookupResponse response = client.lookup("http://113.235.101.11:54384", "crowdstrike", false, false);
         assertTrue(response.isOk());
@@ -109,7 +107,7 @@ public class ITUrlIntelTest {
     }
 
     @Test
-    public void testUrlLookupMalicious_8() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testUrlLookupMalicious_8() throws PangeaException, PangeaAPIException {
         // Provider, verbose, raw
         UrlLookupResponse response = client.lookup("http://113.235.101.11:54384", "crowdstrike", true, true);
         assertTrue(response.isOk());
@@ -121,17 +119,17 @@ public class ITUrlIntelTest {
     }
 
     @Test(expected = ValidationException.class)
-    public void testEmptyIP() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testEmptyIP() throws PangeaException, PangeaAPIException {
         UrlLookupResponse response = client.lookup("", "crowdstrike", true, true);
     }
 
     @Test(expected = ValidationException.class)
-    public void testEmptyProvider() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testEmptyProvider() throws PangeaException, PangeaAPIException {
         UrlLookupResponse response = client.lookup("http://113.235.101.11:54384", "", true, true);
     }
 
     @Test(expected = ValidationException.class)
-    public void testEmptyNotValidProvider() throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public void testEmptyNotValidProvider() throws PangeaException, PangeaAPIException {
         UrlLookupResponse response = client.lookup("http://113.235.101.11:54384", "notvalidprovider", true, true);
     }
 

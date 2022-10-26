@@ -48,7 +48,7 @@ public class EmbargoClient extends Client {
      * @throws PangeaException
      * @throws PangeaAPIException
      */
-    public IsoCheckResponse isoCheck(String isoCode) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
+    public IsoCheckResponse isoCheck(String isoCode) throws PangeaException, PangeaAPIException{
         IsoCheckRequest request = new IsoCheckRequest(isoCode);
         IsoCheckResponse resp = doPost("/v1/iso/check", request, IsoCheckResponse.class);
         return resp;
@@ -67,7 +67,7 @@ public class EmbargoClient extends Client {
      * IpCheckResponse response = client.ipCheck("213.24.238.26");
      * ```
      */
-    public IpCheckResponse ipCheck(String ip) throws IOException, InterruptedException, PangeaException, PangeaAPIException{
+    public IpCheckResponse ipCheck(String ip) throws PangeaException, PangeaAPIException{
         IpCheckRequest request = new IpCheckRequest(ip);
         IpCheckResponse resp = doPost("/v1/ip/check", request, IpCheckResponse.class);
         return resp;

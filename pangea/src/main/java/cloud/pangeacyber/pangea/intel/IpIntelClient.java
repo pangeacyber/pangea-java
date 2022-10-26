@@ -1,7 +1,4 @@
 package cloud.pangeacyber.pangea.intel;
-
-import java.io.IOException;
-
 import cloud.pangeacyber.pangea.Client;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -48,22 +45,22 @@ public class IpIntelClient extends Client{
         super(config, serviceName);
     }
 
-    private IpLookupResponse lookupPost(String ip, String provider, Boolean verbose, Boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    private IpLookupResponse lookupPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
         IpLookupRequest request = new IpLookupRequest(ip, provider, verbose, raw);
         IpLookupResponse resp = doPost("/v1/lookup", request, IpLookupResponse.class);
         return resp;
     }
 
-    public IpLookupResponse lookup(String ip) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public IpLookupResponse lookup(String ip) throws PangeaException, PangeaAPIException {
         return lookupPost(ip, null, null, null);    }
 
-    public IpLookupResponse lookup(String ip, String provider) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public IpLookupResponse lookup(String ip, String provider) throws PangeaException, PangeaAPIException {
         return lookupPost(ip, provider, null, null);    }
 
-    public IpLookupResponse lookup(String ip, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public IpLookupResponse lookup(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(ip, null, verbose, raw);    }
 
-    public IpLookupResponse lookup(String ip, String provider, boolean verbose, boolean raw) throws IOException, InterruptedException, PangeaException, PangeaAPIException {
+    public IpLookupResponse lookup(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(ip, provider, verbose, raw);
     }
 }

@@ -15,7 +15,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
-public class ITAuditTest 
+public class ITAuditTest
 {
     AuditClient client;
 

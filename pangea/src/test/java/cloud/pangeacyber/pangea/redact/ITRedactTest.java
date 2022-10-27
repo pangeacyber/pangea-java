@@ -17,7 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-public class ITRedactTest 
+public class ITRedactTest
 {
     RedactClient client;
 

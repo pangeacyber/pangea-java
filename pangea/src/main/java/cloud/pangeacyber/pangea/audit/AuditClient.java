@@ -109,7 +109,7 @@ public class AuditClient extends Client {
     private LogResponse doLog(Event event, boolean sign, Boolean verbose) throws PangeaException, PangeaAPIException{
         String signature = null;
         String publicKey = null;
-    
+
         if(sign && this.signer == null){
             throw new SignerException("Signer not initialized", null);
         }
@@ -169,7 +169,7 @@ public class AuditClient extends Client {
 
     private RootResponse rootPost(Integer treeSize) throws PangeaException, PangeaAPIException {
         RootRequest request = new RootRequest(treeSize);
-        return doPost("/v1/root", request, RootResponse.class);        
+        return doPost("/v1/root", request, RootResponse.class);
     }
 
     /**
@@ -178,7 +178,7 @@ public class AuditClient extends Client {
      * @return
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example 
+     * @example
      * ```java
      * RootResponse response = client.getRoot();
      * ```
@@ -218,7 +218,7 @@ public class AuditClient extends Client {
             updatePublishedRoots(result);
             for(SearchEvent searchEvent: result.getEvents()){
                 searchEvent.verifyMembershipProof(Hash.decode(root.getRootHash()));
-                searchEvent.verifyConsistency(publishedRoots);    
+                searchEvent.verifyConsistency(publishedRoots);
             }
         }
     }

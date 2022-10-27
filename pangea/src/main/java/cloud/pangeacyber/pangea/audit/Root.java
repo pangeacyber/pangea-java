@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Root {
     @JsonProperty("tree_name")
     String treeName;
-    
+
     @JsonProperty("size")
     int size;
 

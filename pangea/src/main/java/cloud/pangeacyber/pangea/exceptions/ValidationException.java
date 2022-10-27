@@ -9,5 +9,5 @@ public class ValidationException extends PangeaAPIException{
     public ValidationException(String message, Response<PangeaErrors> response) {
         super(message, response);
     }
-    
+
 }

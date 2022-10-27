@@ -13,7 +13,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
-public class ITEmbargoTest 
+public class ITEmbargoTest
 {
     EmbargoClient client;
 

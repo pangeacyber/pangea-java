@@ -9,5 +9,5 @@ public class ServiceNotAvailableException extends PangeaAPIException{
     public ServiceNotAvailableException(String message, Response<PangeaErrors> response) {
         super(message, response);
     }
-    
+
 }

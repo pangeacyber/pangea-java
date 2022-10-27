@@ -18,7 +18,6 @@ public abstract class Client {
     Builder httpRequestBuilder;
     String serviceName;
 
-
     protected Client(Config config, String serviceName) {
         this.serviceName = serviceName;
         this.config = config;
@@ -43,6 +42,7 @@ public abstract class Client {
         builder
             .uri(config.getServiceUrl(serviceName, path))
             .header("Authorization", "Bearer " + config.getToken())
+            .header("User-Agent", "Pangea Java " + Version.VERSION)
             .POST(HttpRequest.BodyPublishers.ofString(body));
     }
 

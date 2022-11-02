@@ -55,6 +55,7 @@ public class DomainIntelClient extends Client{
     }
 
     /**
+     * @service domain-intel
      * @summary Look up a domain
      * @description Retrieve domain reputation from a default provider.
      * @param domain - domain address to be looked up
@@ -73,7 +74,8 @@ public class DomainIntelClient extends Client{
     }
 
     /**
-     * @summary Look up a domain
+     * @service domain-intel
+     * @summary Look up a domain - domain, provider
      * @description Retrieve domain reputation for a particular provider
      * @param domain - domain address to be looked up
      * @param provider - provider to get reputation from
@@ -92,7 +94,8 @@ public class DomainIntelClient extends Client{
     }
 
     /**
-     * @summary Look up a domain
+     * @service domain-intel
+     * @summary Look up a domain - domain, verbose, raw
      * @description Retrieve domain reputation from a default provider.
      * @param domain - domain address to be looked up
      * @param verbose - select a more verbose response
@@ -112,7 +115,8 @@ public class DomainIntelClient extends Client{
     }
 
     /**
-     * @summary Look up a domain
+     * @service domain-intel
+     * @summary Look up a domain - domain, provider, verbose, raw
      * @description Retrieve domain reputation for a particular provider
      * @param domain - domain address to be looked up
      * @param provider - provider to get reputation from

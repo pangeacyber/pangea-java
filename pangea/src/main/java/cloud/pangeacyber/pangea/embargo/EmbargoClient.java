@@ -39,6 +39,7 @@ public class EmbargoClient extends Client {
     }
 
     /**
+     * @service embargo
      * @summary ISO Code Check
      * @description Check a country code against known sanction and trade embargo lists.
      * @param isoCode - Check the  country against code the enabled embargo lists.
@@ -58,6 +59,7 @@ public class EmbargoClient extends Client {
         return resp;
     }
     /**
+     * @service embargo
      * @summary Check IP
      * @description Check an IP against known sanction and trade embargo lists.
      * @param isoCode - Geolocate this IP and check the corresponding country against the enabled embargo lists.

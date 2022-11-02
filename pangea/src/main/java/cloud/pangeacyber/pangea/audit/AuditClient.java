@@ -142,7 +142,6 @@ public class AuditClient extends Client {
      *  LogResponse response = client.log(event);
      * ```
      */
-
     public LogResponse log(Event event) throws PangeaException, PangeaAPIException{
         return doLog(event, false, null);
     }
@@ -175,7 +174,7 @@ public class AuditClient extends Client {
     /**
      * @summary Get root from Pangea Server
      * @description Get last root from Pangea Server
-     * @return
+     * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
      * @example 
@@ -297,7 +296,7 @@ public class AuditClient extends Client {
     /**
      * @summary Search
      * @description Perform a search of logs according to input param. Allow to select to verify or nor consistency proof and events.
-     * @param input - query filters to perfom search
+     * @param input - query filters to perform search
      * @param verifyConsistency - true to verify logs consistency proofs
      * @param verifyEvents - true to verify logs hash and signature
      * @return SearchResponse

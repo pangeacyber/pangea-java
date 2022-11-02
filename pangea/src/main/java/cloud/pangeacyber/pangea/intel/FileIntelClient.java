@@ -56,7 +56,7 @@ public class FileIntelClient extends Client{
     }
 
     /**
-     * @summary Lookup
+     * @summary Look up a file
      * @description Retrieve file reputation from a default provider, using the file's hash.
      * @param hash - hash of the file 
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"
@@ -75,7 +75,7 @@ public class FileIntelClient extends Client{
     }
 
     /**
-     * @summary Lookup
+     * @summary Look up a file
      * @description Retrieve file reputation from a provider, using the file's hash.
      * @param hash - hash of the file 
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"
@@ -95,7 +95,7 @@ public class FileIntelClient extends Client{
     }
 
     /**
-     * @summary Lookup
+     * @summary Look up a file
      * @description Retrieve file reputation from a default provider, using the file's hash.
      * @param hash - hash of the file 
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"
@@ -112,7 +112,7 @@ public class FileIntelClient extends Client{
     }
 
     /**
-     * @summary Lookup
+     * @summary Look up a file
      * @description Retrieve file reputation from a provider, using the file's hash.
      * @param hash - hash of the file 
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"

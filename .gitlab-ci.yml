@@ -11,9 +11,11 @@ cache:
 build:
   stage: build
   script:
+    - cd pangea
     - mvn compile
 
 test:
   stage: test
   script:
+    - cd pangea
     - mvn test

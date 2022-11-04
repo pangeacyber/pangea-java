@@ -21,7 +21,7 @@ public class ITAuditTest
 
     @Before
     public void setUp() throws ConfigException{
-        client = new AuditClient(Config.fromEnvironment(AuditClient.serviceName));
+        client = new AuditClient(Config.fromEnvironment("INTEGRATION_" + AuditClient.serviceName));
     }
 
     @Test

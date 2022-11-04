@@ -19,7 +19,7 @@ public class ITEmbargoTest
 
     @Before
     public void setUp() throws ConfigException{
-        client = new EmbargoClient(Config.fromEnvironment(EmbargoClient.serviceName));
+        client = new EmbargoClient(Config.fromEnvironment("INTEGRATION_" + EmbargoClient.serviceName));
     }
 
     @Test

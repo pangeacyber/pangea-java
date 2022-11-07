@@ -23,7 +23,7 @@ public class ITRedactTest
 
     @Before
     public void setUp() throws ConfigException {
-        client = new RedactClient(Config.fromEnvironment("INTEGRATION_" + RedactClient.serviceName));
+        client = new RedactClient(Config.fromIntegrationEnvironment(RedactClient.serviceName));
     }
 
     @Test

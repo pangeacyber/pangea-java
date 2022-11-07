@@ -19,7 +19,7 @@ public class ITFileIntelTest {
 
     @Before
     public void setUp() throws ConfigException{
-        client = new FileIntelClient(Config.fromEnvironment("INTEGRATION_" + FileIntelClient.serviceName));
+        client = new FileIntelClient(Config.fromIntegrationEnvironment(FileIntelClient.serviceName));
     }
 
     @Test

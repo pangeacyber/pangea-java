@@ -19,7 +19,7 @@ public class ITDomainIntelTest {
 
     @Before
     public void setUp() throws ConfigException{
-         client = new DomainIntelClient(Config.fromEnvironment("INTEGRATION_" + DomainIntelClient.serviceName));
+         client = new DomainIntelClient(Config.fromIntegrationEnvironment(DomainIntelClient.serviceName));
     }
 
     @Test

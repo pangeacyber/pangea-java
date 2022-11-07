@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
 import cloud.pangeacyber.pangea.audit.utils.ConsistencyProof;
-import cloud.pangeacyber.pangea.audit.utils.MembershipProof;
 import cloud.pangeacyber.pangea.audit.utils.Verification;
 
 
@@ -23,11 +22,13 @@ public class SearchEvent {
     @JsonProperty("leaf_index")
     Integer leafIndex;
 
+    @JsonInclude(Include.NON_NULL)
     @JsonProperty("membership_proof")
     String membershipProof;
 
+    @JsonInclude(Include.NON_NULL)
     @JsonProperty("published")
-    boolean published;
+    Boolean published;
 
     @JsonIgnore
     EventVerification membershipVerification = EventVerification.NOT_VERIFIED;
@@ -55,7 +56,7 @@ public class SearchEvent {
     }
 
     public boolean isPublished() {
-        return published;
+        return published == true;
     }
 
     public EventVerification getMembershipVerification() {
@@ -80,7 +81,7 @@ public class SearchEvent {
 
     public void verifyConsistency(Map<Integer, PublishedRoot> publishedRoots){
         // This should never happen.
-        if(published != true || leafIndex == null){
+        if(!isPublished() || leafIndex == null){
             this.consistencyVerification = EventVerification.NOT_VERIFIED;
             return;
         }

@@ -69,7 +69,7 @@ public class ITAuditTest
 
     @Test
     public void testLogSignature() throws PangeaException, PangeaAPIException, ConfigException{
-        AuditClient signClient = new AuditClient(Config.fromEnvironment(AuditClient.serviceName), "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
+        AuditClient signClient = new AuditClient(Config.fromIntegrationEnvironment(AuditClient.serviceName), "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
 
         String msg = "sigtest100";
         Event event = new Event(msg);

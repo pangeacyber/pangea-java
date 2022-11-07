@@ -15,13 +15,13 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
-public class ITAuditTest 
+public class ITAuditTest
 {
     AuditClient client;
 
     @Before
     public void setUp() throws ConfigException{
-        client = new AuditClient(Config.fromEnvironment(AuditClient.serviceName));
+        client = new AuditClient(Config.fromIntegrationEnvironment(AuditClient.serviceName));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class ITAuditTest
 
     @Test
     public void testLogSignature() throws PangeaException, PangeaAPIException, ConfigException{
-        AuditClient signClient = new AuditClient(Config.fromEnvironment(AuditClient.serviceName), "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
+        AuditClient signClient = new AuditClient(Config.fromIntegrationEnvironment(AuditClient.serviceName), "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
 
         String msg = "sigtest100";
         Event event = new Event(msg);

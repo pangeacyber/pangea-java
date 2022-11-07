@@ -19,7 +19,7 @@ public class ITIPIntelTest {
 
     @Before
     public void setUp() throws ConfigException{
-        client = new IpIntelClient(Config.fromEnvironment(IpIntelClient.serviceName));
+        client = new IpIntelClient(Config.fromIntegrationEnvironment(IpIntelClient.serviceName));
     }
 
     @Test

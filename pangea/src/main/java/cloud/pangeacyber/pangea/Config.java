@@ -83,4 +83,23 @@ public final class Config {
         Config config = new Config(token, domain);
         return config;
     }
+
+    public static Config fromIntegrationEnvironment(String serviceName) throws ConfigException{
+        String tokenEnvVarName = "PANGEA_INTEGRATION_" + serviceName.toUpperCase() + "_TOKEN";
+        tokenEnvVarName = tokenEnvVarName.replace('-', '_');
+        String token = System.getenv(tokenEnvVarName);
+        if(token == null || token.isEmpty()){
+            throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
+        }
+
+        String domain = System.getenv("PANGEA_INTEGRATION_DOMAIN");
+        if(domain == null || domain.isEmpty()){
+            throw new ConfigException("Need to set up PANGEA_INTEGRATION_DOMAIN environment variable");
+        }
+
+        Config config = new Config(token, domain);
+        return config;
+    }
+
+
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class EmbargoSanctionAnnotationReference {
     @JsonProperty("paragraph")
     String paragraph;
-    
+
     @JsonProperty("regulation")
     String regulation;
 

@@ -11,7 +11,7 @@ class TestClient extends Client {
     public TestClient() {
         super(new Config("token", "domain.com"), "test");
     }
-    
+
     @Override
     public void fillPostRequestBuilder(HttpRequest.Builder builder, String path, String body) {
         super.fillPostRequestBuilder(builder, path, body);
@@ -32,7 +32,7 @@ public class ClientTest {
         when(builder.header(any(), any())).thenReturn(builder);
         when(builder.POST(any())).thenReturn(builder);
         when(builder.uri(any())).thenReturn(builder);
-        
+
         client.fillPostRequestBuilder(builder, "/path", "body");
 
         verify(builder).header("Authorization", "Bearer token");

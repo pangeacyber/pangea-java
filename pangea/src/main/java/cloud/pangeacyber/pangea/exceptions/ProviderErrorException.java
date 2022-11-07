@@ -9,5 +9,5 @@ public class ProviderErrorException extends PangeaAPIException{
     public ProviderErrorException(String message, Response<PangeaErrors> response) {
         super(message, response);
     }
-    
+
 }

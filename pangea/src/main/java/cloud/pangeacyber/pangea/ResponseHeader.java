@@ -6,18 +6,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseHeader {
-    @JsonProperty("request_id") 
+    @JsonProperty("request_id")
     String requestId;
-    
-    @JsonProperty("request_time") 
+
+    @JsonProperty("request_time")
     String requestTime; // TODO: datetime
 
-    @JsonProperty("response_time") 
+    @JsonProperty("response_time")
     String responseTime; // TODO: datetime
 
-    @JsonProperty("status") 
+    @JsonProperty("status")
     String status;
-    
+
     @JsonProperty("summary")
     String summary;
 

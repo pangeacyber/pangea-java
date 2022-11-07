@@ -39,7 +39,7 @@ public class EventEnvelope {
     }
 
     public EventVerification verifySignature(){
-        // If does not have signature information, it's not verified 
+        // If does not have signature information, it's not verified
         if(this.signature == null && this.publicKey == null){
             return EventVerification.NOT_VERIFIED;
         }

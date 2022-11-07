@@ -9,5 +9,5 @@ public class RateLimitException extends PangeaAPIException{
     public RateLimitException(String message, Response<PangeaErrors> response) {
         super(message, response);
     }
-    
+
 }

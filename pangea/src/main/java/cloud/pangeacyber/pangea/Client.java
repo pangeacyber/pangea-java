@@ -59,7 +59,7 @@ public abstract class Client {
         HttpResponse<String> httpResponse;
 
         try{
-            httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());        
+            httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());
         } catch(Exception e){
             throw new PangeaException("Failed to send request", e);
         }

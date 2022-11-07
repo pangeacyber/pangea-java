@@ -166,13 +166,13 @@ public class SearchEvent {
                 rootHash = Hash.hash(it.next().getHash(), rootHash);
             } catch(IOException e){
                 this.consistencyVerification = EventVerification.FAILED;
-                return; 
+                return;
             }
         }
 
         if(!Arrays.equals(rootHash, prevRootHash)){
             this.consistencyVerification = EventVerification.FAILED;
-            return; 
+            return;
         }
 
         it = proof.iterator();
@@ -197,7 +197,7 @@ public class SearchEvent {
         this.membershipVerification = SearchEvent.verifyMembershipProof(rootHash, nodeHash, proof)? EventVerification.SUCCESS : EventVerification.FAILED;
     }
 
-    static private boolean verifyMembershipProof(byte[] rootHash, byte[] nodeHash, MembershipProof proof){        
+    static private boolean verifyMembershipProof(byte[] rootHash, byte[] nodeHash, MembershipProof proof){
         for(MembershipProofItem item: proof){
             try{
                 nodeHash = item.getSide().equals("left")? Hash.hash(item.getHash(), nodeHash) : Hash.hash(nodeHash, item.getHash());

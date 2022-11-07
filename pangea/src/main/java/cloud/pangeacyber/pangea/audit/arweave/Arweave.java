@@ -77,7 +77,7 @@ public class Arweave {
             }
             """ .replace("{tree_sizes}", sizes)
             .replace("{tree_name}", this.treeName);
-                  
+
         return query;
     }
 
@@ -85,15 +85,15 @@ public class Arweave {
         ObjectMapper mapper = new ObjectMapper();
         ArweaveRequest request = new ArweaveRequest(getQuery(treeSizes));
         String body;
-        
+
         try{
             body = mapper.writeValueAsString(request);
         } catch(Exception e){
             return null;
         }
-          
+
         HttpRequest.Builder builder = HttpRequest.newBuilder();
-        builder 
+        builder
             .uri(URI.create(getGraphqlURL()))
             .setHeader("Content-Type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(body));
@@ -124,7 +124,7 @@ public class Arweave {
 
     private HttpResponse<String> doGet(String url){
         HttpRequest.Builder builder = HttpRequest.newBuilder();
-        builder 
+        builder
             .uri(URI.create(url))
             .GET();
 
@@ -172,7 +172,7 @@ public class Arweave {
         GraphqlOutput response = doPostGraphql(treeSizes);
         if(response == null){
             return publishedRoots;
-        } 
+        }
 
         for(Edge edge: response.getData().getTransactions().getEdges()){
             String nodeID = edge.getNode().getId();

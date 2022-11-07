@@ -58,7 +58,7 @@ public class FileIntelClient extends Client{
     /**
      * @summary Lookup
      * @description Retrieve file reputation from a default provider, using the file's hash.
-     * @param hash - hash of the file 
+     * @param hash - hash of the file
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"
      * @return FileLookupResponse
      * @throws IOException
@@ -77,7 +77,7 @@ public class FileIntelClient extends Client{
     /**
      * @summary Lookup
      * @description Retrieve file reputation from a provider, using the file's hash.
-     * @param hash - hash of the file 
+     * @param hash - hash of the file
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"
      * @param provider - provider to get reputation from
      * @return FileLookupResponse
@@ -97,7 +97,7 @@ public class FileIntelClient extends Client{
     /**
      * @summary Lookup
      * @description Retrieve file reputation from a default provider, using the file's hash.
-     * @param hash - hash of the file 
+     * @param hash - hash of the file
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"
      * @param verbose - select a more verbose response
      * @param raw - if true response include provider raw response. This should vary from one provider to another one.
@@ -114,7 +114,7 @@ public class FileIntelClient extends Client{
     /**
      * @summary Lookup
      * @description Retrieve file reputation from a provider, using the file's hash.
-     * @param hash - hash of the file 
+     * @param hash - hash of the file
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"
      * @param provider - provider to get reputation from
      * @param verbose - select a more verbose response

@@ -10,7 +10,7 @@ public class IntelLookupOutput {
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("parameters")
-    Map<String, Object> Parameters; 
+    Map<String, Object> Parameters;
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("raw_data")

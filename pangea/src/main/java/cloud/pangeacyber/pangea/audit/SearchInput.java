@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class SearchInput {
     @JsonProperty("query")
     String query;
-    
+
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("order")
     String order = null;

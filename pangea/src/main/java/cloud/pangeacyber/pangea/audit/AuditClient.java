@@ -163,7 +163,8 @@ public class AuditClient extends Client {
 
 
     /**
-     * @summary Log an event to Audit Secure Log
+     * @service audit
+     * @summary Log an entry
      * @description Log an event to Audit Secure Log. By default does not sign event and verbose is left as server default
      * @param event - event to log
      * @return LogResponse
@@ -176,13 +177,13 @@ public class AuditClient extends Client {
      *  LogResponse response = client.log(event);
      * ```
      */
-
     public LogResponse log(Event event) throws PangeaException, PangeaAPIException{
         return doLog(event, false, null, false);
     }
 
     /**
-     * @summary Log an event to Audit Secure Log
+     * @service audit
+     * @summary Log an entry - event, sign, verbose
      * @description Log an event to Audit Secure Log. Can select sign event or not and verbosity of the response.
      * @param event - event to log
      * @param sign - true to sign event
@@ -207,9 +208,10 @@ public class AuditClient extends Client {
     }
 
     /**
-     * @summary Get root from Pangea Server
+     * @service audit
+     * @summary Get last root
      * @description Get last root from Pangea Server
-     * @return
+     * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
      * @example
@@ -222,6 +224,7 @@ public class AuditClient extends Client {
     }
 
     /**
+     * @service audit
      * @summary Get root from Pangea Server
      * @description Get root from three of treeSize from Pangea Server
      * @param treeSize - tree size to get root
@@ -316,6 +319,7 @@ public class AuditClient extends Client {
     }
 
     /**
+     * @service audit
      * @summary Search
      * @description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
      * @param input - query filters to perform search
@@ -334,9 +338,10 @@ public class AuditClient extends Client {
     }
 
     /**
-     * @summary Search
+     * @service audit
+     * @summary Search - input, verifyConsistency, verifyEvents
      * @description Perform a search of logs according to input param. Allow to select to verify or nor consistency proof and events.
-     * @param input - query filters to perfom search
+     * @param input - query filters to perform search
      * @param verifyConsistency - true to verify logs consistency proofs
      * @param verifyEvents - true to verify logs hash and signature
      * @return SearchResponse
@@ -364,6 +369,7 @@ public class AuditClient extends Client {
     }
 
     /**
+     * @service audit
      * @summary Results
      * @description Return result's page from search id.
      * @param id - A search results identifier returned by the search call. By default verify events and do not verify consistency.
@@ -378,7 +384,8 @@ public class AuditClient extends Client {
     }
 
     /**
-     * @summary Results
+     * @service audit
+     * @summary Results - id, limit, offset, verifyConsistency, verifyEvents
      * @description Return result's page from search id. Allow to select to verify or nor consistency proof and events.
      * @param id - A search results identifier returned by the search call.
      * @param limit - Number of audit records to include in a single set of results.

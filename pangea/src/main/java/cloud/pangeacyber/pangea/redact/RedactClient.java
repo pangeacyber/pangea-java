@@ -74,6 +74,7 @@ public class RedactClient extends Client {
     }
 
     /**
+     * @service redact
      * @summary Redact
      * @description Redact sensitive information from provided text.
      * @param text - The text data to redact.
@@ -92,7 +93,8 @@ public class RedactClient extends Client {
     }
 
     /**
-     * @summary Redact
+     * @service redact
+     * @summary Redact - text, debug
      * @description Redact sensitive information from provided text.
      * @param text - The text data to redact.
      * @param debug - Setting this value to true will provide a detailed analysis of the redacted data and the rules that caused redaction.
@@ -111,6 +113,7 @@ public class RedactClient extends Client {
     }
 
     /**
+     * @service redact
      * @summary Redact structured
      * @description Redact sensitive information from structured data (e.g., JSON).
      * @param data - Structured data to redact
@@ -131,7 +134,8 @@ public class RedactClient extends Client {
     }
 
     /**
-     * @summary Redact structured
+     * @service redact
+     * @summary Redact structured - data, format
      * @description Redact sensitive information from structured data (e.g., JSON).
      * @param data - Structured data to redact
      * @param format - format of data. Support "json"
@@ -152,7 +156,8 @@ public class RedactClient extends Client {
     }
 
     /**
-     * @summary Redact structured
+     * @service redact
+     * @summary Redact structured - data, debug
      * @description Redact sensitive information from structured data (e.g., JSON).
      * @param data - Structured data to redact
      * @param debug - Setting this value to true will provide a detailed analysis of the redacted data and the rules that caused redaction.
@@ -173,7 +178,8 @@ public class RedactClient extends Client {
     }
 
     /**
-     * @summary Redact structured
+     * @service redact
+     * @summary Redact structured - data, format, debug
      * @description Redact sensitive information from structured data (e.g., JSON).
      * @param data - Structured data to redact
      * @param format - format of data. Support "json"
@@ -195,7 +201,8 @@ public class RedactClient extends Client {
     }
 
     /**
-     * @summary Redact structured
+     * @service redact
+     * @summary Redact structured - data, debug, jsonp
      * @description Redact sensitive information from structured data (e.g., JSON).
      * @param data - Structured data to redact
      * @param debug - Setting this value to true will provide a detailed analysis of the redacted data and the rules that caused redaction.

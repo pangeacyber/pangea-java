@@ -56,7 +56,8 @@ public class FileIntelClient extends Client{
     }
 
     /**
-     * @summary Lookup
+     * @service file-intel
+     * @summary Look up a file
      * @description Retrieve file reputation from a default provider, using the file's hash.
      * @param hash - hash of the file
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"
@@ -75,7 +76,8 @@ public class FileIntelClient extends Client{
     }
 
     /**
-     * @summary Lookup
+     * @service file-intel
+     * @summary Look up a file - hash, hashType, provider
      * @description Retrieve file reputation from a provider, using the file's hash.
      * @param hash - hash of the file
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"
@@ -95,7 +97,8 @@ public class FileIntelClient extends Client{
     }
 
     /**
-     * @summary Lookup
+     * @service file-intel
+     * @summary Look up a file - hash, hashType, verbose, raw
      * @description Retrieve file reputation from a default provider, using the file's hash.
      * @param hash - hash of the file
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"
@@ -106,13 +109,18 @@ public class FileIntelClient extends Client{
      * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @example
+     * ```java
+     * FileLookupResponse response = client.lookup("142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", "sha256", true, false);
+     * ```
      */
     public FileLookupResponse lookup(String hash, String hashType, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, null, verbose, raw);
     }
 
     /**
-     * @summary Lookup
+     * @service file-intel
+     * @summary Look up a file - hash, hashType, provider, verbose, raw
      * @description Retrieve file reputation from a provider, using the file's hash.
      * @param hash - hash of the file
      * @param hashType - Type of hash, can be "sha256", "sha1" or "md5"

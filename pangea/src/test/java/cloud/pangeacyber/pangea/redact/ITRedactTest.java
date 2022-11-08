@@ -17,13 +17,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-public class ITRedactTest 
+public class ITRedactTest
 {
     RedactClient client;
 
     @Before
     public void setUp() throws ConfigException {
-        client = new RedactClient(Config.fromEnvironment(RedactClient.serviceName));
+        client = new RedactClient(Config.fromIntegrationEnvironment(RedactClient.serviceName));
     }
 
     @Test

@@ -64,7 +64,7 @@ public class LogSigner {
         byte[] encoded = Base64.getMimeDecoder().decode(privateKeyPEM);
 
         this.privateKey = new Ed25519PrivateKeyParameters(encoded, 16);
-        this.publicKey = this.privateKey.generatePublicKey(); 
+        this.publicKey = this.privateKey.generatePublicKey();
     }
 
     public String getPublicKey() throws SignerException{

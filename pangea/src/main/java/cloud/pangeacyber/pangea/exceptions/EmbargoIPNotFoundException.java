@@ -9,5 +9,5 @@ public class EmbargoIPNotFoundException extends PangeaAPIException{
     public EmbargoIPNotFoundException(String message, Response<PangeaErrors> response) {
         super(message, response);
     }
-    
+
 }

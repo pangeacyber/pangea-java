@@ -16,7 +16,7 @@ public class Hash {
         return parser.parseHex(hex);
     }
 
-    static public byte[] decode(String hash){        
+    static public byte[] decode(String hash){
         return unhexlify(hash);
     }
 

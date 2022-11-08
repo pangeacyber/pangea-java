@@ -13,13 +13,13 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
-public class ITEmbargoTest 
+public class ITEmbargoTest
 {
     EmbargoClient client;
 
     @Before
     public void setUp() throws ConfigException{
-        client = new EmbargoClient(Config.fromEnvironment(EmbargoClient.serviceName));
+        client = new EmbargoClient(Config.fromIntegrationEnvironment(EmbargoClient.serviceName));
     }
 
     @Test

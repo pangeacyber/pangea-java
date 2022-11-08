@@ -14,7 +14,7 @@ public class ErrorField {
     //     source(str): A JSON pointer where the error occurred
     //     path(str): If verbose mode was enabled, a path to the JSON Schema used to validate the field
     // """
-    
+
     @JsonProperty("code")
     String code;
 

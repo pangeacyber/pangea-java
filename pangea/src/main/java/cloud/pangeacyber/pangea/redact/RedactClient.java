@@ -82,7 +82,7 @@ public class RedactClient extends Client {
      * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example 
+     * @example
      * ```java
      * RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309");
      * ```
@@ -101,7 +101,7 @@ public class RedactClient extends Client {
      * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example 
+     * @example
      * ```java
      * RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", true);
      * ```

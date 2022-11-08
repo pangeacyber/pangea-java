@@ -10,8 +10,6 @@ import cloud.pangeacyber.pangea.exceptions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-final class ResponseRawResult extends Response<Object> {}
-
 public abstract class Client {
     Config config;
     HttpClient httpClient;

@@ -12,6 +12,7 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.exceptions.SignerException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
@@ -364,6 +365,12 @@ public class ITAuditTest{
         input.setMaxResults(searchLimit);
         input.setOrder("notavalidorder");
         SearchResponse searchResponse = fakeClient.search(input, true, true);
+    }
+
+    @Test(expected = SignerException.class)
+    public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException{
+        Event event = new Event(MSG_NO_SIGNED);
+        LogResponse response = client.log(event, true, true, true);
     }
 
 }

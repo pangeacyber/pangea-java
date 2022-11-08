@@ -1,8 +1,18 @@
 image: maven:3-openjdk-18
 
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
 stages:
   - build
   - test
+  - deploy
 
 cache:
   paths:
@@ -12,10 +22,19 @@ build:
   stage: build
   script:
     - cd pangea
-    - mvn -e compile
+    - mvn $MAVEN_CLI_OPTS compile
 
 test:
   stage: test
   script:
     - cd pangea
-    - mvn test
+    - mvn $MAVEN_CLI_OPTS test
+
+# Check to deploy only when commit tagged as version
+deploy:
+  stage: deploy
+  script:
+    - cd pangea
+    - mvn $MAVEN_CLI_OPTS deploy
+  only:
+    - master

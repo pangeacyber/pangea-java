@@ -22,7 +22,7 @@ final class IsoCheckRequest {
 final class IpCheckRequest{
     @JsonProperty("ip")
     String ip;
-    
+
     public IpCheckRequest(String ip) {
         this.ip = ip;
     }

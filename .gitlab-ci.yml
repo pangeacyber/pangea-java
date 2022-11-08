@@ -1,0 +1,25 @@
+image: maven:3-openjdk-18
+
+default:
+  tags:
+    - pangea-internal
+
+stages:
+  - build
+  - test
+
+cache:
+  paths:
+    - target/
+
+build:
+  stage: build
+  script:
+    - cd pangea
+    - mvn compile
+
+test:
+  stage: test
+  script:
+    - cd pangea
+    - mvn test

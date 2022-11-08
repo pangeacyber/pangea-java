@@ -19,7 +19,7 @@ public class ITUrlIntelTest {
 
     @Before
     public void setUp() throws ConfigException{
-        client = new UrlIntelClient(Config.fromEnvironment(UrlIntelClient.serviceName));
+        client = new UrlIntelClient(Config.fromIntegrationEnvironment(UrlIntelClient.serviceName));
     }
 
     @Test

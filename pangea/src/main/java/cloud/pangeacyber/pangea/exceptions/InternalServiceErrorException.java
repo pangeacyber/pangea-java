@@ -9,5 +9,5 @@ public class InternalServiceErrorException extends PangeaAPIException {
     public InternalServiceErrorException(String message, Response<PangeaErrors> response) {
         super(message, response);
     }
-    
+
 }

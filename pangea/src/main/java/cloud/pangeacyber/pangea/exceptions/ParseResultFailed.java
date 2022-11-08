@@ -8,5 +8,5 @@ public class ParseResultFailed extends PangeaException {
     public ParseResultFailed(String message, Throwable cause, ResponseHeader header, String body) {
         super(message, cause);
         this.header = header;
-    }    
+    }
 }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class SearchInput {
     @JsonProperty("query")
     String query;
-    
+
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("order")
     String order = null;
@@ -37,20 +37,16 @@ public class SearchInput {
     Integer maxResults = null;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("include_membership_proof")
-    Boolean includeMembershipProof = null;
-
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("include_hash")
-    Boolean includeHash = true;     // Will be removed soon
-
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("include_root")
-    Boolean includeRoot = true;     // Will be removed soon
-
-    @JsonInclude(Include.NON_NULL)
     @JsonProperty("search_restriction")
     SearchRestriction searchRestriction = null;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("verbose")
+    Boolean Verbose = null;
+
+    public void setVerbose(Boolean verbose) {
+        Verbose = verbose;
+    }
 
     public SearchInput(String query) {
         this.query = query;
@@ -118,14 +114,6 @@ public class SearchInput {
 
     public void setMaxResults(Integer maxResults) {
         this.maxResults = maxResults;
-    }
-
-    public Boolean getIncludeMembershipProof() {
-        return includeMembershipProof;
-    }
-
-    public void setIncludeMembershipProof(Boolean includeMembershipProof) {
-        this.includeMembershipProof = includeMembershipProof;
     }
 
     public SearchRestriction getSearchRestriction() {

@@ -14,10 +14,12 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.audit.arweave.Arweave;
 import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
-import cloud.pangeacyber.pangea.audit.utils.Hash;
+import cloud.pangeacyber.pangea.audit.utils.ConsistencyProof;
+import cloud.pangeacyber.pangea.audit.utils.Verification;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.SignerException;
+import cloud.pangeacyber.pangea.exceptions.VerificationFailed;
 
 
 final class ResultsRequest{
@@ -55,10 +57,6 @@ final class LogRequest{
     Event event;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("include_hash")
-    Boolean includeHash = true;     // Will be removed soon
-
-    @JsonInclude(Include.NON_NULL)
     @JsonProperty("verbose")
     Boolean verbose;
 
@@ -70,11 +68,16 @@ final class LogRequest{
     @JsonProperty("public_key")
     String publicKey;
 
-    public LogRequest(Event event, Boolean verbose, String signature, String publicKey) {
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("prev_root")
+    String prevRoot;
+
+    public LogRequest(Event event, Boolean verbose, String signature, String publicKey, String prevRoot) {
         this.event = event;
         this.verbose = verbose;
         this.signature = signature;
         this.publicKey = publicKey;
+        this.prevRoot = prevRoot;
     }
 }
 
@@ -88,6 +91,7 @@ public class AuditClient extends Client {
     LogSigner signer;
     Map<Integer, PublishedRoot> publishedRoots;
     boolean allowServerRoots = true;    // In case of Arweave failure, ask the server for the roots
+    String prevUnpublishedRoot = null;
 
     public AuditClient(Config config) {
         super(config, serviceName);
@@ -101,15 +105,20 @@ public class AuditClient extends Client {
         publishedRoots = new HashMap<Integer, PublishedRoot>();
     }
 
-    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey)  throws PangeaException, PangeaAPIException{
-        LogRequest request = new LogRequest(event, verbose, signature, publicKey);
+    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey, boolean verify)  throws PangeaException, PangeaAPIException{
+        String prevRoot = null;
+        if(verify){
+            verbose = true;
+            prevRoot = this.prevUnpublishedRoot;
+        }
+        LogRequest request = new LogRequest(event, verbose, signature, publicKey, prevRoot);
         return doPost("/v1/log", request, LogResponse.class);
     }
 
-    private LogResponse doLog(Event event, boolean sign, Boolean verbose) throws PangeaException, PangeaAPIException{
+    private LogResponse doLog(Event event, boolean sign, Boolean verbose, boolean verify) throws PangeaException, PangeaAPIException{
         String signature = null;
         String publicKey = null;
-    
+
         if(sign && this.signer == null){
             throw new SignerException("Signer not initialized", null);
         }
@@ -125,8 +134,33 @@ public class AuditClient extends Client {
             publicKey = this.signer.getPublicKey();
         }
 
-        return logPost(event, verbose, signature, publicKey);
+        LogResponse response = logPost(event, verbose, signature, publicKey, verify);
+        processLogResponse(response.getResult(), verify);
+        return response;
     }
+
+    private void processLogResponse(LogOutput result, boolean verify) throws VerificationFailed{
+        String newUnpublishedRoot = result.getUnpublishedRoot();
+
+        if(verify){
+            EventEnvelope.verifyHash(result.eventEnvelope, result.hash);
+            result.verifySignature();
+
+            if(newUnpublishedRoot != null){
+                result.membershipVerification = Verification.verifyMembershipProof(newUnpublishedRoot, result.hash, result.membershipProof);
+
+                if(result.consistencyProof != null && this.prevUnpublishedRoot != null){
+                    ConsistencyProof conProof = Verification.decodeConsistencyProof(result.consistencyProof);
+                    result.consistencyVerification = Verification.verifyConsistencyProof(newUnpublishedRoot, this.prevUnpublishedRoot, conProof);
+                }
+            }
+        }
+
+        if( newUnpublishedRoot != null){
+            this.prevUnpublishedRoot = newUnpublishedRoot;
+        }
+    }
+
 
     /**
      * @summary Log an event to Audit Secure Log
@@ -144,7 +178,7 @@ public class AuditClient extends Client {
      */
 
     public LogResponse log(Event event) throws PangeaException, PangeaAPIException{
-        return doLog(event, false, null);
+        return doLog(event, false, null, false);
     }
 
     /**
@@ -163,13 +197,13 @@ public class AuditClient extends Client {
      *  LogResponse response = client.log(event, true, true);
      * ```
      */
-    public LogResponse log(Event event, boolean sign, boolean verbose) throws PangeaException, PangeaAPIException {
-        return doLog(event, sign, verbose);
+    public LogResponse log(Event event, boolean sign, boolean verbose, boolean verify) throws PangeaException, PangeaAPIException {
+        return doLog(event, sign, verbose, verify);
     }
 
     private RootResponse rootPost(Integer treeSize) throws PangeaException, PangeaAPIException {
         RootRequest request = new RootRequest(treeSize);
-        return doPost("/v1/root", request, RootResponse.class);        
+        return doPost("/v1/root", request, RootResponse.class);
     }
 
     /**
@@ -178,7 +212,7 @@ public class AuditClient extends Client {
      * @return
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example 
+     * @example
      * ```java
      * RootResponse response = client.getRoot();
      * ```
@@ -204,47 +238,53 @@ public class AuditClient extends Client {
     }
 
     private void processSearchResult(ResultsOutput result, boolean verifyConsistency, boolean verifyEvents) throws PangeaException, PangeaAPIException{
-
         if(verifyEvents){
             for(SearchEvent searchEvent : result.getEvents()){
-                searchEvent.verifyHash();
+                EventEnvelope.verifyHash(searchEvent.eventEnvelope, searchEvent.hash);
                 searchEvent.verifySignature();
             }
         }
 
         Root root = result.getRoot();
+        Root unpublishedRoot = result.getUnpublishedRoot();
 
-        if(verifyConsistency && root != null){  // if there is no root, we don't have any record migrated to cold. We cannot verify any proof
-            updatePublishedRoots(result);
+        if(verifyConsistency){
+            if(root != null){
+                updatePublishedRoots(result);
+            }
+
             for(SearchEvent searchEvent: result.getEvents()){
-                searchEvent.verifyMembershipProof(Hash.decode(root.getRootHash()));
-                searchEvent.verifyConsistency(publishedRoots);    
+                searchEvent.verifyMembershipProof(searchEvent.isPublished()? root.getRootHash() : unpublishedRoot.getRootHash());
+                searchEvent.verifyConsistency(publishedRoots);
             }
         }
     }
 
     private void updatePublishedRoots(ResultsOutput result){
+        Root root = result.getRoot();
+        if(root == null){
+            return;
+        }
+
         Set<Integer> treeSizes = new HashSet<Integer>();
         for(SearchEvent searchEvent: result.getEvents()){
-            int leafIndex = searchEvent.getLeafIndex();
-            treeSizes.add(leafIndex + 1);
-            if(leafIndex > 0){
-                treeSizes.add(leafIndex);
+            if(searchEvent.published){
+                int leafIndex = searchEvent.getLeafIndex();
+                treeSizes.add(leafIndex + 1);
+                if(leafIndex > 0){
+                    treeSizes.add(leafIndex);
+                }
             }
         }
 
-        Root root = result.getRoot();
-        if(root != null){
-            treeSizes.add(root.getSize());
-        }
-
+        treeSizes.add(root.getSize());
         treeSizes.removeAll(publishedRoots.keySet());
         Integer[] sizes = new Integer[treeSizes.size()];
-        treeSizes.toArray(sizes);
+
         Map<Integer, PublishedRoot> arweaveRoots;
         if( !treeSizes.isEmpty()){
             Arweave arweave = new Arweave(root.getTreeName());
-            arweaveRoots = arweave.getPublishedRoots(treeSizes.toArray(sizes)); //FIXME: This should be just 'sizes'?
+            arweaveRoots = arweave.getPublishedRoots(treeSizes.toArray(sizes));
         } else {
             return;
         }
@@ -290,7 +330,6 @@ public class AuditClient extends Client {
      * ```
      */
     public SearchResponse search(SearchInput input) throws PangeaException, PangeaAPIException{
-        input.setIncludeMembershipProof(true);
         return searchPost(input, true, true);
     }
 
@@ -312,7 +351,7 @@ public class AuditClient extends Client {
      */
     public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws PangeaException, PangeaAPIException {
         if(verifyConsistency){
-            input.setIncludeMembershipProof(true);
+            input.setVerbose(true);
         }
         return searchPost(input, verifyConsistency, verifyEvents);
     }

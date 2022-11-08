@@ -6,6 +6,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cloud.pangeacyber.pangea.audit.utils.Hash;
+import cloud.pangeacyber.pangea.exceptions.VerificationFailed;
+
 public class EventEnvelope {
     @JsonProperty("event")
     Event event;
@@ -39,7 +42,7 @@ public class EventEnvelope {
     }
 
     public EventVerification verifySignature(){
-        // If does not have signature information, it's not verified 
+        // If does not have signature information, it's not verified
         if(this.signature == null && this.publicKey == null){
             return EventVerification.NOT_VERIFIED;
         }
@@ -63,5 +66,23 @@ public class EventEnvelope {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
         return mapper.writeValueAsString(envelope);
+    }
+
+    public static void verifyHash(EventEnvelope envelope, String hash) throws VerificationFailed {
+        if(envelope == null || hash == null || hash.isEmpty()){
+            return;
+        }
+
+        String canonicalJson;
+        try{
+            canonicalJson = EventEnvelope.canonicalize(envelope);
+        } catch(JsonProcessingException e){
+            throw new VerificationFailed("Failed to canonicalize envelope in hash verification. Event hash: " + hash, e, hash);
+        }
+
+        String calcHash = Hash.hash(canonicalJson);
+        if(!calcHash.equals(hash)){
+            throw new VerificationFailed("Failed hash verification. Calculated and received hash are not equals. Event hash: " + hash, null, hash);
+        }
     }
 }

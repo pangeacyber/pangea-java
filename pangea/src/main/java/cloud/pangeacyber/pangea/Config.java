@@ -17,11 +17,14 @@ public final class Config {
     // Timeout for connections
     Duration connectionTimeout;
 
+    // Set to "local" to debug
+    String enviroment;
+
     public Config(String token, String domain) {
         this.token = token;
         this.domain = domain;
-
         this.insecure = false;
+        this.enviroment = "production";
         this.connectionTimeout = Duration.ofSeconds(20);
     }
 
@@ -39,6 +42,14 @@ public final class Config {
 
     public void setDomain(String domain) {
         this.domain = domain;
+    }
+
+    public String getEnviroment() {
+        return enviroment;
+    }
+
+    public void setEnviroment(String enviroment) {
+        this.enviroment = enviroment;
     }
 
     public boolean isInsecure() {
@@ -60,8 +71,12 @@ public final class Config {
     URI getServiceUrl(String serviceName, String path) {
         StringBuilder b = new StringBuilder();
         b.append(insecure ? "http://" : "https://");
-        b.append(serviceName);
-        b.append('.');
+
+        if(enviroment != "local"){
+            b.append(serviceName);
+            b.append('.');
+        }
+
         b.append(domain);
         b.append(path);
         return URI.create(b.toString());

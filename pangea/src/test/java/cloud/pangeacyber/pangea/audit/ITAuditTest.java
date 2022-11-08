@@ -15,83 +15,133 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
-public class ITAuditTest 
-{
-    AuditClient client;
+public class ITAuditTest{
+    AuditClient client, signClient;
+
+    private static final String ACTOR = "java-sdk";
+    private static final String MSG_NO_SIGNED = "test-message";
+    private static final String MSG_SIGNED = "sign-test";
+    private static final String STATUS_NO_SIGNED = "no-signed";
+    private static final String STATUS_SIGNED = "signed";
 
     @Before
     public void setUp() throws ConfigException{
-        client = new AuditClient(Config.fromEnvironment(AuditClient.serviceName));
+        Config cfg = Config.fromEnvironment(AuditClient.serviceName);
+        client = new AuditClient(cfg);
+        signClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
     }
 
     @Test
     public void testLog() throws PangeaException, PangeaAPIException{
-        String msg = "Integration test msg";
-        Event event = new Event(msg);
+        Event event = new Event(MSG_NO_SIGNED);
+        event.setActor(ACTOR);
+        event.setStatus(STATUS_NO_SIGNED);
 
         LogResponse response = client.log(event);
         assertTrue(response.isOk());
 
         LogOutput result = response.getResult();
         assertNull(result.getEventEnvelope());
-        assertNull(result.getCanonicalEnvelopeBase64());
         assertNotNull(result.getHash());
+        assertNull(result.getConsistencyProof());
+        assertNull(result.getMembershipProof());
+        assertEquals(result.getConsistencyVerification(), EventVerification.NOT_VERIFIED);
+        assertEquals(result.getMembershipVerification(), EventVerification.NOT_VERIFIED);
+        assertEquals(result.getSignatureVerification(), EventVerification.NOT_VERIFIED);
     }
 
     @Test
     public void testLogNoVerbose() throws PangeaException, PangeaAPIException{
-        String msg = "Integration test msg";
-        Event event = new Event(msg);
+        Event event = new Event(MSG_NO_SIGNED);
+        event.setActor(ACTOR);
+        event.setStatus(STATUS_NO_SIGNED);
 
-        LogResponse response = client.log(event, false, false);
+        LogResponse response = client.log(event, false, false, false);
         assertTrue(response.isOk());
 
         LogOutput result = response.getResult();
         assertNull(result.getEventEnvelope());
-        assertNull(result.getCanonicalEnvelopeBase64());
         assertNotNull(result.getHash());
+        assertNull(result.getConsistencyProof());
+        assertNull(result.getMembershipProof());
+        assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
+        assertEquals(EventVerification.NOT_VERIFIED, result.getMembershipVerification());
+        assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
     }
 
     @Test
     public void testLogVerbose() throws PangeaAPIException, PangeaException{
-        String msg = "Integration test msg";
-        Event event = new Event(msg);
+        Event event = new Event(MSG_NO_SIGNED);
+        event.setActor(ACTOR);
+        event.setStatus(STATUS_NO_SIGNED);
 
-        LogResponse response = client.log(event, false, true);
+        LogResponse response = client.log(event, false, true, false);
         assertTrue(response.isOk());
 
         LogOutput result = response.getResult();
         assertNotNull(result.getEventEnvelope());
-        assertNotNull(result.getCanonicalEnvelopeBase64());
         assertNotNull(result.getHash());
-        assertEquals(msg, result.getEventEnvelope().getEvent().getMessage());
+        assertEquals(MSG_NO_SIGNED, result.getEventEnvelope().getEvent().getMessage());
+        assertNull(result.getConsistencyProof());
+        assertNotNull(result.getMembershipProof());
+        assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
+        assertEquals(EventVerification.NOT_VERIFIED, result.getMembershipVerification());
+        assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
+    }
+
+    @Test
+    public void testLogVerify() throws PangeaAPIException, PangeaException{
+        Event event = new Event(MSG_NO_SIGNED);
+        event.setActor(ACTOR);
+        event.setStatus(STATUS_NO_SIGNED);
+
+        LogResponse response = client.log(event, false, true, true);
+        assertTrue(response.isOk());
+
+        LogOutput result = response.getResult();
+        assertNotNull(result.getEventEnvelope());
+        assertNotNull(result.getHash());
+        assertEquals(MSG_NO_SIGNED, result.getEventEnvelope().getEvent().getMessage());
+        assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
+        assertEquals(EventVerification.SUCCESS, result.getMembershipVerification());
+        assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
+
+        // Second log
+        event = new Event(MSG_NO_SIGNED);
+        event.setActor(ACTOR);
+        event.setStatus(STATUS_NO_SIGNED);
+        response = client.log(event, false, true, true);
+        assertTrue(response.isOk());
+
+        result = response.getResult();
+        assertNotNull(result.getEventEnvelope());
+        assertNotNull(result.getHash());
+        assertEquals(MSG_NO_SIGNED, result.getEventEnvelope().getEvent().getMessage());
+        assertEquals(EventVerification.SUCCESS, result.getConsistencyVerification());
+        assertEquals(EventVerification.SUCCESS, result.getMembershipVerification());
+        assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
     }
 
     @Test
     public void testLogSignature() throws PangeaException, PangeaAPIException, ConfigException{
-        AuditClient signClient = new AuditClient(Config.fromEnvironment(AuditClient.serviceName), "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
-
-        String msg = "sigtest100";
-        Event event = new Event(msg);
-        event.setActor("Actor");
+        Event event = new Event(MSG_SIGNED);
+        event.setActor(ACTOR);
         event.setAction("Action");
         event.setSource("Source");
-        event.setStatus("Status");
+        event.setStatus(STATUS_SIGNED);
         event.setTarget("Target");
         event.setNewField("New");
         event.setOld("Old");
 
-        LogResponse response = signClient.log(event, true, true);
+        LogResponse response = signClient.log(event, true, true, true);
         assertTrue(response.isOk());
 
         LogOutput result = response.getResult();
         assertNotNull(result.getEventEnvelope());
-        assertNotNull(result.getCanonicalEnvelopeBase64());
         assertNotNull(result.getHash());
-        assertEquals(msg, result.getEventEnvelope().getEvent().getMessage());
+        assertEquals(MSG_SIGNED, result.getEventEnvelope().getEvent().getMessage());
         assertEquals("lvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=", result.getEventEnvelope().getPublicKey());
-        assertEquals("dg7Wg+E8QzZzhECzQoH3v3pbjWObR8ve7SHREAyA9JlFOusKPHVb16t5D3rbscnv80ry/aWzfMTscRNSYJFzDA==", result.getEventEnvelope().getSignature());
-
+        assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
     }
 
     @Test(expected = ValidationException.class)
@@ -102,21 +152,20 @@ public class ITAuditTest
 
     @Test
     public void testSearchDefault() throws PangeaException, PangeaAPIException {
-        SearchInput input = new SearchInput("message:sigtest100");
+        SearchInput input = new SearchInput("message:");
         int limit = 4;
         int maxResults = 6;
         input.setMaxResults(limit);
         input.setMaxResults(maxResults);
-        input.setOrder("desc");
+        input.setOrder("asc");
 
         SearchResponse response = client.search(input);
         assertTrue(response.isOk());
         assertTrue(response.getResult().getCount() <= maxResults);
 
         for(SearchEvent event: response.getResult().getEvents()){
-            assertTrue(event.getConsistencyVerification() != EventVerification.FAILED);     // This could be NOT_VERIFIED or SUCCESS is they have data or not
-            assertTrue(event.getMembershipVerification() != EventVerification.FAILED);
-            assertTrue(event.getSignatureVerification() != EventVerification.FAILED);
+            assertEquals(EventVerification.SUCCESS, event.getConsistencyVerification());     // This could be NOT_VERIFIED or SUCCESS is they have data or not
+            assertEquals(EventVerification.SUCCESS, event.getMembershipVerification());
             assertNotNull(event.getEventEnvelope());
             assertNotNull(event.getHash());
         }
@@ -141,8 +190,8 @@ public class ITAuditTest
     }
 
     @Test
-    public void testSearchVerify() throws PangeaAPIException, PangeaException {
-        SearchInput input = new SearchInput("message:Integration test msg");
+    public void testSearchVerifyConsistency() throws PangeaAPIException, PangeaException {
+        SearchInput input = new SearchInput("message:");
         int limit = 10;
         input.setMaxResults(limit);
         input.setOrder("asc");
@@ -158,49 +207,83 @@ public class ITAuditTest
     }
 
     @Test
-    public void testResultsDefault() throws PangeaAPIException, PangeaException {
-        SearchInput input = new SearchInput("message:");
-        int searchLimit = 100;
-        input.setMaxResults(searchLimit);
-        input.setOrder("desc");
+    public void testSearchVerifySignature() throws PangeaAPIException, PangeaException {
+        SearchInput input = new SearchInput("message:" + MSG_SIGNED + " status:" + STATUS_SIGNED);
+        int limit = 10;
+        input.setMaxResults(limit);
+        input.setOrder("asc");
 
-        SearchResponse searchResponse = client.search(input, true, true);
-        assertTrue(searchResponse.isOk());
-        assertTrue(searchResponse.getResult().getCount() <= searchLimit);
+        SearchResponse response = client.search(input, true, true);
+        assertTrue(response.isOk());
+        assertTrue(response.getResult().getCount() <= limit);
 
-        int resultsLimit = 10;
-        ResultsResponse resultsResponse = client.results(searchResponse.getRequestId(), resultsLimit, 0);
-        assertTrue(resultsResponse.getResult().getCount() <= resultsLimit);
-        for(SearchEvent event: resultsResponse.getResult().getEvents()){
-            assertEquals(EventVerification.NOT_VERIFIED, event.getConsistencyVerification());
-            assertTrue(event.getMembershipVerification() != EventVerification.FAILED);
-            assertTrue(event.getSignatureVerification() != EventVerification.FAILED);       //By default verify signatures. If does not have signature is NOT_VERIFIED
+        for(SearchEvent event: response.getResult().getEvents()){
+            assertEquals(EventVerification.SUCCESS, event.getSignatureVerification());
         }
     }
 
     @Test
-    public void testResultsNoVerify() throws PangeaAPIException, PangeaException {
+    public void testResultsDefault() throws PangeaAPIException, PangeaException {
         SearchInput input = new SearchInput("message:");
-        int searchLimit = 100;
+        int searchLimit = 10;
         input.setMaxResults(searchLimit);
-        input.setOrder("desc");
+        input.setOrder("asc");
+
+        SearchResponse searchResponse = client.search(input, true, true);
+        assertTrue(searchResponse.isOk());
+        assertTrue(searchResponse.getResult().getCount() <= searchLimit);
+        assertTrue(searchResponse.getResult().getCount() > 0);
+
+        int resultsLimit = 3;
+        ResultsResponse resultsResponse = client.results(searchResponse.getResult().getId(), resultsLimit, 0);
+        assertEquals(resultsResponse.getResult().getCount(), resultsLimit);
+        for(SearchEvent event: resultsResponse.getResult().getEvents()){
+            assertEquals(EventVerification.NOT_VERIFIED, event.getConsistencyVerification());
+            assertEquals(EventVerification.NOT_VERIFIED, event.getMembershipVerification());
+        }
+    }
+
+    public void testResultsVerify() throws PangeaAPIException, PangeaException {
+        SearchInput input = new SearchInput("message:");
+        int searchLimit = 10;
+        input.setMaxResults(searchLimit);
+        input.setOrder("asc");
+
+        SearchResponse searchResponse = client.search(input, true, true);
+        assertTrue(searchResponse.isOk());
+        assertTrue(searchResponse.getResult().getCount() <= searchLimit);
+        assertTrue(searchResponse.getResult().getCount() > 0);
+
+        int resultsLimit = 3;
+        ResultsResponse resultsResponse = client.results(searchResponse.getResult().getId(), resultsLimit, 0, true, true);
+        assertEquals(resultsResponse.getResult().getCount(), resultsLimit);
+        for(SearchEvent event: resultsResponse.getResult().getEvents()){
+            assertEquals(EventVerification.SUCCESS, event.getConsistencyVerification());
+            assertEquals(EventVerification.SUCCESS, event.getMembershipVerification());
+        }
+    }
+
+    @Test
+    public void testResultsNoVerify() throws PangeaAPIException, PangeaException{
+        SearchInput input = new SearchInput("message:");
+        int searchLimit = 10;
+        input.setMaxResults(searchLimit);
+        input.setOrder("asc");
 
         SearchResponse searchResponse = client.search(input, true, true);
         assertTrue(searchResponse.isOk());
         assertTrue(searchResponse.getResult().getCount() <= searchLimit);
 
-        int resultsLimit = 10;
+        int resultsLimit = 3;
         // Skip verifications
-        ResultsResponse resultsResponse = client.results(searchResponse.getRequestId(), resultsLimit, 0, false, false);
-        assertTrue(resultsResponse.getResult().getCount() <= resultsLimit);
+        ResultsResponse resultsResponse = client.results(searchResponse.getResult().getId(), resultsLimit, 0, false, false);
+        assertEquals(resultsResponse.getResult().getCount(), resultsLimit);
         for(SearchEvent event: resultsResponse.getResult().getEvents()){
             // This should be NOT_VERIFIED
             assertEquals(EventVerification.NOT_VERIFIED, event.getConsistencyVerification());
             assertEquals(EventVerification.NOT_VERIFIED, event.getMembershipVerification());
-            assertEquals(EventVerification.NOT_VERIFIED, event.getSignatureVerification());
         }
     }
-
 
     @Test
     public void testRoot() throws PangeaException, PangeaAPIException {

@@ -26,7 +26,7 @@ public class ITAuditTest{
 
     @Before
     public void setUp() throws ConfigException{
-        Config cfg = Config.fromEnvironment(AuditClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment(AuditClient.serviceName);
         client = new AuditClient(cfg);
         signClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
     }

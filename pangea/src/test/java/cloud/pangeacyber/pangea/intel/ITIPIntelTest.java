@@ -12,6 +12,7 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 public class ITIPIntelTest {
@@ -131,6 +132,14 @@ public class ITIPIntelTest {
     @Test(expected = ValidationException.class)
     public void testEmptyNotValidProvider() throws PangeaException, PangeaAPIException {
         IpLookupResponse response = client.lookup("93.231.182.110", "notvalidprovider", true, true);
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
+        Config cfg = Config.fromIntegrationEnvironment(IpIntelClient.serviceName);
+        cfg.setToken("notarealtoken");
+        IpIntelClient fakeClient = new IpIntelClient(cfg);
+        IpLookupResponse response = fakeClient.lookup("93.231.182.110");
     }
 
 }

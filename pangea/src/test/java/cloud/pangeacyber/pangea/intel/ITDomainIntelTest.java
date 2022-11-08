@@ -12,6 +12,7 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 public class ITDomainIntelTest {
@@ -131,6 +132,14 @@ public class ITDomainIntelTest {
     @Test(expected = ValidationException.class)
     public void testEmptyNotValidProvider() throws PangeaException, PangeaAPIException {
         DomainLookupResponse response = client.lookup("737updatesboeing.com", "notvalidprovider", true, true);
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
+        Config cfg = Config.fromIntegrationEnvironment(DomainIntelClient.serviceName);
+        cfg.setToken("notarealtoken");
+        DomainIntelClient fakeClient = new DomainIntelClient(cfg);
+        DomainLookupResponse response = fakeClient.lookup("737updatesboeing.com");
     }
 
 }

@@ -10,6 +10,7 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
@@ -61,6 +62,14 @@ public class ITEmbargoTest
     @Test(expected = ValidationException.class)
     public void testEmptyIP() throws PangeaException, PangeaAPIException {
         IpCheckResponse response = client.ipCheck("");
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
+        Config cfg = Config.fromIntegrationEnvironment(EmbargoClient.serviceName);
+        cfg.setToken("notarealtoken");
+        EmbargoClient fakeClient = new EmbargoClient(cfg);
+        IpCheckResponse response = fakeClient.ipCheck("1.1.1.1");
     }
 
 }

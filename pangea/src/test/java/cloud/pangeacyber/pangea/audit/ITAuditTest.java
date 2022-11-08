@@ -12,6 +12,7 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
@@ -311,6 +312,58 @@ public class ITAuditTest{
         assertNotNull(root.getTreeName());
         assertNotNull(root.getRootHash());
         assertEquals(treeSize, root.getSize());
+    }
+
+    @Test(expected = PangeaException.class)
+    public void testRootTreeNotFound() throws PangeaException, PangeaAPIException {
+        int treeSize = 1000000;
+        RootResponse response = client.getRoot(treeSize);
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void testRootUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
+        int treeSize = 1;
+        Config cfg = Config.fromIntegrationEnvironment(AuditClient.serviceName);
+        cfg.setToken("notarealtoken");
+        AuditClient fakeClient = new AuditClient(cfg);
+        RootResponse response = fakeClient.getRoot(treeSize);
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void testLogUnathorized() throws PangeaException, PangeaAPIException, ConfigException{
+        Config cfg = Config.fromIntegrationEnvironment(AuditClient.serviceName);
+        cfg.setToken("notarealtoken");
+        AuditClient fakeClient = new AuditClient(cfg);
+        Event event = new Event("Test msg");
+        LogResponse response = fakeClient.log(event);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void testLogEmptyMessage() throws PangeaException, PangeaAPIException{
+        Event event = new Event("");
+        LogResponse response = client.log(event);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void testSearchValidationException() throws PangeaAPIException, PangeaException {
+        SearchInput input = new SearchInput("message:");
+        int searchLimit = 100;
+        input.setMaxResults(searchLimit);
+        input.setOrder("notavalidorder");
+        SearchResponse searchResponse = client.search(input, true, true);
+
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void testSearchValidationException2() throws PangeaAPIException, PangeaException, ConfigException {
+        Config cfg = Config.fromIntegrationEnvironment(AuditClient.serviceName);
+        cfg.setToken("notarealtoken");
+        AuditClient fakeClient = new AuditClient(cfg);
+        SearchInput input = new SearchInput("message:");
+        int searchLimit = 100;
+        input.setMaxResults(searchLimit);
+        input.setOrder("notavalidorder");
+        SearchResponse searchResponse = fakeClient.search(input, true, true);
     }
 
 }

@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.exceptions.SignerException;
 
 public class ITSignTest {
     LogSigner signer;
@@ -24,4 +25,12 @@ public class ITSignTest {
         assertEquals("lvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=", pubKey);
         assertEquals("IYmIUBKWu5yLHM1u3bAw7dvVg1MPc7FLDWSz6d9oqn4FoCu9Bk6ta/lXvvXZUpa7hCm6RhU0VdBzh53x3mKiDQ==", signature);
     }
+
+    @Test(expected = SignerException.class)
+    public void testSignerFileNotFound() throws PangeaException {
+        LogSigner fakeSigner = new LogSigner("./not/arealfile");
+        String msg = "Hello signed world";
+        String signature = fakeSigner.sign(msg);
+    }
+
 }

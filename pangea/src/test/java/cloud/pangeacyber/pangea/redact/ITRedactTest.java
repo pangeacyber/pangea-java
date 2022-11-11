@@ -12,6 +12,7 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -168,6 +169,25 @@ public class ITRedactTest
 
         assertEquals(expected, result.getRedactedData());
         assertNotNull(result.getReport());
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void testRedactTextUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
+        Config cfg = Config.fromIntegrationEnvironment(RedactClient.serviceName);
+        cfg.setToken("notarealtoken");
+        RedactClient fakeClient = new RedactClient(cfg);
+        RedactTextResponse response = fakeClient.redactText("Jenny Jenny... 415-867-5309", false);
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void testRedactStructuredUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
+        Config cfg = Config.fromIntegrationEnvironment(RedactClient.serviceName);
+        cfg.setToken("notarealtoken");
+        RedactClient fakeClient = new RedactClient(cfg);
+        Map<String, Object> data = new LinkedHashMap<String, Object>();
+        data.put("Name", "Jenny Jenny");
+        data.put("Phone", "This is its number: 415-867-5309");
+        RedactStructuredResponse response = fakeClient.redactStructured(data, true, new String[] {"Phone"});
     }
 
 }

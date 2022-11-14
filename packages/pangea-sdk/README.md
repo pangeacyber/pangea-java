@@ -15,7 +15,7 @@
 <br />
 </p>
 
-# Java Pangea SDK
+# Pangea Java SDK
 
 ## compile
 

@@ -1,25 +1,12 @@
-image: maven:3-openjdk-18
-
 default:
+  image: maven:3-openjdk-18
   tags:
     - pangea-internal
 
 stages:
   - build
   - test
+  - publish
 
-cache:
-  paths:
-    - target/
-
-build:
-  stage: build
-  script:
-    - cd pangea
-    - mvn compile
-
-test:
-  stage: test
-  script:
-    - cd pangea
-    - mvn test
+includes:
+  - /packages/pangea-sdk/.sdk-ci.yml

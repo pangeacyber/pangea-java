@@ -19,8 +19,6 @@
 
 ## compile
 
-Move to `pangea-java/packages/pangea-sdk` and run:
-
 ```
 mvn compile
 ```

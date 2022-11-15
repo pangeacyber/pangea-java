@@ -5,10 +5,7 @@
   before_script:
     - cd packages/pangea-sdk
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - packages/pangea-sdk/**/*
-      when: on_success
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 build:
   extends: .java-sdk-base

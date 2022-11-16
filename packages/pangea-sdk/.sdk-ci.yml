@@ -1,4 +1,4 @@
-.java-sdk-base
+.java-sdk-base:
   cache:
     paths:
       - target/
@@ -7,7 +7,7 @@
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
 
-.java-sdk-publish
+.java-sdk-publish:
   cache:
     paths:
       - target/

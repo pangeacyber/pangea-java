@@ -8,5 +8,5 @@ stages:
   - test
   - publish
 
-includes:
+include:
   - /packages/pangea-sdk/.sdk-ci.yml

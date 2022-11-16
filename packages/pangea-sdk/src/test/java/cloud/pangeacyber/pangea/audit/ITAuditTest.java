@@ -22,13 +22,17 @@ public class ITAuditTest{
 
     private static final String ACTOR = "java-sdk";
     private static final String MSG_NO_SIGNED = "test-message";
-    private static final String MSG_SIGNED = "sign-test";
+    private static final String MSG_SIGNED_LOCAL = "sign-test-local";
+    private static final String MSG_SIGNED_VAULT = "sign-test-vault";
     private static final String STATUS_NO_SIGNED = "no-signed";
     private static final String STATUS_SIGNED = "signed";
 
     @Before
     public void setUp() throws ConfigException{
         Config cfg = Config.fromIntegrationEnvironment(AuditClient.serviceName);
+        cfg.setEnviroment("local");
+        cfg.setDomain("audit-gea-1771-audit-vault.dev.aws.pangea.cloud");
+        cfg.setToken("pts_orck2dofow5xmxxvlk4q3dbjnvvoc5nm");
         client = new AuditClient(cfg);
         signClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
     }
@@ -58,7 +62,7 @@ public class ITAuditTest{
         event.setActor(ACTOR);
         event.setStatus(STATUS_NO_SIGNED);
 
-        LogResponse response = client.log(event, false, false, false);
+        LogResponse response = client.log(event, SignMode.UNSIGNED, false, false);
         assertTrue(response.isOk());
 
         LogOutput result = response.getResult();
@@ -77,7 +81,7 @@ public class ITAuditTest{
         event.setActor(ACTOR);
         event.setStatus(STATUS_NO_SIGNED);
 
-        LogResponse response = client.log(event, false, true, false);
+        LogResponse response = client.log(event, SignMode.UNSIGNED, true, false);
         assertTrue(response.isOk());
 
         LogOutput result = response.getResult();
@@ -97,7 +101,7 @@ public class ITAuditTest{
         event.setActor(ACTOR);
         event.setStatus(STATUS_NO_SIGNED);
 
-        LogResponse response = client.log(event, false, true, true);
+        LogResponse response = client.log(event, SignMode.UNSIGNED, true, true);
         assertTrue(response.isOk());
 
         LogOutput result = response.getResult();
@@ -112,7 +116,7 @@ public class ITAuditTest{
         event = new Event(MSG_NO_SIGNED);
         event.setActor(ACTOR);
         event.setStatus(STATUS_NO_SIGNED);
-        response = client.log(event, false, true, true);
+        response = client.log(event, SignMode.UNSIGNED, true, true);
         assertTrue(response.isOk());
 
         result = response.getResult();
@@ -125,8 +129,8 @@ public class ITAuditTest{
     }
 
     @Test
-    public void testLogSignature() throws PangeaException, PangeaAPIException, ConfigException{
-        Event event = new Event(MSG_SIGNED);
+    public void testLogLocalSignature() throws PangeaException, PangeaAPIException, ConfigException{
+        Event event = new Event(MSG_SIGNED_LOCAL);
         event.setActor(ACTOR);
         event.setAction("Action");
         event.setSource("Source");
@@ -135,16 +139,42 @@ public class ITAuditTest{
         event.setNewField("New");
         event.setOld("Old");
 
-        LogResponse response = signClient.log(event, true, true, true);
+        LogResponse response = signClient.log(event, SignMode.LOCAL, true, true);
         assertTrue(response.isOk());
 
         LogOutput result = response.getResult();
         assertNotNull(result.getEventEnvelope());
         assertNotNull(result.getHash());
-        assertEquals(MSG_SIGNED, result.getEventEnvelope().getEvent().getMessage());
+        assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
         assertEquals("lvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=", result.getEventEnvelope().getPublicKey());
         assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
     }
+
+    @Test
+    public void testLogVaultSignature() throws PangeaException, PangeaAPIException, ConfigException{
+        Event event = new Event(MSG_SIGNED_VAULT);
+        event.setActor(ACTOR);
+        event.setAction("Action");
+        event.setSource("Source");
+        event.setStatus(STATUS_SIGNED);
+        event.setTarget("Target");
+        event.setNewField("New");
+        event.setOld("Old");
+
+        LogResponse response = signClient.log(event, SignMode.VAULT, true, true);
+        assertTrue(response.isOk());
+
+        LogOutput result = response.getResult();
+        assertNotNull(result.getEventEnvelope());
+        assertNotNull(result.getHash());
+        assertEquals(MSG_SIGNED_VAULT, result.getEventEnvelope().getEvent().getMessage());
+        assertNotNull(result.getEventEnvelope().getPublicKey());
+        assertNotNull(result.getEventEnvelope().getSignature());
+        assertNotNull(result.getEventEnvelope().getSignatureKeyID());
+        assertNotNull(result.getEventEnvelope().getSignatureKeyVersion());
+        assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
+    }
+
 
     @Test(expected = ValidationException.class)
     public void testEmptyMessage() throws PangeaException, PangeaAPIException {
@@ -210,7 +240,7 @@ public class ITAuditTest{
 
     @Test
     public void testSearchVerifySignature() throws PangeaAPIException, PangeaException {
-        SearchInput input = new SearchInput("message:" + MSG_SIGNED + " status:" + STATUS_SIGNED);
+        SearchInput input = new SearchInput("message:" + MSG_SIGNED_LOCAL + " status:" + STATUS_SIGNED);
         int limit = 10;
         input.setMaxResults(limit);
         input.setOrder("asc");
@@ -370,7 +400,7 @@ public class ITAuditTest{
     @Test(expected = SignerException.class)
     public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException{
         Event event = new Event(MSG_NO_SIGNED);
-        LogResponse response = client.log(event, true, true, true);
+        LogResponse response = client.log(event, SignMode.LOCAL, true, true);
     }
 
 }

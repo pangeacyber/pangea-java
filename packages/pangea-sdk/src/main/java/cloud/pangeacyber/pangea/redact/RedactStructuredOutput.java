@@ -1,7 +1,9 @@
 package cloud.pangeacyber.pangea.redact;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RedactStructuredOutput {
     @JsonProperty("redacted_data")
     Object redactedData;

@@ -72,12 +72,17 @@ final class LogRequest{
     @JsonProperty("prev_root")
     String prevRoot;
 
-    public LogRequest(Event event, Boolean verbose, String signature, String publicKey, String prevRoot) {
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("sign")
+    Boolean sign;
+
+    public LogRequest(Event event, Boolean verbose, String signature, String publicKey, String prevRoot, Boolean sign) {
         this.event = event;
         this.verbose = verbose;
         this.signature = signature;
         this.publicKey = publicKey;
         this.prevRoot = prevRoot;
+        this.sign = sign;
     }
 }
 
@@ -105,24 +110,24 @@ public class AuditClient extends Client {
         publishedRoots = new HashMap<Integer, PublishedRoot>();
     }
 
-    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey, boolean verify)  throws PangeaException, PangeaAPIException{
+    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey, Boolean sign, boolean verify)  throws PangeaException, PangeaAPIException{
         String prevRoot = null;
         if(verify){
             verbose = true;
             prevRoot = this.prevUnpublishedRoot;
         }
-        LogRequest request = new LogRequest(event, verbose, signature, publicKey, prevRoot);
+        LogRequest request = new LogRequest(event, verbose, signature, publicKey, prevRoot, sign);
         return doPost("/v1/log", request, LogResponse.class);
     }
 
-    private LogResponse doLog(Event event, boolean sign, Boolean verbose, boolean verify) throws PangeaException, PangeaAPIException{
+    private LogResponse doLog(Event event, SignMode signMode, Boolean verbose, boolean verify) throws PangeaException, PangeaAPIException{
         String signature = null;
         String publicKey = null;
+        Boolean sign = null;
 
-        if(sign && this.signer == null){
+        if(signMode == SignMode.LOCAL && this.signer == null){
             throw new SignerException("Signer not initialized", null);
-        }
-        else if(sign && this.signer != null){
+        } else if(signMode == SignMode.LOCAL && this.signer != null){
             String canEvent;
             try{
                 canEvent = Event.canonicalize(event);
@@ -132,23 +137,24 @@ public class AuditClient extends Client {
 
             signature = this.signer.sign(canEvent);
             publicKey = this.signer.getPublicKey();
+        } else if (signMode == SignMode.VAULT){
+            sign = true;
         }
 
-        LogResponse response = logPost(event, verbose, signature, publicKey, verify);
+        LogResponse response = logPost(event, verbose, signature, publicKey, sign, verify);
         processLogResponse(response.getResult(), verify);
         return response;
     }
 
-    private void processLogResponse(LogOutput result, boolean verify) throws VerificationFailed{
+    private void processLogResponse(LogOutput result, boolean verify) throws VerificationFailed, PangeaException{
         String newUnpublishedRoot = result.getUnpublishedRoot();
 
+        result.setEventEnvelope(EventEnvelope.fromRaw(result.getRawEnvelope()));
         if(verify){
-            EventEnvelope.verifyHash(result.eventEnvelope, result.hash);
+            EventEnvelope.verifyHash(result.getRawEnvelope(), result.getHash());
             result.verifySignature();
-
             if(newUnpublishedRoot != null){
                 result.membershipVerification = Verification.verifyMembershipProof(newUnpublishedRoot, result.hash, result.membershipProof);
-
                 if(result.consistencyProof != null && this.prevUnpublishedRoot != null){
                     ConsistencyProof conProof = Verification.decodeConsistencyProof(result.consistencyProof);
                     result.consistencyVerification = Verification.verifyConsistencyProof(newUnpublishedRoot, this.prevUnpublishedRoot, conProof);
@@ -178,7 +184,7 @@ public class AuditClient extends Client {
      * ```
      */
     public LogResponse log(Event event) throws PangeaException, PangeaAPIException{
-        return doLog(event, false, null, false);
+        return doLog(event, SignMode.UNSIGNED, null, false);
     }
 
     /**
@@ -198,8 +204,8 @@ public class AuditClient extends Client {
      *  LogResponse response = client.log(event, true, true);
      * ```
      */
-    public LogResponse log(Event event, boolean sign, boolean verbose, boolean verify) throws PangeaException, PangeaAPIException {
-        return doLog(event, sign, verbose, verify);
+    public LogResponse log(Event event, SignMode signMode, boolean verbose, boolean verify) throws PangeaException, PangeaAPIException {
+        return doLog(event, signMode, verbose, verify);
     }
 
     private RootResponse rootPost(Integer treeSize) throws PangeaException, PangeaAPIException {
@@ -241,9 +247,13 @@ public class AuditClient extends Client {
     }
 
     private void processSearchResult(ResultsOutput result, boolean verifyConsistency, boolean verifyEvents) throws PangeaException, PangeaAPIException{
+        for(SearchEvent searchEvent : result.getEvents()){
+            searchEvent.setEventEnvelope(EventEnvelope.fromRaw(searchEvent.getRawEnvelope()));
+        }
+
         if(verifyEvents){
             for(SearchEvent searchEvent : result.getEvents()){
-                EventEnvelope.verifyHash(searchEvent.eventEnvelope, searchEvent.hash);
+                EventEnvelope.verifyHash(searchEvent.getRawEnvelope(), searchEvent.getHash());
                 searchEvent.verifySignature();
             }
         }

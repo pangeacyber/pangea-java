@@ -2,6 +2,7 @@ package cloud.pangeacyber.pangea.audit;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -11,8 +12,11 @@ import cloud.pangeacyber.pangea.audit.utils.ConsistencyProof;
 import cloud.pangeacyber.pangea.audit.utils.Verification;
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchEvent {
     @JsonProperty("envelope")
+    Object rawEnvelope;
+
     EventEnvelope eventEnvelope;
 
     @JsonProperty("hash")
@@ -39,8 +43,16 @@ public class SearchEvent {
     @JsonIgnore
     EventVerification signatureVerification = EventVerification.NOT_VERIFIED;
 
+    public Object getRawEnvelope() {
+        return rawEnvelope;
+    }
+
     public EventEnvelope getEventEnvelope() {
         return eventEnvelope;
+    }
+
+    public void setEventEnvelope(EventEnvelope eventEnvelope) {
+        this.eventEnvelope = eventEnvelope;
     }
 
     public String getHash() {

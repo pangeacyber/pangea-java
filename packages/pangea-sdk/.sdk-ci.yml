@@ -7,14 +7,32 @@
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
 
-build:
+.java-sdk-publish
+  cache:
+    paths:
+      - target/
+  before_script:
+    - apt-get -qq update
+    - apt-get install -y gnupg
+    - cd packages/pangea-sdk
+  rules:
+    - if: $CI_COMMIT_BRANCH == "release"
+      changes:
+        - packages/pangea-sdk/**/*
+      when: on_success
+
+build_sdk:
   extends: .java-sdk-base
   stage: build
   script:
     - mvn compile
 
-test:
+test_sdk:
   extends: .java-sdk-base
   stage: test
   script:
     - mvn test
+
+publish_sdk:
+  extends: .java-sdk-publish
+  stage: publish

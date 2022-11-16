@@ -1,9 +1,11 @@
 package cloud.pangeacyber.pangea;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PangeaErrors {
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("errors")

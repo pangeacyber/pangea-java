@@ -1,15 +1,20 @@
 package cloud.pangeacyber.pangea.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LogOutput {
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("envelope")
-    EventEnvelope eventEnvelope;
+    Object rawEnvelope;
+
+    @JsonIgnore    
+    EventEnvelope eventEnvelope = null;
 
     @JsonProperty("hash")
     String hash;
@@ -35,8 +40,16 @@ public class LogOutput {
     @JsonIgnore
     EventVerification signatureVerification = EventVerification.NOT_VERIFIED;
 
+    public Object getRawEnvelope() {
+        return rawEnvelope;
+    }
+
     public EventEnvelope getEventEnvelope() {
         return eventEnvelope;
+    }
+
+    public void setEventEnvelope(EventEnvelope eventEnvelope) {
+        this.eventEnvelope = eventEnvelope;
     }
 
     public String getHash() {

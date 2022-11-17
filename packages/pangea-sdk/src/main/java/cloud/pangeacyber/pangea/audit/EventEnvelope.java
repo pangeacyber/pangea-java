@@ -1,4 +1,8 @@
 package cloud.pangeacyber.pangea.audit;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -7,8 +11,10 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cloud.pangeacyber.pangea.audit.utils.Hash;
+import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.VerificationFailed;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EventEnvelope {
     @JsonProperty("event")
     Event event;
@@ -52,6 +58,10 @@ public class EventEnvelope {
             return EventVerification.FAILED;
         }
 
+        if(this.publicKey != null && this.publicKey.startsWith("-----")){
+            return EventVerification.NOT_VERIFIED;
+        }
+
         String canonicalJson;
         try{
             canonicalJson = Event.canonicalize(this.event);
@@ -62,21 +72,56 @@ public class EventEnvelope {
         return verifier.verify(this.publicKey, this.signature, canonicalJson);
     }
 
-    static public String canonicalize(EventEnvelope envelope) throws JsonProcessingException{
+    static public String canonicalize(Object rawEnvelope) throws PangeaException{
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        return mapper.writeValueAsString(envelope);
+        LinkedHashMap<String, Object> mapEnvelope = (LinkedHashMap<String, Object>)rawEnvelope;
+        String canon;
+
+        if(mapEnvelope.containsKey("event")){
+            // TreeMap to store sorted values of HashMap
+            TreeMap<String, Object> sortedEvent = new TreeMap<>();
+            sortedEvent.putAll((LinkedHashMap<String, Object>)mapEnvelope.get("event"));
+            mapEnvelope.put("event", sortedEvent);
+        }
+        // TreeMap to store sorted values of HashMap
+        TreeMap<String, Object> sortedEnvelope = new TreeMap<>();
+        sortedEnvelope.putAll(mapEnvelope);
+
+        try{
+            canon = mapper.writeValueAsString(sortedEnvelope);
+        } catch(JsonProcessingException e){
+            throw new PangeaException("Failed to canonicalize event envelope", e);
+        }
+
+        return canon;
     }
 
-    public static void verifyHash(EventEnvelope envelope, String hash) throws VerificationFailed {
-        if(envelope == null || hash == null || hash.isEmpty()){
+    static public EventEnvelope fromRaw(Object raw) throws PangeaException{
+        if(raw == null){
+            return null;
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        EventEnvelope eventEnvelope;
+        try{
+            eventEnvelope = mapper.readValue(mapper.writeValueAsString(raw), EventEnvelope.class);
+        } catch(JsonProcessingException e){
+            throw new PangeaException("Failed to process event envelope", e);
+        }
+
+        return eventEnvelope;
+    }
+
+    public static void verifyHash(Object rawEnvelope, String hash) throws VerificationFailed {
+        if(rawEnvelope == null || hash == null || hash.isEmpty()){
             return;
         }
 
         String canonicalJson;
         try{
-            canonicalJson = EventEnvelope.canonicalize(envelope);
-        } catch(JsonProcessingException e){
+            canonicalJson = EventEnvelope.canonicalize(rawEnvelope);
+        } catch(PangeaException e){
             throw new VerificationFailed("Failed to canonicalize envelope in hash verification. Event hash: " + hash, e, hash);
         }
 

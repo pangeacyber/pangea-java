@@ -1,6 +1,11 @@
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
 .java-sdk-base:
   cache:
     paths:
+     - .m2/repository/
       - target/
   before_script:
     - cd packages/pangea-sdk
@@ -10,6 +15,7 @@
 .java-sdk-publish:
   cache:
     paths:
+      - .m2/repository/
       - target/
   before_script:
     - apt-get -qq update
@@ -21,20 +27,20 @@
         - packages/pangea-sdk/**/*
       when: on_success
 
-build_sdk:
+building_sdk:
   extends: .java-sdk-base
   stage: build
   script:
-    - mvn compile
+    - mvn $MAVEN_CLI_OPTS compile
 
-test_sdk:
+testing_sdk:
   extends: .java-sdk-base
   stage: test
   script:
-    - mvn test
+    - mvn $MAVEN_CLI_OPTS test
 
-publish_sdk:
+publishing_sdk:
   extends: .java-sdk-publish
   stage: publish
   script:
-    - echo "Publishing here"
+    - mvn $MAVEN_CLI_OPTS deploy

@@ -36,3 +36,5 @@ test_sdk:
 publish_sdk:
   extends: .java-sdk-publish
   stage: publish
+  script:
+    - echo "Publishing here"

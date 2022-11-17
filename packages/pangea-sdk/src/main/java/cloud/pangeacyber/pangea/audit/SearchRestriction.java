@@ -1,9 +1,11 @@
 package cloud.pangeacyber.pangea.audit;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchRestriction {
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("actor")

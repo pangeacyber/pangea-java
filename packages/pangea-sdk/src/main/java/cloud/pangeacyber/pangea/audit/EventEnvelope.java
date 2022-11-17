@@ -125,7 +125,6 @@ public class EventEnvelope {
             throw new VerificationFailed("Failed to canonicalize envelope in hash verification. Event hash: " + hash, e, hash);
         }
 
-        System.out.println("Hash canon: " + canonicalJson);
         String calcHash = Hash.hash(canonicalJson);
         if(!calcHash.equals(hash)){
             throw new VerificationFailed("Failed hash verification. Calculated and received hash are not equals. Event hash: " + hash, null, hash);

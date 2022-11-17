@@ -82,7 +82,6 @@ public abstract class Client {
             try{
                 resultResponse =  mapper.readValue(body, responseClass);
             } catch(Exception e) {
-                System.out.println(body);
                 throw new ParseResultFailed("Failed to parse response result", e, header, body);
             }
             resultResponse.setHttpResponse(httpResponse);

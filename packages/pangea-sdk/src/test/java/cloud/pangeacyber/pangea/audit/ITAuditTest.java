@@ -29,9 +29,6 @@ public class ITAuditTest{
     @Before
     public void setUp() throws ConfigException{
         Config cfg = Config.fromIntegrationEnvironment(AuditClient.serviceName);
-        cfg.setEnviroment("local");
-        cfg.setDomain("audit-gea-1771-audit-vault.dev.aws.pangea.cloud");
-        cfg.setToken("pts_orck2dofow5xmxxvlk4q3dbjnvvoc5nm");
         client = new AuditClient(cfg);
         signClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
     }
@@ -318,7 +315,7 @@ public class ITAuditTest{
         assertEquals(treeSize, root.getSize());
     }
 
-    @Test(expected = PangeaException.class)
+    @Test(expected = PangeaAPIException.class)
     public void testRootTreeNotFound() throws PangeaException, PangeaAPIException {
         int treeSize = 1000000;
         RootResponse response = client.getRoot(treeSize);

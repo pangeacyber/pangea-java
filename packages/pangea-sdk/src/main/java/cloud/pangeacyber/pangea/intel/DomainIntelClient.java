@@ -39,7 +39,7 @@ final class DomainLookupRequest {
 
 }
 
-final class DomainLookupResponse extends Response<IntelLookupOutput> {}
+final class DomainLookupResponse extends Response<IntelLookupResult> {}
 
 public class DomainIntelClient extends Client{
     public static String serviceName = "domain-intel";

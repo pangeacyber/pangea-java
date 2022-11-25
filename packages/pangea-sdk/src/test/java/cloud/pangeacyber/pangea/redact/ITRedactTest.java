@@ -32,7 +32,7 @@ public class ITRedactTest
         RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309");
         assertTrue(response.isOk());
 
-        RedactTextOutput result = response.getResult();
+        RedactTextResult result = response.getResult();
         assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
         assertNull(result.getReport());
     }
@@ -42,7 +42,7 @@ public class ITRedactTest
         RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", true);
         assertTrue(response.isOk());
 
-        RedactTextOutput result = response.getResult();
+        RedactTextResult result = response.getResult();
         assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
         assertNotNull(result.getReport());
     }
@@ -52,7 +52,7 @@ public class ITRedactTest
         RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", false);
         assertTrue(response.isOk());
 
-        RedactTextOutput result = response.getResult();
+        RedactTextResult result = response.getResult();
         assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
         assertNull(result.getReport());
     }
@@ -66,7 +66,7 @@ public class ITRedactTest
         RedactStructuredResponse response = client.redactStructured(data);
         assertTrue(response.isOk());
 
-        RedactStructuredOutput result = response.getResult();
+        RedactStructuredResult result = response.getResult();
 
         Map<String, Object> expected = new LinkedHashMap<String, Object>();
         expected.put("Name", "<PERSON>");
@@ -85,7 +85,7 @@ public class ITRedactTest
         RedactStructuredResponse response = client.redactStructured(data, "json");
         assertTrue(response.isOk());
 
-        RedactStructuredOutput result = response.getResult();
+        RedactStructuredResult result = response.getResult();
 
         Map<String, Object> expected = new LinkedHashMap<String, Object>();
         expected.put("Name", "<PERSON>");
@@ -104,7 +104,7 @@ public class ITRedactTest
         RedactStructuredResponse response = client.redactStructured(data, true);
         assertTrue(response.isOk());
 
-        RedactStructuredOutput result = response.getResult();
+        RedactStructuredResult result = response.getResult();
 
         Map<String, Object> expected = new LinkedHashMap<String, Object>();
         expected.put("Name", "<PERSON>");
@@ -123,7 +123,7 @@ public class ITRedactTest
         RedactStructuredResponse response = client.redactStructured(data, false);
         assertTrue(response.isOk());
 
-        RedactStructuredOutput result = response.getResult();
+        RedactStructuredResult result = response.getResult();
 
         Map<String, Object> expected = new LinkedHashMap<String, Object>();
         expected.put("Name", "<PERSON>");
@@ -142,7 +142,7 @@ public class ITRedactTest
         RedactStructuredResponse response = client.redactStructured(data, "json", true);
         assertTrue(response.isOk());
 
-        RedactStructuredOutput result = response.getResult();
+        RedactStructuredResult result = response.getResult();
 
         Map<String, Object> expected = new LinkedHashMap<String, Object>();
         expected.put("Name", "<PERSON>");
@@ -161,7 +161,7 @@ public class ITRedactTest
         RedactStructuredResponse response = client.redactStructured(data, true, new String[] {"Phone"});
         assertTrue(response.isOk());
 
-        RedactStructuredOutput result = response.getResult();
+        RedactStructuredResult result = response.getResult();
 
         Map<String, Object> expected = new LinkedHashMap<String, Object>();
         expected.put("Name", "Jenny Jenny");

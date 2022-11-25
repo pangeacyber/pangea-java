@@ -51,8 +51,8 @@ final class StructuredRequest {
     }
 }
 
-final class RedactTextResponse extends Response<RedactTextOutput> {}
-final class RedactStructuredResponse extends Response<RedactStructuredOutput> {}
+final class RedactTextResponse extends Response<RedactTextResult> {}
+final class RedactStructuredResponse extends Response<RedactStructuredResult> {}
 
 public class RedactClient extends Client {
     public static String serviceName = "redact";

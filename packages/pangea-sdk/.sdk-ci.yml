@@ -8,8 +8,6 @@ variables:
      - .m2/repository/
       - target/
   before_script:
-    - yum update
-    - yum install gnupg
     - cd packages/pangea-sdk
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"

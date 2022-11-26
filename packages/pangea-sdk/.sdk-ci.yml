@@ -3,10 +3,6 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 .java-sdk-base:
-  cache:
-    paths:
-     - .m2/repository/
-      - target/
   before_script:
     - cd packages/pangea-sdk
   rules:

@@ -36,7 +36,7 @@ final class IpLookupRequest {
 
 }
 
-final class IpLookupResponse extends Response<IntelLookupOutput> {}
+final class IpLookupResponse extends Response<IntelLookupResult> {}
 
 public class IpIntelClient extends Client{
     public static String serviceName = "ip-intel";

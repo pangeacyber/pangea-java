@@ -40,7 +40,7 @@ final class FileLookupRequest {
 
 }
 
-final class FileLookupResponse extends Response<IntelLookupOutput> {}
+final class FileLookupResponse extends Response<IntelLookupResult> {}
 
 public class FileIntelClient extends Client{
     public static String serviceName = "file-intel";

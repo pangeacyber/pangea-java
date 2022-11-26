@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class IntelLookupOutput {
+public class IntelLookupResult {
     @JsonProperty("data")
     IntelLookupData Data;
 

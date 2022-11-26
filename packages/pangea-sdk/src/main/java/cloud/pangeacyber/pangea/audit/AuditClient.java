@@ -81,10 +81,10 @@ final class LogRequest{
     }
 }
 
-final class LogResponse extends Response<LogOutput> {}
+final class LogResponse extends Response<LogResult> {}
 final class SearchResponse extends Response<SearchOutput> {}
 final class ResultsResponse extends Response<ResultsOutput> {}
-final class RootResponse extends Response<RootOutput> {}
+final class RootResponse extends Response<RootResult> {}
 
 public class AuditClient extends Client {
     public static String serviceName = "audit";
@@ -138,7 +138,7 @@ public class AuditClient extends Client {
         return response;
     }
 
-    private void processLogResponse(LogOutput result, boolean verify) throws VerificationFailed, PangeaException{
+    private void processLogResponse(LogResult result, boolean verify) throws VerificationFailed, PangeaException{
         String newUnpublishedRoot = result.getUnpublishedRoot();
 
         result.setEventEnvelope(EventEnvelope.fromRaw(result.getRawEnvelope()));

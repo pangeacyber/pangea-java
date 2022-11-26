@@ -36,7 +36,7 @@ final class UrlLookupRequest {
 
 }
 
-final class UrlLookupResponse extends Response<IntelLookupOutput> {}
+final class UrlLookupResponse extends Response<IntelLookupResult> {}
 
 public class UrlIntelClient extends Client{
     public static String serviceName = "url-intel";

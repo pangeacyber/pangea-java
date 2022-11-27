@@ -9,10 +9,6 @@ variables:
     - if: $CI_PIPELINE_SOURCE == "push"
 
 .java-sdk-publish:
-  cache:
-    paths:
-      - .m2/repository/
-      - target/
   before_script:
     - cd packages/pangea-sdk
   rules:

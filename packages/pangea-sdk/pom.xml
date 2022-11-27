@@ -228,6 +228,26 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.simplify4u.plugins</groupId>
+        <artifactId>sign-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <executions>
+            <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                    <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <skipNoKey>false</skipNoKey>
+                </configuration>
+            </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
   <reporting>

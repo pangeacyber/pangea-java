@@ -33,4 +33,4 @@ publishing_sdk:
   extends: .java-sdk-publish
   stage: publish
   script:
-    - mvn $MAVEN_CLI_OPTS deploy -P release
+    - mvn $MAVEN_CLI_OPTS deploy

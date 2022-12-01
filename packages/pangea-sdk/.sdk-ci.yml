@@ -3,23 +3,13 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 .java-sdk-base:
-  cache:
-    paths:
-     - .m2/repository/
-      - target/
   before_script:
     - cd packages/pangea-sdk
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
 
 .java-sdk-publish:
-  cache:
-    paths:
-      - .m2/repository/
-      - target/
   before_script:
-    - apt-get -qq update
-    - apt-get install -y gnupg
     - cd packages/pangea-sdk
   rules:
     - if: $CI_COMMIT_BRANCH == "release"

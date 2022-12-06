@@ -1,7 +1,6 @@
 package cloud.pangeacyber.pangea.redact;
 
 import java.io.IOException;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
@@ -50,9 +48,6 @@ final class StructuredRequest {
         this.debug = debug;
     }
 }
-
-final class RedactTextResponse extends Response<RedactTextResult> {}
-final class RedactStructuredResponse extends Response<RedactStructuredResult> {}
 
 public class RedactClient extends Client {
     public static String serviceName = "redact";

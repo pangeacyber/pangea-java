@@ -39,19 +39,19 @@ public class EmbargoClient extends Client {
     }
 
     /**
+     * ISO Code Check
      * @service embargo
-     * @summary ISO Code Check
      * @description Check a country code against known sanction and trade embargo lists.
-     * @param isoCode - Check the  country against code the enabled embargo lists.
+     * @param isoCode Check the  country against code the enabled embargo lists.
      * @return IsoCheckResponse
      * @throws IOException
      * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
      * @example
-     * ```java
+     * <pre>
      * IsoCheckResponse response = client.isoCheck("CU");
-     * ```
+     * </pre>
      */
     public IsoCheckResponse isoCheck(String isoCode) throws PangeaException, PangeaAPIException{
         IsoCheckRequest request = new IsoCheckRequest(isoCode);
@@ -59,19 +59,19 @@ public class EmbargoClient extends Client {
         return resp;
     }
     /**
+     * Check IP
      * @service embargo
-     * @summary Check IP
      * @description Check an IP against known sanction and trade embargo lists.
-     * @param isoCode - Geolocate this IP and check the corresponding country against the enabled embargo lists.
+     * @param isoCode Geolocate this IP and check the corresponding country against the enabled embargo lists.
      * @return IpCheckResponse
      * @throws IOException
      * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
      * @example
-     * ```java
+     * <pre>
      * IpCheckResponse response = client.ipCheck("213.24.238.26");
-     * ```
+     * </pre>
      */
     public IpCheckResponse ipCheck(String ip) throws PangeaException, PangeaAPIException{
         IpCheckRequest request = new IpCheckRequest(ip);

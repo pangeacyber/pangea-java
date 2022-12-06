@@ -1,18 +1,19 @@
 package cloud.pangeacyber;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementFilter;
-import javax.tools.Diagnostic.Kind;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.source.doctree.DocCommentTree;
 import com.sun.source.util.DocTrees;
 
@@ -21,24 +22,31 @@ import jdk.javadoc.doclet.DocletEnvironment;
 import jdk.javadoc.doclet.Reporter;
 
 public class JsonDoclet implements Doclet {
-    private Reporter reporter;
-    private PrintWriter stdout;
-
     @Override
     public void init(Locale locale, Reporter reporter) {
         // TODO Auto-generated method stub
 
     }
 
-    public void printElement(DocTrees trees, Element e) {
+    public HashMap<String,String> printElement(DocTrees trees, Element e) {
+        HashMap<String,String> props = new HashMap<>();
+
         DocCommentTree docCommentTree = trees.getDocCommentTree(e);
         if (docCommentTree != null) {
-            System.out.println("Element (" + e.getKind() + ": "
-                    + e + ") has the following comments:");
-            System.out.println("Entire body: " + docCommentTree.getFullBody());
-            System.out.println("Block tags: " + docCommentTree.getBlockTags());
-            System.out.println("hey: " + docCommentTree.toString());
+            // Usually: "METHOD" with a value of the method signature
+            props.put(e.getKind().toString(), e.toString());
+            props.put("summary", docCommentTree.getFullBody().toString());
+            props.put("blockTags", docCommentTree.getBlockTags().toString());
+            props.put("rawDocString", docCommentTree.toString());
+
+            // System.out.println("Element (" + e.getKind() + ": "
+            //         + e + ") has the following comments:");
+            // System.out.println("Entire body: " + docCommentTree.getFullBody());
+            // System.out.println("Block tags: " + docCommentTree.getBlockTags());
+            // System.out.println("hey: " + docCommentTree.toString());
         }
+
+        return props;
     }
 
     @Override
@@ -46,9 +54,6 @@ public class JsonDoclet implements Doclet {
         // TODO Auto-generated method stub
         return null;
     }
-
-    private String author;
-    private String charset;
 
     @Override
     public Set<? extends Option> getSupportedOptions() {
@@ -93,7 +98,6 @@ public class JsonDoclet implements Doclet {
 
                     @Override
                     public boolean process(String opt, List<String> arguments) {
-                        author = arguments.get(0);
                         return true;
                     }
                 }
@@ -113,78 +117,49 @@ public class JsonDoclet implements Doclet {
         // get the DocTrees utility class to access document comments
         DocTrees docTrees = environment.getDocTrees();
 
-        // This method is called to perform the work of the doclet.
-        // // In this case, it just prints out the names of the
-        // // elements specified on the command line.
-        // environment.getSpecifiedElements()
-        // .forEach(System.out::println);
-
-        // location of an element in the same directory as overview.html
-        try {
-            Element e = ElementFilter.typesIn(environment.getSpecifiedElements()).iterator().next();
-            DocCommentTree docCommentTree = docTrees.getDocCommentTree(e);
-            if (docCommentTree != null) {
-                stdout.println("Overview html: " + docCommentTree.getFullBody());
-            }
-        } catch (NoSuchElementException missing) {
-            System.out.println(Kind.ERROR + "Idk something happened");
-        }
-
+        ArrayList<HashMap<String,String>> docComments = new ArrayList<HashMap<String,String>>();
+        
         for (TypeElement t : ElementFilter.typesIn(environment.getIncludedElements())) {
-            System.out.println(t.getKind() + ":" + t);
+            // System.out.println(t.getKind() + ":" + t);
+
             for (Element e : t.getEnclosedElements()) {
-                printElement(docTrees, e);
+                HashMap<String, String> docComment = printElement(docTrees, e);
+
+                if (!docComment.isEmpty()) docComments.add(docComment);
             }
         }
 
-        System.out.println("hello world");
+        try {
+            writeJson(new File("docs.json"),docComments);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            System.out.println("IDK something bad here" + e1);
+        }
 
         return true;
     }
+
+    public static void writeJson(File f, Object o) throws IOException {
+        if(f.exists())f.delete();
+        if(!f.createNewFile()) throw new IOException("Cant create file "+f.getName());
+        if(!f.canWrite()) throw new IOException("Hey bud let me write to "+f.getName());
+
+        FileWriter fw = new FileWriter(f);
+
+        // Try with ObjectMapper?
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(o);
+
+        // Try with Gson?
+        // Gson gson = new Gson();
+        // String json = gson.toJson(o);
+
+        fw.write(json);
+        fw.flush();
+        fw.close();
+    }
+
+    // private static HashMap<String,Object> getObjectData(List<HashMap<String,Object>> docComments) {
+
+    // }
 }
-
-/**
- * A minimal doclet that just prints out the names of the
- * selected elements.
- */
-// public class JsonDoclet implements Doclet {
-// @Override
-// public void init(Locale locale, Reporter reporter) { }
-
-// @Override
-// public String getName() {
-// // For this doclet, the name of the doclet is just the
-// // simple name of the class. The name may be used in
-// // messages related to this doclet, such as in command-line
-// // help when doclet-specific options are provided.
-// return getClass().getSimpleName();
-// }
-
-// @Override
-// public Set<? extends Option> getSupportedOptions() {
-// // This doclet does not support any options.
-// return Collections.emptySet();
-// }
-
-// @Override
-// public SourceVersion getSupportedSourceVersion() {
-// // This doclet supports all source versions.
-// // More sophisticated doclets may use a more
-// // specific version, to ensure that they do not
-// // encounter more recent language features that
-// // they may not be able to handle.
-// return SourceVersion.latest();
-// }
-
-// private static final boolean OK = true;
-
-// @Override
-// public boolean run(DocletEnvironment environment) {
-// // This method is called to perform the work of the doclet.
-// // In this case, it just prints out the names of the
-// // elements specified on the command line.
-// environment.getSpecifiedElements()
-// .forEach(System.out::println);
-// return OK;
-// }
-// }

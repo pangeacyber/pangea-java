@@ -343,14 +343,7 @@
           <author>Pangea Cyber</author>
           <tags>
             <tag>
-              <name>summary</name>
-              <!-- summary tag for all places -->
-              <placement>a</placement>
-              <head>Summary:</head>
-            </tag>
-            <tag>
               <name>service</name>
-              <!-- service tag for all places -->
               <placement>a</placement>
               <head>Service Name:</head>
             </tag>

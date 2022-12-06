@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
@@ -38,8 +37,6 @@ final class DomainLookupRequest {
     }
 
 }
-
-final class DomainLookupResponse extends Response<IntelLookupResult> {}
 
 public class DomainIntelClient extends Client{
     public static String serviceName = "domain-intel";

@@ -316,7 +316,7 @@
         </executions>
       </plugin>
       -->
-      <plugin>
+      <!-- <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.4.1</version>
@@ -331,6 +331,31 @@
             </configuration>
           </execution>
         </executions>
+      </plugin> -->
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>
+          <doclet>cloud.pangeacyber.JsonDoclet</doclet>
+          <docletPath>\;.;${project.build.outputDirectory};</docletPath>
+          <author>Pangea Cyber</author>
+          <tags>
+            <tag>
+              <name>summary</name>
+              <!-- summary tag for all places -->
+              <placement>a</placement>
+              <head>Summary:</head>
+            </tag>
+            <tag>
+              <name>service</name>
+              <!-- service tag for all places -->
+              <placement>a</placement>
+              <head>Service Name:</head>
+            </tag>
+          </tags>
+        </configuration>
       </plugin>
     </plugins>
   </build>

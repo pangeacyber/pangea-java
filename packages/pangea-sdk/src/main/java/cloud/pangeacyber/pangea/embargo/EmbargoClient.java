@@ -28,9 +28,6 @@ final class IpCheckRequest{
     }
 }
 
-final class IsoCheckResponse extends Response<EmbargoSanctions> {}
-final class IpCheckResponse extends Response<EmbargoSanctions> {}
-
 public class EmbargoClient extends Client {
     public static String serviceName = "embargo";
 

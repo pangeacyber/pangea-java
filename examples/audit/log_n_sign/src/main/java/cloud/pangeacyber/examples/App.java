@@ -5,6 +5,7 @@ import cloud.pangeacyber.pangea.audit.Event;
 import cloud.pangeacyber.pangea.audit.LogResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.audit.SignMode;
 
 public class App
 {
@@ -18,13 +19,13 @@ public class App
             System.exit(1);
         }
 
-        AuditClient client = new AuditClient(cfg);
+        AuditClient client = new AuditClient(cfg, "./src/main/java/cloud/pangeacyber/examples/privkey");
         Event event = new Event("This is a message to log");
         event.setAction("Login");
         event.setActor("Terminal");
         LogResponse response = null;
         try {
-            response = client.log(event);
+            response = client.log(event, SignMode.LOCAL, true, true);
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);
@@ -32,5 +33,7 @@ public class App
 
         System.out.println("Log success");
         System.out.println("Hash: " + response.getResult().getHash());
+        System.out.println("Message: " + response.getResult().getEventEnvelope().getEvent().getMessage());
+        System.out.println("Signature verification: " + response.getResult().getSignatureVerification());
     }
 }

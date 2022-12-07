@@ -5,6 +5,7 @@ import cloud.pangeacyber.pangea.audit.Event;
 import cloud.pangeacyber.pangea.audit.LogResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.audit.SignMode;
 
 public class App
 {
@@ -24,7 +25,7 @@ public class App
         event.setActor("Terminal");
         LogResponse response = null;
         try {
-            response = client.log(event);
+            response = client.log(event, SignMode.UNSIGNED, true, true);
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);
@@ -32,5 +33,6 @@ public class App
 
         System.out.println("Log success");
         System.out.println("Hash: " + response.getResult().getHash());
+        System.out.println("Message: " + response.getResult().getEventEnvelope().getEvent().getMessage());
     }
 }

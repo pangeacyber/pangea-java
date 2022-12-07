@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
@@ -39,8 +38,6 @@ final class FileLookupRequest {
     }
 
 }
-
-final class FileLookupResponse extends Response<IntelLookupResult> {}
 
 public class FileIntelClient extends Client{
     public static String serviceName = "file-intel";

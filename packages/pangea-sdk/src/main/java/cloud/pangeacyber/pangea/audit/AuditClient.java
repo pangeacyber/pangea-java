@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.audit.arweave.Arweave;
 import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
 import cloud.pangeacyber.pangea.audit.utils.ConsistencyProof;
@@ -80,11 +79,6 @@ final class LogRequest{
         this.prevRoot = prevRoot;
     }
 }
-
-final class LogResponse extends Response<LogResult> {}
-final class SearchResponse extends Response<SearchOutput> {}
-final class ResultsResponse extends Response<ResultsOutput> {}
-final class RootResponse extends Response<RootResult> {}
 
 public class AuditClient extends Client {
     public static String serviceName = "audit";

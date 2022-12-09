@@ -7,18 +7,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Set;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.source.doctree.DocCommentTree;
 import com.sun.source.doctree.DocTree;
-import com.sun.source.doctree.DocTree.Kind;
 import com.sun.source.util.DocTrees;
 
 import jdk.javadoc.doclet.Doclet;
@@ -27,39 +26,6 @@ import jdk.javadoc.doclet.Reporter;
 
 public class JsonDoclet implements Doclet {
     public void init(Locale locale, Reporter reporter) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     * Takes a doc comment assuming the form "@param paramType paramDescription"
-     * and splits it out to a HashMap: { type: "paramType", text: "paramDescription"
-     * }
-     * 
-     * @param comment
-     * @return HashMap<String, Object>
-     */
-    public HashMap<String, Object> processParamDocComment(String comment) {
-        HashMap<String, Object> param = new HashMap<>();
-
-        String[] splitComment = comment.split(" ");
-        String[] textArr = Arrays.copyOfRange(splitComment, 2, splitComment.length);
-
-        param.put("type", splitComment[1]);
-        param.put("text", String.join(" ", textArr));
-
-        return param;
-    }
-
-    public HashMap<String, Object> processDocComment(String comment) {
-        HashMap<String, Object> docComment = new HashMap<>();
-
-        String[] splitComment = comment.split(" ");
-        String[] textArr = Arrays.copyOfRange(splitComment, 1, splitComment.length);
-
-        docComment.put("tag", splitComment[0]);
-        docComment.put("text", String.join(" ", textArr));
-
-        return docComment;
     }
 
     public HashMap<String, Object> printElement(DocTrees trees, Element e) {
@@ -67,25 +33,46 @@ public class JsonDoclet implements Doclet {
 
         DocCommentTree docCommentTree = trees.getDocCommentTree(e);
         if (docCommentTree != null) {
+            List<HashMap<String, Object>> tags = new ArrayList<HashMap<String, Object>>();
+            List<HashMap<String, Object>> paramTags = new ArrayList<HashMap<String, Object>>();
+            List<HashMap<String, Object>> throwsTags = new ArrayList<HashMap<String, Object>>();
+            List<HashMap<String, Object>> returnsTags = new ArrayList<HashMap<String, Object>>();
+            String[] types = {};
+
             // Usually: "METHOD" with a value of the method signature
             props.put(e.getKind().toString(), e.toString());
             props.put("fullBody", docCommentTree.getFullBody().toString());
 
-            List<HashMap<String, Object>> tags = new ArrayList<HashMap<String, Object>>();
-            System.out.println("THIS HAPPENED!!!!!!!" + e.getClass().getSimpleName());
+            if (e.getKind() == ElementKind.METHOD) {
+                types = getTypesFromMethod(e.toString());
+            }
+
             for (DocTree t : docCommentTree.getBlockTags()) {
-                System.out.println("GOT HERE: " + t.getKind());
                 HashMap<String, Object> tag = new HashMap<>();
                 tag.put("kind", t.getKind());
 
                 switch (t.getKind()) {
                     case PARAM:
-                        tag.put("data", processParamDocComment(t.toString()));
+                        paramTags.add(processParamDocComment(t.toString()));
                         break;
                     case RETURN:
+                      HashMap<String, Object> returnComment = processDocComment(t.toString());
+                        returnsTags.add(returnComment);
+                        props.put("returns", returnComment.get("text"));
+                        break;
                     case THROWS:
+                        throwsTags.add(processDocComment(t.toString()));
+                        break;
                     case UNKNOWN_BLOCK_TAG:
-                        tag.put("data", processDocComment(t.toString()));
+                        HashMap<String, Object> processedComment = processDocComment(t.toString());
+
+                        tag.put("data", processedComment);
+
+                        if (processedComment.get("tag").equals("@pangea.description")) {
+                            props.put("description", processedComment.get("text"));
+                        } else if (processedComment.get("tag").equals("@pangea.code")) {
+                            props.put("example", processedComment.get("text"));
+                        }
                         break;
                     default:
                         break;
@@ -95,73 +82,33 @@ public class JsonDoclet implements Doclet {
                 tags.add(tag);
             }
 
-            props.put("tags", tags);
-            props.put("blockTags", docCommentTree.getBlockTags().toString());
-            props.put("rawDocString", docCommentTree.toString());
+            // Add in types to params
+            int i = 0;
+            for (HashMap<String, Object> param : paramTags) {
+                param.put("type", types[i]);
+                i++;
+            }
 
-            // System.out.println("Element (" + e.getKind() + ": "
-            // + e + ") has the following comments:");
-            // System.out.println("Entire body: " + docCommentTree.getFullBody());
-            // System.out.println("Block tags: " + docCommentTree.getBlockTags());
-            // System.out.println("hey: " + docCommentTree.toString());
+            props.put("throws", throwsTags);
+            props.put("params", paramTags);
+            props.put("tags", tags);
+            props.put("rawDocString", docCommentTree.toString());
         }
 
         return props;
     }
 
     public String getName() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     String classPathString;
 
     public Set<? extends Option> getSupportedOptions() {
-        Option[] options = {
-                new Option() {
-                    private final List<String> someOption = List.of(
-                            "-author",
-                            "-charset",
-                            "-d",
-                            "-docencoding",
-                            "-doctitle",
-                            "-use",
-                            "-windowtitle",
-                            "-bottom",
-                            "-tag",
-                            "-protected");
-
-                    public int getArgumentCount() {
-                        return 1;
-                    }
-
-                    public String getDescription() {
-                        return "an option with aliases";
-                    }
-
-                    public Option.Kind getKind() {
-                        return Option.Kind.STANDARD;
-                    }
-
-                    public List<String> getNames() {
-                        return someOption;
-                    }
-
-                    public String getParameters() {
-                        return "file";
-                    }
-
-                    public boolean process(String opt, List<String> arguments) {
-                        return true;
-                    }
-                }
-        };
-
-        return Set.of(options);
+        return null;
     }
 
     public SourceVersion getSupportedSourceVersion() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -172,7 +119,7 @@ public class JsonDoclet implements Doclet {
         ArrayList<HashMap<String, Object>> docComments = new ArrayList<HashMap<String, Object>>();
 
         for (TypeElement t : ElementFilter.typesIn(environment.getIncludedElements())) {
-            System.out.println(t.getKind() + ":" + t);
+            // System.out.println(t.getKind() + ":" + t);
             HashMap<String, Object> doc = new HashMap<>();
 
             doc.put("kind", t.getKind());
@@ -201,7 +148,7 @@ public class JsonDoclet implements Doclet {
             writeJson(new File("docs.json"), docComments);
         } catch (IOException e1) {
             e1.printStackTrace();
-            System.out.println("IDK something bad here" + e1);
+            System.out.println("Something bad happened: " + e1);
         }
 
         return true;
@@ -211,9 +158,9 @@ public class JsonDoclet implements Doclet {
         if (f.exists())
             f.delete();
         if (!f.createNewFile())
-            throw new IOException("Cant create file " + f.getName());
+            throw new IOException("Cannot create the file: " + f.getName());
         if (!f.canWrite())
-            throw new IOException("Hey bud let me write to " + f.getName());
+            throw new IOException("Cannot write to " + f.getName());
 
         FileWriter fw = new FileWriter(f);
 
@@ -224,5 +171,46 @@ public class JsonDoclet implements Doclet {
         fw.write(json);
         fw.flush();
         fw.close();
+    }
+
+    /**
+     * Takes a doc comment assuming the form "@param paramType paramDescription"
+     * and splits it out to a HashMap: { name: "paramName", text: "paramDescription"
+     * }
+     * 
+     * @param comment
+     * @return HashMap<String, Object>
+     */
+    private HashMap<String, Object> processParamDocComment(String comment) {
+        HashMap<String, Object> param = new HashMap<>();
+
+        String[] splitComment = comment.split(" ");
+        String[] textArr = Arrays.copyOfRange(splitComment, 2, splitComment.length);
+
+        param.put("name", splitComment[1]);
+        param.put("text", String.join(" ", textArr));
+
+        return param;
+    }
+
+    private HashMap<String, Object> processDocComment(String comment) {
+        HashMap<String, Object> docComment = new HashMap<>();
+
+        String[] splitComment = comment.split(" ");
+        String[] textArr = Arrays.copyOfRange(splitComment, 1, splitComment.length);
+
+        docComment.put("tag", splitComment[0]);
+        docComment.put("text", String.join(" ", textArr));
+
+        return docComment;
+    }
+
+    private String[] getTypesFromMethod(String method) {
+        int start = method.indexOf("(");
+        int end = method.indexOf(")");
+
+        String typeString = method.substring(start + 1, end);
+
+        return typeString.split(",");
     }
 }

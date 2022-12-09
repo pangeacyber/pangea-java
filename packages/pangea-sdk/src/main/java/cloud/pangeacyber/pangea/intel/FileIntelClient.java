@@ -60,10 +60,11 @@ public class FileIntelClient extends Client{
      * @return FileLookupResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * FileLookupResponse response = client.lookup(
      *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
      *     "sha256");
+     * }
      */
     public FileLookupResponse lookup(String hash, String hashType) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, null, null, null);
@@ -78,11 +79,12 @@ public class FileIntelClient extends Client{
      * @return FileLookupResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * FileLookupResponse response = client.lookup(
      *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
      *     "sha256", 
      *     "reversinglabs");
+     * }
      */
     public FileLookupResponse lookup(String hash, String hashType, String provider) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, provider, null, null);
@@ -98,12 +100,13 @@ public class FileIntelClient extends Client{
      * @return FileLookupResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * FileLookupResponse response = client.lookup(
      *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
      *     "sha256", 
      *     true, 
      *     false);
+     * }
      */
     public FileLookupResponse lookup(String hash, String hashType, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, null, verbose, raw);
@@ -120,13 +123,14 @@ public class FileIntelClient extends Client{
      * @return FileLookupResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * FileLookupResponse response = client.lookup(
      *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
      *     "sha256", 
      *     "reversinglabs", 
      *     true, 
      *     false);
+     * }
      */
     public FileLookupResponse lookup(String hash, String hashType, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, provider, verbose, raw);

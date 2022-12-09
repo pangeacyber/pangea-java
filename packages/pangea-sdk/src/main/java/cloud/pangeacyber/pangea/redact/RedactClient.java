@@ -73,8 +73,9 @@ public class RedactClient extends Client {
      * @return RedactTextResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309");
+     * }
      */
     public RedactTextResponse redactText(String text) throws PangeaException, PangeaAPIException{
         return redactPost(text, null);
@@ -88,8 +89,9 @@ public class RedactClient extends Client {
      * @return RedactTextResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", true);
+     * }
      */
     public RedactTextResponse redactText(String text, boolean debug) throws PangeaException, PangeaAPIException {
         return redactPost(text, debug);
@@ -102,13 +104,14 @@ public class RedactClient extends Client {
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
      * 
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
      * 
      * RedactStructuredResponse response = client.redactStructured(data);
+     * }
      */
     public RedactStructuredResponse redactStructured(Object data) throws PangeaException, PangeaAPIException{
         return structuredPost(data, null, null, null);
@@ -122,13 +125,14 @@ public class RedactClient extends Client {
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
      * 
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
      * 
      * RedactStructuredResponse response = client.redactStructured(data, "json");
+     * }
      */
     public RedactStructuredResponse redactStructured(Object data, String format) throws PangeaException, PangeaAPIException{
         return structuredPost(data, format, null, null);
@@ -142,13 +146,14 @@ public class RedactClient extends Client {
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
      * 
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
      * 
      * RedactStructuredResponse response = client.redactStructured(data, true);
+     * }
      */
     public RedactStructuredResponse redactStructured(Object data, boolean debug) throws PangeaException, PangeaAPIException{
         return structuredPost(data, null, debug, null);
@@ -163,13 +168,14 @@ public class RedactClient extends Client {
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
      * 
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
      * 
      * RedactStructuredResponse response = client.redactStructured(data, "json", true);
+     * }
      */
     public RedactStructuredResponse redactStructured(Object data, String format, boolean debug) throws PangeaException, PangeaAPIException{
         return structuredPost(data, format, debug, null);
@@ -184,13 +190,14 @@ public class RedactClient extends Client {
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
      * 
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
      * 
      * RedactStructuredResponse response = client.redactStructured(data, true, new String[] {"Phone"});
+     * }
      */
     public RedactStructuredResponse redactStructured(Object data, boolean debug, String[] jsonp) throws PangeaException, PangeaAPIException{
         return structuredPost(data, null, debug, jsonp);

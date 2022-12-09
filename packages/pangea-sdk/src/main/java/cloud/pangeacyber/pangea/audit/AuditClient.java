@@ -161,12 +161,13 @@ public class AuditClient extends Client {
      * @return LogResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * String msg = "Event's message";
      * 
      * Event event = new Event(msg);
      * 
      * LogResponse response = client.log(event);
+     * }
      */
     public LogResponse log(Event event) throws PangeaException, PangeaAPIException{
         return doLog(event, SignMode.UNSIGNED, null, false);
@@ -181,12 +182,13 @@ public class AuditClient extends Client {
      * @return LogResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * String msg = "Event's message";
      * 
      * Event event = new Event(msg);
      * 
      * LogResponse response = client.log(event, "Local", true);
+     * }
      */
     public LogResponse log(Event event, SignMode signMode, boolean verbose, boolean verify) throws PangeaException, PangeaAPIException {
         return doLog(event, signMode, verbose, verify);
@@ -203,8 +205,9 @@ public class AuditClient extends Client {
      * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * RootResponse response = client.getRoot();
+     * }
      */
     public RootResponse getRoot() throws PangeaException, PangeaAPIException {
         return rootPost(null);
@@ -217,8 +220,9 @@ public class AuditClient extends Client {
      * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * RootResponse response = client.getRoot(treeSize);
+     * }
      */
     public RootResponse getRoot(int treeSize) throws PangeaException, PangeaAPIException {
         return rootPost(treeSize);
@@ -313,12 +317,13 @@ public class AuditClient extends Client {
      * @return SearchResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * SearchInput input = new SearchInput("message:Integration test msg");
      * 
      * input.setMaxResults(10);
      * 
      * SearchResponse response = client.search(input);
+     * }
      */
     public SearchResponse search(SearchInput input) throws PangeaException, PangeaAPIException{
         return searchPost(input, true, true);
@@ -333,12 +338,13 @@ public class AuditClient extends Client {
      * @return SearchResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @pangea.example
+     * {@code
      * SearchInput input = new SearchInput("message:Integration test msg");
      * 
      * input.setMaxResults(10);
      * 
      * SearchResponse response = client.search(input);
+     * }
      */
     public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws PangeaException, PangeaAPIException {
         if(verifyConsistency){

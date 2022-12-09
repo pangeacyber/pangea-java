@@ -161,6 +161,7 @@ public class AuditClient extends Client {
      * @return LogResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * String msg = "Event's message";
      * 
@@ -182,6 +183,7 @@ public class AuditClient extends Client {
      * @return LogResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * String msg = "Event's message";
      * 
@@ -205,6 +207,7 @@ public class AuditClient extends Client {
      * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * RootResponse response = client.getRoot();
      * }
@@ -220,6 +223,7 @@ public class AuditClient extends Client {
      * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * RootResponse response = client.getRoot(treeSize);
      * }
@@ -317,6 +321,7 @@ public class AuditClient extends Client {
      * @return SearchResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * SearchInput input = new SearchInput("message:Integration test msg");
      * 
@@ -338,6 +343,7 @@ public class AuditClient extends Client {
      * @return SearchResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * SearchInput input = new SearchInput("message:Integration test msg");
      * 

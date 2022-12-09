@@ -56,8 +56,10 @@ public class DomainIntelClient extends Client{
      * @return DomainLookupResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
-     * DomainLookupResponse response = client.lookup("737updatesboeing.com");
+     * DomainLookupResponse response = client.lookup(
+     *     "737updatesboeing.com");
      * }
      */
     public DomainLookupResponse lookup(String domain) throws PangeaException, PangeaAPIException {
@@ -72,8 +74,11 @@ public class DomainIntelClient extends Client{
      * @return DomainLookupResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
-     * DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools");
+     * DomainLookupResponse response = client.lookup(
+     *     "737updatesboeing.com", 
+     *     "domaintools");
      * }
      */
     public DomainLookupResponse lookup(String domain, String provider) throws PangeaException, PangeaAPIException {
@@ -89,8 +94,12 @@ public class DomainIntelClient extends Client{
      * @return DomainLookupResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
-     * DomainLookupResponse response = client.lookup("737updatesboeing.com", true, true);
+     * DomainLookupResponse response = client.lookup(
+     *     "737updatesboeing.com", 
+     *     true, 
+     *     true);
      * }
      */
     public DomainLookupResponse lookup(String domain, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
@@ -107,8 +116,13 @@ public class DomainIntelClient extends Client{
      * @return DomainLookupResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
-     * DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools", true, true);
+     * DomainLookupResponse response = client.lookup(
+     *     "737updatesboeing.com", 
+     *     "domaintools", 
+     *     true, 
+     *     true);
      * }
      */
     public DomainLookupResponse lookup(String domain, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {

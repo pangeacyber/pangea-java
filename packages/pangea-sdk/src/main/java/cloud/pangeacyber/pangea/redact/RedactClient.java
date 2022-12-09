@@ -73,6 +73,7 @@ public class RedactClient extends Client {
      * @return RedactTextResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309");
      * }
@@ -89,6 +90,7 @@ public class RedactClient extends Client {
      * @return RedactTextResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", true);
      * }
@@ -104,6 +106,7 @@ public class RedactClient extends Client {
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
      * 
@@ -125,6 +128,7 @@ public class RedactClient extends Client {
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
      * 
@@ -146,6 +150,7 @@ public class RedactClient extends Client {
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
      * 
@@ -168,6 +173,7 @@ public class RedactClient extends Client {
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
      * 
@@ -190,6 +196,7 @@ public class RedactClient extends Client {
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
      * 

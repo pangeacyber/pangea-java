@@ -39,6 +39,7 @@ public class EmbargoClient extends Client {
      * @return IsoCheckResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * IsoCheckResponse response = client.isoCheck("CU");
      * }
@@ -55,6 +56,7 @@ public class EmbargoClient extends Client {
      * @return IpCheckResponse
      * @throws PangeaException
      * @throws PangeaAPIException
+     * @pangea.code
      * {@code
      * IpCheckResponse response = client.ipCheck("213.24.238.26");
      * }

@@ -334,7 +334,7 @@
               <head>Description:</head>
             </tag>
             <tag>
-              <name>pangea.example</name>
+              <name>pangea.code</name>
               <placement>a</placement>
               <head>Example:</head>
             </tag>
@@ -342,7 +342,7 @@
         </configuration>
       </plugin>
 
-      <!-- test our custom doclet -->
+      <!-- our custom JSON doclet used for generating Pangea SDK docs -->
       <!-- <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -357,13 +357,19 @@
           <useStandardDocletOptions>false</useStandardDocletOptions>
           <tags>
             <tag>
-              <name>service</name>
+              <name>pangea.description</name>
               <placement>a</placement>
-              <head>Service Name:</head>
+              <head>Description:</head>
+            </tag>
+            <tag>
+              <name>pangea.code</name>
+              <placement>a</placement>
+              <head>Example:</head>
             </tag>
           </tags>
         </configuration>
       </plugin> -->
+
     </plugins>
   </build>
 

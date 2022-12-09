@@ -321,25 +321,29 @@
         </executions>
       </plugin>
       -->
-      <!-- <plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.4.1</version>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <doclint>none</doclint>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin> -->
+        <configuration>
+          <doclint>all,-missing</doclint>
+          <tags>
+            <tag>
+              <name>pangea.description</name>
+              <placement>a</placement>
+              <head>Description:</head>
+            </tag>
+            <tag>
+              <name>pangea.example</name>
+              <placement>a</placement>
+              <head>Example:</head>
+            </tag>
+          </tags>
+        </configuration>
+      </plugin>
 
       <!-- test our custom doclet -->
-      <plugin>
+      <!-- <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.4.1</version>
@@ -350,7 +354,7 @@
             <artifactId>jsondoclet</artifactId>
             <version>1.0.0-SNAPSHOT</version>
           </docletArtifact>
-          <useStandardDocletOptions>false</useStandardDocletOptions><!-- very important -->
+          <useStandardDocletOptions>false</useStandardDocletOptions>
           <tags>
             <tag>
               <name>service</name>
@@ -359,7 +363,7 @@
             </tag>
           </tags>
         </configuration>
-      </plugin>
+      </plugin> -->
     </plugins>
   </build>
 

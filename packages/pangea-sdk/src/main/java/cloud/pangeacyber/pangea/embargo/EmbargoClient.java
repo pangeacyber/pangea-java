@@ -1,12 +1,9 @@
 package cloud.pangeacyber.pangea.embargo;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
@@ -37,18 +34,13 @@ public class EmbargoClient extends Client {
 
     /**
      * ISO Code Check
-     * @service embargo
-     * @description Check a country code against known sanction and trade embargo lists.
-     * @param isoCode Check the  country against code the enabled embargo lists.
+     * @pangea.description Check a country code against known sanction and trade embargo lists.
+     * @param isoCode Check the country against code the enabled embargo lists.
      * @return IsoCheckResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * IsoCheckResponse response = client.isoCheck("CU");
-     * </pre>
      */
     public IsoCheckResponse isoCheck(String isoCode) throws PangeaException, PangeaAPIException{
         IsoCheckRequest request = new IsoCheckRequest(isoCode);
@@ -57,18 +49,13 @@ public class EmbargoClient extends Client {
     }
     /**
      * Check IP
-     * @service embargo
-     * @description Check an IP against known sanction and trade embargo lists.
-     * @param isoCode Geolocate this IP and check the corresponding country against the enabled embargo lists.
+     * @pangea.description Check an IP against known sanction and trade embargo lists.
+     * @param ip Geolocate this IP and check the corresponding country against the enabled embargo lists.
      * @return IpCheckResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * IpCheckResponse response = client.ipCheck("213.24.238.26");
-     * </pre>
      */
     public IpCheckResponse ipCheck(String ip) throws PangeaException, PangeaAPIException{
         IpCheckRequest request = new IpCheckRequest(ip);

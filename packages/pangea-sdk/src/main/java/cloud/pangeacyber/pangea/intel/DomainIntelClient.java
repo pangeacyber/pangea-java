@@ -1,7 +1,5 @@
 package cloud.pangeacyber.pangea.intel;
 
-import java.io.IOException;
-
 import cloud.pangeacyber.pangea.Client;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -53,18 +51,13 @@ public class DomainIntelClient extends Client{
 
     /**
      * Look up a domain
-     * @service domain-intel
-     * @description Retrieve domain reputation from a default provider.
+     * @pangea.description Retrieve domain reputation from a default provider.
      * @param domain domain address to be looked up
      * @return DomainLookupResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * DomainLookupResponse response = client.lookup("737updatesboeing.com");
-     * </pre>
      */
     public DomainLookupResponse lookup(String domain) throws PangeaException, PangeaAPIException {
         return lookupPost(domain, null, null, null);
@@ -72,19 +65,14 @@ public class DomainIntelClient extends Client{
 
     /**
      * Look up a domain - domain, provider
-     * @service domain-intel
-     * @description Retrieve domain reputation for a particular provider
+     * @pangea.description Retrieve domain reputation for a particular provider
      * @param domain domain address to be looked up
      * @param provider provider to get reputation from
      * @return DomainLookupResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools");
-     * </pre>
      */
     public DomainLookupResponse lookup(String domain, String provider) throws PangeaException, PangeaAPIException {
         return lookupPost(domain, provider, null, null);
@@ -92,20 +80,15 @@ public class DomainIntelClient extends Client{
 
     /**
      * Look up a domain - domain, verbose, raw
-     * @service domain-intel
-     * @description Retrieve domain reputation from a default provider.
+     * @pangea.description Retrieve domain reputation from a default provider.
      * @param domain domain address to be looked up
      * @param verbose select a more verbose response
      * @param raw if true response include provider raw response. This should vary from one provider to another one.
      * @return DomainLookupResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * DomainLookupResponse response = client.lookup("737updatesboeing.com", true, true);
-     * </pre>
      */
     public DomainLookupResponse lookup(String domain, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(domain, null, verbose, raw);
@@ -113,21 +96,16 @@ public class DomainIntelClient extends Client{
 
     /**
      * Look up a domain - domain, provider, verbose, raw
-     * @service domain-intel
-     * @description Retrieve domain reputation for a particular provider
+     * @pangea.description Retrieve domain reputation for a particular provider
      * @param domain domain address to be looked up
      * @param provider provider to get reputation from
      * @param verbose select a more verbose response
      * @param raw if true response include provider raw response. This should vary from one provider to another one.
      * @return DomainLookupResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools", true, true);
-     * </pre>
      */
     public DomainLookupResponse lookup(String domain, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(domain, provider, verbose, raw);

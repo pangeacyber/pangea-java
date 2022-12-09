@@ -54,21 +54,16 @@ public class FileIntelClient extends Client{
 
     /**
      * Look up a file
-     * @service file-intel
-     * @description Retrieve file reputation from a default provider, using the file's hash.
+     * @pangea.description Retrieve file reputation from a default provider, using the file's hash.
      * @param hash hash of the file
      * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
      * @return FileLookupResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * FileLookupResponse response = client.lookup(
      *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
      *     "sha256");
-     * </pre>
      */
     public FileLookupResponse lookup(String hash, String hashType) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, null, null, null);
@@ -76,23 +71,18 @@ public class FileIntelClient extends Client{
 
     /**
      * Look up a file - hash, hashType, provider
-     * @service file-intel
-     * @description Retrieve file reputation from a provider, using the file's hash.
+     * @pangea.description Retrieve file reputation from a provider, using the file's hash.
      * @param hash hash of the file
      * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
      * @param provider provider to get reputation from
      * @return FileLookupResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * FileLookupResponse response = client.lookup(
      *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
      *     "sha256", 
      *     "reversinglabs");
-     * </pre>
      */
     public FileLookupResponse lookup(String hash, String hashType, String provider) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, provider, null, null);
@@ -100,25 +90,20 @@ public class FileIntelClient extends Client{
 
     /**
      * Look up a file - hash, hashType, verbose, raw
-     * @service file-intel
-     * @description Retrieve file reputation from a default provider, using the file's hash.
+     * @pangea.description Retrieve file reputation from a default provider, using the file's hash.
      * @param hash hash of the file
      * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
      * @param verbose select a more verbose response
      * @param raw if true response include provider raw response. This should vary from one provider to another one.
      * @return FileLookupResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * FileLookupResponse response = client.lookup(
      *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
      *     "sha256", 
      *     true, 
      *     false);
-     * </pre>
      */
     public FileLookupResponse lookup(String hash, String hashType, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, null, verbose, raw);
@@ -126,27 +111,22 @@ public class FileIntelClient extends Client{
 
     /**
      * Look up a file - hash, hashType, provider, verbose, raw
-     * @service file-intel
-     * @description Retrieve file reputation from a provider, using the file's hash.
+     * @pangea.description Retrieve file reputation from a provider, using the file's hash.
      * @param hash hash of the file
      * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
      * @param provider provider to get reputation from
      * @param verbose select a more verbose response
      * @param raw if true response include provider raw response. This should vary from one provider to another one.
      * @return FileLookupResponse
-     * @throws IOException
-     * @throws InterruptedException
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * FileLookupResponse response = client.lookup(
      *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
      *     "sha256", 
      *     "reversinglabs", 
      *     true, 
      *     false);
-     * </pre>
      */
     public FileLookupResponse lookup(String hash, String hashType, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, provider, verbose, raw);

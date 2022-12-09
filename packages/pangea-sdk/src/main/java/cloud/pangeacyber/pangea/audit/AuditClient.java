@@ -156,20 +156,17 @@ public class AuditClient extends Client {
 
     /**
      * Log an entry
-     * @service audit
-     * @description Log an event to Audit Secure Log. By default does not sign event and verbose is left as server default
+     * @pangea.description Log an event to Audit Secure Log. By default does not sign event and verbose is left as server default
      * @param event event to log
      * @return LogResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * String msg = "Event's message";
      * 
      * Event event = new Event(msg);
      * 
      * LogResponse response = client.log(event);
-     * </pre>
      */
     public LogResponse log(Event event) throws PangeaException, PangeaAPIException{
         return doLog(event, SignMode.UNSIGNED, null, false);
@@ -177,22 +174,19 @@ public class AuditClient extends Client {
 
     /**
      * Log an entry - event, sign, verbose
-     * @service audit
-     * @description Log an event to Audit Secure Log. Can select sign event or not and verbosity of the response.
+     * @pangea.description Log an event to Audit Secure Log. Can select sign event or not and verbosity of the response.
      * @param event event to log
      * @param signMode "Unsigned" or "Local"
      * @param verbose true to more verbose response
      * @return LogResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * String msg = "Event's message";
      * 
      * Event event = new Event(msg);
      * 
      * LogResponse response = client.log(event, "Local", true);
-     * </pre>
      */
     public LogResponse log(Event event, SignMode signMode, boolean verbose, boolean verify) throws PangeaException, PangeaAPIException {
         return doLog(event, signMode, verbose, verify);
@@ -205,15 +199,12 @@ public class AuditClient extends Client {
 
     /**
      * Get last root
-     * @service audit
-     * @description Get last root from Pangea Server
+     * @pangea.description Get last root from Pangea Server
      * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * RootResponse response = client.getRoot();
-     * </pre>
      */
     public RootResponse getRoot() throws PangeaException, PangeaAPIException {
         return rootPost(null);
@@ -221,16 +212,13 @@ public class AuditClient extends Client {
 
     /**
      * Get root from Pangea Server
-     * @service audit
-     * @description Get root from three of treeSize from Pangea Server
+     * @pangea.description Get root from three of treeSize from Pangea Server
      * @param treeSize tree size to get root
      * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * RootResponse response = client.getRoot(treeSize);
-     * </pre>
      */
     public RootResponse getRoot(int treeSize) throws PangeaException, PangeaAPIException {
         return rootPost(treeSize);
@@ -320,20 +308,17 @@ public class AuditClient extends Client {
 
     /**
      * Search
-     * @service audit
-     * @description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
+     * @pangea.description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
      * @param input query filters to perform search
      * @return SearchResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * SearchInput input = new SearchInput("message:Integration test msg");
      * 
      * input.setMaxResults(10);
      * 
      * SearchResponse response = client.search(input);
-     * </pre>
      */
     public SearchResponse search(SearchInput input) throws PangeaException, PangeaAPIException{
         return searchPost(input, true, true);
@@ -341,22 +326,19 @@ public class AuditClient extends Client {
 
     /**
      * Search - input, verifyConsistency, verifyEvents
-     * @service audit
-     * @description Perform a search of logs according to input param. Allow to select to verify or nor consistency proof and events.
+     * @pangea.description Perform a search of logs according to input param. Allow to select to verify or nor consistency proof and events.
      * @param input query filters to perform search
      * @param verifyConsistency true to verify logs consistency proofs
      * @param verifyEvents true to verify logs hash and signature
      * @return SearchResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * <pre>
+     * @pangea.example
      * SearchInput input = new SearchInput("message:Integration test msg");
      * 
      * input.setMaxResults(10);
      * 
      * SearchResponse response = client.search(input);
-     * </pre>
      */
     public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws PangeaException, PangeaAPIException {
         if(verifyConsistency){
@@ -374,8 +356,7 @@ public class AuditClient extends Client {
 
     /**
      * Results
-     * @service audit
-     * @description Return result's page from search id.
+     * @pangea.description Return result's page from search id.
      * @param id A search results identifier returned by the search call. By default verify events and do not verify consistency.
      * @param limit Number of audit records to include in a single set of results.
      * @param offset Offset from the start of the result set to start returning results from.
@@ -389,8 +370,7 @@ public class AuditClient extends Client {
 
     /**
      * Results - id, limit, offset, verifyConsistency, verifyEvents
-     * @service audit
-     * @description Return result's page from search id. Allow to select to verify or nor consistency proof and events.
+     * @pangea.description Return result's page from search id. Allow to select to verify or nor consistency proof and events.
      * @param id A search results identifier returned by the search call.
      * @param limit Number of audit records to include in a single set of results.
      * @param offset Offset from the start of the result set to start returning results from.

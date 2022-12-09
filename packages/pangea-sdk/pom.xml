@@ -104,7 +104,8 @@
   </dependencies>
 
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement>
+      <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>
           <groupId>org.jacoco</groupId>
@@ -220,16 +221,16 @@
           <artifactId>sign-maven-plugin</artifactId>
           <version>1.0.1</version>
           <executions>
-              <execution>
-                  <id>sign-artifacts</id>
-                  <phase>verify</phase>
-                  <goals>
-                      <goal>sign</goal>
-                  </goals>
-                  <configuration>
-                    <skipNoKey>false</skipNoKey>
-                  </configuration>
-              </execution>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+              <configuration>
+                <skipNoKey>false</skipNoKey>
+              </configuration>
+            </execution>
           </executions>
         </plugin>
         <plugin>
@@ -248,7 +249,11 @@
           <artifactId>license-maven-plugin</artifactId>
           <version>2.0.0</version>
         </plugin>
-
+        <plugin>
+          <groupId>cloud.pangea</groupId>
+          <artifactId>jsondoclet-maven-plugin</artifactId>
+          <version>1.0.0-SNAPSHOT</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -271,16 +276,16 @@
         <artifactId>sign-maven-plugin</artifactId>
         <version>1.0.1</version>
         <executions>
-            <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                    <goal>sign</goal>
-                </goals>
-                <configuration>
-                  <skipNoKey>false</skipNoKey>
-                </configuration>
-            </execution>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+            <configuration>
+              <skipNoKey>false</skipNoKey>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -333,14 +338,19 @@
         </executions>
       </plugin> -->
 
+      <!-- test our custom doclet -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.4.1</version>
         <configuration>
-          <doclet>cloud.pangeacyber.JsonDoclet</doclet>
-          <docletPath>\;.;${project.build.outputDirectory};</docletPath>
-          <author>Pangea Cyber</author>
+          <doclet>cloud.pangea.JsonDoclet</doclet>
+          <docletArtifact>
+            <groupId>cloud.pangea</groupId>
+            <artifactId>jsondoclet</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+          </docletArtifact>
+          <useStandardDocletOptions>false</useStandardDocletOptions><!-- very important -->
           <tags>
             <tag>
               <name>service</name>

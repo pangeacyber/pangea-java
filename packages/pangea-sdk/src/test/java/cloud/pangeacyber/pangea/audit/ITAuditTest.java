@@ -28,7 +28,7 @@ public class ITAuditTest{
 
     @Before
     public void setUp() throws ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(AuditClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         client = new AuditClient(cfg);
         signClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
     }
@@ -324,7 +324,7 @@ public class ITAuditTest{
     @Test(expected = UnauthorizedException.class)
     public void testRootUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
         int treeSize = 1;
-        Config cfg = Config.fromIntegrationEnvironment(AuditClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         cfg.setToken("notarealtoken");
         AuditClient fakeClient = new AuditClient(cfg);
         RootResponse response = fakeClient.getRoot(treeSize);
@@ -332,7 +332,7 @@ public class ITAuditTest{
 
     @Test(expected = UnauthorizedException.class)
     public void testLogUnathorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(AuditClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         cfg.setToken("notarealtoken");
         AuditClient fakeClient = new AuditClient(cfg);
         Event event = new Event("Test msg");
@@ -357,7 +357,7 @@ public class ITAuditTest{
 
     @Test(expected = UnauthorizedException.class)
     public void testSearchValidationException2() throws PangeaAPIException, PangeaException, ConfigException {
-        Config cfg = Config.fromIntegrationEnvironment(AuditClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         cfg.setToken("notarealtoken");
         AuditClient fakeClient = new AuditClient(cfg);
         SearchInput input = new SearchInput("message:");

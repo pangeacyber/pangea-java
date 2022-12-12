@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>cloud.pangeacyber.examples</groupId>
-  <artifactId>log</artifactId>
+  <artifactId>redact_structured</artifactId>
   <version>1.0.0</version>
 
-  <name>log</name>
+  <name>redact_structured</name>
   <url>http://pangea.cloud</url>
 
   <properties>

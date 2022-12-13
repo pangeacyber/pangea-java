@@ -20,7 +20,7 @@ public class ITUrlIntelTest {
 
     @Before
     public void setUp() throws ConfigException{
-        client = new UrlIntelClient(Config.fromIntegrationEnvironment(UrlIntelClient.serviceName));
+        client = new UrlIntelClient(Config.fromIntegrationEnvironment());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class ITUrlIntelTest {
 
     @Test(expected = UnauthorizedException.class)
     public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(UrlIntelClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         cfg.setToken("notarealtoken");
         UrlIntelClient fakeClient = new UrlIntelClient(cfg);
         UrlLookupResponse response = fakeClient.lookup("http://113.235.101.11:54384");

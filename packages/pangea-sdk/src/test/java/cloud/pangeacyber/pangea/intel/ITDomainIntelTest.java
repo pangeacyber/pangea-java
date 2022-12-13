@@ -20,7 +20,7 @@ public class ITDomainIntelTest {
 
     @Before
     public void setUp() throws ConfigException{
-         client = new DomainIntelClient(Config.fromIntegrationEnvironment(DomainIntelClient.serviceName));
+         client = new DomainIntelClient(Config.fromIntegrationEnvironment());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class ITDomainIntelTest {
 
     @Test(expected = UnauthorizedException.class)
     public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(DomainIntelClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         cfg.setToken("notarealtoken");
         DomainIntelClient fakeClient = new DomainIntelClient(cfg);
         DomainLookupResponse response = fakeClient.lookup("737updatesboeing.com");

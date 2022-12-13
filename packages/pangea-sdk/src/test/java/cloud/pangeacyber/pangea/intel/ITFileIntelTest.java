@@ -20,7 +20,7 @@ public class ITFileIntelTest {
 
     @Before
     public void setUp() throws ConfigException{
-        client = new FileIntelClient(Config.fromIntegrationEnvironment(FileIntelClient.serviceName));
+        client = new FileIntelClient(Config.fromIntegrationEnvironment());
     }
 
     @Test
@@ -145,7 +145,7 @@ public class ITFileIntelTest {
 
     @Test(expected = UnauthorizedException.class)
     public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(FileIntelClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         cfg.setToken("notarealtoken");
         FileIntelClient fakeClient = new FileIntelClient(cfg);
         FileLookupResponse response = fakeClient.lookup("142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", "sha256", "reversinglabs", false, false);

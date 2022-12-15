@@ -4,15 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RedactStructuredOutput {
-    @JsonProperty("redacted_data")
-    Object redactedData;
+public class RedactTextResult {
+    @JsonProperty("redacted_text")
+    String redactedText;
 
     @JsonProperty("report")
     RedactDebugReport report;
 
-    public Object getRedactedData() {
-        return redactedData;
+    public String getRedactedText() {
+        return redactedText;
     }
 
     public RedactDebugReport getReport() {

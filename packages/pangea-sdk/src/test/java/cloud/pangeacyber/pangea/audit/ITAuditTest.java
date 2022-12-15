@@ -46,7 +46,7 @@ public class ITAuditTest{
         LogResponse response = client.log(event);
         assertTrue(response.isOk());
 
-        LogOutput result = response.getResult();
+        LogResult result = response.getResult();
         assertNull(result.getEventEnvelope());
         assertNotNull(result.getHash());
         assertNull(result.getConsistencyProof());
@@ -65,7 +65,7 @@ public class ITAuditTest{
         LogResponse response = client.log(event, SignMode.UNSIGNED, false, false);
         assertTrue(response.isOk());
 
-        LogOutput result = response.getResult();
+        LogResult result = response.getResult();
         assertNull(result.getEventEnvelope());
         assertNotNull(result.getHash());
         assertNull(result.getConsistencyProof());
@@ -84,7 +84,7 @@ public class ITAuditTest{
         LogResponse response = client.log(event, SignMode.UNSIGNED, true, false);
         assertTrue(response.isOk());
 
-        LogOutput result = response.getResult();
+        LogResult result = response.getResult();
         assertNotNull(result.getEventEnvelope());
         assertNotNull(result.getHash());
         assertEquals(MSG_NO_SIGNED, result.getEventEnvelope().getEvent().getMessage());
@@ -104,7 +104,7 @@ public class ITAuditTest{
         LogResponse response = client.log(event, SignMode.UNSIGNED, true, true);
         assertTrue(response.isOk());
 
-        LogOutput result = response.getResult();
+        LogResult result = response.getResult();
         assertNotNull(result.getEventEnvelope());
         assertNotNull(result.getHash());
         assertEquals(MSG_NO_SIGNED, result.getEventEnvelope().getEvent().getMessage());
@@ -142,7 +142,7 @@ public class ITAuditTest{
         LogResponse response = signClient.log(event, SignMode.LOCAL, true, true);
         assertTrue(response.isOk());
 
-        LogOutput result = response.getResult();
+        LogResult result = response.getResult();
         assertNotNull(result.getEventEnvelope());
         assertNotNull(result.getHash());
         assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
@@ -164,7 +164,7 @@ public class ITAuditTest{
         LogResponse response = signClient.log(event, SignMode.VAULT, true, true);
         assertTrue(response.isOk());
 
-        LogOutput result = response.getResult();
+        LogResult result = response.getResult();
         assertNotNull(result.getEventEnvelope());
         assertNotNull(result.getHash());
         assertEquals(MSG_SIGNED_VAULT, result.getEventEnvelope().getEvent().getMessage());
@@ -322,7 +322,7 @@ public class ITAuditTest{
         RootResponse response = client.getRoot();
         assertTrue(response.isOk());
 
-        RootOutput result = response.getResult();
+        RootResult result = response.getResult();
         Root root = result.getRoot();
         assertNotNull(root);
         assertNotNull(root.getSize());
@@ -336,7 +336,7 @@ public class ITAuditTest{
         RootResponse response = client.getRoot(treeSize);
         assertTrue(response.isOk());
 
-        RootOutput result = response.getResult();
+        RootResult result = response.getResult();
         Root root = result.getRoot();
         assertNotNull(root);
         assertNotNull(root.getSize());
@@ -345,7 +345,7 @@ public class ITAuditTest{
         assertEquals(treeSize, root.getSize());
     }
 
-    @Test(expected = PangeaException.class)
+    @Test(expected = PangeaAPIException.class)
     public void testRootTreeNotFound() throws PangeaException, PangeaAPIException {
         int treeSize = 1000000;
         RootResponse response = client.getRoot(treeSize);

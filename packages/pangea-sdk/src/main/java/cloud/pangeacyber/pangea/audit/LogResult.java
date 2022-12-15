@@ -10,12 +10,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LogOutput {
+public class LogResult {
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("envelope")
     Object rawEnvelope;
 
-    @JsonIgnore    
+    @JsonIgnore
     EventEnvelope eventEnvelope = null;
 
     @JsonProperty("hash")

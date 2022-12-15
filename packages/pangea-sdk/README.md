@@ -9,7 +9,7 @@
 <p>
 <br />
 
-[![documentation](https://img.shields.io/badge/documentation-pangea-blue?style=for-the-badge&labelColor=551B76)](https://pangea.cloud/docs/sdk/python/)
+[![documentation](https://img.shields.io/badge/documentation-pangea-blue?style=for-the-badge&labelColor=551B76)](https://pangea.cloud/docs/sdk/java/)
 [![Discord](https://img.shields.io/discord/1017567751818182786?color=%23551b76&label=Discord&logo=discord&logoColor=%23FFFFFF&style=for-the-badge)](https://discord.gg/z7yXhC7cQr)
 
 <br />
@@ -32,7 +32,6 @@ mvn test
 
 ```
 $ export PANGEA_TOKEN=...
-$ export PANGEA_EMBARGO_CONFIG_ID=...
 $ export PANGEA_DOMAIN=...
 $ mvn verify
 ```

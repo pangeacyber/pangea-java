@@ -4,12 +4,57 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>cloud.pangeacyber</groupId>
-  <artifactId>pangea</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <groupId>cloud.pangea</groupId>
+  <artifactId>pangea-sdk</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-  <name>pangea</name>
-  <url>https://pangeacyber.cloud</url>
+  <name>cloud.pangea:pangea-sdk</name>
+  <description>Java SDK to access Pangea API services on pangea.cloud</description>
+  <url>https://github.com/pangeacyber/pangea-java</url>
+
+  <developers>
+    <developer>
+      <name>Andres Tournour</name>
+      <email>andres.tournour@pangea.cloud</email>
+      <organization>Pangea</organization>
+      <organizationUrl>https://pangea.cloud/</organizationUrl>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>MIT</name>
+      <url>https://opensource.org/licenses/MIT</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git://github.com/pangeacyber/pangea-java.git</connection>
+    <developerConnection>scm:git:ssh://github.com/pangeacyber/pangea-java.git</developerConnection>
+    <url>https://github.com/pangeacyber/pangea-java/tree/main/packages/pangea-sdk</url>
+  </scm>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>Maven Central</name>
+      <layout>default</layout>
+      <url>https://repo1.maven.org/maven2</url>
+    </repository>
+  </repositories>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -59,7 +104,8 @@
   </dependencies>
 
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement>
+      <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>
           <groupId>org.jacoco</groupId>
@@ -128,8 +174,203 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.4.1</version>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.2.1</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!--
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>3.0.1</version>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        -->
+        <plugin>
+          <groupId>org.simplify4u.plugins</groupId>
+          <artifactId>sign-maven-plugin</artifactId>
+          <version>1.0.1</version>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+              <configuration>
+                <skipNoKey>false</skipNoKey>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.13</version>
+          <extensions>true</extensions>
+          <configuration>
+            <serverId>ossrh</serverId>
+            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>2.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>cloud.pangea</groupId>
+          <artifactId>jsondoclet-maven-plugin</artifactId>
+          <version>1.0.0-SNAPSHOT</version>
+        </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.simplify4u.plugins</groupId>
+        <artifactId>sign-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+            <configuration>
+              <skipNoKey>false</skipNoKey>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.13</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>2.0.0</version>
+        <configuration>
+            <licenseName>pangea</licenseName>
+            <licenseResolver>${project.baseUri}src/license</licenseResolver>
+            <organizationName>Pangea Cynber</organizationName>
+            <inceptionYear>2021</inceptionYear>
+        </configuration>
+        <executions>
+            <execution>
+                <id>first</id>
+                <goals>
+                    <goal>update-file-header</goal>
+                </goals>
+                <phase>process-sources</phase>
+            </execution>
+        </executions>
+      </plugin>
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>
+          <doclint>all,-missing</doclint>
+          <tags>
+            <tag>
+              <name>pangea.description</name>
+              <placement>a</placement>
+              <head>Description:</head>
+            </tag>
+            <tag>
+              <name>pangea.code</name>
+              <placement>a</placement>
+              <head>Example:</head>
+            </tag>
+          </tags>
+        </configuration>
+      </plugin>
+
+      <!-- our custom JSON doclet used for generating Pangea SDK docs -->
+      <!-- <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>
+          <doclet>cloud.pangea.JsonDoclet</doclet>
+          <docletArtifact>
+            <groupId>cloud.pangea</groupId>
+            <artifactId>jsondoclet</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+          </docletArtifact>
+          <useStandardDocletOptions>false</useStandardDocletOptions>
+          <tags>
+            <tag>
+              <name>pangea.description</name>
+              <placement>a</placement>
+              <head>Description:</head>
+            </tag>
+            <tag>
+              <name>pangea.code</name>
+              <placement>a</placement>
+              <head>Example:</head>
+            </tag>
+          </tags>
+        </configuration>
+      </plugin> -->
+
+    </plugins>
   </build>
 
   <reporting>

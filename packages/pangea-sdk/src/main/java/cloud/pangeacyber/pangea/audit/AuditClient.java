@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.audit.arweave.Arweave;
 import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
 import cloud.pangeacyber.pangea.audit.utils.ConsistencyProof;
@@ -86,11 +85,6 @@ final class LogRequest{
     }
 }
 
-final class LogResponse extends Response<LogOutput> {}
-final class SearchResponse extends Response<SearchOutput> {}
-final class ResultsResponse extends Response<ResultsOutput> {}
-final class RootResponse extends Response<RootOutput> {}
-
 public class AuditClient extends Client {
     public static String serviceName = "audit";
     LogSigner signer;
@@ -146,7 +140,7 @@ public class AuditClient extends Client {
         return response;
     }
 
-    private void processLogResponse(LogOutput result, boolean verify) throws VerificationFailed, PangeaException{
+    private void processLogResponse(LogResult result, boolean verify) throws VerificationFailed, PangeaException{
         String newUnpublishedRoot = result.getUnpublishedRoot();
 
         result.setEventEnvelope(EventEnvelope.fromRaw(result.getRawEnvelope()));
@@ -169,40 +163,42 @@ public class AuditClient extends Client {
 
 
     /**
-     * @service audit
-     * @summary Log an entry
-     * @description Log an event to Audit Secure Log. By default does not sign event and verbose is left as server default
-     * @param event - event to log
+     * Log an entry
+     * @pangea.description Log an event to Audit Secure Log. By default does not sign event and verbose is left as server default
+     * @param event event to log
      * @return LogResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * ```java
-     *  String msg = "Event's message";
-     *  Event event = new Event(msg);
-     *  LogResponse response = client.log(event);
-     * ```
+     * @pangea.code
+     * {@code
+     * String msg = "Event's message";
+     *
+     * Event event = new Event(msg);
+     *
+     * LogResponse response = client.log(event);
+     * }
      */
     public LogResponse log(Event event) throws PangeaException, PangeaAPIException{
         return doLog(event, SignMode.UNSIGNED, null, false);
     }
 
     /**
-     * @service audit
-     * @summary Log an entry - event, sign, verbose
-     * @description Log an event to Audit Secure Log. Can select sign event or not and verbosity of the response.
-     * @param event - event to log
-     * @param sign - true to sign event
-     * @param verbose - true to more verbose response
+     * Log an entry - event, sign, verbose
+     * @pangea.description Log an event to Audit Secure Log. Can select sign event or not and verbosity of the response.
+     * @param event event to log
+     * @param signMode "Unsigned" or "Local"
+     * @param verbose true to more verbose response
      * @return LogResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * ```java
-     *  String msg = "Event's message";
-     *  Event event = new Event(msg);
-     *  LogResponse response = client.log(event, true, true);
-     * ```
+     * @pangea.code
+     * {@code
+     * String msg = "Event's message";
+     *
+     * Event event = new Event(msg);
+     *
+     * LogResponse response = client.log(event, "Local", true);
+     * }
      */
     public LogResponse log(Event event, SignMode signMode, boolean verbose, boolean verify) throws PangeaException, PangeaAPIException {
         return doLog(event, signMode, verbose, verify);
@@ -214,33 +210,31 @@ public class AuditClient extends Client {
     }
 
     /**
-     * @service audit
-     * @summary Get last root
-     * @description Get last root from Pangea Server
+     * Get last root
+     * @pangea.description Get last root from Pangea Server
      * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * ```java
+     * @pangea.code
+     * {@code
      * RootResponse response = client.getRoot();
-     * ```
+     * }
      */
     public RootResponse getRoot() throws PangeaException, PangeaAPIException {
         return rootPost(null);
     }
 
     /**
-     * @service audit
-     * @summary Get root from Pangea Server
-     * @description Get root from three of treeSize from Pangea Server
-     * @param treeSize - tree size to get root
+     * Get root from Pangea Server
+     * @pangea.description Get root from three of treeSize from Pangea Server
+     * @param treeSize tree size to get root
      * @return RootResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * ```java
+     * @pangea.code
+     * {@code
      * RootResponse response = client.getRoot(treeSize);
-     * ```
+     * }
      */
     public RootResponse getRoot(int treeSize) throws PangeaException, PangeaAPIException {
         return rootPost(treeSize);
@@ -329,40 +323,42 @@ public class AuditClient extends Client {
     }
 
     /**
-     * @service audit
-     * @summary Search
-     * @description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
-     * @param input - query filters to perform search
+     * Search
+     * @pangea.description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
+     * @param input query filters to perform search
      * @return SearchResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * ```java
-     *  SearchInput input = new SearchInput("message:Integration test msg");
-     *  input.setMaxResults(10);
-     *  SearchResponse response = client.search(input);
-     * ```
+     * @pangea.code
+     * {@code
+     * SearchInput input = new SearchInput("message:Integration test msg");
+     *
+     * input.setMaxResults(10);
+     *
+     * SearchResponse response = client.search(input);
+     * }
      */
     public SearchResponse search(SearchInput input) throws PangeaException, PangeaAPIException{
         return searchPost(input, true, true);
     }
 
     /**
-     * @service audit
-     * @summary Search - input, verifyConsistency, verifyEvents
-     * @description Perform a search of logs according to input param. Allow to select to verify or nor consistency proof and events.
-     * @param input - query filters to perform search
-     * @param verifyConsistency - true to verify logs consistency proofs
-     * @param verifyEvents - true to verify logs hash and signature
+     * Search - input, verifyConsistency, verifyEvents
+     * @pangea.description Perform a search of logs according to input param. Allow to select to verify or nor consistency proof and events.
+     * @param input query filters to perform search
+     * @param verifyConsistency true to verify logs consistency proofs
+     * @param verifyEvents true to verify logs hash and signature
      * @return SearchResponse
      * @throws PangeaException
      * @throws PangeaAPIException
-     * @example
-     * ```java
-     *  SearchInput input = new SearchInput("message:Integration test msg");
-     *  input.setMaxResults(10);
-     *  SearchResponse response = client.search(input);
-     * ```
+     * @pangea.code
+     * {@code
+     * SearchInput input = new SearchInput("message:Integration test msg");
+     *
+     * input.setMaxResults(10);
+     *
+     * SearchResponse response = client.search(input);
+     * }
      */
     public SearchResponse search(SearchInput input, boolean verifyConsistency, boolean verifyEvents) throws PangeaException, PangeaAPIException {
         if(verifyConsistency){
@@ -379,12 +375,11 @@ public class AuditClient extends Client {
     }
 
     /**
-     * @service audit
-     * @summary Results
-     * @description Return result's page from search id.
-     * @param id - A search results identifier returned by the search call. By default verify events and do not verify consistency.
-     * @param limit - Number of audit records to include in a single set of results.
-     * @param offset - Offset from the start of the result set to start returning results from.
+     * Results
+     * @pangea.description Return result's page from search id.
+     * @param id A search results identifier returned by the search call. By default verify events and do not verify consistency.
+     * @param limit Number of audit records to include in a single set of results.
+     * @param offset Offset from the start of the result set to start returning results from.
      * @return ResultsResponse
      * @throws PangeaException
      * @throws PangeaAPIException
@@ -394,14 +389,13 @@ public class AuditClient extends Client {
     }
 
     /**
-     * @service audit
-     * @summary Results - id, limit, offset, verifyConsistency, verifyEvents
-     * @description Return result's page from search id. Allow to select to verify or nor consistency proof and events.
-     * @param id - A search results identifier returned by the search call.
-     * @param limit - Number of audit records to include in a single set of results.
-     * @param offset - Offset from the start of the result set to start returning results from.
-     * @param verifyConsistency - true to verify logs consistency proofs
-     * @param verifyEvents - true to verify logs hash and signature
+     * Results - id, limit, offset, verifyConsistency, verifyEvents
+     * @pangea.description Return result's page from search id. Allow to select to verify or nor consistency proof and events.
+     * @param id A search results identifier returned by the search call.
+     * @param limit Number of audit records to include in a single set of results.
+     * @param offset Offset from the start of the result set to start returning results from.
+     * @param verifyConsistency true to verify logs consistency proofs
+     * @param verifyEvents true to verify logs hash and signature
      * @return ResultsResponse
      * @throws PangeaException
      * @throws PangeaAPIException

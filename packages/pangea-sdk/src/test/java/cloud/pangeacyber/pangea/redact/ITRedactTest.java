@@ -24,7 +24,7 @@ public class ITRedactTest
 
     @Before
     public void setUp() throws ConfigException {
-        client = new RedactClient(Config.fromIntegrationEnvironment(RedactClient.serviceName));
+        client = new RedactClient(Config.fromIntegrationEnvironment());
     }
 
     @Test
@@ -173,7 +173,7 @@ public class ITRedactTest
 
     @Test(expected = UnauthorizedException.class)
     public void testRedactTextUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(RedactClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         cfg.setToken("notarealtoken");
         RedactClient fakeClient = new RedactClient(cfg);
         RedactTextResponse response = fakeClient.redactText("Jenny Jenny... 415-867-5309", false);
@@ -181,7 +181,7 @@ public class ITRedactTest
 
     @Test(expected = UnauthorizedException.class)
     public void testRedactStructuredUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(RedactClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         cfg.setToken("notarealtoken");
         RedactClient fakeClient = new RedactClient(cfg);
         Map<String, Object> data = new LinkedHashMap<String, Object>();

@@ -20,7 +20,7 @@ public class ITEmbargoTest
 
     @Before
     public void setUp() throws ConfigException{
-        client = new EmbargoClient(Config.fromIntegrationEnvironment(EmbargoClient.serviceName));
+        client = new EmbargoClient(Config.fromIntegrationEnvironment());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class ITEmbargoTest
 
     @Test(expected = UnauthorizedException.class)
     public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(EmbargoClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         cfg.setToken("notarealtoken");
         EmbargoClient fakeClient = new EmbargoClient(cfg);
         IpCheckResponse response = fakeClient.ipCheck("1.1.1.1");

@@ -1,9 +1,17 @@
 package cloud.pangeacyber.pangea.intel;
 import cloud.pangeacyber.pangea.Client;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.apache.commons.codec.binary.Hex;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -63,7 +71,7 @@ public class FileIntelClient extends Client{
      * @pangea.code
      * {@code
      * FileLookupResponse response = client.lookup(
-     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
+     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
      *     "sha256");
      * }
      */
@@ -83,8 +91,8 @@ public class FileIntelClient extends Client{
      * @pangea.code
      * {@code
      * FileLookupResponse response = client.lookup(
-     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
-     *     "sha256", 
+     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+     *     "sha256",
      *     "reversinglabs");
      * }
      */
@@ -105,9 +113,9 @@ public class FileIntelClient extends Client{
      * @pangea.code
      * {@code
      * FileLookupResponse response = client.lookup(
-     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
-     *     "sha256", 
-     *     true, 
+     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+     *     "sha256",
+     *     true,
      *     false);
      * }
      */
@@ -129,14 +137,47 @@ public class FileIntelClient extends Client{
      * @pangea.code
      * {@code
      * FileLookupResponse response = client.lookup(
-     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", 
-     *     "sha256", 
-     *     "reversinglabs", 
-     *     true, 
+     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+     *     "sha256",
+     *     "reversinglabs",
+     *     true,
      *     false);
      * }
      */
     public FileLookupResponse lookup(String hash, String hashType, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, provider, verbose, raw);
     }
+
+    public static String calculateSHA256fromFile(String filepath) throws PangeaException{
+        byte[] buffer= new byte[8192];
+        int count;
+        MessageDigest digest = null;
+        try{
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch(NoSuchAlgorithmException e){
+            throw new PangeaException("NoSuchAlgorithm", e);
+        }
+
+        FileInputStream file = null;
+        try{
+            file = new FileInputStream(filepath);
+        } catch(FileNotFoundException e){
+            throw new PangeaException("FileNotFoundException", e);
+        }
+
+        BufferedInputStream bis = new BufferedInputStream(file);
+
+        try{
+            while ((count = bis.read(buffer)) > 0) {
+                digest.update(buffer, 0, count);
+            }
+            bis.close();
+        } catch(IOException e){
+            throw new PangeaException("Failed to update digest", e);
+        }
+
+        byte[] hash = digest.digest();
+        return Hex.encodeHexString(hash);
+    }
+
 }

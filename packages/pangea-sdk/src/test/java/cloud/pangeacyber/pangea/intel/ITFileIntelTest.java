@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.intel;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -150,4 +151,17 @@ public class ITFileIntelTest {
         FileIntelClient fakeClient = new FileIntelClient(cfg);
         FileLookupResponse response = fakeClient.lookup("142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", "sha256", "reversinglabs", false, false);
     }
+
+    @Test
+    public void testSHA256fromFilepath() throws PangeaException{
+        String hash = FileIntelClient.calculateSHA256fromFile("./README.md");
+        assertNotNull(hash);
+        assertNotEquals(hash, "");
+    }
+
+    @Test(expected = PangeaException.class)
+    public void testSHA256fromFilepathNoFile() throws PangeaException{
+        String hash = FileIntelClient.calculateSHA256fromFile("./not/a/real/path/file.exe");
+    }
+
 }

@@ -15,15 +15,8 @@ public final class EmbargoSanctionAnnotationReference {
         return paragraph;
     }
 
-    public void setParagraph(String paragraph) {
-        this.paragraph = paragraph;
-    }
-
     public String getRegulation() {
         return regulation;
     }
 
-    public void setRegulation(String regulation) {
-        this.regulation = regulation;
-    }
 }

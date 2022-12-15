@@ -16,13 +16,8 @@ public final class EmbargoSanctions {
     public int getCount() {
         return count;
     }
-    public void setCount(int count) {
-        this.count = count;
-    }
     public Vector<EmbargoSanction> getSanctions() {
         return sanctions;
     }
-    public void setSanctions(Vector<EmbargoSanction> sanctions) {
-        this.sanctions = sanctions;
-    }
+
 }

@@ -3,7 +3,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-// import javax.xml.bind.DatatypeConverter;
 import java.util.HexFormat;
 
 public class Hash {

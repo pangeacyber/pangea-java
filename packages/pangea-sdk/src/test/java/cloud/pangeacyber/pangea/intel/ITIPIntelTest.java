@@ -20,7 +20,7 @@ public class ITIPIntelTest {
 
     @Before
     public void setUp() throws ConfigException{
-        client = new IpIntelClient(Config.fromIntegrationEnvironment(IpIntelClient.serviceName));
+        client = new IpIntelClient(Config.fromIntegrationEnvironment());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class ITIPIntelTest {
 
     @Test(expected = UnauthorizedException.class)
     public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(IpIntelClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment();
         cfg.setToken("notarealtoken");
         IpIntelClient fakeClient = new IpIntelClient(cfg);
         IpLookupResponse response = fakeClient.lookup("93.231.182.110");

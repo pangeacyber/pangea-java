@@ -99,9 +99,8 @@ public final class Config {
         return config;
     }
 
-    public static Config fromIntegrationEnvironment(String serviceName) throws ConfigException{
-        String tokenEnvVarName = "PANGEA_INTEGRATION_" + serviceName.toUpperCase() + "_TOKEN";
-        tokenEnvVarName = tokenEnvVarName.replace('-', '_');
+    public static Config fromIntegrationEnvironment() throws ConfigException{
+        String tokenEnvVarName = "PANGEA_INTEGRATION_TOKEN";
         String token = System.getenv(tokenEnvVarName);
         if(token == null || token.isEmpty()){
             throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");

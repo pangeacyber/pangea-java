@@ -30,9 +30,6 @@ public class ITAuditTest{
     @Before
     public void setUp() throws ConfigException{
         Config cfg = Config.fromIntegrationEnvironment();
-        cfg.setEnviroment("local");
-        cfg.setDomain("audit-gea-1771-audit-vault.dev.aws.pangea.cloud");
-        cfg.setToken("pts_orck2dofow5xmxxvlk4q3dbjnvvoc5nm");
         client = new AuditClient(cfg);
         signClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
     }

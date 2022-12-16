@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.audit.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -17,10 +18,11 @@ import cloud.pangeacyber.pangea.exceptions.ValidationException;
 public class ITEmbargoTest
 {
     EmbargoClient client;
+    TestEnvironment environment = TestEnvironment.PRODUCTION;
 
     @Before
     public void setUp() throws ConfigException{
-        client = new EmbargoClient(Config.fromIntegrationEnvironment());
+        client = new EmbargoClient(Config.fromIntegrationEnvironment(environment));
     }
 
     @Test
@@ -66,7 +68,7 @@ public class ITEmbargoTest
 
     @Test(expected = UnauthorizedException.class)
     public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment();
+        Config cfg = Config.fromIntegrationEnvironment(environment);
         cfg.setToken("notarealtoken");
         EmbargoClient fakeClient = new EmbargoClient(cfg);
         IpCheckResponse response = fakeClient.ipCheck("1.1.1.1");

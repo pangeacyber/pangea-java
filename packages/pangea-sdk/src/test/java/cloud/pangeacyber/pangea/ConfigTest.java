@@ -7,12 +7,13 @@ import java.time.Duration;
 import org.junit.Before;
 import org.junit.Test;
 
+import cloud.pangeacyber.pangea.audit.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 public class ConfigTest {
     Config config;
     @Before
     public void setUp() throws ConfigException {
-        config = Config.fromIntegrationEnvironment();
+        config = Config.fromIntegrationEnvironment(TestEnvironment.PRODUCTION);
     }
 
     @Test

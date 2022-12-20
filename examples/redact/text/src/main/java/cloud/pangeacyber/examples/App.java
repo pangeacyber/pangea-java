@@ -27,7 +27,7 @@ public class App
             System.exit(1);
         }
 
-        System.out.println("Redact success");
-        System.out.println("Redacted text: " + response.getResult().getRedactedText());
+        System.out.println(String.format("Redacting PII from: '%s'", text));
+        System.out.println(String.format("Redacted text: '%s'", response.getResult().getRedactedText()));
     }
 }

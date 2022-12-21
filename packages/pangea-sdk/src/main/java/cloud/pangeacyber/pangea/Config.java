@@ -3,7 +3,6 @@ package cloud.pangeacyber.pangea;
 import java.net.URI;
 import java.time.Duration;
 
-import cloud.pangeacyber.pangea.audit.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 
 public final class Config {

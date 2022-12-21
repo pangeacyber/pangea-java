@@ -1,7 +1,7 @@
-package cloud.pangeacyber.pangea.audit;
+package cloud.pangeacyber.pangea;
 
 public enum TestEnvironment {
-    PRODUCTION("PROD"),
+    LIVE("LVE"),
     DEVELOP("DEV"),
     STAGING("STG"),
     ;

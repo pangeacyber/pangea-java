@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.audit.TestEnvironment;
+import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -19,7 +19,7 @@ import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 public class ITFileIntelTest {
     FileIntelClient client;
-    TestEnvironment environment = TestEnvironment.PRODUCTION;
+    TestEnvironment environment = TestEnvironment.LIVE;
 
     @Before
     public void setUp() throws ConfigException{

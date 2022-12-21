@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -20,7 +21,7 @@ import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 public class ITAuditTest{
     AuditClient client, signClient;
-    TestEnvironment environment = TestEnvironment.PRODUCTION;
+    TestEnvironment environment = TestEnvironment.LIVE;
 
     private static final String ACTOR = "java-sdk";
     private static final String MSG_NO_SIGNED = "test-message";

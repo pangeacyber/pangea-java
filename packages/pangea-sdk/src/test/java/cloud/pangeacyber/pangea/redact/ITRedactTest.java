@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -21,10 +22,11 @@ import java.util.Map;
 public class ITRedactTest
 {
     RedactClient client;
+    TestEnvironment environment = TestEnvironment.LIVE;
 
     @Before
     public void setUp() throws ConfigException {
-        client = new RedactClient(Config.fromIntegrationEnvironment());
+        client = new RedactClient(Config.fromIntegrationEnvironment(environment));
     }
 
     @Test
@@ -173,7 +175,7 @@ public class ITRedactTest
 
     @Test(expected = UnauthorizedException.class)
     public void testRedactTextUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment();
+        Config cfg = Config.fromIntegrationEnvironment(environment);
         cfg.setToken("notarealtoken");
         RedactClient fakeClient = new RedactClient(cfg);
         RedactTextResponse response = fakeClient.redactText("Jenny Jenny... 415-867-5309", false);
@@ -181,7 +183,7 @@ public class ITRedactTest
 
     @Test(expected = UnauthorizedException.class)
     public void testRedactStructuredUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment();
+        Config cfg = Config.fromIntegrationEnvironment(environment);
         cfg.setToken("notarealtoken");
         RedactClient fakeClient = new RedactClient(cfg);
         Map<String, Object> data = new LinkedHashMap<String, Object>();

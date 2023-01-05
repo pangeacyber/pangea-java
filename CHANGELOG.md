@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Samples apps to show how should be used each client
 - SDK logo to show in Maven Central
 - Intel File function to calculate SHA256 hash directly from path file
+- Intel add IP/URL service lookup endpoint
 
 ### Fixed
 

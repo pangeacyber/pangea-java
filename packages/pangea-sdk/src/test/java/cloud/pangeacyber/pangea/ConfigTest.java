@@ -12,7 +12,7 @@ public class ConfigTest {
     Config config;
     @Before
     public void setUp() throws ConfigException {
-        config = Config.fromIntegrationEnvironment("AUDIT");
+        config = Config.fromIntegrationEnvironment(TestEnvironment.LIVE);
     }
 
     @Test

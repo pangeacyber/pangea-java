@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.intel;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -9,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -17,10 +19,11 @@ import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 public class ITFileIntelTest {
     FileIntelClient client;
+    TestEnvironment environment = TestEnvironment.LIVE;
 
     @Before
     public void setUp() throws ConfigException{
-        client = new FileIntelClient(Config.fromIntegrationEnvironment(FileIntelClient.serviceName));
+        client = new FileIntelClient(Config.fromIntegrationEnvironment(environment));
     }
 
     @Test
@@ -145,9 +148,22 @@ public class ITFileIntelTest {
 
     @Test(expected = UnauthorizedException.class)
     public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(FileIntelClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment(environment);
         cfg.setToken("notarealtoken");
         FileIntelClient fakeClient = new FileIntelClient(cfg);
         FileLookupResponse response = fakeClient.lookup("142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", "sha256", "reversinglabs", false, false);
     }
+
+    @Test
+    public void testSHA256fromFilepath() throws PangeaException{
+        String hash = FileIntelClient.calculateSHA256fromFile("./README.md");
+        assertNotNull(hash);
+        assertNotEquals(hash, "");
+    }
+
+    @Test(expected = PangeaException.class)
+    public void testSHA256fromFilepathNoFile() throws PangeaException{
+        String hash = FileIntelClient.calculateSHA256fromFile("./not/a/real/path/file.exe");
+    }
+
 }

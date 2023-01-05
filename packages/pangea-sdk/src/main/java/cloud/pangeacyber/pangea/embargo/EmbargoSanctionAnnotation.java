@@ -15,15 +15,8 @@ public final class EmbargoSanctionAnnotation {
         return reference;
     }
 
-    public void setReference(EmbargoSanctionAnnotationReference reference) {
-        this.reference = reference;
-    }
-
     public String getRestrictionName() {
         return restrictionName;
     }
 
-    public void setRestrictionName(String restrictionName) {
-        this.restrictionName = restrictionName;
-    }
 }

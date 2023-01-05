@@ -6,7 +6,7 @@
 
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1.0</version>
   <packaging>jar</packaging>
 
   <name>cloud.pangea:pangea-sdk</name>
@@ -76,23 +76,23 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>2.12.3</version>
+      <version>2.14.1</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.12.3</version>
+      <version>2.14.1</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>2.12.3</version>
+      <version>2.14.1</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
     <dependency>
@@ -104,7 +104,8 @@
   </dependencies>
 
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement>
+      <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>
           <groupId>org.jacoco</groupId>
@@ -220,16 +221,16 @@
           <artifactId>sign-maven-plugin</artifactId>
           <version>1.0.1</version>
           <executions>
-              <execution>
-                  <id>sign-artifacts</id>
-                  <phase>verify</phase>
-                  <goals>
-                      <goal>sign</goal>
-                  </goals>
-                  <configuration>
-                    <skipNoKey>false</skipNoKey>
-                  </configuration>
-              </execution>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+              <configuration>
+                <skipNoKey>false</skipNoKey>
+              </configuration>
+            </execution>
           </executions>
         </plugin>
         <plugin>
@@ -248,7 +249,11 @@
           <artifactId>license-maven-plugin</artifactId>
           <version>2.0.0</version>
         </plugin>
-
+        <plugin>
+          <groupId>cloud.pangea</groupId>
+          <artifactId>jsondoclet-maven-plugin</artifactId>
+          <version>1.0.0-SNAPSHOT</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -271,16 +276,16 @@
         <artifactId>sign-maven-plugin</artifactId>
         <version>1.0.1</version>
         <executions>
-            <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                    <goal>sign</goal>
-                </goals>
-                <configuration>
-                  <skipNoKey>false</skipNoKey>
-                </configuration>
-            </execution>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+            <configuration>
+              <skipNoKey>false</skipNoKey>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -320,18 +325,51 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.4.1</version>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <doclint>none</doclint>
-            </configuration>
-          </execution>
-        </executions>
+        <configuration>
+          <doclint>all,-missing</doclint>
+          <tags>
+            <tag>
+              <name>pangea.description</name>
+              <placement>a</placement>
+              <head>Description:</head>
+            </tag>
+            <tag>
+              <name>pangea.code</name>
+              <placement>a</placement>
+              <head>Example:</head>
+            </tag>
+          </tags>
+        </configuration>
       </plugin>
+
+      <!-- our custom JSON doclet used for generating Pangea SDK docs -->
+      <!-- <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>
+          <doclet>cloud.pangea.JsonDoclet</doclet>
+          <docletArtifact>
+            <groupId>cloud.pangea</groupId>
+            <artifactId>jsondoclet</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+          </docletArtifact>
+          <useStandardDocletOptions>false</useStandardDocletOptions>
+          <tags>
+            <tag>
+              <name>pangea.description</name>
+              <placement>a</placement>
+              <head>Description:</head>
+            </tag>
+            <tag>
+              <name>pangea.code</name>
+              <placement>a</placement>
+              <head>Example:</head>
+            </tag>
+          </tags>
+        </configuration>
+      </plugin> -->
+
     </plugins>
   </build>
 

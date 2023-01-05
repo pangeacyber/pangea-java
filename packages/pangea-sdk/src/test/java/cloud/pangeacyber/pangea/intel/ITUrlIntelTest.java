@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -17,10 +18,11 @@ import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 public class ITUrlIntelTest {
     UrlIntelClient client;
+    TestEnvironment environment = TestEnvironment.LIVE;
 
     @Before
     public void setUp() throws ConfigException{
-        client = new UrlIntelClient(Config.fromIntegrationEnvironment(UrlIntelClient.serviceName));
+        client = new UrlIntelClient(Config.fromIntegrationEnvironment(environment));
     }
 
     @Test
@@ -136,7 +138,7 @@ public class ITUrlIntelTest {
 
     @Test(expected = UnauthorizedException.class)
     public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(UrlIntelClient.serviceName);
+        Config cfg = Config.fromIntegrationEnvironment(environment);
         cfg.setToken("notarealtoken");
         UrlIntelClient fakeClient = new UrlIntelClient(cfg);
         UrlLookupResponse response = fakeClient.lookup("http://113.235.101.11:54384");

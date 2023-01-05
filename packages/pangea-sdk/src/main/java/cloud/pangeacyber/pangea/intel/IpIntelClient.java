@@ -49,13 +49,16 @@ public class IpIntelClient extends Client{
     }
 
     public IpLookupResponse lookup(String ip) throws PangeaException, PangeaAPIException {
-        return lookupPost(ip, null, null, null);    }
+        return lookupPost(ip, null, null, null);
+    }
 
     public IpLookupResponse lookup(String ip, String provider) throws PangeaException, PangeaAPIException {
-        return lookupPost(ip, provider, null, null);    }
+        return lookupPost(ip, provider, null, null);
+    }
 
     public IpLookupResponse lookup(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
-        return lookupPost(ip, null, verbose, raw);    }
+        return lookupPost(ip, null, verbose, raw);
+    }
 
     public IpLookupResponse lookup(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(ip, provider, verbose, raw);

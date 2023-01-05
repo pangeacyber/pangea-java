@@ -24,39 +24,20 @@ public final class EmbargoSanction {
         return embargoedCountryISOCode;
     }
 
-    public void setEmbargoedCountryISOCode(String embargoedCountryISOCode) {
-        this.embargoedCountryISOCode = embargoedCountryISOCode;
-    }
-
     public String getIssuingCountry() {
         return issuingCountry;
-    }
-
-    public void setIssuingCountry(String issuingCountry) {
-        this.issuingCountry = issuingCountry;
     }
 
     public String getListName() {
         return listName;
     }
 
-    public void setListName(String listName) {
-        this.listName = listName;
-    }
-
     public String getEmbargoedCountryName() {
         return embargoedCountryName;
-    }
-
-    public void setEmbargoedCountryName(String embargoedCountryName) {
-        this.embargoedCountryName = embargoedCountryName;
     }
 
     public EmbargoSanctionAnnotation getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(EmbargoSanctionAnnotation annotations) {
-        this.annotations = annotations;
-    }
 }

@@ -18,7 +18,7 @@ import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 public class ITIPIntelTest {
     IpIntelClient client;
-    TestEnvironment environment = TestEnvironment.DEVELOP;
+    TestEnvironment environment = TestEnvironment.LIVE;
 
     @Before
     public void setUp() throws ConfigException{

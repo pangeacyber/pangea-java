@@ -16,19 +16,19 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
-public class ITDomainIntelTest {
-    DomainIntelClient client;
+public class ITIPIntelTest {
+    IpIntelClient client;
     TestEnvironment environment = TestEnvironment.LIVE;
 
     @Before
     public void setUp() throws ConfigException{
-         client = new DomainIntelClient(Config.fromIntegrationEnvironment(environment));
+        client = new IpIntelClient(Config.fromIntegrationEnvironment(environment));
     }
 
     @Test
-    public void testDomainLookupMalicious_1() throws PangeaException, PangeaAPIException {
+    public void testIpLookupMalicious_1() throws PangeaException, PangeaAPIException {
         // Default provider, not verbose by default, not raw by default;
-        DomainLookupResponse response = client.lookup("737updatesboeing.com");
+        IpLookupResponse response = client.lookup("93.231.182.110");
         assertTrue(response.isOk());
 
         IntelLookupData data = response.getResult().getData();
@@ -38,9 +38,9 @@ public class ITDomainIntelTest {
     }
 
     @Test
-    public void testDomainLookupMalicious_2() throws PangeaException, PangeaAPIException {
+    public void testIpLookupMalicious_2() throws PangeaException, PangeaAPIException {
         // With provider, not verbose by default, not raw by default;
-        DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools");
+        IpLookupResponse response = client.lookup("93.231.182.110", "crowdstrike");
         assertTrue(response.isOk());
 
         IntelLookupData data = response.getResult().getData();
@@ -50,9 +50,9 @@ public class ITDomainIntelTest {
     }
 
     @Test
-    public void testDomainLookupMalicious_3() throws PangeaException, PangeaAPIException {
+    public void testIpLookupMalicious_3() throws PangeaException, PangeaAPIException {
         // Default provider, no verbose, no raw;
-        DomainLookupResponse response = client.lookup("737updatesboeing.com", false, false);
+        IpLookupResponse response = client.lookup("93.231.182.110", false, false);
         assertTrue(response.isOk());
 
         IntelLookupData data = response.getResult().getData();
@@ -62,9 +62,9 @@ public class ITDomainIntelTest {
     }
 
     @Test
-    public void testDomainLookupMalicious_4() throws PangeaException, PangeaAPIException {
+    public void testIpLookupMalicious_4() throws PangeaException, PangeaAPIException {
         // Default provider, verbose, no raw;
-        DomainLookupResponse response = client.lookup("737updatesboeing.com", true, false);
+        IpLookupResponse response = client.lookup("93.231.182.110", true, false);
         assertTrue(response.isOk());
 
         IntelLookupData data = response.getResult().getData();
@@ -74,9 +74,9 @@ public class ITDomainIntelTest {
     }
 
     @Test
-    public void testDomainLookupMalicious_5() throws PangeaException, PangeaAPIException {
+    public void testIpLookupMalicious_5() throws PangeaException, PangeaAPIException {
         // Default provider, no verbose, raw;
-        DomainLookupResponse response = client.lookup("737updatesboeing.com", false, true);
+        IpLookupResponse response = client.lookup("93.231.182.110", false, true);
         assertTrue(response.isOk());
 
         IntelLookupData data = response.getResult().getData();
@@ -86,9 +86,9 @@ public class ITDomainIntelTest {
     }
 
     @Test
-    public void testDomainLookupMalicious_6() throws PangeaException, PangeaAPIException {
+    public void testIpLookupMalicious_6() throws PangeaException, PangeaAPIException {
         // Default provider, verbose, raw;
-        DomainLookupResponse response = client.lookup("737updatesboeing.com", true, true);
+        IpLookupResponse response = client.lookup("93.231.182.110", true, true);
         assertTrue(response.isOk());
 
         IntelLookupData data = response.getResult().getData();
@@ -98,9 +98,9 @@ public class ITDomainIntelTest {
     }
 
     @Test
-    public void testDomainLookupMalicious_7() throws PangeaException, PangeaAPIException {
+    public void testIpLookupMalicious_7() throws PangeaException, PangeaAPIException {
         // Provider, no verbose, no raw
-        DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools", false, false);
+        IpLookupResponse response = client.lookup("93.231.182.110", "crowdstrike", false, false);
         assertTrue(response.isOk());
 
         IntelLookupData data = response.getResult().getData();
@@ -110,9 +110,9 @@ public class ITDomainIntelTest {
     }
 
     @Test
-    public void testDomainLookupMalicious_8() throws PangeaException, PangeaAPIException {
+    public void testIpLookupMalicious_8() throws PangeaException, PangeaAPIException {
         // Provider, verbose, raw
-        DomainLookupResponse response = client.lookup("737updatesboeing.com", "domaintools", true, true);
+        IpLookupResponse response = client.lookup("93.231.182.110", "crowdstrike", true, true);
         assertTrue(response.isOk());
 
         IntelLookupData data = response.getResult().getData();
@@ -123,25 +123,25 @@ public class ITDomainIntelTest {
 
     @Test(expected = ValidationException.class)
     public void testEmptyIP() throws PangeaException, PangeaAPIException {
-        DomainLookupResponse response = client.lookup("", "domaintools", true, true);
+        IpLookupResponse response = client.lookup("", "crowdstrike", true, true);
     }
 
     @Test(expected = ValidationException.class)
     public void testEmptyProvider() throws PangeaException, PangeaAPIException {
-        DomainLookupResponse response = client.lookup("737updatesboeing.com", "", true, true);
+        IpLookupResponse response = client.lookup("93.231.182.110", "", true, true);
     }
 
     @Test(expected = ValidationException.class)
     public void testEmptyNotValidProvider() throws PangeaException, PangeaAPIException {
-        DomainLookupResponse response = client.lookup("737updatesboeing.com", "notvalidprovider", true, true);
+        IpLookupResponse response = client.lookup("93.231.182.110", "notvalidprovider", true, true);
     }
 
     @Test(expected = UnauthorizedException.class)
     public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
         Config cfg = Config.fromIntegrationEnvironment(environment);
         cfg.setToken("notarealtoken");
-        DomainIntelClient fakeClient = new DomainIntelClient(cfg);
-        DomainLookupResponse response = fakeClient.lookup("737updatesboeing.com");
+        IpIntelClient fakeClient = new IpIntelClient(cfg);
+        IpLookupResponse response = fakeClient.lookup("93.231.182.110");
     }
 
 }

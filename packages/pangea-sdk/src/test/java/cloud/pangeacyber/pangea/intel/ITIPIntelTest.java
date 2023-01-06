@@ -18,7 +18,8 @@ import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 public class ITIPIntelTest {
     IpIntelClient client;
-    TestEnvironment environment = TestEnvironment.LIVE;
+    // FIXME: Update enviroment to LIVE once in prod
+    TestEnvironment environment = TestEnvironment.DEVELOP;
 
     @Before
     public void setUp() throws ConfigException{
@@ -117,6 +118,102 @@ public class ITIPIntelTest {
 
         IntelLookupData data = response.getResult().getData();
         assertEquals("malicious", data.getVerdict());
+        assertNotNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_1() throws PangeaException, PangeaAPIException {
+        // Default provider, not verbose by default, not raw by default;
+        IpGeolocateResponse response = client.geolocate("93.231.182.110");
+        assertTrue(response.isOk());
+
+        IpGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_2() throws PangeaException, PangeaAPIException {
+        // With provider, not verbose by default, not raw by default;
+        IpGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy");
+        assertTrue(response.isOk());
+
+        IpGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_3() throws PangeaException, PangeaAPIException {
+        // Default provider, no verbose, no raw;
+        IpGeolocateResponse response = client.geolocate("93.231.182.110", false, false);
+        assertTrue(response.isOk());
+
+        IpGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_4() throws PangeaException, PangeaAPIException {
+        // Default provider, verbose, no raw;
+        IpGeolocateResponse response = client.geolocate("93.231.182.110", true, false);
+        assertTrue(response.isOk());
+
+        IpGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNotNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_5() throws PangeaException, PangeaAPIException {
+        // Default provider, no verbose, raw;
+        IpGeolocateResponse response = client.geolocate("93.231.182.110", false, true);
+        assertTrue(response.isOk());
+
+        IpGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_6() throws PangeaException, PangeaAPIException {
+        // Default provider, verbose, raw;
+        IpGeolocateResponse response = client.geolocate("93.231.182.110", true, true);
+        assertTrue(response.isOk());
+
+        IpGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNotNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_7() throws PangeaException, PangeaAPIException {
+        // Provider, no verbose, no raw
+        IpGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy", false, false);
+        assertTrue(response.isOk());
+
+        IpGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_8() throws PangeaException, PangeaAPIException {
+        // Provider, verbose, raw
+        IpGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy", true, true);
+        assertTrue(response.isOk());
+
+        IpGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
         assertNotNull(response.getResult().getParameters());
         assertNotNull(response.getResult().getRawData());
     }

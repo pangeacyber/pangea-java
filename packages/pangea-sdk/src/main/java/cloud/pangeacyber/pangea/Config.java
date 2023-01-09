@@ -2,6 +2,7 @@ package cloud.pangeacyber.pangea;
 
 import java.net.URI;
 import java.time.Duration;
+
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 
 public final class Config {
@@ -99,16 +100,17 @@ public final class Config {
         return config;
     }
 
-    public static Config fromIntegrationEnvironment() throws ConfigException{
-        String tokenEnvVarName = "PANGEA_INTEGRATION_TOKEN";
+    public static Config fromIntegrationEnvironment(TestEnvironment environment) throws ConfigException{
+        String tokenEnvVarName = "PANGEA_INTEGRATION_TOKEN_" + environment.toString();
         String token = System.getenv(tokenEnvVarName);
         if(token == null || token.isEmpty()){
             throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
         }
 
-        String domain = System.getenv("PANGEA_INTEGRATION_DOMAIN");
+        String domainEnvVarName = "PANGEA_INTEGRATION_DOMAIN_" + environment.toString();
+        String domain = System.getenv(domainEnvVarName);
         if(domain == null || domain.isEmpty()){
-            throw new ConfigException("Need to set up PANGEA_INTEGRATION_DOMAIN environment variable");
+            throw new ConfigException("Need to set up " + domainEnvVarName + " environment variable");
         }
 
         Config config = new Config(token, domain);

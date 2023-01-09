@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -17,8 +18,10 @@ import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
+
 public class ITAuditTest{
     AuditClient client, signClient;
+    TestEnvironment environment = TestEnvironment.LIVE;
 
     private static final String ACTOR = "java-sdk";
     private static final String MSG_NO_SIGNED = "test-message";
@@ -29,7 +32,7 @@ public class ITAuditTest{
 
     @Before
     public void setUp() throws ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment();
+        Config cfg = Config.fromIntegrationEnvironment(environment);
         client = new AuditClient(cfg);
         signClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
     }
@@ -351,7 +354,7 @@ public class ITAuditTest{
     @Test(expected = UnauthorizedException.class)
     public void testRootUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
         int treeSize = 1;
-        Config cfg = Config.fromIntegrationEnvironment();
+        Config cfg = Config.fromIntegrationEnvironment(environment);
         cfg.setToken("notarealtoken");
         AuditClient fakeClient = new AuditClient(cfg);
         RootResponse response = fakeClient.getRoot(treeSize);
@@ -359,7 +362,7 @@ public class ITAuditTest{
 
     @Test(expected = UnauthorizedException.class)
     public void testLogUnathorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment();
+        Config cfg = Config.fromIntegrationEnvironment(environment);
         cfg.setToken("notarealtoken");
         AuditClient fakeClient = new AuditClient(cfg);
         Event event = new Event("Test msg");
@@ -384,7 +387,7 @@ public class ITAuditTest{
 
     @Test(expected = UnauthorizedException.class)
     public void testSearchValidationException2() throws PangeaAPIException, PangeaException, ConfigException {
-        Config cfg = Config.fromIntegrationEnvironment();
+        Config cfg = Config.fromIntegrationEnvironment(environment);
         cfg.setToken("notarealtoken");
         AuditClient fakeClient = new AuditClient(cfg);
         SearchInput input = new SearchInput("message:");

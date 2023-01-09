@@ -19,7 +19,7 @@ public class App
         }
 
         AuditClient client = new AuditClient(cfg);
-        Event event = new Event("This is a message to log");
+        Event event = new Event("Hello, World!");
         event.setAction("Login");
         event.setActor("Terminal");
         LogResponse response = null;
@@ -30,7 +30,7 @@ public class App
             System.exit(1);
         }
 
-        System.out.println("Log success");
-        System.out.println("Hash: " + response.getResult().getHash());
+        System.out.println("Logging: " + event.getMessage());
+        System.out.println("Response: " + response.getResult().getHash());
     }
 }

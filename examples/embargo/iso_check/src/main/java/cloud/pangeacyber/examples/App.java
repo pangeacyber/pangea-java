@@ -28,7 +28,7 @@ public class App
             System.exit(1);
         }
 
-        System.out.println("Check success");
+        System.out.println(String.format("Checking Embargo ISO code: '%s'", code));
         System.out.println("ISO code " + code + " has " + response.getResult().getCount() + " sanction(s)");
         for(EmbargoSanction sanction: response.getResult().getSanctions()){
             System.out.println("Embargoed country: " + sanction.getEmbargoedCountryName()

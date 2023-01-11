@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import cloud.pangeacyber.pangea.audit.utils.Hash;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -31,6 +32,14 @@ public class EventEnvelope {
     @JsonProperty("received_at")
     String receivedAt;
 
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("signature_key_id")
+    String signatureKeyID;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("signature_key_version")
+    String signatureKeyVersion;
+
     public Event getEvent() {
         return event;
     }
@@ -47,6 +56,14 @@ public class EventEnvelope {
         return receivedAt;
     }
 
+    public String getSignatureKeyID() {
+        return signatureKeyID;
+    }
+
+    public String getSignatureKeyVersion() {
+        return signatureKeyVersion;
+    }
+
     public EventVerification verifySignature(){
         // If does not have signature information, it's not verified
         if(this.signature == null && this.publicKey == null){
@@ -56,10 +73,6 @@ public class EventEnvelope {
         // But if one field is missing, it's verification failed
         if(this.signature == null || this.publicKey == null){
             return EventVerification.FAILED;
-        }
-
-        if(this.publicKey != null && this.publicKey.startsWith("-----")){
-            return EventVerification.NOT_VERIFIED;
         }
 
         String canonicalJson;
@@ -73,8 +86,7 @@ public class EventEnvelope {
     }
 
     static public String canonicalize(Object rawEnvelope) throws PangeaException{
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        ObjectMapper mapper = JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true).build();
         LinkedHashMap<String, Object> mapEnvelope = (LinkedHashMap<String, Object>)rawEnvelope;
         String canon;
 

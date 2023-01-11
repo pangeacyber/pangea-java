@@ -32,7 +32,30 @@ final class IpLookupRequest {
         this.verbose = verbose;
         this.raw = raw;
     }
+}
 
+final class IpGeolocateRequest {
+    @JsonProperty("ip")
+    String ip;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("provider")
+    String provider;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("verbose")
+    Boolean verbose;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("raw")
+    Boolean raw;
+
+    IpGeolocateRequest(String ip, String provider, Boolean verbose, Boolean raw){
+        this.ip = ip;
+        this.provider = provider;
+        this.verbose = verbose;
+        this.raw = raw;
+    }
 }
 
 public class IpIntelClient extends Client{
@@ -62,5 +85,27 @@ public class IpIntelClient extends Client{
 
     public IpLookupResponse lookup(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(ip, provider, verbose, raw);
+    }
+
+    private IpGeolocateResponse geolocatePost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
+        IpGeolocateRequest request = new IpGeolocateRequest(ip, provider, verbose, raw);
+        IpGeolocateResponse resp = doPost("/v1/geolocate", request, IpGeolocateResponse.class);
+        return resp;
+    }
+
+    public IpGeolocateResponse geolocate(String ip) throws PangeaException, PangeaAPIException {
+        return geolocatePost(ip, null, null, null);
+    }
+
+    public IpGeolocateResponse geolocate(String ip, String provider) throws PangeaException, PangeaAPIException {
+        return geolocatePost(ip, provider, null, null);
+    }
+
+    public IpGeolocateResponse geolocate(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+        return geolocatePost(ip, null, verbose, raw);
+    }
+
+    public IpGeolocateResponse geolocate(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+        return geolocatePost(ip, provider, verbose, raw);
     }
 }

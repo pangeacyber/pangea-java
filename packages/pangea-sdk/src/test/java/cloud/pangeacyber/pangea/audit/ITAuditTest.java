@@ -20,8 +20,8 @@ import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
 public class ITAuditTest{
-    AuditClient client, signClient;
-    TestEnvironment environment = TestEnvironment.LIVE;
+    AuditClient client, localSignClient, vaultSignClient;
+    TestEnvironment environment = TestEnvironment.DEVELOP;
 
     private static final String ACTOR = "java-sdk";
     private static final String MSG_NO_SIGNED = "test-message";
@@ -33,8 +33,10 @@ public class ITAuditTest{
     @Before
     public void setUp() throws ConfigException{
         Config cfg = Config.fromIntegrationEnvironment(environment);
+        Config vaultCfg = Config.fromVaultIntegrationEnvironment(environment);
         client = new AuditClient(cfg);
-        signClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
+        vaultSignClient = new AuditClient(vaultCfg);
+        localSignClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
     }
 
     @Test
@@ -139,14 +141,14 @@ public class ITAuditTest{
         event.setNewField("New");
         event.setOld("Old");
 
-        LogResponse response = signClient.log(event, SignMode.LOCAL, true, true);
+        LogResponse response = localSignClient.log(event, SignMode.LOCAL, true, true);
         assertTrue(response.isOk());
 
         LogResult result = response.getResult();
         assertNotNull(result.getEventEnvelope());
         assertNotNull(result.getHash());
         assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
-        assertEquals("lvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=", result.getEventEnvelope().getPublicKey());
+        assertEquals("-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\n-----END PUBLIC KEY-----\n", result.getEventEnvelope().getPublicKey());
         assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
     }
 
@@ -161,7 +163,7 @@ public class ITAuditTest{
         event.setNewField("New");
         event.setOld("Old");
 
-        LogResponse response = signClient.log(event, SignMode.VAULT, true, true);
+        LogResponse response = vaultSignClient.log(event, SignMode.UNSIGNED, true, true);
         assertTrue(response.isOk());
 
         LogResult result = response.getResult();
@@ -172,7 +174,7 @@ public class ITAuditTest{
         assertNotNull(result.getEventEnvelope().getSignature());
         assertNotNull(result.getEventEnvelope().getSignatureKeyID());
         assertNotNull(result.getEventEnvelope().getSignatureKeyVersion());
-        assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
+        assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
     }
 
 
@@ -205,7 +207,7 @@ public class ITAuditTest{
 
     @Test
     public void testSearchNoVerify() throws PangeaAPIException, PangeaException {
-        SearchInput input = new SearchInput("message:Integration test msg");
+        SearchInput input = new SearchInput("message: ");
         int limit = 10;
         input.setMaxResults(limit);
         input.setOrder("desc");

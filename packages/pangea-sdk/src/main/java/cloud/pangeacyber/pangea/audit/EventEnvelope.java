@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import cloud.pangeacyber.pangea.audit.utils.Hash;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -74,10 +75,6 @@ public class EventEnvelope {
             return EventVerification.FAILED;
         }
 
-        if(this.publicKey != null && this.publicKey.startsWith("-----")){
-            return EventVerification.NOT_VERIFIED;
-        }
-
         String canonicalJson;
         try{
             canonicalJson = Event.canonicalize(this.event);
@@ -89,8 +86,7 @@ public class EventEnvelope {
     }
 
     static public String canonicalize(Object rawEnvelope) throws PangeaException{
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        ObjectMapper mapper = JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true).build();
         LinkedHashMap<String, Object> mapEnvelope = (LinkedHashMap<String, Object>)rawEnvelope;
         String canon;
 
@@ -141,7 +137,6 @@ public class EventEnvelope {
             throw new VerificationFailed("Failed to canonicalize envelope in hash verification. Event hash: " + hash, e, hash);
         }
 
-        System.out.println("Hash canon: " + canonicalJson);
         String calcHash = Hash.hash(canonicalJson);
         if(!calcHash.equals(hash)){
             throw new VerificationFailed("Failed hash verification. Calculated and received hash are not equals. Event hash: " + hash, null, hash);

@@ -109,6 +109,8 @@ public abstract class Client {
             throw new NoCreditException(summary, response);
         } else if( status.equals(ResponseStatus.UNAUTHORIZED.toString())) {
             throw new UnauthorizedException(this.serviceName, response);
+        } else if( status.equals(ResponseStatus.NOT_FOUND.toString())) {
+            throw new NotFound(httpResponse.uri().getHost() + httpResponse.uri().getPath(), response);
         } else if( status.equals(ResponseStatus.SERVICE_NOT_ENABLED.toString())) {
             throw new ServiceNotEnabledException(this.serviceName, response);
         } else if( status.equals(ResponseStatus.PROVIDER_ERR.toString())) {

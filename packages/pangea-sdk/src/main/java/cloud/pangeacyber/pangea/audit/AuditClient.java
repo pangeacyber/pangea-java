@@ -71,17 +71,12 @@ final class LogRequest{
     @JsonProperty("prev_root")
     String prevRoot;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("sign")
-    Boolean sign;
-
-    public LogRequest(Event event, Boolean verbose, String signature, String publicKey, String prevRoot, Boolean sign) {
+    public LogRequest(Event event, Boolean verbose, String signature, String publicKey, String prevRoot) {
         this.event = event;
         this.verbose = verbose;
         this.signature = signature;
         this.publicKey = publicKey;
         this.prevRoot = prevRoot;
-        this.sign = sign;
     }
 }
 
@@ -104,20 +99,19 @@ public class AuditClient extends Client {
         publishedRoots = new HashMap<Integer, PublishedRoot>();
     }
 
-    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey, Boolean sign, boolean verify)  throws PangeaException, PangeaAPIException{
+    private LogResponse logPost(Event event, Boolean verbose, String signature, String publicKey, boolean verify)  throws PangeaException, PangeaAPIException{
         String prevRoot = null;
         if(verify){
             verbose = true;
             prevRoot = this.prevUnpublishedRoot;
         }
-        LogRequest request = new LogRequest(event, verbose, signature, publicKey, prevRoot, sign);
+        LogRequest request = new LogRequest(event, verbose, signature, publicKey, prevRoot);
         return doPost("/v1/log", request, LogResponse.class);
     }
 
     private LogResponse doLog(Event event, SignMode signMode, Boolean verbose, boolean verify) throws PangeaException, PangeaAPIException{
         String signature = null;
         String publicKey = null;
-        Boolean sign = null;
 
         if(signMode == SignMode.LOCAL && this.signer == null){
             throw new SignerException("Signer not initialized", null);
@@ -131,11 +125,9 @@ public class AuditClient extends Client {
 
             signature = this.signer.sign(canEvent);
             publicKey = this.signer.getPublicKey();
-        } else if (signMode == SignMode.VAULT){
-            sign = true;
         }
 
-        LogResponse response = logPost(event, verbose, signature, publicKey, sign, verify);
+        LogResponse response = logPost(event, verbose, signature, publicKey, verify);
         processLogResponse(response.getResult(), verify);
         return response;
     }

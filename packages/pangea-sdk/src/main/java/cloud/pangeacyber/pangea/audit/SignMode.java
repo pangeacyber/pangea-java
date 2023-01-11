@@ -3,7 +3,6 @@ package cloud.pangeacyber.pangea.audit;
 public enum SignMode {
     UNSIGNED("Unsigned"),
     LOCAL("Local"),
-    VAULT("Vault"),
     ;
 
     private final String text;

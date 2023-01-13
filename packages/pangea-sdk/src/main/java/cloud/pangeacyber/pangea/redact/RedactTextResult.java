@@ -8,11 +8,18 @@ public class RedactTextResult {
     @JsonProperty("redacted_text")
     String redactedText;
 
+    @JsonProperty("count")
+    int count;
+
     @JsonProperty("report")
     RedactDebugReport report;
 
     public String getRedactedText() {
         return redactedText;
+    }
+
+    public int getCount() {
+      return count;
     }
 
     public RedactDebugReport getReport() {

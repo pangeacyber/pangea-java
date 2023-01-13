@@ -36,6 +36,7 @@ public class ITRedactTest
 
         RedactTextResult result = response.getResult();
         assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
+        assertEquals(2, result.getCount());
         assertNull(result.getReport());
     }
 
@@ -73,6 +74,7 @@ public class ITRedactTest
         Map<String, Object> expected = new LinkedHashMap<String, Object>();
         expected.put("Name", "<PERSON>");
         expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+        assertEquals(2, result.getCount());
 
         assertEquals(expected, result.getRedactedData());
         assertNull(result.getReport());

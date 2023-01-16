@@ -5,6 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -64,7 +67,7 @@ public class ITAuditTest{
         event.setActor(ACTOR);
         event.setStatus(STATUS_NO_SIGNED);
 
-        LogResponse response = client.log(event, SignMode.UNSIGNED, false, false);
+        LogResponse response = client.log(event, SignMode.UNSIGNED, false, false, null);
         assertTrue(response.isOk());
 
         LogResult result = response.getResult();
@@ -83,7 +86,7 @@ public class ITAuditTest{
         event.setActor(ACTOR);
         event.setStatus(STATUS_NO_SIGNED);
 
-        LogResponse response = client.log(event, SignMode.UNSIGNED, true, false);
+        LogResponse response = client.log(event, SignMode.UNSIGNED, true, false, null);
         assertTrue(response.isOk());
 
         LogResult result = response.getResult();
@@ -103,7 +106,7 @@ public class ITAuditTest{
         event.setActor(ACTOR);
         event.setStatus(STATUS_NO_SIGNED);
 
-        LogResponse response = client.log(event, SignMode.UNSIGNED, true, true);
+        LogResponse response = client.log(event, SignMode.UNSIGNED, true, true, null);
         assertTrue(response.isOk());
 
         LogResult result = response.getResult();
@@ -118,7 +121,7 @@ public class ITAuditTest{
         event = new Event(MSG_NO_SIGNED);
         event.setActor(ACTOR);
         event.setStatus(STATUS_NO_SIGNED);
-        response = client.log(event, SignMode.UNSIGNED, true, true);
+        response = client.log(event, SignMode.UNSIGNED, true, true, null);
         assertTrue(response.isOk());
 
         result = response.getResult();
@@ -141,7 +144,11 @@ public class ITAuditTest{
         event.setNewField("New");
         event.setOld("Old");
 
-        LogResponse response = localSignClient.log(event, SignMode.LOCAL, true, true);
+        Map<String, Object> pkInfo = new LinkedHashMap<String, Object>();
+        pkInfo.put("Info1", "some info");
+        pkInfo.put("Info1", "more info about public key");
+
+        LogResponse response = localSignClient.log(event, SignMode.LOCAL, true, true, pkInfo);
         assertTrue(response.isOk());
 
         LogResult result = response.getResult();
@@ -163,7 +170,7 @@ public class ITAuditTest{
         event.setNewField("New");
         event.setOld("Old");
 
-        LogResponse response = vaultSignClient.log(event, SignMode.UNSIGNED, true, true);
+        LogResponse response = vaultSignClient.log(event, SignMode.UNSIGNED, true, true, null);
         assertTrue(response.isOk());
 
         LogResult result = response.getResult();
@@ -401,8 +408,8 @@ public class ITAuditTest{
 
     @Test(expected = SignerException.class)
     public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException{
-        Event event = new Event(MSG_NO_SIGNED);
-        LogResponse response = client.log(event, SignMode.LOCAL, true, true);
+        Event event = new Event(MSG_SIGNED_LOCAL);
+        LogResponse response = client.log(event, SignMode.LOCAL, true, true, null);
     }
 
 }

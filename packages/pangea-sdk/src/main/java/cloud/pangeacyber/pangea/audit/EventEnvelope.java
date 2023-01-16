@@ -1,11 +1,13 @@
 package cloud.pangeacyber.pangea.audit;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -75,6 +77,11 @@ public class EventEnvelope {
             return EventVerification.FAILED;
         }
 
+        String pubKey = this.getPublicKeyValue();
+        if(pubKey == null){
+            return EventVerification.FAILED;
+        }
+
         String canonicalJson;
         try{
             canonicalJson = Event.canonicalize(this.event);
@@ -82,8 +89,26 @@ public class EventEnvelope {
             return EventVerification.FAILED;
         }
         Verifier verifier = new Verifier();
-        return verifier.verify(this.publicKey, this.signature, canonicalJson);
+        return verifier.verify(pubKey, this.signature, canonicalJson);
     }
+
+    private String getPublicKeyValue(){
+        if (this.publicKey == null){
+            return null;
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<Object, Object> pkJSON;
+        try {
+            // This to parse publicKey field as JSON
+            pkJSON = mapper.readValue(this.publicKey, (Map.class));
+            return (String)pkJSON.get("key");
+        } catch(JacksonException e){
+            // If it's not JSON format just return raw publicKey
+            return this.publicKey;
+        }
+    }
+
 
     static public String canonicalize(Object rawEnvelope) throws PangeaException{
         ObjectMapper mapper = JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true).build();

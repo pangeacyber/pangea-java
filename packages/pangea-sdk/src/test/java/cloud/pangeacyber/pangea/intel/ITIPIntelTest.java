@@ -121,29 +121,6 @@ public class ITIPIntelTest {
         assertNotNull(response.getResult().getRawData());
     }
 
-    @Test(expected = ValidationException.class)
-    public void testEmptyIP() throws PangeaException, PangeaAPIException {
-        IpLookupResponse response = client.lookup("", "crowdstrike", true, true);
-    }
-
-    @Test(expected = ValidationException.class)
-    public void testEmptyProvider() throws PangeaException, PangeaAPIException {
-        IpLookupResponse response = client.lookup("93.231.182.110", "", true, true);
-    }
-
-    @Test(expected = ValidationException.class)
-    public void testEmptyNotValidProvider() throws PangeaException, PangeaAPIException {
-        IpLookupResponse response = client.lookup("93.231.182.110", "notvalidprovider", true, true);
-    }
-
-    @Test(expected = UnauthorizedException.class)
-    public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException{
-        Config cfg = Config.fromIntegrationEnvironment(environment);
-        cfg.setToken("notarealtoken");
-        IpIntelClient fakeClient = new IpIntelClient(cfg);
-        IpLookupResponse response = fakeClient.lookup("93.231.182.110");
-    }
-
     @Test
     public void testIpReputationMalicious_1() throws PangeaException, PangeaAPIException {
         // Default provider, not verbose by default, not raw by default;

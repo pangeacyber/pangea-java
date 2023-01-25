@@ -5,24 +5,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IntelLookupData {
-    @JsonProperty("category")
-    String[] Category;
 
-    @JsonProperty("score")
-    int Score;
+	@JsonProperty("category")
+	String[] Category;
 
-    @JsonProperty("verdict")
-    String Verdict;
+	@JsonProperty("score")
+	int Score;
 
-    public String[] getCategory() {
-        return Category;
-    }
+	@JsonProperty("verdict")
+	String Verdict;
 
-    public int getScore() {
-        return Score;
-    }
+	public String[] getCategory() {
+		return Category;
+	}
 
-    public String getVerdict() {
-        return Verdict;
-    }
+	public int getScore() {
+		return Score;
+	}
+
+	public String getVerdict() {
+		return Verdict;
+	}
 }

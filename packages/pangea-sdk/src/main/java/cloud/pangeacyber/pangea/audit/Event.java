@@ -2,144 +2,153 @@ package cloud.pangeacyber.pangea.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("actor")
-    String actor = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("action")
-    String action = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("actor")
+	String actor = null;
 
-    @JsonProperty("message")
-    String message;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("action")
+	String action = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("new")
-    String newField = null;
+	@JsonProperty("message")
+	String message;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("old")
-    String old = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("new")
+	String newField = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("source")
-    String source = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("old")
+	String old = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("status")
-    String status = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("source")
+	String source = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("target")
-    String target = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("status")
+	String status = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("timestamp")
-    String timestamp = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("target")
+	String target = null;
 
-    public Event() {
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("timestamp")
+	String timestamp = null;
 
-    public Event(String message) {
-        this.message = message;
-    }
+	public Event() {}
 
-    public Event(String actor, String action, String message, String newField, String old, String source, String status,
-            String target, String timestamp) {
-        this.actor = actor;
-        this.action = action;
-        this.message = message;
-        this.newField = newField;
-        this.old = old;
-        this.source = source;
-        this.status = status;
-        this.target = target;
-        this.timestamp = timestamp;
-    }
+	public Event(String message) {
+		this.message = message;
+	}
 
-    public String getActor() {
-        return actor;
-    }
+	public Event(
+		String actor,
+		String action,
+		String message,
+		String newField,
+		String old,
+		String source,
+		String status,
+		String target,
+		String timestamp
+	) {
+		this.actor = actor;
+		this.action = action;
+		this.message = message;
+		this.newField = newField;
+		this.old = old;
+		this.source = source;
+		this.status = status;
+		this.target = target;
+		this.timestamp = timestamp;
+	}
 
-    public void setActor(String actor) {
-        this.actor = actor;
-    }
+	public String getActor() {
+		return actor;
+	}
 
-    public String getAction() {
-        return action;
-    }
+	public void setActor(String actor) {
+		this.actor = actor;
+	}
 
-    public void setAction(String action) {
-        this.action = action;
-    }
+	public String getAction() {
+		return action;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public void setAction(String action) {
+		this.action = action;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    public String getNewField() {
-        return newField;
-    }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-    public void setNewField(String newField) {
-        this.newField = newField;
-    }
+	public String getNewField() {
+		return newField;
+	}
 
-    public String getOld() {
-        return old;
-    }
+	public void setNewField(String newField) {
+		this.newField = newField;
+	}
 
-    public void setOld(String old) {
-        this.old = old;
-    }
+	public String getOld() {
+		return old;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public void setOld(String old) {
+		this.old = old;
+	}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public String getSource() {
+		return source;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public void setSource(String source) {
+		this.source = source;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public String getTarget() {
-        return target;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public void setTarget(String target) {
-        this.target = target;
-    }
+	public String getTarget() {
+		return target;
+	}
 
-    public String getTimestamp() {
-        return timestamp;
-    }
+	public void setTarget(String target) {
+		this.target = target;
+	}
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
+	public String getTimestamp() {
+		return timestamp;
+	}
 
-    static public String canonicalize(Event event) throws JsonProcessingException{
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        return mapper.writeValueAsString(event);
-    }
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public static String canonicalize(Event event) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+		return mapper.writeValueAsString(event);
+	}
 }

@@ -1,31 +1,32 @@
 package cloud.pangeacyber.pangea.intel;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-final public class IpReputationResult {
-    @JsonProperty("data")
-    IntelReputationData Data;
+public final class IpReputationResult {
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("parameters")
-    Map<String, Object> Parameters;
+	@JsonProperty("data")
+	IntelReputationData Data;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("raw_data")
-    Map<String, Object> RawData;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("parameters")
+	Map<String, Object> Parameters;
 
-    public IntelReputationData getData() {
-        return Data;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("raw_data")
+	Map<String, Object> RawData;
 
-    public Map<String, Object> getParameters() {
-        return Parameters;
-    }
+	public IntelReputationData getData() {
+		return Data;
+	}
 
-    public Map<String, Object> getRawData() {
-        return RawData;
-    }
+	public Map<String, Object> getParameters() {
+		return Parameters;
+	}
+
+	public Map<String, Object> getRawData() {
+		return RawData;
+	}
 }

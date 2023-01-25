@@ -1,12 +1,11 @@
 package cloud.pangeacyber.pangea.exceptions;
 
+public class VerificationFailed extends AuditException {
 
-public class VerificationFailed extends AuditException{
-    String hash;
+	String hash;
 
-    public VerificationFailed(String message, Throwable cause, String hash) {
-        super(message, cause);
-        this.hash = hash;
-    }
-
+	public VerificationFailed(String message, Throwable cause, String hash) {
+		super(message, cause);
+		this.hash = hash;
+	}
 }

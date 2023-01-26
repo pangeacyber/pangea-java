@@ -1,5 +1,5 @@
 default:
-  image: maven:3-openjdk-18
+  image: maven:3-eclipse-temurin-19
   tags:
     - pangea-internal 
 

@@ -15,6 +15,10 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
+import cloud.pangeacyber.pangea.intel.models.IntelLookupData;
+import cloud.pangeacyber.pangea.intel.models.IntelReputationData;
+import cloud.pangeacyber.pangea.intel.models.IpLookupResponse;
+import cloud.pangeacyber.pangea.intel.models.IPReputationResponse;
 
 public class ITIPIntelTest {
     IpIntelClient client;
@@ -124,7 +128,7 @@ public class ITIPIntelTest {
     @Test
     public void testIpReputationMalicious_1() throws PangeaException, PangeaAPIException {
         // Default provider, not verbose by default, not raw by default;
-        IpReputationResponse response = client.reputation("93.231.182.110");
+        IPReputationResponse response = client.reputation("93.231.182.110");
         assertTrue(response.isOk());
 
         IntelReputationData data = response.getResult().getData();
@@ -136,7 +140,7 @@ public class ITIPIntelTest {
     @Test
     public void testIpReputationMalicious_2() throws PangeaException, PangeaAPIException {
         // With provider, not verbose by default, not raw by default;
-        IpReputationResponse response = client.reputation("93.231.182.110", "crowdstrike");
+        IPReputationResponse response = client.reputation("93.231.182.110", "crowdstrike");
         assertTrue(response.isOk());
 
         IntelReputationData data = response.getResult().getData();
@@ -148,7 +152,7 @@ public class ITIPIntelTest {
     @Test
     public void testIpReputationMalicious_3() throws PangeaException, PangeaAPIException {
         // Default provider, no verbose, no raw;
-        IpReputationResponse response = client.reputation("93.231.182.110", false, false);
+        IPReputationResponse response = client.reputation("93.231.182.110", false, false);
         assertTrue(response.isOk());
 
         IntelReputationData data = response.getResult().getData();
@@ -160,7 +164,7 @@ public class ITIPIntelTest {
     @Test
     public void testIpReputationMalicious_4() throws PangeaException, PangeaAPIException {
         // Default provider, verbose, no raw;
-        IpReputationResponse response = client.reputation("93.231.182.110", true, false);
+        IPReputationResponse response = client.reputation("93.231.182.110", true, false);
         assertTrue(response.isOk());
 
         IntelReputationData data = response.getResult().getData();
@@ -172,7 +176,7 @@ public class ITIPIntelTest {
     @Test
     public void testIpReputationMalicious_5() throws PangeaException, PangeaAPIException {
         // Default provider, no verbose, raw;
-        IpReputationResponse response = client.reputation("93.231.182.110", false, true);
+        IPReputationResponse response = client.reputation("93.231.182.110", false, true);
         assertTrue(response.isOk());
 
         IntelReputationData data = response.getResult().getData();
@@ -184,7 +188,7 @@ public class ITIPIntelTest {
     @Test
     public void testIpReputationMalicious_6() throws PangeaException, PangeaAPIException {
         // Default provider, verbose, raw;
-        IpReputationResponse response = client.reputation("93.231.182.110", true, true);
+        IPReputationResponse response = client.reputation("93.231.182.110", true, true);
         assertTrue(response.isOk());
 
         IntelReputationData data = response.getResult().getData();
@@ -196,7 +200,7 @@ public class ITIPIntelTest {
     @Test
     public void testIpReputationMalicious_7() throws PangeaException, PangeaAPIException {
         // Provider, no verbose, no raw
-        IpReputationResponse response = client.reputation("93.231.182.110", "crowdstrike", false, false);
+        IPReputationResponse response = client.reputation("93.231.182.110", "crowdstrike", false, false);
         assertTrue(response.isOk());
 
         IntelReputationData data = response.getResult().getData();
@@ -208,7 +212,7 @@ public class ITIPIntelTest {
     @Test
     public void testIpReputationMalicious_8() throws PangeaException, PangeaAPIException {
         // Provider, verbose, raw
-        IpReputationResponse response = client.reputation("93.231.182.110", "crowdstrike", true, true);
+        IPReputationResponse response = client.reputation("93.231.182.110", "crowdstrike", true, true);
         assertTrue(response.isOk());
 
         IntelReputationData data = response.getResult().getData();
@@ -219,17 +223,17 @@ public class ITIPIntelTest {
 
     @Test(expected = ValidationException.class)
     public void testEmptyIP() throws PangeaException, PangeaAPIException {
-        IpReputationResponse response = client.reputation("", "crowdstrike", true, true);
+        IPReputationResponse response = client.reputation("", "crowdstrike", true, true);
     }
 
     @Test(expected = ValidationException.class)
     public void testEmptyProvider() throws PangeaException, PangeaAPIException {
-        IpReputationResponse response = client.reputation("93.231.182.110", "", true, true);
+        IPReputationResponse response = client.reputation("93.231.182.110", "", true, true);
     }
 
     @Test(expected = ValidationException.class)
     public void testEmptyNotValidProvider() throws PangeaException, PangeaAPIException {
-        IpReputationResponse response = client.reputation("93.231.182.110", "notvalidprovider", true, true);
+        IPReputationResponse response = client.reputation("93.231.182.110", "notvalidprovider", true, true);
     }
 
     @Test(expected = UnauthorizedException.class)
@@ -237,7 +241,7 @@ public class ITIPIntelTest {
         Config cfg = Config.fromIntegrationEnvironment(environment);
         cfg.setToken("notarealtoken");
         IpIntelClient fakeClient = new IpIntelClient(cfg);
-        IpReputationResponse response = fakeClient.reputation("93.231.182.110");
+        IPReputationResponse response = fakeClient.reputation("93.231.182.110");
     }
 
 }

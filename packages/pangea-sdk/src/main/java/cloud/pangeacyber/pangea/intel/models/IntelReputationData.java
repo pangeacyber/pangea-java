@@ -1,4 +1,4 @@
-package cloud.pangeacyber.pangea.intel;
+package cloud.pangeacyber.pangea.intel.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,23 +6,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IntelReputationData {
     @JsonProperty("category")
-    String[] Category;
+    String[] category;
 
     @JsonProperty("score")
-    int Score;
+    int score;
 
     @JsonProperty("verdict")
-    String Verdict;
+    String verdict;
 
     public String[] getCategory() {
-        return Category;
+        return category;
     }
 
     public int getScore() {
-        return Score;
+        return score;
     }
 
     public String getVerdict() {
-        return Verdict;
+        return verdict;
     }
 }

@@ -18,16 +18,16 @@ public class App
         }
 
         FileIntelClient client = new FileIntelClient(cfg);
-        FileLookupResponse response = null;
+        FileReputationResponse response = null;
         try {
-            response = client.lookup("142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", "sha256", "reversinglabs", true, true);
+            response = client.reputation("142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", "sha256", "reversinglabs", true, true);
         } catch (Exception e){
-            System.out.println("Fail to perfom lookup: " + e);
+            System.out.println("Fail to perfom request: " + e);
             System.exit(1);
         }
 
-        System.out.println("Lookup success");
-        System.out.println("Lookup verdict: " + response.getResult().getData().getVerdict());
-        System.out.println("Lookup raw data: " + response.getResult().getRawData());
+        System.out.println("Reputation success");
+        System.out.println("Reputation verdict: " + response.getResult().getData().getVerdict());
+        System.out.println("Reputation raw data: " + response.getResult().getRawData());
     }
 }

@@ -35,6 +35,31 @@ final class IpLookupRequest {
 
 }
 
+final class IpReputationRequest {
+    @JsonProperty("ip")
+    String Ip;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("provider")
+    String provider;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("verbose")
+    Boolean verbose;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("raw")
+    Boolean raw;
+
+    IpReputationRequest(String ip, String provider, Boolean verbose, Boolean raw){
+        this.Ip = ip;
+        this.provider = provider;
+        this.verbose = verbose;
+        this.raw = raw;
+    }
+
+}
+
 public class IpIntelClient extends Client{
     public static String serviceName = "ip-intel";
 
@@ -44,13 +69,20 @@ public class IpIntelClient extends Client{
 
     private IpLookupResponse lookupPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
         IpLookupRequest request = new IpLookupRequest(ip, provider, verbose, raw);
-        IpLookupResponse resp = doPost("/v1/lookup", request, IpLookupResponse.class);
+        IpLookupResponse resp = doPost("/v1/reputation", request, IpLookupResponse.class);
+        return resp;
+    }
+
+    private IpReputationResponse reputationPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
+        IpReputationRequest request = new IpReputationRequest(ip, provider, verbose, raw);
+        IpReputationResponse resp = doPost("/v1/reputation", request, IpReputationResponse.class);
         return resp;
     }
 
     /**
      * Look up an IP
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
+     * @deprecated use reputation instead.
      * @param ip The IP to be looked up
      * @return IpLookupResponse
      * @throws PangeaException
@@ -61,6 +93,7 @@ public class IpIntelClient extends Client{
      *     "93.231.182.110");
      * }
      */
+    @Deprecated
     public IpLookupResponse lookup(String ip) throws PangeaException, PangeaAPIException {
         return lookupPost(ip, null, null, null);
     }
@@ -68,6 +101,7 @@ public class IpIntelClient extends Client{
     /**
      * Look up an IP - provider
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
+     * @deprecated use reputation instead.
      * @param ip The IP to be looked up
      * @param provider Use reputation data from this provider
      * @return IpLookupResponse
@@ -80,6 +114,7 @@ public class IpIntelClient extends Client{
      *     "crowdstrike");
      * }
      */
+    @Deprecated
     public IpLookupResponse lookup(String ip, String provider) throws PangeaException, PangeaAPIException {
         return lookupPost(ip, provider, null, null);
     }
@@ -87,6 +122,7 @@ public class IpIntelClient extends Client{
     /**
      * Look up an IP - verbose, raw
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
+     * @deprecated use reputation instead.
      * @param ip The IP to be looked up
      * @param verbose Echo the API parameters in the response
      * @param raw Include raw data from this provider
@@ -101,6 +137,7 @@ public class IpIntelClient extends Client{
      *     true);
      * }
      */
+    @Deprecated
     public IpLookupResponse lookup(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(ip, null, verbose, raw);
     }
@@ -108,6 +145,7 @@ public class IpIntelClient extends Client{
     /**
      * Look up an IP - provider, verbose, raw
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
+     * @deprecated use reputation instead.
      * @param ip The IP to be looked up
      * @param provider Use reputation data from this provider
      * @param verbose Echo the API parameters in the response
@@ -124,7 +162,88 @@ public class IpIntelClient extends Client{
      *     true);
      * }
      */
+    @Deprecated
     public IpLookupResponse lookup(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(ip, provider, verbose, raw);
+    }
+
+    /**
+     * Look up an IP
+     * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
+     * @param ip The IP to be looked up
+     * @return IpReputationResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpReputationResponse response = client.reputation(
+     *     "93.231.182.110");
+     * }
+     */
+    public IpReputationResponse reputation(String ip) throws PangeaException, PangeaAPIException {
+        return reputationPost(ip, null, null, null);
+    }
+
+    /**
+     * Look up an IP - provider
+     * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
+     * @param ip The IP to be looked up
+     * @param provider Use reputation data from this provider
+     * @return IpReputationResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpReputationResponse response = client.reputation(
+     *     "93.231.182.110",
+     *     "crowdstrike");
+     * }
+     */
+    public IpReputationResponse reputation(String ip, String provider) throws PangeaException, PangeaAPIException {
+        return reputationPost(ip, provider, null, null);
+    }
+
+    /**
+     * Look up an IP - verbose, raw
+     * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
+     * @param ip The IP to be looked up
+     * @param verbose Echo the API parameters in the response
+     * @param raw Include raw data from this provider
+     * @return IpReputationResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpReputationResponse response = client.reputation(
+     *     "93.231.182.110",
+     *     true,
+     *     true);
+     * }
+     */
+    public IpReputationResponse reputation(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+        return reputationPost(ip, null, verbose, raw);
+    }
+
+    /**
+     * Look up an IP - provider, verbose, raw
+     * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
+     * @param ip The IP to be looked up
+     * @param provider Use reputation data from this provider
+     * @param verbose Echo the API parameters in the response
+     * @param raw Include raw data from this provider
+     * @return IpReputationResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpReputationResponse response = client.reputation(
+     *     "93.231.182.110",
+     *     "crowdstrike",
+     *     true,
+     *     true);
+     * }
+     */
+    public IpReputationResponse reputation(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+        return reputationPost(ip, provider, verbose, raw);
     }
 }

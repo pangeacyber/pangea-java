@@ -22,7 +22,11 @@ import cloud.pangeacyber.pangea.intel.models.IPDomainData;
 import cloud.pangeacyber.pangea.intel.models.IPDomainResponse;
 import cloud.pangeacyber.pangea.intel.models.IPGeolocateData;
 import cloud.pangeacyber.pangea.intel.models.IPGeolocateResponse;
+import cloud.pangeacyber.pangea.intel.models.IPProxyData;
+import cloud.pangeacyber.pangea.intel.models.IPProxyResponse;
 import cloud.pangeacyber.pangea.intel.models.IPReputationResponse;
+import cloud.pangeacyber.pangea.intel.models.IPVPNData;
+import cloud.pangeacyber.pangea.intel.models.IPVPNResponse;
 
 public class ITIPIntelTest {
     IpIntelClient client;

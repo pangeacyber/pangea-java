@@ -171,18 +171,76 @@ public class IpIntelClient extends Client{
         return resp;
     }
 
+    /**
+     * Look up domain for an IP
+     * @pangea.description Retrieve the domain name associated with an IP address
+     * @param ip The IP to be looked up
+     * @return IpDomainResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpVPNResponse response = client.getDomain(
+     *     "93.231.182.110");
+     * }
+     */
     public IpDomainResponse getDomain(String ip) throws PangeaException, PangeaAPIException {
         return domainPost(ip, null, null, null);
     }
 
+    /**
+     * Look up domain for an IP
+     * @pangea.description Retrieve the domain name associated with an IP address
+     * @param ip The IP to be looked up
+     * @return IpDomainResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpVPNResponse response = client.getDomain(
+     *     "93.231.182.110",
+     *      "digitalenvoy");
+     * }
+     */
     public IpDomainResponse getDomain(String ip, String provider) throws PangeaException, PangeaAPIException {
         return domainPost(ip, provider, null, null);
     }
 
+    /**
+     * Look up domain for an IP
+     * @pangea.description Retrieve the domain name associated with an IP address
+     * @param ip The IP to be looked up
+     * @return IpDomainResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpVPNResponse response = client.getDomain(
+     *     "93.231.182.110",
+     *      true,
+     *      true);
+     * }
+     */
     public IpDomainResponse getDomain(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return domainPost(ip, null, verbose, raw);
     }
 
+    /**
+     * Look up domain for an IP
+     * @pangea.description Retrieve the domain name associated with an IP address
+     * @param ip The IP to be looked up
+     * @return IpDomainResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpVPNResponse response = client.getDomain(
+     *     "93.231.182.110",
+     *      "digitalenvoy",
+     *      true,
+     *      true);
+     * }
+     */
     public IpDomainResponse getDomain(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return domainPost(ip, provider, verbose, raw);
     }
@@ -193,18 +251,76 @@ public class IpIntelClient extends Client{
         return resp;
     }
 
+    /**
+     * Check if an IP is a VPN
+     * @pangea.description Determine if an IP address is provided by a VPN service
+     * @param ip The IP to be looked up
+     * @return IpVPNResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpVPNResponse response = client.isVPN(
+     *     "93.231.182.110");
+     * }
+     */
     public IpVPNResponse isVPN(String ip) throws PangeaException, PangeaAPIException {
         return vpnPost(ip, null, null, null);
     }
 
+    /**
+     * Check if an IP is a VPN
+     * @pangea.description Determine if an IP address is provided by a VPN service
+     * @param ip The IP to be looked up
+     * @return IpVPNResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpVPNResponse response = client.isVPN(
+     *     "93.231.182.110",
+     *      "digitalenvoy");
+     * }
+     */
     public IpVPNResponse isVPN(String ip, String provider) throws PangeaException, PangeaAPIException {
         return vpnPost(ip, provider, null, null);
     }
 
+    /**
+     * Check if an IP is a VPN
+     * @pangea.description Determine if an IP address is provided by a VPN service
+     * @param ip The IP to be looked up
+     * @return IpVPNResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpVPNResponse response = client.isVPN(
+     *     "93.231.182.110",
+     *      true,
+     *      true);
+     * }
+     */
     public IpVPNResponse isVPN(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return vpnPost(ip, null, verbose, raw);
     }
 
+    /**
+     * Check if an IP is a VPN
+     * @pangea.description Determine if an IP address is provided by a VPN service
+     * @param ip The IP to be looked up
+     * @return IpVPNResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpVPNResponse response = client.isVPN(
+     *     "93.231.182.110",
+     *      "digitalenvoy",
+     *      true,
+     *      true);
+     * }
+     */
     public IpVPNResponse isVPN(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return vpnPost(ip, provider, verbose, raw);
     }
@@ -215,18 +331,82 @@ public class IpIntelClient extends Client{
         return resp;
     }
 
+    /**
+     * Check for proxied IPs
+     * @pangea.description Determine if an IP address is provided by a proxy service
+     * @param ip The IP to be looked up
+     * @return IpProxyResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpProxyResponse response = client.isProxy(
+     *     "93.231.182.110");
+     * }
+     */
     public IpProxyResponse isProxy(String ip) throws PangeaException, PangeaAPIException {
         return proxyPost(ip, null, null, null);
     }
 
+    /**
+     * Check for proxied IPs
+     * @pangea.description Determine if an IP address is provided by a proxy service
+     * @param ip The IP to be looked up
+     * @param provider Use reputation data from this provider
+     * @return IpProxyResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpProxyResponse response = client.isProxy(
+     *     "93.231.182.110",
+     *      "digitalenvoy");
+     * }
+     */
     public IpProxyResponse isProxy(String ip, String provider) throws PangeaException, PangeaAPIException {
         return proxyPost(ip, provider, null, null);
     }
 
+    /**
+     * Check for proxied IPs
+     * @pangea.description Determine if an IP address is provided by a proxy service
+     * @param ip The IP to be looked up
+     * @param verbose Echo the API parameters in the response
+     * @param raw Include raw data from this provider
+     * @return IpProxyResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpProxyResponse response = client.isProxy(
+     *     "93.231.182.110",
+     *      true,
+     *      true);
+     * }
+     */
     public IpProxyResponse isProxy(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return proxyPost(ip, null, verbose, raw);
     }
 
+    /**
+     * Check for proxied IPs
+     * @pangea.description Determine if an IP address is provided by a proxy service
+     * @param ip The IP to be looked up
+     * @param provider Use reputation data from this provider
+     * @param verbose Echo the API parameters in the response
+     * @param raw Include raw data from this provider
+     * @return IpProxyResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * IpProxyResponse response = client.isProxy(
+     *     "93.231.182.110",
+     *      "digitalenvoy",
+     *      true,
+     *      true);
+     * }
+     */
     public IpProxyResponse isProxy(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return proxyPost(ip, provider, verbose, raw);
     }

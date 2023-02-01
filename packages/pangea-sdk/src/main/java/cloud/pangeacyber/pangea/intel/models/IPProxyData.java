@@ -1,10 +1,10 @@
-package cloud.pangeacyber.pangea.intel;
+package cloud.pangeacyber.pangea.intel.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class IpProxyData {
+public class IPProxyData {
     @JsonProperty("is_proxy")
     boolean isProxy;
 

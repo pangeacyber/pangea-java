@@ -1,4 +1,4 @@
-package cloud.pangeacyber.pangea.intel;
+package cloud.pangeacyber.pangea.intel.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class IpVPNResult {
+public class IPDomainResult {
     @JsonProperty("data")
-    IpVPNData Data;
+    IPDomainData Data;
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("parameters")
@@ -18,7 +18,7 @@ public class IpVPNResult {
     @JsonProperty("raw_data")
     Map<String, Object> RawData;
 
-    public IpVPNData getData() {
+    public IPDomainData getData() {
         return Data;
     }
 

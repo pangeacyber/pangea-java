@@ -9,7 +9,11 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.intel.models.IpLookupResponse;
+import cloud.pangeacyber.pangea.intel.models.IPDomainResponse;
+import cloud.pangeacyber.pangea.intel.models.IPGeolocateResponse;
+import cloud.pangeacyber.pangea.intel.models.IPProxyResponse;
 import cloud.pangeacyber.pangea.intel.models.IPReputationResponse;
+import cloud.pangeacyber.pangea.intel.models.IPVPNResponse;
 
 
 final class IpCommonRequest {
@@ -143,31 +147,31 @@ public class IpIntelClient extends Client{
         return lookupPost(ip, provider, verbose, raw);
     }
 
-    private IpGeolocateResponse geolocatePost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
+    private IPGeolocateResponse geolocatePost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
         IpCommonRequest request = new IpCommonRequest(ip, provider, verbose, raw);
-        IpGeolocateResponse resp = doPost("/v1/geolocate", request, IpGeolocateResponse.class);
+        IPGeolocateResponse resp = doPost("/v1/geolocate", request, IPGeolocateResponse.class);
         return resp;
     }
 
-    public IpGeolocateResponse geolocate(String ip) throws PangeaException, PangeaAPIException {
+    public IPGeolocateResponse geolocate(String ip) throws PangeaException, PangeaAPIException {
         return geolocatePost(ip, null, null, null);
     }
 
-    public IpGeolocateResponse geolocate(String ip, String provider) throws PangeaException, PangeaAPIException {
+    public IPGeolocateResponse geolocate(String ip, String provider) throws PangeaException, PangeaAPIException {
         return geolocatePost(ip, provider, null, null);
     }
 
-    public IpGeolocateResponse geolocate(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+    public IPGeolocateResponse geolocate(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return geolocatePost(ip, null, verbose, raw);
     }
 
-    public IpGeolocateResponse geolocate(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+    public IPGeolocateResponse geolocate(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return geolocatePost(ip, provider, verbose, raw);
     }
 
-    private IpDomainResponse domainPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
+    private IPDomainResponse domainPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
         IpCommonRequest request = new IpCommonRequest(ip, provider, verbose, raw);
-        IpDomainResponse resp = doPost("/v1/domain", request, IpDomainResponse.class);
+        IPDomainResponse resp = doPost("/v1/domain", request, IPDomainResponse.class);
         return resp;
     }
 
@@ -184,7 +188,7 @@ public class IpIntelClient extends Client{
      *     "93.231.182.110");
      * }
      */
-    public IpDomainResponse getDomain(String ip) throws PangeaException, PangeaAPIException {
+    public IPDomainResponse getDomain(String ip) throws PangeaException, PangeaAPIException {
         return domainPost(ip, null, null, null);
     }
 
@@ -202,7 +206,7 @@ public class IpIntelClient extends Client{
      *      "digitalenvoy");
      * }
      */
-    public IpDomainResponse getDomain(String ip, String provider) throws PangeaException, PangeaAPIException {
+    public IPDomainResponse getDomain(String ip, String provider) throws PangeaException, PangeaAPIException {
         return domainPost(ip, provider, null, null);
     }
 
@@ -221,7 +225,7 @@ public class IpIntelClient extends Client{
      *      true);
      * }
      */
-    public IpDomainResponse getDomain(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+    public IPDomainResponse getDomain(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return domainPost(ip, null, verbose, raw);
     }
 
@@ -241,13 +245,13 @@ public class IpIntelClient extends Client{
      *      true);
      * }
      */
-    public IpDomainResponse getDomain(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+    public IPDomainResponse getDomain(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return domainPost(ip, provider, verbose, raw);
     }
 
-    private IpVPNResponse vpnPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
+    private IPVPNResponse vpnPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
         IpCommonRequest request = new IpCommonRequest(ip, provider, verbose, raw);
-        IpVPNResponse resp = doPost("/v1/vpn", request, IpVPNResponse.class);
+        IPVPNResponse resp = doPost("/v1/vpn", request, IPVPNResponse.class);
         return resp;
     }
 
@@ -264,7 +268,7 @@ public class IpIntelClient extends Client{
      *     "93.231.182.110");
      * }
      */
-    public IpVPNResponse isVPN(String ip) throws PangeaException, PangeaAPIException {
+    public IPVPNResponse isVPN(String ip) throws PangeaException, PangeaAPIException {
         return vpnPost(ip, null, null, null);
     }
 
@@ -282,7 +286,7 @@ public class IpIntelClient extends Client{
      *      "digitalenvoy");
      * }
      */
-    public IpVPNResponse isVPN(String ip, String provider) throws PangeaException, PangeaAPIException {
+    public IPVPNResponse isVPN(String ip, String provider) throws PangeaException, PangeaAPIException {
         return vpnPost(ip, provider, null, null);
     }
 
@@ -301,7 +305,7 @@ public class IpIntelClient extends Client{
      *      true);
      * }
      */
-    public IpVPNResponse isVPN(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+    public IPVPNResponse isVPN(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return vpnPost(ip, null, verbose, raw);
     }
 
@@ -321,13 +325,13 @@ public class IpIntelClient extends Client{
      *      true);
      * }
      */
-    public IpVPNResponse isVPN(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+    public IPVPNResponse isVPN(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return vpnPost(ip, provider, verbose, raw);
     }
 
-    private IpProxyResponse proxyPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
+    private IPProxyResponse proxyPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
         IpCommonRequest request = new IpCommonRequest(ip, provider, verbose, raw);
-        IpProxyResponse resp = doPost("/v1/proxy", request, IpProxyResponse.class);
+        IPProxyResponse resp = doPost("/v1/proxy", request, IPProxyResponse.class);
         return resp;
     }
 
@@ -344,7 +348,7 @@ public class IpIntelClient extends Client{
      *     "93.231.182.110");
      * }
      */
-    public IpProxyResponse isProxy(String ip) throws PangeaException, PangeaAPIException {
+    public IPProxyResponse isProxy(String ip) throws PangeaException, PangeaAPIException {
         return proxyPost(ip, null, null, null);
     }
 
@@ -363,7 +367,7 @@ public class IpIntelClient extends Client{
      *      "digitalenvoy");
      * }
      */
-    public IpProxyResponse isProxy(String ip, String provider) throws PangeaException, PangeaAPIException {
+    public IPProxyResponse isProxy(String ip, String provider) throws PangeaException, PangeaAPIException {
         return proxyPost(ip, provider, null, null);
     }
 
@@ -384,7 +388,7 @@ public class IpIntelClient extends Client{
      *      true);
      * }
      */
-    public IpProxyResponse isProxy(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+    public IPProxyResponse isProxy(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return proxyPost(ip, null, verbose, raw);
     }
 
@@ -407,7 +411,7 @@ public class IpIntelClient extends Client{
      *      true);
      * }
      */
-    public IpProxyResponse isProxy(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+    public IPProxyResponse isProxy(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return proxyPost(ip, provider, verbose, raw);
     }
 

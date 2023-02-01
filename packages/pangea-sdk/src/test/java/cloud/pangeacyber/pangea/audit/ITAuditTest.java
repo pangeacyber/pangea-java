@@ -145,8 +145,6 @@ public class ITAuditTest{
         event.setOld("Old");
 
         Map<String, Object> pkInfo = new LinkedHashMap<String, Object>();
-        pkInfo.put("Info1", "some info");
-        pkInfo.put("Info1", "more info about public key");
 
         LogResponse response = localSignClient.log(event, SignMode.LOCAL, true, true, pkInfo);
         assertTrue(response.isOk());
@@ -155,7 +153,10 @@ public class ITAuditTest{
         assertNotNull(result.getEventEnvelope());
         assertNotNull(result.getHash());
         assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
-        assertEquals("-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\n-----END PUBLIC KEY-----\n", result.getEventEnvelope().getPublicKey());
+        assertEquals(
+            """
+{"key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}"""
+        , result.getEventEnvelope().getPublicKey());
         assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
     }
 

@@ -16,6 +16,8 @@ import org.apache.commons.codec.binary.Hex;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.intel.models.FileLookupResponse;
+import cloud.pangeacyber.pangea.intel.models.FileReputationResponse;
 
 
 final class FileLookupRequest {
@@ -44,7 +46,34 @@ final class FileLookupRequest {
         this.verbose = verbose;
         this.raw = raw;
     }
+}
 
+final class FileReputationRequest {
+    @JsonProperty("hash")
+    String Hash;
+
+    @JsonProperty("hash_type")
+    String HashType;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("provider")
+    String provider;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("verbose")
+    Boolean verbose;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("raw")
+    Boolean raw;
+
+    FileReputationRequest(String hash, String hashType, String provider, Boolean verbose, Boolean raw){
+        this.Hash = hash;
+        this.HashType = hashType;
+        this.provider = provider;
+        this.verbose = verbose;
+        this.raw = raw;
+    }
 }
 
 public class FileIntelClient extends Client{
@@ -56,13 +85,14 @@ public class FileIntelClient extends Client{
 
     private FileLookupResponse lookupPost(String hash, String hashType, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
         FileLookupRequest request = new FileLookupRequest(hash, hashType, provider, verbose, raw);
-        FileLookupResponse resp = doPost("/v1/lookup", request, FileLookupResponse.class);
+        FileLookupResponse resp = doPost("/v1/reputation", request, FileLookupResponse.class);
         return resp;
     }
 
     /**
      * Look up a file
      * @pangea.description Retrieve file reputation from a default provider, using the file's hash.
+     * @deprecated use reputation instead.
      * @param hash hash of the file
      * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
      * @return FileLookupResponse
@@ -82,6 +112,7 @@ public class FileIntelClient extends Client{
     /**
      * Look up a file - hash, hashType, provider
      * @pangea.description Retrieve file reputation from a provider, using the file's hash.
+     * @deprecated use reputation instead.
      * @param hash hash of the file
      * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
      * @param provider provider to get reputation from
@@ -103,6 +134,7 @@ public class FileIntelClient extends Client{
     /**
      * Look up a file - hash, hashType, verbose, raw
      * @pangea.description Retrieve file reputation from a default provider, using the file's hash.
+     * @deprecated use reputation instead.
      * @param hash hash of the file
      * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
      * @param verbose select a more verbose response
@@ -126,6 +158,7 @@ public class FileIntelClient extends Client{
     /**
      * Look up a file - hash, hashType, provider, verbose, raw
      * @pangea.description Retrieve file reputation from a provider, using the file's hash.
+     * @deprecated use reputation instead.
      * @param hash hash of the file
      * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
      * @param provider provider to get reputation from
@@ -146,6 +179,100 @@ public class FileIntelClient extends Client{
      */
     public FileLookupResponse lookup(String hash, String hashType, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return lookupPost(hash, hashType, provider, verbose, raw);
+    }
+
+    private FileReputationResponse reputationPost(String hash, String hashType, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
+        FileReputationRequest request = new FileReputationRequest(hash, hashType, provider, verbose, raw);
+        FileReputationResponse resp = doPost("/v1/reputation", request, FileReputationResponse.class);
+        return resp;
+    }
+
+    /**
+     * Look up a file
+     * @pangea.description Retrieve file reputation from a default provider, using the file's hash.
+     * @param hash hash of the file
+     * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
+     * @return FileReputationResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * FileReputationResponse response = client.reputation(
+     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+     *     "sha256");
+     * }
+     */
+    public FileReputationResponse reputation(String hash, String hashType) throws PangeaException, PangeaAPIException {
+        return reputationPost(hash, hashType, null, null, null);
+    }
+
+    /**
+     * Look up a file - hash, hashType, provider
+     * @pangea.description Retrieve file reputation from a provider, using the file's hash.
+     * @param hash hash of the file
+     * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
+     * @param provider provider to get reputation from
+     * @return FileReputationResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * FileReputationResponse response = client.reputation(
+     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+     *     "sha256",
+     *     "reversinglabs");
+     * }
+     */
+    public FileReputationResponse reputation(String hash, String hashType, String provider) throws PangeaException, PangeaAPIException {
+        return reputationPost(hash, hashType, provider, null, null);
+    }
+
+    /**
+     * Look up a file - hash, hashType, verbose, raw
+     * @pangea.description Retrieve file reputation from a default provider, using the file's hash.
+     * @param hash hash of the file
+     * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
+     * @param verbose select a more verbose response
+     * @param raw if true response include provider raw response. This should vary from one provider to another one.
+     * @return FileReputationResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * FileReputationResponse response = client.reputation(
+     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+     *     "sha256",
+     *     true,
+     *     false);
+     * }
+     */
+    public FileReputationResponse reputation(String hash, String hashType, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+        return reputationPost(hash, hashType, null, verbose, raw);
+    }
+
+    /**
+     * Look up a file - hash, hashType, provider, verbose, raw
+     * @pangea.description Retrieve file reputation from a provider, using the file's hash.
+     * @param hash hash of the file
+     * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
+     * @param provider provider to get reputation from
+     * @param verbose select a more verbose response
+     * @param raw if true response include provider raw response. This should vary from one provider to another one.
+     * @return FileReputationResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * FileReputationResponse response = client.reputation(
+     *     "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+     *     "sha256",
+     *     "reversinglabs",
+     *     true,
+     *     false);
+     * }
+     */
+    public FileReputationResponse reputation(String hash, String hashType, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+        return reputationPost(hash, hashType, provider, verbose, raw);
     }
 
     public static String calculateSHA256fromFile(String filepath) throws PangeaException{

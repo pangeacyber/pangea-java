@@ -180,8 +180,6 @@ public class ITAuditTest{
         assertEquals(MSG_SIGNED_VAULT, result.getEventEnvelope().getEvent().getMessage());
         assertNotNull(result.getEventEnvelope().getPublicKey());
         assertNotNull(result.getEventEnvelope().getSignature());
-        assertNotNull(result.getEventEnvelope().getSignatureKeyID());
-        assertNotNull(result.getEventEnvelope().getSignatureKeyVersion());
         assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
     }
 

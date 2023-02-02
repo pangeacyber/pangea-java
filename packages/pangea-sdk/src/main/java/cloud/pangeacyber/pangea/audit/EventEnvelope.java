@@ -34,14 +34,6 @@ public class EventEnvelope {
     @JsonProperty("received_at")
     String receivedAt;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("signature_key_id")
-    String signatureKeyID;
-
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("signature_key_version")
-    String signatureKeyVersion;
-
     public Event getEvent() {
         return event;
     }
@@ -56,14 +48,6 @@ public class EventEnvelope {
 
     public String getReceivedAt() {
         return receivedAt;
-    }
-
-    public String getSignatureKeyID() {
-        return signatureKeyID;
-    }
-
-    public String getSignatureKeyVersion() {
-        return signatureKeyVersion;
     }
 
     public EventVerification verifySignature(){

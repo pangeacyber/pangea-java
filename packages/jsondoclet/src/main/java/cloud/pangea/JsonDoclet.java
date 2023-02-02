@@ -63,6 +63,9 @@ public class JsonDoclet implements Doclet {
                     case THROWS:
                         throwsTags.add(processDocComment(t.toString()));
                         break;
+                    case DEPRECATED:
+                        props.put("deprecated", processDocComment(t.toString()).get("text"));
+                        break;
                     case UNKNOWN_BLOCK_TAG:
                         HashMap<String, Object> processedComment = processDocComment(t.toString());
 
@@ -177,7 +180,7 @@ public class JsonDoclet implements Doclet {
      * Takes a doc comment assuming the form "@param paramType paramDescription"
      * and splits it out to a HashMap: { name: "paramName", text: "paramDescription"
      * }
-     * 
+     *
      * @param comment
      * @return HashMap<String, Object>
      */

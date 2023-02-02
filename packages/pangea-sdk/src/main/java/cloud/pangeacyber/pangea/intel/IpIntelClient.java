@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.intel.models.IpLookupResponse;
+import cloud.pangeacyber.pangea.intel.models.IPReputationResponse;
 
 
 final class IpLookupRequest {
@@ -32,7 +34,6 @@ final class IpLookupRequest {
         this.verbose = verbose;
         this.raw = raw;
     }
-
 }
 
 final class IpReputationRequest {
@@ -57,7 +58,6 @@ final class IpReputationRequest {
         this.verbose = verbose;
         this.raw = raw;
     }
-
 }
 
 public class IpIntelClient extends Client{
@@ -73,9 +73,9 @@ public class IpIntelClient extends Client{
         return resp;
     }
 
-    private IpReputationResponse reputationPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
+    private IPReputationResponse reputationPost(String ip, String provider, Boolean verbose, Boolean raw) throws PangeaException, PangeaAPIException {
         IpReputationRequest request = new IpReputationRequest(ip, provider, verbose, raw);
-        IpReputationResponse resp = doPost("/v1/reputation", request, IpReputationResponse.class);
+        IPReputationResponse resp = doPost("/v1/reputation", request, IPReputationResponse.class);
         return resp;
     }
 
@@ -180,7 +180,7 @@ public class IpIntelClient extends Client{
      *     "93.231.182.110");
      * }
      */
-    public IpReputationResponse reputation(String ip) throws PangeaException, PangeaAPIException {
+    public IPReputationResponse reputation(String ip) throws PangeaException, PangeaAPIException {
         return reputationPost(ip, null, null, null);
     }
 
@@ -199,7 +199,7 @@ public class IpIntelClient extends Client{
      *     "crowdstrike");
      * }
      */
-    public IpReputationResponse reputation(String ip, String provider) throws PangeaException, PangeaAPIException {
+    public IPReputationResponse reputation(String ip, String provider) throws PangeaException, PangeaAPIException {
         return reputationPost(ip, provider, null, null);
     }
 
@@ -220,7 +220,7 @@ public class IpIntelClient extends Client{
      *     true);
      * }
      */
-    public IpReputationResponse reputation(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+    public IPReputationResponse reputation(String ip, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return reputationPost(ip, null, verbose, raw);
     }
 
@@ -243,7 +243,7 @@ public class IpIntelClient extends Client{
      *     true);
      * }
      */
-    public IpReputationResponse reputation(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
+    public IPReputationResponse reputation(String ip, String provider, boolean verbose, boolean raw) throws PangeaException, PangeaAPIException {
         return reputationPost(ip, provider, verbose, raw);
     }
 }

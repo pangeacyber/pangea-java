@@ -109,10 +109,10 @@ public class RedactClient extends Client {
      * @pangea.code
      * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
-     * 
+     *
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
-     * 
+     *
      * RedactStructuredResponse response = client.redactStructured(data);
      * }
      */
@@ -131,10 +131,10 @@ public class RedactClient extends Client {
      * @pangea.code
      * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
-     * 
+     *
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
-     * 
+     *
      * RedactStructuredResponse response = client.redactStructured(data, "json");
      * }
      */
@@ -153,10 +153,10 @@ public class RedactClient extends Client {
      * @pangea.code
      * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
-     * 
+     *
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
-     * 
+     *
      * RedactStructuredResponse response = client.redactStructured(data, true);
      * }
      */
@@ -176,10 +176,10 @@ public class RedactClient extends Client {
      * @pangea.code
      * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
-     * 
+     *
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
-     * 
+     *
      * RedactStructuredResponse response = client.redactStructured(data, "json", true);
      * }
      */
@@ -199,10 +199,10 @@ public class RedactClient extends Client {
      * @pangea.code
      * {@code
      * Map<String, Object> data = new LinkedHashMap<String, Object>();
-     * 
+     *
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
-     * 
+     *
      * RedactStructuredResponse response = client.redactStructured(data, true, new String[] {"Phone"});
      * }
      */

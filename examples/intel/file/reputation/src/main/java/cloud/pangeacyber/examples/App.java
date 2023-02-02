@@ -1,7 +1,7 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.FileIntelClient;
-import cloud.pangeacyber.pangea.intel.FileLookupResponse;
+import cloud.pangeacyber.pangea.intel.models.FileReputationResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 

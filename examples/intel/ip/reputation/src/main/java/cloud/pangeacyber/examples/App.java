@@ -1,7 +1,7 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.IpIntelClient;
-import cloud.pangeacyber.pangea.intel.IPReputationResponse;
+import cloud.pangeacyber.pangea.intel.models.IPReputationResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 
@@ -11,7 +11,7 @@ public class App
     {
         Config cfg = null;
         try {
-            cfg = Config.fromEnvironment(DomainIntelClient.serviceName);
+            cfg = Config.fromEnvironment(IpIntelClient.serviceName);
         } catch (ConfigException e){
             System.out.println(e);
             System.exit(1);

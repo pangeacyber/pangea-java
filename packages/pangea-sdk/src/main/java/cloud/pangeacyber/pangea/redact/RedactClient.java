@@ -115,13 +115,13 @@ public class RedactClient extends Client {
      * @pangea.description Redact sensitive information from provided text.
      * @param text The text data to redact.
      * @param debug Setting this value to true will provide a detailed analysis of the redacted data and the rules that caused redaction.
-     * @param rules An array of redact ruleset short names.
+     * @param rules An array of redact rule short names.
      * @return RedactTextResponse
      * @throws PangeaException
      * @throws PangeaAPIException
      * @pangea.code
      * {@code
-     * RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", true, {"EMAIL_ADDRESS"});
+     * RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", true, new String[] {"PHONE_NUMBER"});
      * }
      */
     public RedactTextResponse redactText(String text, Boolean debug, String[] rules) throws PangeaException, PangeaAPIException {
@@ -151,10 +151,10 @@ public class RedactClient extends Client {
     }
 
     /**
-     * Redact structured
+     * Redact structured - rules
      * @pangea.description Redact sensitive information from structured data (e.g., JSON).
      * @param data Structured data to redact
-     * @param rules An array of redact ruleset short names.
+     * @param rules An array of redact rule short names
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
@@ -165,7 +165,7 @@ public class RedactClient extends Client {
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
      *
-     * RedactStructuredResponse response = client.redactStructured(data);
+     * RedactStructuredResponse response = client.redactStructured(data, new String[] {"PHONE_NUMBER"});
      * }
      */
     public RedactStructuredResponse redactStructured(Object data, String[] rules) throws PangeaException, PangeaAPIException{
@@ -268,7 +268,7 @@ public class RedactClient extends Client {
      * @param data Structured data to redact
      * @param debug Setting this value to true will provide a detailed analysis of the redacted data and the rules that caused redaction.
      * @param jsonp JSON path(s) used to identify the specific JSON fields to redact in the structured data. Note: data parameter must be in JSON format.
-     * @param rules An array of redact ruleset short names.
+     * @param rules An array of redact rule short names
      * @return RedactStructuredResponse
      * @throws PangeaException
      * @throws PangeaAPIException
@@ -279,7 +279,7 @@ public class RedactClient extends Client {
      * data.put("Name", "Jenny Jenny");
      * data.put("Phone", "This is its number: 415-867-5309");
      *
-     * RedactStructuredResponse response = client.redactStructured(data, true, new String[] {"Phone"});
+     * RedactStructuredResponse response = client.redactStructured(data, true, new String[] {"Phone"}, new String[] {"PHONE_NUMBER"});
      * }
      */
     public RedactStructuredResponse redactStructured(Object data, boolean debug, String[] jsonp, String[] rules) throws PangeaException, PangeaAPIException{

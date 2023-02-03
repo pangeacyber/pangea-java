@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>cloud.pangeacyber.examples</groupId>
-  <artifactId>domain_lookup</artifactId>
+  <artifactId>ip_reputation</artifactId>
   <version>1.0.0</version>
 
-  <name>domain_lookup</name>
+  <name>ip_reputation</name>
   <url>http://pangea.cloud</url>
 
   <properties>
@@ -36,7 +36,7 @@
     <dependency>
       <groupId>cloud.pangea</groupId>
       <artifactId>pangea-sdk</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
+      <version>1.1.2</version>
     </dependency>
 
     <dependency>

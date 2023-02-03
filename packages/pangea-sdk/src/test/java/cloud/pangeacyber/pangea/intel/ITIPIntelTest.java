@@ -18,7 +18,15 @@ import cloud.pangeacyber.pangea.exceptions.ValidationException;
 import cloud.pangeacyber.pangea.intel.models.IntelLookupData;
 import cloud.pangeacyber.pangea.intel.models.IntelReputationData;
 import cloud.pangeacyber.pangea.intel.models.IpLookupResponse;
+import cloud.pangeacyber.pangea.intel.models.IPDomainData;
+import cloud.pangeacyber.pangea.intel.models.IPDomainResponse;
+import cloud.pangeacyber.pangea.intel.models.IPGeolocateData;
+import cloud.pangeacyber.pangea.intel.models.IPGeolocateResponse;
+import cloud.pangeacyber.pangea.intel.models.IPProxyData;
+import cloud.pangeacyber.pangea.intel.models.IPProxyResponse;
 import cloud.pangeacyber.pangea.intel.models.IPReputationResponse;
+import cloud.pangeacyber.pangea.intel.models.IPVPNData;
+import cloud.pangeacyber.pangea.intel.models.IPVPNResponse;
 
 public class ITIPIntelTest {
     IpIntelClient client;
@@ -127,102 +135,6 @@ public class ITIPIntelTest {
     }
 
     @Test
-    public void testIpGeolocate_1() throws PangeaException, PangeaAPIException {
-        // Default provider, not verbose by default, not raw by default;
-        IpGeolocateResponse response = client.geolocate("93.231.182.110");
-        assertTrue(response.isOk());
-
-        IpGeolocateData data = response.getResult().getData();
-        assertEquals("deu", data.getCountry());
-        assertNull(response.getResult().getParameters());
-        assertNull(response.getResult().getRawData());
-    }
-
-    @Test
-    public void testIpGeolocate_2() throws PangeaException, PangeaAPIException {
-        // With provider, not verbose by default, not raw by default;
-        IpGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy");
-        assertTrue(response.isOk());
-
-        IpGeolocateData data = response.getResult().getData();
-        assertEquals("deu", data.getCountry());
-        assertNull(response.getResult().getParameters());
-        assertNull(response.getResult().getRawData());
-    }
-
-    @Test
-    public void testIpGeolocate_3() throws PangeaException, PangeaAPIException {
-        // Default provider, no verbose, no raw;
-        IpGeolocateResponse response = client.geolocate("93.231.182.110", false, false);
-        assertTrue(response.isOk());
-
-        IpGeolocateData data = response.getResult().getData();
-        assertEquals("deu", data.getCountry());
-        assertNull(response.getResult().getParameters());
-        assertNull(response.getResult().getRawData());
-    }
-
-    @Test
-    public void testIpGeolocate_4() throws PangeaException, PangeaAPIException {
-        // Default provider, verbose, no raw;
-        IpGeolocateResponse response = client.geolocate("93.231.182.110", true, false);
-        assertTrue(response.isOk());
-
-        IpGeolocateData data = response.getResult().getData();
-        assertEquals("deu", data.getCountry());
-        assertNotNull(response.getResult().getParameters());
-        assertNull(response.getResult().getRawData());
-    }
-
-    @Test
-    public void testIpGeolocate_5() throws PangeaException, PangeaAPIException {
-        // Default provider, no verbose, raw;
-        IpGeolocateResponse response = client.geolocate("93.231.182.110", false, true);
-        assertTrue(response.isOk());
-
-        IpGeolocateData data = response.getResult().getData();
-        assertEquals("deu", data.getCountry());
-        assertNull(response.getResult().getParameters());
-        assertNotNull(response.getResult().getRawData());
-    }
-
-    @Test
-    public void testIpGeolocate_6() throws PangeaException, PangeaAPIException {
-        // Default provider, verbose, raw;
-        IpGeolocateResponse response = client.geolocate("93.231.182.110", true, true);
-        assertTrue(response.isOk());
-
-        IpGeolocateData data = response.getResult().getData();
-        assertEquals("deu", data.getCountry());
-        assertNotNull(response.getResult().getParameters());
-        assertNotNull(response.getResult().getRawData());
-    }
-
-    @Test
-    public void testIpGeolocate_7() throws PangeaException, PangeaAPIException {
-        // Provider, no verbose, no raw
-        IpGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy", false, false);
-        assertTrue(response.isOk());
-
-        IpGeolocateData data = response.getResult().getData();
-        assertEquals("deu", data.getCountry());
-        assertNull(response.getResult().getParameters());
-        assertNull(response.getResult().getRawData());
-    }
-
-    @Test
-    public void testIpGeolocate_8() throws PangeaException, PangeaAPIException {
-        // Provider, verbose, raw
-        IpGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy", true, true);
-        assertTrue(response.isOk());
-
-        IpGeolocateData data = response.getResult().getData();
-        assertEquals("deu", data.getCountry());
-        assertNotNull(response.getResult().getParameters());
-        assertNotNull(response.getResult().getRawData());
-    }
-
-    @Test
     public void testIpReputationMalicious_1() throws PangeaException, PangeaAPIException {
         // Default provider, not verbose by default, not raw by default;
         IPReputationResponse response = client.reputation("93.231.182.110");
@@ -314,6 +226,398 @@ public class ITIPIntelTest {
 
         IntelReputationData data = response.getResult().getData();
         assertEquals("malicious", data.getVerdict());
+        assertNotNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_1() throws PangeaException, PangeaAPIException {
+        // Default provider, not verbose by default, not raw by default;
+        IPGeolocateResponse response = client.geolocate("93.231.182.110");
+        assertTrue(response.isOk());
+
+        IPGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_2() throws PangeaException, PangeaAPIException {
+        // With provider, not verbose by default, not raw by default;
+        IPGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy");
+        assertTrue(response.isOk());
+
+        IPGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_3() throws PangeaException, PangeaAPIException {
+        // Default provider, no verbose, no raw;
+        IPGeolocateResponse response = client.geolocate("93.231.182.110", false, false);
+        assertTrue(response.isOk());
+
+        IPGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_4() throws PangeaException, PangeaAPIException {
+        // Default provider, verbose, no raw;
+        IPGeolocateResponse response = client.geolocate("93.231.182.110", true, false);
+        assertTrue(response.isOk());
+
+        IPGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNotNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_5() throws PangeaException, PangeaAPIException {
+        // Default provider, no verbose, raw;
+        IPGeolocateResponse response = client.geolocate("93.231.182.110", false, true);
+        assertTrue(response.isOk());
+
+        IPGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_6() throws PangeaException, PangeaAPIException {
+        // Default provider, verbose, raw;
+        IPGeolocateResponse response = client.geolocate("93.231.182.110", true, true);
+        assertTrue(response.isOk());
+
+        IPGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNotNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_7() throws PangeaException, PangeaAPIException {
+        // Provider, no verbose, no raw
+        IPGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy", false, false);
+        assertTrue(response.isOk());
+
+        IPGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpGeolocate_8() throws PangeaException, PangeaAPIException {
+        // Provider, verbose, raw
+        IPGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy", true, true);
+        assertTrue(response.isOk());
+
+        IPGeolocateData data = response.getResult().getData();
+        assertEquals("deu", data.getCountry());
+        assertNotNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpDomain_1() throws PangeaException, PangeaAPIException {
+        // Default provider, not verbose by default, not raw by default;
+        IPDomainResponse response = client.getDomain("24.235.114.61");
+        assertTrue(response.isOk());
+
+        IPDomainData data = response.getResult().getData();
+        assertTrue(data.isDomainFound());
+        assertEquals("rogers.com", data.getDomain());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpDomain_2() throws PangeaException, PangeaAPIException {
+        // With provider, not verbose by default, not raw by default;
+        IPDomainResponse response = client.getDomain("24.235.114.61", "digitalenvoy");
+        assertTrue(response.isOk());
+
+        IPDomainData data = response.getResult().getData();
+        assertTrue(data.isDomainFound());
+        assertEquals("rogers.com", data.getDomain());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpDomain_3() throws PangeaException, PangeaAPIException {
+        // Default provider, no verbose, no raw;
+        IPDomainResponse response = client.getDomain("24.235.114.61", false, false);
+        assertTrue(response.isOk());
+
+        IPDomainData data = response.getResult().getData();
+        assertTrue(data.isDomainFound());
+        assertEquals("rogers.com", data.getDomain());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpDomain_4() throws PangeaException, PangeaAPIException {
+        // Default provider, verbose, no raw;
+        IPDomainResponse response = client.getDomain("24.235.114.61", true, false);
+        assertTrue(response.isOk());
+
+        IPDomainData data = response.getResult().getData();
+        assertTrue(data.isDomainFound());
+        assertEquals("rogers.com", data.getDomain());
+        assertNotNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpDomain_5() throws PangeaException, PangeaAPIException {
+        // Default provider, no verbose, raw;
+        IPDomainResponse response = client.getDomain("24.235.114.61", false, true);
+        assertTrue(response.isOk());
+
+        IPDomainData data = response.getResult().getData();
+        assertTrue(data.isDomainFound());
+        assertEquals("rogers.com", data.getDomain());
+        assertNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpDomain_6() throws PangeaException, PangeaAPIException {
+        // Default provider, verbose, raw;
+        IPDomainResponse response = client.getDomain("24.235.114.61", true, true);
+        assertTrue(response.isOk());
+
+        IPDomainData data = response.getResult().getData();
+            assertTrue(data.isDomainFound());
+        assertEquals("rogers.com", data.getDomain());
+        assertNotNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpDomain_7() throws PangeaException, PangeaAPIException {
+        // Provider, no verbose, no raw
+        IPDomainResponse response = client.getDomain("24.235.114.61", "digitalenvoy", false, false);
+        assertTrue(response.isOk());
+
+        IPDomainData data = response.getResult().getData();
+            assertTrue(data.isDomainFound());
+        assertEquals("rogers.com", data.getDomain());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpDomain_8() throws PangeaException, PangeaAPIException {
+        // Provider, verbose, raw
+        IPDomainResponse response = client.getDomain("24.235.114.61", "digitalenvoy", true, true);
+        assertTrue(response.isOk());
+
+        IPDomainData data = response.getResult().getData();
+        assertTrue(data.isDomainFound());
+        assertEquals("rogers.com", data.getDomain());
+        assertNotNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpVPN_1() throws PangeaException, PangeaAPIException {
+        // Default provider, not verbose by default, not raw by default;
+        IPVPNResponse response = client.isVPN("1.46.128.165");
+        assertTrue(response.isOk());
+
+        IPVPNData data = response.getResult().getData();
+        assertTrue(data.isVPN());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpVPN_2() throws PangeaException, PangeaAPIException {
+        // With provider, not verbose by default, not raw by default;
+        IPVPNResponse response = client.isVPN("1.46.128.165", "digitalenvoy");
+        assertTrue(response.isOk());
+
+        IPVPNData data = response.getResult().getData();
+        assertTrue(data.isVPN());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpVPN_3() throws PangeaException, PangeaAPIException {
+        // Default provider, no verbose, no raw;
+        IPVPNResponse response = client.isVPN("1.46.128.165", false, false);
+        assertTrue(response.isOk());
+
+        IPVPNData data = response.getResult().getData();
+        assertTrue(data.isVPN());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpVPN_4() throws PangeaException, PangeaAPIException {
+        // Default provider, verbose, no raw;
+        IPVPNResponse response = client.isVPN("1.46.128.165", true, false);
+        assertTrue(response.isOk());
+
+        IPVPNData data = response.getResult().getData();
+        assertTrue(data.isVPN());
+        assertNotNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpVPN_5() throws PangeaException, PangeaAPIException {
+        // Default provider, no verbose, raw;
+        IPVPNResponse response = client.isVPN("1.46.128.165", false, true);
+        assertTrue(response.isOk());
+
+        IPVPNData data = response.getResult().getData();
+        assertTrue(data.isVPN());
+        assertNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpVPN_6() throws PangeaException, PangeaAPIException {
+        // Default provider, verbose, raw;
+        IPVPNResponse response = client.isVPN("1.46.128.165", true, true);
+        assertTrue(response.isOk());
+
+        IPVPNData data = response.getResult().getData();
+        assertTrue(data.isVPN());
+        assertNotNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpVPN_7() throws PangeaException, PangeaAPIException {
+        // Provider, no verbose, no raw
+        IPVPNResponse response = client.isVPN("1.46.128.165", "digitalenvoy", false, false);
+        assertTrue(response.isOk());
+
+        IPVPNData data = response.getResult().getData();
+        assertTrue(data.isVPN());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpVPN_8() throws PangeaException, PangeaAPIException {
+        // Provider, verbose, raw
+        IPVPNResponse response = client.isVPN("1.46.128.165", "digitalenvoy", true, true);
+        assertTrue(response.isOk());
+
+        IPVPNData data = response.getResult().getData();
+        assertTrue(data.isVPN());
+        assertNotNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpProxy_1() throws PangeaException, PangeaAPIException {
+        // Default provider, not verbose by default, not raw by default;
+        IPProxyResponse response = client.isProxy("34.201.32.172");
+        assertTrue(response.isOk());
+
+        IPProxyData data = response.getResult().getData();
+        assertTrue(data.isProxy());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpProxy_2() throws PangeaException, PangeaAPIException {
+        // With provider, not verbose by default, not raw by default;
+        IPProxyResponse response = client.isProxy("34.201.32.172", "digitalenvoy");
+        assertTrue(response.isOk());
+
+        IPProxyData data = response.getResult().getData();
+        assertTrue(data.isProxy());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpProxy_3() throws PangeaException, PangeaAPIException {
+        // Default provider, no verbose, no raw;
+        IPProxyResponse response = client.isProxy("34.201.32.172", false, false);
+        assertTrue(response.isOk());
+
+        IPProxyData data = response.getResult().getData();
+        assertTrue(data.isProxy());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpProxy_4() throws PangeaException, PangeaAPIException {
+        // Default provider, verbose, no raw;
+        IPProxyResponse response = client.isProxy("34.201.32.172", true, false);
+        assertTrue(response.isOk());
+
+        IPProxyData data = response.getResult().getData();
+        assertTrue(data.isProxy());
+        assertNotNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpProxy_5() throws PangeaException, PangeaAPIException {
+        // Default provider, no verbose, raw;
+        IPProxyResponse response = client.isProxy("34.201.32.172", false, true);
+        assertTrue(response.isOk());
+
+        IPProxyData data = response.getResult().getData();
+        assertTrue(data.isProxy());
+        assertNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpProxy_6() throws PangeaException, PangeaAPIException {
+        // Default provider, verbose, raw;
+        IPProxyResponse response = client.isProxy("34.201.32.172", true, true);
+        assertTrue(response.isOk());
+
+        IPProxyData data = response.getResult().getData();
+        assertTrue(data.isProxy());
+        assertNotNull(response.getResult().getParameters());
+        assertNotNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpProxy_7() throws PangeaException, PangeaAPIException {
+        // Provider, no verbose, no raw
+        IPProxyResponse response = client.isProxy("34.201.32.172", "digitalenvoy", false, false);
+        assertTrue(response.isOk());
+
+        IPProxyData data = response.getResult().getData();
+        assertTrue(data.isProxy());
+        assertNull(response.getResult().getParameters());
+        assertNull(response.getResult().getRawData());
+    }
+
+    @Test
+    public void testIpProxy_8() throws PangeaException, PangeaAPIException {
+        // Provider, verbose, raw
+        IPProxyResponse response = client.isProxy("34.201.32.172", "digitalenvoy", true, true);
+        assertTrue(response.isOk());
+
+        IPProxyData data = response.getResult().getData();
+        assertTrue(data.isProxy());
         assertNotNull(response.getResult().getParameters());
         assertNotNull(response.getResult().getRawData());
     }

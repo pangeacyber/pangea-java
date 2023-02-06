@@ -92,16 +92,26 @@ public class AuditClient extends Client {
     Map<Integer, PublishedRoot> publishedRoots;
     boolean allowServerRoots = true;    // In case of Arweave failure, ask the server for the roots
     String prevUnpublishedRoot = null;
+    Map<String, Object> pkInfo = null;
 
     public AuditClient(Config config) {
         super(config, serviceName);
         this.signer = null;
+        this.pkInfo = null;
         publishedRoots = new HashMap<Integer, PublishedRoot>();
     }
 
     public AuditClient(Config config, String privateKeyFilename) {
         super(config, serviceName);
         this.signer = new LogSigner(privateKeyFilename);
+        this.pkInfo = null;
+        publishedRoots = new HashMap<Integer, PublishedRoot>();
+    }
+
+    public AuditClient(Config config, String privateKeyFilename, Map<String, Object> pkInfo) {
+        super(config, serviceName);
+        this.signer = new LogSigner(privateKeyFilename);
+        this.pkInfo = pkInfo;
         publishedRoots = new HashMap<Integer, PublishedRoot>();
     }
 
@@ -115,7 +125,7 @@ public class AuditClient extends Client {
         return doPost("/v1/log", request, LogResponse.class);
     }
 
-    private LogResponse doLog(Event event, SignMode signMode, Boolean verbose, boolean verify, Map<String, Object> pkInfo) throws PangeaException, PangeaAPIException{
+    private LogResponse doLog(Event event, SignMode signMode, Boolean verbose, boolean verify) throws PangeaException, PangeaAPIException{
         String signature = null;
         String publicKey = null;
 
@@ -130,7 +140,7 @@ public class AuditClient extends Client {
             }
 
             signature = this.signer.sign(canEvent);
-            publicKey = this.getPublicKeyData(pkInfo);
+            publicKey = this.getPublicKeyData();
         }
 
         LogResponse response = logPost(event, verbose, signature, publicKey, verify);
@@ -139,16 +149,16 @@ public class AuditClient extends Client {
     }
 
 
-    private String getPublicKeyData(Map<String, Object> pkInfo) throws PangeaException{
+    private String getPublicKeyData() throws PangeaException{
         ObjectMapper mapper = JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true).build();
-        if (pkInfo == null) {
-            pkInfo = new LinkedHashMap<String, Object>();
+        if (this.pkInfo == null) {
+            this.pkInfo = new LinkedHashMap<String, Object>();
         }
 
-        pkInfo.put("key", this.signer.getPublicKey());
+        this.pkInfo.put("key", this.signer.getPublicKey());
 
         try{
-            return mapper.writeValueAsString(pkInfo);
+            return mapper.writeValueAsString(this.pkInfo);
         } catch(JsonProcessingException e){
             throw new PangeaException("Failed to stringify public key info", e);
         }
@@ -194,7 +204,7 @@ public class AuditClient extends Client {
      * }
      */
     public LogResponse log(Event event) throws PangeaException, PangeaAPIException{
-        return doLog(event, SignMode.UNSIGNED, null, false, null);
+        return doLog(event, SignMode.UNSIGNED, null, false);
     }
 
     /**
@@ -216,8 +226,8 @@ public class AuditClient extends Client {
      * LogResponse response = client.log(event, "Local", true);
      * }
      */
-    public LogResponse log(Event event, SignMode signMode, boolean verbose, boolean verify, Map<String, Object> pkInfo) throws PangeaException, PangeaAPIException {
-        return doLog(event, signMode, verbose, verify, pkInfo);
+    public LogResponse log(Event event, SignMode signMode, boolean verbose, boolean verify) throws PangeaException, PangeaAPIException {
+        return doLog(event, signMode, verbose, verify);
     }
 
     private RootResponse rootPost(Integer treeSize) throws PangeaException, PangeaAPIException {

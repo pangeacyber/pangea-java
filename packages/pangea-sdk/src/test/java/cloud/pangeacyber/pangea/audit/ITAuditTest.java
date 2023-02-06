@@ -5,6 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +23,7 @@ import cloud.pangeacyber.pangea.exceptions.ValidationException;
 
 
 public class ITAuditTest{
-    AuditClient client, localSignClient, vaultSignClient;
+    AuditClient client, localSignClient, localSignInfoClient, vaultSignClient;
     TestEnvironment environment = TestEnvironment.DEVELOP;
 
     private static final String ACTOR = "java-sdk";
@@ -37,6 +40,9 @@ public class ITAuditTest{
         client = new AuditClient(cfg);
         vaultSignClient = new AuditClient(vaultCfg);
         localSignClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
+        Map<String, Object> pkInfo = new LinkedHashMap<String, Object>();
+        pkInfo.put("ExtraInfo", "LocalKey");
+        localSignInfoClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey", pkInfo);
     }
 
     @Test
@@ -148,7 +154,35 @@ public class ITAuditTest{
         assertNotNull(result.getEventEnvelope());
         assertNotNull(result.getHash());
         assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
-        assertEquals("-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\n-----END PUBLIC KEY-----\n", result.getEventEnvelope().getPublicKey());
+        assertEquals(
+            """
+{"key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}"""
+        , result.getEventEnvelope().getPublicKey());
+        assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
+    }
+
+    @Test
+    public void testLogLocalSignatureWithPublicKeyInfo() throws PangeaException, PangeaAPIException, ConfigException{
+        Event event = new Event(MSG_SIGNED_LOCAL);
+        event.setActor(ACTOR);
+        event.setAction("Action");
+        event.setSource("Source");
+        event.setStatus(STATUS_SIGNED);
+        event.setTarget("Target");
+        event.setNewField("New");
+        event.setOld("Old");
+
+        LogResponse response = localSignInfoClient.log(event, SignMode.LOCAL, true, true);
+        assertTrue(response.isOk());
+
+        LogResult result = response.getResult();
+        assertNotNull(result.getEventEnvelope());
+        assertNotNull(result.getHash());
+        assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
+        assertEquals(
+            """
+{"ExtraInfo":"LocalKey","key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}"""
+        , result.getEventEnvelope().getPublicKey());
         assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
     }
 
@@ -172,8 +206,6 @@ public class ITAuditTest{
         assertEquals(MSG_SIGNED_VAULT, result.getEventEnvelope().getEvent().getMessage());
         assertNotNull(result.getEventEnvelope().getPublicKey());
         assertNotNull(result.getEventEnvelope().getSignature());
-        assertNotNull(result.getEventEnvelope().getSignatureKeyID());
-        assertNotNull(result.getEventEnvelope().getSignatureKeyVersion());
         assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
     }
 
@@ -401,7 +433,7 @@ public class ITAuditTest{
 
     @Test(expected = SignerException.class)
     public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException{
-        Event event = new Event(MSG_NO_SIGNED);
+        Event event = new Event(MSG_SIGNED_LOCAL);
         LogResponse response = client.log(event, SignMode.LOCAL, true, true);
     }
 

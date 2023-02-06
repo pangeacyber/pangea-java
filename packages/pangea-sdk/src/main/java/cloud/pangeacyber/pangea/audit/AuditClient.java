@@ -2,12 +2,14 @@ package cloud.pangeacyber.pangea.audit;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
@@ -19,6 +21,10 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.SignerException;
 import cloud.pangeacyber.pangea.exceptions.VerificationFailed;
+
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 
 final class ResultsRequest{
@@ -86,16 +92,26 @@ public class AuditClient extends Client {
     Map<Integer, PublishedRoot> publishedRoots;
     boolean allowServerRoots = true;    // In case of Arweave failure, ask the server for the roots
     String prevUnpublishedRoot = null;
+    Map<String, Object> pkInfo = null;
 
     public AuditClient(Config config) {
         super(config, serviceName);
         this.signer = null;
+        this.pkInfo = null;
         publishedRoots = new HashMap<Integer, PublishedRoot>();
     }
 
     public AuditClient(Config config, String privateKeyFilename) {
         super(config, serviceName);
         this.signer = new LogSigner(privateKeyFilename);
+        this.pkInfo = null;
+        publishedRoots = new HashMap<Integer, PublishedRoot>();
+    }
+
+    public AuditClient(Config config, String privateKeyFilename, Map<String, Object> pkInfo) {
+        super(config, serviceName);
+        this.signer = new LogSigner(privateKeyFilename);
+        this.pkInfo = pkInfo;
         publishedRoots = new HashMap<Integer, PublishedRoot>();
     }
 
@@ -124,13 +140,30 @@ public class AuditClient extends Client {
             }
 
             signature = this.signer.sign(canEvent);
-            publicKey = this.signer.getPublicKey();
+            publicKey = this.getPublicKeyData();
         }
 
         LogResponse response = logPost(event, verbose, signature, publicKey, verify);
         processLogResponse(response.getResult(), verify);
         return response;
     }
+
+
+    private String getPublicKeyData() throws PangeaException{
+        ObjectMapper mapper = JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true).build();
+        if (this.pkInfo == null) {
+            this.pkInfo = new LinkedHashMap<String, Object>();
+        }
+
+        this.pkInfo.put("key", this.signer.getPublicKey());
+
+        try{
+            return mapper.writeValueAsString(this.pkInfo);
+        } catch(JsonProcessingException e){
+            throw new PangeaException("Failed to stringify public key info", e);
+        }
+    }
+
 
     private void processLogResponse(LogResult result, boolean verify) throws VerificationFailed, PangeaException{
         String newUnpublishedRoot = result.getUnpublishedRoot();
@@ -180,6 +213,7 @@ public class AuditClient extends Client {
      * @param event event to log
      * @param signMode "Unsigned" or "Local"
      * @param verbose true to more verbose response
+     * @param pkInfo additional information about public key. Will be ignored if signMode is UNSIGNED
      * @return LogResponse
      * @throws PangeaException
      * @throws PangeaAPIException

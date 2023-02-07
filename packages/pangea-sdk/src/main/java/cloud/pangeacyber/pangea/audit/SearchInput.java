@@ -1,126 +1,127 @@
 package cloud.pangeacyber.pangea.audit;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SearchInput {
-    @JsonProperty("query")
-    String query;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("order")
-    String order = null;
+	@JsonProperty("query")
+	String query;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("order_by")
-    String orderBy = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("order")
+	String order = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("last")
-    Integer last = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("order_by")
+	String orderBy = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("start")
-    String start = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("last")
+	Integer last = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("end")
-    String end = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("start")
+	String start = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("limit")
-    Integer limit = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("end")
+	String end = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("max_results")
-    Integer maxResults = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("limit")
+	Integer limit = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("search_restriction")
-    SearchRestriction searchRestriction = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("max_results")
+	Integer maxResults = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("verbose")
-    Boolean Verbose = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("search_restriction")
+	SearchRestriction searchRestriction = null;
 
-    public void setVerbose(Boolean verbose) {
-        Verbose = verbose;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("verbose")
+	Boolean Verbose = null;
 
-    public SearchInput(String query) {
-        this.query = query;
-    }
+	public void setVerbose(Boolean verbose) {
+		Verbose = verbose;
+	}
 
-    public String getQuery() {
-        return query;
-    }
+	public SearchInput(String query) {
+		this.query = query;
+	}
 
-    public void setQuery(String query) {
-        this.query = query;
-    }
+	public String getQuery() {
+		return query;
+	}
 
-    public String getOrder() {
-        return order;
-    }
+	public void setQuery(String query) {
+		this.query = query;
+	}
 
-    public void setOrder(String order) {
-        this.order = order;
-    }
+	public String getOrder() {
+		return order;
+	}
 
-    public String getOrderBy() {
-        return orderBy;
-    }
+	public void setOrder(String order) {
+		this.order = order;
+	}
 
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
-    }
+	public String getOrderBy() {
+		return orderBy;
+	}
 
-    public Integer getLast() {
-        return last;
-    }
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
 
-    public void setLast(Integer last) {
-        this.last = last;
-    }
+	public Integer getLast() {
+		return last;
+	}
 
-    public String getStart() {
-        return start;
-    }
+	public void setLast(Integer last) {
+		this.last = last;
+	}
 
-    public void setStart(String start) {
-        this.start = start;
-    }
+	public String getStart() {
+		return start;
+	}
 
-    public String getEnd() {
-        return end;
-    }
+	public void setStart(String start) {
+		this.start = start;
+	}
 
-    public void setEnd(String end) {
-        this.end = end;
-    }
+	public String getEnd() {
+		return end;
+	}
 
-    public Integer getLimit() {
-        return limit;
-    }
+	public void setEnd(String end) {
+		this.end = end;
+	}
 
-    public void setLimit(Integer limit) {
-        this.limit = limit;
-    }
+	public Integer getLimit() {
+		return limit;
+	}
 
-    public Integer getMaxResults() {
-        return maxResults;
-    }
+	public void setLimit(Integer limit) {
+		this.limit = limit;
+	}
 
-    public void setMaxResults(Integer maxResults) {
-        this.maxResults = maxResults;
-    }
+	public Integer getMaxResults() {
+		return maxResults;
+	}
 
-    public SearchRestriction getSearchRestriction() {
-        return searchRestriction;
-    }
+	public void setMaxResults(Integer maxResults) {
+		this.maxResults = maxResults;
+	}
 
-    public void setSearchRestriction(SearchRestriction searchRestriction) {
-        this.searchRestriction = searchRestriction;
-    }
+	public SearchRestriction getSearchRestriction() {
+		return searchRestriction;
+	}
+
+	public void setSearchRestriction(SearchRestriction searchRestriction) {
+		this.searchRestriction = searchRestriction;
+	}
 }

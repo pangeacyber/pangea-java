@@ -1,41 +1,43 @@
 package cloud.pangeacyber.pangea;
 
+import static org.mockito.Mockito.*;
+
 import java.net.URI;
 import java.net.http.HttpRequest;
-
-import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 
 class TestClient extends Client {
-    public TestClient() {
-        super(new Config("token", "domain.com"), "test");
-    }
 
-    @Override
-    public void fillPostRequestBuilder(HttpRequest.Builder builder, String path, String body) {
-        super.fillPostRequestBuilder(builder, path, body);
-    }
+	public TestClient() {
+		super(new Config("token", "domain.com"), "test");
+	}
+
+	@Override
+	public void fillPostRequestBuilder(HttpRequest.Builder builder, String path, String body) {
+		super.fillPostRequestBuilder(builder, path, body);
+	}
 }
 
 public class ClientTest {
-    Client client;
 
-    @Before
-    public void setUp() {
-        client = new TestClient();
-    }
+	Client client;
 
-    @Test
-    public void testBuildPostRequestOk() {
-        HttpRequest.Builder builder = mock(HttpRequest.Builder.class);
-        when(builder.header(any(), any())).thenReturn(builder);
-        when(builder.POST(any())).thenReturn(builder);
-        when(builder.uri(any())).thenReturn(builder);
+	@Before
+	public void setUp() {
+		client = new TestClient();
+	}
 
-        client.fillPostRequestBuilder(builder, "/path", "body");
+	@Test
+	public void testBuildPostRequestOk() {
+		HttpRequest.Builder builder = mock(HttpRequest.Builder.class);
+		when(builder.header(any(), any())).thenReturn(builder);
+		when(builder.POST(any())).thenReturn(builder);
+		when(builder.uri(any())).thenReturn(builder);
 
-        verify(builder).header("Authorization", "Bearer token");
-        verify(builder).uri(URI.create("https://test.domain.com/path"));
-    }
+		client.fillPostRequestBuilder(builder, "/path", "body");
+
+		verify(builder).header("Authorization", "Bearer token");
+		verify(builder).uri(URI.create("https://test.domain.com/path"));
+	}
 }

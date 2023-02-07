@@ -1,5 +1,3 @@
 package cloud.pangeacyber.pangea.intel.models;
 
-public class DomainReputationData extends IntelReputationData{
-
-}
+public class DomainReputationData extends IntelReputationData {}

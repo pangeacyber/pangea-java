@@ -1,7 +1,7 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.DomainIntelClient;
-import cloud.pangeacyber.pangea.intel.DomainLookupResponse;
+import cloud.pangeacyber.pangea.intel.models.DomainReputationResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 

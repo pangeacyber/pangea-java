@@ -26,7 +26,7 @@ final class FlowVerifyMFAStartRequest {
 
 
 public class FlowVerifyMFA extends Client {
-    public static String serviceName = "authn";
+    public static final String serviceName = "authn";
 
     public FlowVerifyMFA(Config config) {
         super(config, serviceName);

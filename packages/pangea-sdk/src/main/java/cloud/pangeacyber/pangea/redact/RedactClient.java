@@ -59,7 +59,7 @@ final class StructuredRequest {
 }
 
 public class RedactClient extends Client {
-    public static String serviceName = "redact";
+    public static final String serviceName = "redact";
 
     public RedactClient(Config config) {
         super(config, serviceName);

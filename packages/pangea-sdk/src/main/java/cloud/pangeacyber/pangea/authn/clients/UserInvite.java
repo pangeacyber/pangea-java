@@ -22,7 +22,7 @@ final class UserInviteDeleteRequest {
 
 
 public class UserInvite extends Client {
-    public static String serviceName = "authn";
+    public static final String serviceName = "authn";
 
 
     public UserInvite(Config config) {

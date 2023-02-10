@@ -81,7 +81,7 @@ final class LogRequest{
 }
 
 public class AuditClient extends Client {
-    public static String serviceName = "audit";
+    public static final String serviceName = "audit";
     LogSigner signer;
     Map<Integer, PublishedRoot> publishedRoots;
     boolean allowServerRoots = true;    // In case of Arweave failure, ask the server for the roots
@@ -164,9 +164,9 @@ public class AuditClient extends Client {
      * @pangea.code
      * {@code
      * String msg = "Event's message";
-     * 
+     *
      * Event event = new Event(msg);
-     * 
+     *
      * LogResponse response = client.log(event);
      * }
      */
@@ -186,9 +186,9 @@ public class AuditClient extends Client {
      * @pangea.code
      * {@code
      * String msg = "Event's message";
-     * 
+     *
      * Event event = new Event(msg);
-     * 
+     *
      * LogResponse response = client.log(event, "Local", true);
      * }
      */
@@ -324,9 +324,9 @@ public class AuditClient extends Client {
      * @pangea.code
      * {@code
      * SearchInput input = new SearchInput("message:Integration test msg");
-     * 
+     *
      * input.setMaxResults(10);
-     * 
+     *
      * SearchResponse response = client.search(input);
      * }
      */
@@ -346,9 +346,9 @@ public class AuditClient extends Client {
      * @pangea.code
      * {@code
      * SearchInput input = new SearchInput("message:Integration test msg");
-     * 
+     *
      * input.setMaxResults(10);
-     * 
+     *
      * SearchResponse response = client.search(input);
      * }
      */

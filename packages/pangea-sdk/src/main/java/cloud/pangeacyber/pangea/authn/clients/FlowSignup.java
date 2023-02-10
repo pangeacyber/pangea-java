@@ -48,7 +48,7 @@ final class FlowSignupSocialRequest {
 
 
 public class FlowSignup extends Client {
-    public static String serviceName = "authn";
+    public static final String serviceName = "authn";
 
     public FlowSignup(Config config) {
         super(config, serviceName);

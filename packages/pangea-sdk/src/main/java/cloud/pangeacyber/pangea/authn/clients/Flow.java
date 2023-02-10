@@ -21,10 +21,10 @@ final class FlowCompleteRequest {
 
 
 public class Flow extends Client {
-    public static String serviceName = "authn";
-    FlowEnroll enroll;
-    FlowSignup signup;
-    FlowVerify verify;
+    public static final String serviceName = "authn";
+    private FlowEnroll enroll;
+    private FlowSignup signup;
+    private FlowVerify verify;
 
     public Flow(Config config) {
         super(config, serviceName);

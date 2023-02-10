@@ -29,7 +29,7 @@ final class UserProfileGetRequest {
 
 
 public class UserProfile extends Client {
-    public static String serviceName = "authn";
+    public static final String serviceName = "authn";
 
     public UserProfile(Config config) {
         super(config, serviceName);

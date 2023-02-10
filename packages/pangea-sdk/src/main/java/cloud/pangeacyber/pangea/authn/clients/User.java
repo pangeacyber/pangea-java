@@ -69,10 +69,10 @@ final class UserVerifyRequest {
 
 
 public class User extends Client {
-    public static String serviceName = "authn";
-    UserProfile profile;
-    UserInvite invite;
-    UserMFA mfa;
+    public static final String serviceName = "authn";
+    private UserProfile profile;
+    private UserInvite invite;
+    private UserMFA mfa;
 
     public User(Config config) {
         super(config, serviceName);

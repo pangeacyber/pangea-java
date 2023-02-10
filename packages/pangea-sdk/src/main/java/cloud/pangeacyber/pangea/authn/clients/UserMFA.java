@@ -86,7 +86,7 @@ final class UserMFAVerifyRequest {
 }
 
 public class UserMFA extends Client {
-    public static String serviceName = "authn";
+    public static final String serviceName = "authn";
 
     public UserMFA(Config config) {
         super(config, serviceName);

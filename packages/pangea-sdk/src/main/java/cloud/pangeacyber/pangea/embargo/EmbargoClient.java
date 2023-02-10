@@ -26,7 +26,7 @@ final class IpCheckRequest{
 }
 
 public class EmbargoClient extends Client {
-    public static String serviceName = "embargo";
+    public static final String serviceName = "embargo";
 
     public EmbargoClient(Config config) {
         super(config, serviceName);

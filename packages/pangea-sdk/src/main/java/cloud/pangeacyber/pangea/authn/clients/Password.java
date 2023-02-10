@@ -26,7 +26,7 @@ final class PasswordUpdateResquest {
 }
 
 public class Password extends Client {
-    public static String serviceName = "authn";
+    public static final String serviceName = "authn";
 
     public Password(Config config) {
         super(config, serviceName);

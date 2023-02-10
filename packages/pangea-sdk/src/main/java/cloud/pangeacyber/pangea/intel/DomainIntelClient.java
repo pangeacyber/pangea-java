@@ -64,7 +64,7 @@ final class DomainReputationRequest {
 }
 
 public class DomainIntelClient extends Client{
-    public static String serviceName = "domain-intel";
+    public static final String serviceName = "domain-intel";
 
     public DomainIntelClient(Config config) {
         super(config, serviceName);

@@ -77,7 +77,7 @@ final class FileReputationRequest {
 }
 
 public class FileIntelClient extends Client{
-    public static String serviceName = "file-intel";
+    public static final String serviceName = "file-intel";
 
     public FileIntelClient(Config config) {
         super(config, serviceName);

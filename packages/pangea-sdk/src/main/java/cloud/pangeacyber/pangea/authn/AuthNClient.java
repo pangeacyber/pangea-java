@@ -21,7 +21,7 @@ final class UserinfoResquest {
 }
 
 public class AuthNClient extends Client {
-    public static String serviceName = "authn";
+    public static final String serviceName = "authn";
     User user;
     Password password;
     Flow flow;

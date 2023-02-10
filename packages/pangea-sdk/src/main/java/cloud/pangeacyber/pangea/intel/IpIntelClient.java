@@ -61,7 +61,7 @@ final class IpReputationRequest {
 }
 
 public class IpIntelClient extends Client{
-    public static String serviceName = "ip-intel";
+    public static final String serviceName = "ip-intel";
 
     public IpIntelClient(Config config) {
         super(config, serviceName);

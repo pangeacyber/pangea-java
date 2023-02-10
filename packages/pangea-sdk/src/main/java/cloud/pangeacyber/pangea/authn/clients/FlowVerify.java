@@ -73,8 +73,8 @@ final class FlowVerifySocialRequest {
 
 
 public class FlowVerify extends Client {
-    public static String serviceName = "authn";
-    FlowVerifyMFA mfa;
+    public static final String serviceName = "authn";
+    private FlowVerifyMFA mfa;
 
     public FlowVerify(Config config) {
         super(config, serviceName);
@@ -103,6 +103,10 @@ public class FlowVerify extends Client {
     public FlowVerifySocialResponse social(String flowId, String cbState, String cbCode) throws PangeaException, PangeaAPIException{
         FlowVerifySocialRequest request = new FlowVerifySocialRequest(flowId, cbState, cbCode);
         return doPost("/v1/flow/verify/social", request, FlowVerifySocialResponse.class);
+    }
+
+    public FlowVerifyMFA mfa() {
+        return mfa;
     }
 
 }

@@ -4,8 +4,8 @@ import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 
 public class FlowEnroll extends Client {
-    public static String serviceName = "authn";
-    FlowEnrollMFA mfa;
+    public static final String serviceName = "authn";
+    private FlowEnrollMFA mfa;
 
     public FlowEnroll(Config config) {
         super(config, serviceName);

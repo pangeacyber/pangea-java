@@ -61,7 +61,7 @@ final class URLReputationRequest {
 }
 
 public class UrlIntelClient extends Client{
-    public static String serviceName = "url-intel";
+    public static final String serviceName = "url-intel";
 
     public UrlIntelClient(Config config) {
         super(config, serviceName);

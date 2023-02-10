@@ -26,8 +26,7 @@ final class FlowEnrollMFAStartRequest {
 
 
 public class FlowEnrollMFA extends Client {
-    public static String serviceName = "authn";
-
+    public static final String serviceName = "authn";
 
     public FlowEnrollMFA(Config config) {
         super(config, serviceName);

@@ -87,7 +87,6 @@ public abstract class Client {
             resultResponse.setHttpResponse(httpResponse);
             return resultResponse;
         }
-
         // Process error
         String summary = header.getSummary();
         String status = header.getStatus();

@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum SymmetricAlgorithm {
     AES("aes"),
+    HS256("hs256"),
+    HS384("hs384"),
+    HS512("hs512"),
     ;
 
     private final String text;

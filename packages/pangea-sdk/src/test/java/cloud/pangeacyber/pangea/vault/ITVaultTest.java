@@ -15,17 +15,10 @@ import cloud.pangeacyber.pangea.Utils;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
-import cloud.pangeacyber.pangea.exceptions.ValidationException;
 import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
-import cloud.pangeacyber.pangea.vault.models.AsymmetricGenerateRequest;
-import cloud.pangeacyber.pangea.vault.models.AsymmetricPurpose;
-import cloud.pangeacyber.pangea.vault.models.AsymmetricStoreRequest;
-import cloud.pangeacyber.pangea.vault.models.KeyRotateRequest;
-import cloud.pangeacyber.pangea.vault.models.SecretStoreRequest;
 import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
-import cloud.pangeacyber.pangea.vault.models.SymmetricGenerateRequest;
-import cloud.pangeacyber.pangea.vault.models.SymmetricStoreRequest;
+import cloud.pangeacyber.pangea.vault.requests.*;
+import cloud.pangeacyber.pangea.vault.responses.*;
 
 
 public class ITVaultTest
@@ -49,7 +42,7 @@ public class ITVaultTest
         assertNotNull(encryptResponse1.getResult().getCipherText());
 
         // Rotate
-        KeyRotateResponse rotateResponse = client.keyRotate(new KeyRotateRequest(id));
+        KeyRotateResponse rotateResponse = client.keyRotate(new KeyRotateRequest.KeyRotateRequestBuilder(id).build());
         assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
         assertEquals(id, rotateResponse.getResult().getId());
 
@@ -89,12 +82,11 @@ public class ITVaultTest
 
         // Sign 1
         SignResponse signResponse1 = client.sign(id, data);
-        assertEquals(data, signResponse1.getResult().getId());
         assertEquals(Integer.valueOf(1), signResponse1.getResult().getVersion());
         assertNotNull(signResponse1.getResult().getSignature());
 
         // Rotate
-        KeyRotateResponse rotateResponse = client.keyRotate(new KeyRotateRequest(id));
+        KeyRotateResponse rotateResponse = client.keyRotate(new KeyRotateRequest.KeyRotateRequestBuilder(id).build());
         assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
         assertNotNull(rotateResponse.getResult().getEncodedPublicKey());
 
@@ -132,24 +124,24 @@ public class ITVaultTest
 
 
     @Test
-    public void testAESSigningLifeCycle() throws PangeaException, PangeaAPIException{
+    public void testAESEncryptingLifeCycle() throws PangeaException, PangeaAPIException{
         try{
-            SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest(
-                SymmetricAlgorithm.AES,
-                false,
-                false
-            );
-            generateRequest.setStore(false);
+            SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder()
+                                                            .setAlgorithm(SymmetricAlgorithm.AES)
+                                                            .setStore(false)
+                                                            .setManaged(false)
+                                                            .build();
 
             // Generate without store
             SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
             assertNotNull(generateResp.getResult().getEncodedSymmetricKey());
             assertNull(generateResp.getResult().getId());
-            SymmetricStoreResponse storeResponse = client.symmetricStore(new SymmetricStoreRequest(
-                SymmetricAlgorithm.AES,
-                generateResp.getResult().getEncodedSymmetricKey(),
-                false
-                ));
+            SymmetricStoreResponse storeResponse =
+                client.symmetricStore(new SymmetricStoreRequest.SymmetricStoreRequestBuilder(
+                    SymmetricAlgorithm.AES,
+                    generateResp.getResult().getEncodedSymmetricKey())
+                    .build()
+                );
             assertNotNull(storeResponse.getResult().getId());
             encryptingCycle(storeResponse.getResult().getId());
         } catch(PangeaAPIException e){
@@ -159,29 +151,65 @@ public class ITVaultTest
     }
 
     @Test
+    public void testEd25519SigningLifeCycle() throws PangeaException, PangeaAPIException{
+        try{
+            AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder()
+                                                            .setAlgorithm(AsymmetricAlgorithm.ED25519)
+                                                            .setStore(false)
+                                                            .setManaged(false)
+                                                            .build();
+
+            // Generate without store
+            AsymmetricGenerateResponse generateResp = client.asymmetricGenerate(generateRequest);
+            assertNotNull(generateResp.getResult().getEncodedPrivateKey());
+            assertNotNull(generateResp.getResult().getEncodedPrivateKey());
+            assertNull(generateResp.getResult().getId());
+            AsymmetricStoreResponse storeResponse =
+                client.asymmetricStore(new AsymmetricStoreRequest.AsymmetricStoreRequestBuilder(
+                    AsymmetricAlgorithm.ED25519,
+                    generateResp.getResult().getEncodedPublicKey(),
+                    generateResp.getResult().getEncodedPrivateKey())
+                    .build()
+                );
+            assertNotNull(storeResponse.getResult().getId());
+            signingCycle(storeResponse.getResult().getId());
+        } catch(PangeaAPIException e){
+            System.out.println(e.toString());
+            assertTrue(false);
+        }
+    }
+
+
+    @Test
     public void testSecretLifeCycle() throws PangeaException, PangeaAPIException{
         String secretV1 = "mysecret";
         String secretV2 = "mynewsecret";
+        SecretStoreResponse storeResponse = null;
+        try{
+            storeResponse = client.secretStore(
+                new SecretStoreRequest.SecretStoreRequestBuilder(secretV1)
+                .build()
+            );
+            assertEquals(secretV1, storeResponse.getResult().getSecret());
+            assertEquals(Integer.valueOf(1), storeResponse.getResult().getVersion());
+            assertNotNull(storeResponse.getResult().getId());
 
-        SecretStoreResponse storeResponse = client.secretStore(
-            new SecretStoreRequest(secretV1, false)
-        );
-        assertEquals(secretV1, storeResponse.getResult().getSecret());
-        assertEquals(Integer.valueOf(1), storeResponse.getResult().getVersion());
-        assertNotNull(storeResponse.getResult().getId());
+            SecretRotateResponse rotateResponse = client.secretRotate(
+                storeResponse.getResult().getId(), secretV2);
 
-        SecretRotateResponse rotateResponse = client.secretRotate(
-            storeResponse.getResult().getId(), secretV2);
+            assertEquals(secretV2, rotateResponse.getResult().getSecret());
+            assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
+            assertEquals(storeResponse.getResult().getId(), rotateResponse.getResult().getId());
 
-        assertEquals(secretV2, rotateResponse.getResult().getSecret());
-        assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
-        assertEquals(storeResponse.getResult().getId(), rotateResponse.getResult().getId());
+            GetResponse getResponse = client.get(storeResponse.getResult().getId());
+            assertEquals(secretV2, getResponse.getResult().getSecret());
 
-        GetResponse getResponse = client.get(storeResponse.getResult().getId());
-        assertEquals(secretV2, getResponse.getResult().getSecret());
-
-        RevokeResponse revokeResponse = client.revoke(storeResponse.getResult().getId());
-        assertEquals(storeResponse.getResult().getId(), revokeResponse.getResult().getId());
+            RevokeResponse revokeResponse = client.revoke(storeResponse.getResult().getId());
+            assertEquals(storeResponse.getResult().getId(), revokeResponse.getResult().getId());
+        } catch(PangeaAPIException e){
+            System.out.println(e.toString());
+            assertTrue(false);
+        }
 
         try{
             GetResponse getReponse2 = client.get(storeResponse.getResult().getId());

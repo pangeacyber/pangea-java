@@ -2,17 +2,14 @@ package cloud.pangeacyber.pangea.vault.models;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AsymmetricAlgorithm {
-    ED25519("ed25519"),
-    RSA("rsa"),
-    ES256("es256"),
-    ES384("es384"),
-    ES512("es512"),
+public enum KeyPurpose {
+    SIGNING("signing"),
+    ENCRYPTION("encryption"),
     ;
 
     private final String text;
 
-    AsymmetricAlgorithm(String text) {
+    KeyPurpose(String text) {
         this.text = text;
     }
 
@@ -28,5 +25,4 @@ public enum AsymmetricAlgorithm {
     final String value() {
         return text;
     }
-
 }

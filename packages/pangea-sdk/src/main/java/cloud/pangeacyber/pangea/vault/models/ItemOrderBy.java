@@ -2,17 +2,24 @@ package cloud.pangeacyber.pangea.vault.models;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AsymmetricAlgorithm {
-    ED25519("ed25519"),
-    RSA("rsa"),
-    ES256("es256"),
-    ES384("es384"),
-    ES512("es512"),
+public enum ItemOrderBy {
+    TYPE("type"),
+    CREATED_AT("created_at"),
+    REVOKED_AT("revoked_at"),
+    IDENTITY("identity"),
+    MANAGED("managed"),
+    PURPOSE("purpose"),
+    EXPIRATION("expiration"),
+    LAST_ROTATED("last_rotated"),
+    NEXT_ROTATION("next_rotation"),
+    NAME("name"),
+    FOLDER("folder"),
+    VERSION("version"),
     ;
 
     private final String text;
 
-    AsymmetricAlgorithm(String text) {
+    ItemOrderBy(String text) {
         this.text = text;
     }
 
@@ -28,5 +35,4 @@ public enum AsymmetricAlgorithm {
     final String value() {
         return text;
     }
-
 }

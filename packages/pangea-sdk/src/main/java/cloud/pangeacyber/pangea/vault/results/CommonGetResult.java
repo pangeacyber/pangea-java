@@ -1,10 +1,13 @@
-package cloud.pangeacyber.pangea.vault.models;
+package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-public class ListItemData {
+import cloud.pangeacyber.pangea.vault.models.Metadata;
+import cloud.pangeacyber.pangea.vault.models.Tags;
+
+public class CommonGetResult {
     @JsonProperty("id")
     String id;
 
@@ -13,9 +16,6 @@ public class ListItemData {
 
     @JsonProperty("version")
     Boolean version;
-
-    @JsonProperty("identity")
-    String identity;
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("name")
@@ -65,9 +65,34 @@ public class ListItemData {
     @JsonProperty("revoked_at")
     String revokedAt = null;
 
-    @JsonProperty("managed")
-    Boolean managed;
+    public CommonGetResult() {
+    }
 
+    public CommonGetResult(String id, String type, Boolean version, String name, String folder, Metadata metadata,
+            Tags tags, Boolean autoRotate, String rotationPolicy, String lastRotated, String nextRotation,
+            Boolean retainPreviousVersion, String expiration, String createdAt, String revokedAt) {
+        this.id = id;
+        this.type = type;
+        this.version = version;
+        this.name = name;
+        this.folder = folder;
+        this.metadata = metadata;
+        this.tags = tags;
+        this.autoRotate = autoRotate;
+        this.rotationPolicy = rotationPolicy;
+        this.lastRotated = lastRotated;
+        this.nextRotation = nextRotation;
+        this.retainPreviousVersion = retainPreviousVersion;
+        this.expiration = expiration;
+        this.createdAt = createdAt;
+        this.revokedAt = revokedAt;
+    }
+
+    public CommonGetResult(String id, String type, Boolean version) {
+        this.id = id;
+        this.type = type;
+        this.version = version;
+    }
 
     public String getId() {
         return id;
@@ -127,13 +152,5 @@ public class ListItemData {
 
     public String getRevokedAt() {
         return revokedAt;
-    }
-
-    public String getIdentity() {
-        return identity;
-    }
-
-    public Boolean getManaged() {
-        return managed;
     }
 }

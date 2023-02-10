@@ -4,22 +4,133 @@ import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import cloud.pangeacyber.pangea.vault.models.AsymmetricGenerateRequest;
-import cloud.pangeacyber.pangea.vault.models.AsymmetricStoreRequest;
-import cloud.pangeacyber.pangea.vault.models.DecryptRequest;
-import cloud.pangeacyber.pangea.vault.models.DeleteRequest;
-import cloud.pangeacyber.pangea.vault.models.EncryptRequest;
-import cloud.pangeacyber.pangea.vault.models.GetRequest;
-import cloud.pangeacyber.pangea.vault.models.KeyRotateRequest;
-import cloud.pangeacyber.pangea.vault.models.ListRequest;
-import cloud.pangeacyber.pangea.vault.models.RevokeRequest;
-import cloud.pangeacyber.pangea.vault.models.SecretRotateRequest;
-import cloud.pangeacyber.pangea.vault.models.SecretStoreRequest;
-import cloud.pangeacyber.pangea.vault.models.SignRequest;
-import cloud.pangeacyber.pangea.vault.models.SymmetricGenerateRequest;
-import cloud.pangeacyber.pangea.vault.models.SymmetricStoreRequest;
-import cloud.pangeacyber.pangea.vault.models.VerifyRequest;
+import cloud.pangeacyber.pangea.vault.requests.*;
+import cloud.pangeacyber.pangea.vault.requests.SecretRotateRequest.SecretRotateRequestBuilder;
+import cloud.pangeacyber.pangea.vault.responses.*;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+
+final class GetRequest {
+    @JsonProperty("id")
+    String id;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("version")
+    Integer version = null;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("verbose")
+    Boolean verbose = null;
+
+    public GetRequest(String id, Integer version, Boolean verbose) {
+        this.id = id;
+        this.version = version;
+        this.verbose = verbose;
+    }
+
+    public GetRequest(String id) {
+        this.id = id;
+    }
+}
+
+final class RevokeRequest {
+    @JsonProperty("id")
+    String id;
+
+    public RevokeRequest(String id) {
+        this.id = id;
+    }
+}
+
+
+final class SignRequest {
+    @JsonProperty("id")
+    String id;
+
+    @JsonProperty("message")
+    String message;
+
+    public SignRequest(String id, String message) {
+        this.id = id;
+        this.message = message;
+    }
+}
+
+final class VerifyRequest {
+    @JsonProperty("id")
+    String id;
+
+    @JsonProperty("message")
+    String message;
+
+    @JsonProperty("signature")
+    String signature;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("version")
+    Integer version = null;
+
+    public VerifyRequest(String id, String message, String signature) {
+        this.id = id;
+        this.message = message;
+        this.signature = signature;
+    }
+
+    public VerifyRequest(String id, String message, String signature, Integer version) {
+        this.id = id;
+        this.message = message;
+        this.signature = signature;
+        this.version = version;
+    }
+}
+
+final class EncryptRequest {
+    @JsonProperty("id")
+    String id;
+
+    @JsonProperty("plain_text")
+    String plainText;
+
+    public EncryptRequest(String id, String plainText) {
+        this.id = id;
+        this.plainText = plainText;
+    }
+}
+
+final class DecryptRequest {
+    @JsonProperty("id")
+    String id;
+
+    @JsonProperty("cipher_text")
+    String cipherText;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("version")
+    Integer version = null;
+
+    public DecryptRequest(String id, String cipherText, Integer version) {
+        this.id = id;
+        this.cipherText = cipherText;
+        this.version = version;
+    }
+
+    public DecryptRequest(String id, String cipherText) {
+        this.id = id;
+        this.cipherText = cipherText;
+    }
+}
+
+final class DeleteRequest {
+    @JsonProperty("id")
+    String id;
+
+    public DeleteRequest(String id) {
+        this.id = id;
+    }
+}
 
 public class VaultClient extends Client {
     public static String serviceName = "vault";
@@ -106,7 +217,7 @@ public class VaultClient extends Client {
      * // TODO:
      * }
      */
-    public ListResponse get(ListRequest request) throws PangeaException, PangeaAPIException{
+    public ListResponse list(ListRequest request) throws PangeaException, PangeaAPIException{
         return doPost("/v1/list", request , ListResponse.class);
     }
 
@@ -156,7 +267,7 @@ public class VaultClient extends Client {
      * }
      */
     public SecretRotateResponse secretRotate(String id, String secret) throws PangeaException, PangeaAPIException{
-        return doPost("/v1/secret/rotate", new SecretRotateRequest(id, secret) , SecretRotateResponse.class);
+        return doPost("/v1/secret/rotate", new SecretRotateRequestBuilder(id, secret).build() , SecretRotateResponse.class);
     }
 
     /**

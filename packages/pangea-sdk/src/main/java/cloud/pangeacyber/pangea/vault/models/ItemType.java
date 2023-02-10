@@ -6,7 +6,6 @@ public enum ItemType {
     ASYMMETRIC_KEY("asymmetric_key"),
     SYMMETRIC_KEY("symmetric_key"),
     SECRET("secret"),
-    MASTER_KEY("master_key"),
     ;
 
     private final String text;

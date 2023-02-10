@@ -7,10 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.models.MFAProvider;
-import cloud.pangeacyber.pangea.authn.responses.UserMFADeleteResponse;
-import cloud.pangeacyber.pangea.authn.responses.UserMFAEnrollResponse;
-import cloud.pangeacyber.pangea.authn.responses.UserMFAStartResponse;
-import cloud.pangeacyber.pangea.authn.responses.UserMFAVerifyResponse;
+import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 

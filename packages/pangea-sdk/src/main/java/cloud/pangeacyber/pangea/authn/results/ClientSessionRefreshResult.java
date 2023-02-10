@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import cloud.pangeacyber.pangea.authn.models.LoginToken;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserLoginResult {
+public class ClientSessionRefreshResult {
     @JsonProperty("refresh_token")
     LoginToken refreshToken;
 
@@ -20,5 +20,4 @@ public class UserLoginResult {
     public LoginToken getActiveToken() {
         return activeToken;
     }
-
 }

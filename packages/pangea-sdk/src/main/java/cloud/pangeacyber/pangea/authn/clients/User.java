@@ -7,26 +7,10 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
 import cloud.pangeacyber.pangea.authn.models.Scopes;
 import cloud.pangeacyber.pangea.authn.requests.UserCreateRequest;
-import cloud.pangeacyber.pangea.authn.requests.UserLoginRequest;
 import cloud.pangeacyber.pangea.authn.requests.UserUpdateRequest;
-import cloud.pangeacyber.pangea.authn.responses.UserCreateResponse;
-import cloud.pangeacyber.pangea.authn.responses.UserDeleteResponse;
-import cloud.pangeacyber.pangea.authn.responses.UserInviteResponse;
-import cloud.pangeacyber.pangea.authn.responses.UserListResponse;
-import cloud.pangeacyber.pangea.authn.responses.UserLoginResponse;
-import cloud.pangeacyber.pangea.authn.responses.UserUpdateResponse;
-import cloud.pangeacyber.pangea.authn.responses.UserVerifyResponse;
+import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
-
-final class IsoCheckRequest {
-    @JsonProperty("iso_code")
-    String isoCode;
-
-    public IsoCheckRequest(String isoCode) {
-        this.isoCode = isoCode;
-    }
-}
 
 final class UserDeleteRequest {
     @JsonProperty("email")
@@ -73,12 +57,14 @@ public class User extends Client {
     private UserProfile profile;
     private UserInvite invite;
     private UserMFA mfa;
+    private UserLogin login;
 
     public User(Config config) {
         super(config, serviceName);
         profile = new UserProfile(config);
         invite = new UserInvite(config);
         mfa = new UserMFA(config);
+        login = new UserLogin(config);
     }
 
     // TODO: Doc
@@ -109,11 +95,6 @@ public class User extends Client {
     }
 
     // TODO: Doc
-    public UserLoginResponse invite(UserLoginRequest request) throws PangeaException, PangeaAPIException{
-        return doPost("/v1/user/login", request, UserLoginResponse.class);
-    }
-
-    // TODO: Doc
     public UserVerifyResponse verify(IDProvider idProvider, String email, String authenticator) throws PangeaException, PangeaAPIException{
         UserVerifyRequest request = new UserVerifyRequest(idProvider, email, authenticator);
         return doPost("/v1/user/verify", request, UserVerifyResponse.class);
@@ -129,5 +110,9 @@ public class User extends Client {
 
     public UserMFA mfa() {
         return mfa;
+    }
+
+    public UserLogin login() {
+        return login;
     }
 }

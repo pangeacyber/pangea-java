@@ -7,7 +7,7 @@ import cloud.pangeacyber.pangea.authn.models.Profile;
 import cloud.pangeacyber.pangea.authn.models.Scopes;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserinfoResult {
+public class ClientUserinfoResult {
     @JsonProperty("token")
     String token;
 

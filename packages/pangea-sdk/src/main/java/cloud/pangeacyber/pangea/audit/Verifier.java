@@ -11,7 +11,13 @@ public class Verifier {
     public EventVerification verify(String pubKeyBase64, String signatureBase64, String message){
         // verify the signature
         Signer verifier = new Ed25519Signer();
-        Ed25519PublicKeyParameters pubKey = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(pubKeyBase64));
+        Ed25519PublicKeyParameters pubKey = null;
+        try{
+            pubKey = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(pubKeyBase64));
+        } catch(IllegalArgumentException e){
+            return EventVerification.FAILED;
+        }
+
         verifier.init(false, pubKey);
         byte[] byteMessage;
         try{

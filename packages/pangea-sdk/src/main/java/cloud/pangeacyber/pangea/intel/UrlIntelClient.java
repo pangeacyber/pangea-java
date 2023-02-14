@@ -74,7 +74,7 @@ public class UrlIntelClient extends Client{
     }
 
     /**
-     * Look up a URL
+     * URL reputation
      * @pangea.description Retrieve a reputation score for a URL from a provider, including an optional detailed report.
      * @deprecated use reputation instead.
      * @param url The URL to be looked up
@@ -92,7 +92,7 @@ public class UrlIntelClient extends Client{
     }
 
     /**
-     * Look up a URL - provider
+     * URL reputation - provider
      * @pangea.description Retrieve a reputation score for a URL from a provider, including an optional detailed report.
      * @deprecated use reputation instead.
      * @param url The URL to be looked up
@@ -112,7 +112,7 @@ public class UrlIntelClient extends Client{
     }
 
     /**
-     * Look up a URL - verbose, raw
+     * URL reputation - verbose, raw
      * @pangea.description Retrieve a reputation score for a URL from a provider, including an optional detailed report.
      * @deprecated use reputation instead.
      * @param url The URL to be looked up
@@ -134,7 +134,7 @@ public class UrlIntelClient extends Client{
     }
 
     /**
-     * Look up a URL - provider, verbose, raw
+     * URL reputation - provider, verbose, raw
      * @pangea.description Retrieve a reputation score for a URL from a provider, including an optional detailed report.
      * @deprecated use reputation instead.
      * @param url The URL to be looked up
@@ -164,7 +164,7 @@ public class UrlIntelClient extends Client{
     }
 
     /**
-     * Look up a URL
+     * URL reputation
      * @pangea.description Retrieve a reputation score for a URL from a provider, including an optional detailed report.
      * @param url The URL to be looked up
      * @return URLReputationResponse
@@ -181,7 +181,7 @@ public class UrlIntelClient extends Client{
     }
 
     /**
-     * Look up a URL - provider
+     * URL reputation - provider
      * @pangea.description Retrieve a reputation score for a URL from a provider, including an optional detailed report.
      * @param url The URL to be looked up
      * @param provider Use reputation data from this provider
@@ -200,7 +200,7 @@ public class UrlIntelClient extends Client{
     }
 
     /**
-     * Look up a URL - verbose, raw
+     * URL reputation - verbose, raw
      * @pangea.description Retrieve a reputation score for a URL from a provider, including an optional detailed report.
      * @param url The URL to be looked up
      * @param verbose Echo the API parameters in the response
@@ -221,7 +221,7 @@ public class UrlIntelClient extends Client{
     }
 
     /**
-     * Look up a URL - provider, verbose, raw
+     * URL reputation - provider, verbose, raw
      * @pangea.description Retrieve a reputation score for a URL from a provider, including an optional detailed report.
      * @param url The URL to be looked up
      * @param provider Use reputation data from this provider

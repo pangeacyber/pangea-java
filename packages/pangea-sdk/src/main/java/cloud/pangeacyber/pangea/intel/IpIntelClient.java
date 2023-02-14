@@ -80,7 +80,7 @@ public class IpIntelClient extends Client{
     }
 
     /**
-     * Look up an IP
+     * IP reputation
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
      * @deprecated use reputation instead.
      * @param ip The IP to be looked up
@@ -99,7 +99,7 @@ public class IpIntelClient extends Client{
     }
 
     /**
-     * Look up an IP - provider
+     * IP reputation - provider
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
      * @deprecated use reputation instead.
      * @param ip The IP to be looked up
@@ -120,7 +120,7 @@ public class IpIntelClient extends Client{
     }
 
     /**
-     * Look up an IP - verbose, raw
+     * IP reputation - verbose, raw
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
      * @deprecated use reputation instead.
      * @param ip The IP to be looked up
@@ -143,7 +143,7 @@ public class IpIntelClient extends Client{
     }
 
     /**
-     * Look up an IP - provider, verbose, raw
+     * IP reputation - provider, verbose, raw
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
      * @deprecated use reputation instead.
      * @param ip The IP to be looked up
@@ -168,7 +168,7 @@ public class IpIntelClient extends Client{
     }
 
     /**
-     * Look up an IP
+     * IP reputation
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
      * @param ip The IP to be looked up
      * @return IpReputationResponse
@@ -185,7 +185,7 @@ public class IpIntelClient extends Client{
     }
 
     /**
-     * Look up an IP - provider
+     * IP reputation - provider
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
      * @param ip The IP to be looked up
      * @param provider Use reputation data from this provider
@@ -204,7 +204,7 @@ public class IpIntelClient extends Client{
     }
 
     /**
-     * Look up an IP - verbose, raw
+     * IP reputation - verbose, raw
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
      * @param ip The IP to be looked up
      * @param verbose Echo the API parameters in the response
@@ -225,7 +225,7 @@ public class IpIntelClient extends Client{
     }
 
     /**
-     * Look up an IP - provider, verbose, raw
+     * IP reputation - provider, verbose, raw
      * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
      * @param ip The IP to be looked up
      * @param provider Use reputation data from this provider

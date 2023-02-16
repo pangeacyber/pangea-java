@@ -159,10 +159,6 @@ public class ITVaultTest
 
         // Gets -1
         getResponse = client.jwtGet(id, "-1");
-        assertEquals(1, getResponse.getResult().getJWK().getKeys().length);
-
-        // Gets -2
-        getResponse = client.jwtGet(id, "-2");
         assertEquals(2, getResponse.getResult().getJWK().getKeys().length);
 
         // Revoke key

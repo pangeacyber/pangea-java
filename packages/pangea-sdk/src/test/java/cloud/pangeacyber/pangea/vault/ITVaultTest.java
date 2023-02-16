@@ -16,6 +16,7 @@ import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
+import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
 import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.responses.*;
@@ -77,7 +78,7 @@ public class ITVaultTest
 
     }
 
-    private void signingCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
+    private void asymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
         String data = "thisisamessagetosign";
 
         // Sign 1
@@ -120,6 +121,57 @@ public class ITVaultTest
         assertEquals(Integer.valueOf(1), verifyResponseAfterRevoke.getResult().getVersion());
         assertTrue(verifyResponseAfterRevoke.getResult().isValidSignature());
 
+    }
+
+    private void jwtSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
+        String payload =
+            """
+            {'message': 'message to sign', 'data': 'Some extra data'}
+            """;
+
+        // Sign 1
+        JWTSignResponse signResponse1 = client.jwtSign(id, payload);
+        assertNotNull(signResponse1.getResult().getJws());
+
+        // Rotate
+        KeyRotateResponse rotateResponse = client.keyRotate(new KeyRotateRequest.KeyRotateRequestBuilder(id).build());
+        assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
+
+        // Sign 2
+        JWTSignResponse signResponse2 = client.jwtSign(id, payload);
+        assertNotNull(signResponse2.getResult().getJws());
+
+        // Verify 1
+        JWTVerifyResponse verifyResponse1 = client.jwtVerify(signResponse1.getResult().getJws());
+        assertTrue(verifyResponse1.getResult().isValidSignature());
+
+        // Verify 2
+        JWTVerifyResponse verifyResponse2 = client.jwtVerify(signResponse2.getResult().getJws());
+        assertTrue(verifyResponse2.getResult().isValidSignature());
+
+        // Gets default
+        JWTGetResponse getResponse = client.jwtGet(id);
+        assertEquals(1, getResponse.getResult().getJWK().getKeys().length);
+
+        // Gets all
+        getResponse = client.jwtGet(id, "all");
+        assertEquals(2, getResponse.getResult().getJWK().getKeys().length);
+
+        // Gets -1
+        getResponse = client.jwtGet(id, "-1");
+        assertEquals(1, getResponse.getResult().getJWK().getKeys().length);
+
+        // Gets -2
+        getResponse = client.jwtGet(id, "-2");
+        assertEquals(2, getResponse.getResult().getJWK().getKeys().length);
+
+        // Revoke key
+        RevokeResponse revokeResponse = client.revoke(id);
+        assertEquals(id, revokeResponse.getResult().getId());
+
+        // Verify after revoke
+        JWTVerifyResponse verifyResponseAfterRevoke = client.jwtVerify(signResponse1.getResult().getJws());
+        assertTrue(verifyResponseAfterRevoke.getResult().isValidSignature());
     }
 
 
@@ -172,13 +224,76 @@ public class ITVaultTest
                     .build()
                 );
             assertNotNull(storeResponse.getResult().getId());
-            signingCycle(storeResponse.getResult().getId());
+            asymSigningCycle(storeResponse.getResult().getId());
         } catch(PangeaAPIException e){
             System.out.println(e.toString());
             assertTrue(false);
         }
     }
 
+    @Test
+    public void testJWTasymES256SigningLifeCycle() throws PangeaException, PangeaAPIException{
+        KeyPurpose purpose = KeyPurpose.JWT;
+        AsymmetricAlgorithm algorithm = AsymmetricAlgorithm.ES256;
+        try{
+            AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder()
+                                                            .setAlgorithm(algorithm)
+                                                            .setPurpose(purpose)
+                                                            .setStore(false)
+                                                            .setManaged(false)
+                                                            .build();
+
+            // Generate without store
+            AsymmetricGenerateResponse generateResp = client.asymmetricGenerate(generateRequest);
+            assertNotNull(generateResp.getResult().getEncodedPrivateKey());
+            assertNotNull(generateResp.getResult().getEncodedPrivateKey());
+            assertNull(generateResp.getResult().getId());
+            AsymmetricStoreResponse storeResponse =
+                client.asymmetricStore(new AsymmetricStoreRequest.AsymmetricStoreRequestBuilder(
+                    algorithm,
+                    generateResp.getResult().getEncodedPublicKey(),
+                    generateResp.getResult().getEncodedPrivateKey())
+                    .setPurpose(purpose)
+                    .build()
+                );
+            assertNotNull(storeResponse.getResult().getId());
+            jwtSigningCycle(storeResponse.getResult().getId());
+        } catch(PangeaAPIException e){
+            System.out.println(e.toString());
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testJWTsymHS256SigningLifeCycle() throws PangeaException, PangeaAPIException{
+        KeyPurpose purpose = KeyPurpose.JWT;
+        SymmetricAlgorithm algorithm = SymmetricAlgorithm.HS256;
+        try{
+            SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder()
+                                                            .setAlgorithm(algorithm)
+                                                            .setPurpose(purpose)
+                                                            .setStore(false)
+                                                            .setManaged(false)
+                                                            .build();
+
+            // Generate without store
+            SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
+            assertNotNull(generateResp.getResult().getEncodedSymmetricKey());
+            assertNull(generateResp.getResult().getId());
+            SymmetricStoreResponse storeResponse =
+                client.symmetricStore(new SymmetricStoreRequest.SymmetricStoreRequestBuilder(
+                    algorithm,
+                    generateResp.getResult().getEncodedSymmetricKey())
+                    .setPurpose(purpose)
+                    .build()
+                );
+            assertNotNull(storeResponse.getResult().getId());
+            jwtSigningCycle(storeResponse.getResult().getId());
+        } catch(PangeaAPIException e){
+            System.out.println(e.toString());
+            assertTrue(false);
+        }
+    }
 
     @Test
     public void testSecretLifeCycle() throws PangeaException, PangeaAPIException{
@@ -211,11 +326,8 @@ public class ITVaultTest
             assertTrue(false);
         }
 
-        try{
-            GetResponse getReponse2 = client.get(storeResponse.getResult().getId());
-            assertTrue(false);
-        } catch (PangeaAPIException e){
-            assertTrue(true);
-        }
+        GetResponse getReponse2 = client.get(storeResponse.getResult().getId());
+        assertNotNull(getReponse2.getResult().getSecret());
+
     }
 }

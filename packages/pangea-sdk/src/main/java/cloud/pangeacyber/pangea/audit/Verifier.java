@@ -33,7 +33,7 @@ public class Verifier {
         Signer verifier = new Ed25519Signer();
         Ed25519PublicKeyParameters pubKey = null;
         try{
-            pubKey = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(pubKeyBase64));
+            pubKey = new Ed25519PublicKeyParameters(pubKeyBytes);
         } catch(IllegalArgumentException e){
             return EventVerification.FAILED;
         }

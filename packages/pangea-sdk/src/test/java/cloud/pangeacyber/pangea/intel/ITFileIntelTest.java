@@ -69,7 +69,7 @@ public class ITFileIntelTest {
     public void testFileLookupMalicious_4() throws PangeaException, PangeaAPIException {
         // Default provider, no verbose by default, no raw data by default
         FileLookupResponse response = client.lookup("142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", "sha256");
-        
+
         // NOTE: because we're using the default provider in this test,
         // the resulting verdict can change based on the provider set as default
         // so only assert the response is successful
@@ -111,7 +111,7 @@ public class ITFileIntelTest {
         assertTrue(response.isOk());
 
         IntelLookupData data = response.getResult().getData();
-        assertEquals("", data.getVerdict());
+        assertEquals("unknown", data.getVerdict());
         assertEquals("Not Provided", data.getCategory()[0]);
         assertNotNull(response.getResult().getParameters());
         assertNotNull(response.getResult().getRawData());

@@ -26,7 +26,7 @@ public class SecretStoreRequest extends CommonStoreRequest{
         return retainPreviousVersion;
     }
 
-    public static class SecretStoreRequestBuilder extends CommonStoreRequestBuilder {
+    public static class SecretStoreRequestBuilder extends CommonStoreRequestBuilder<SecretStoreRequestBuilder> {
         String secret = null;
         Boolean retainPreviousVersion = null;
 

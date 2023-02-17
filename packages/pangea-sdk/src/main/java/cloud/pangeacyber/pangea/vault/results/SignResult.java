@@ -1,4 +1,4 @@
-package cloud.pangeacyber.pangea.vault.models;
+package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -36,6 +36,20 @@ final class GetRequest {
     }
 }
 
+final class JWKGetRequest {
+    @JsonProperty("id")
+    String id;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("version")
+    String version = null;
+
+    public JWKGetRequest(String id, String version) {
+        this.id = id;
+        this.version = version;
+    }
+}
+
 final class RevokeRequest {
     @JsonProperty("id")
     String id;
@@ -44,7 +58,6 @@ final class RevokeRequest {
         this.id = id;
     }
 }
-
 
 final class SignRequest {
     @JsonProperty("id")
@@ -58,6 +71,20 @@ final class SignRequest {
         this.message = message;
     }
 }
+
+final class JWTSignRequest {
+    @JsonProperty("id")
+    String id;
+
+    @JsonProperty("payload")
+    String payload;
+
+    public JWTSignRequest(String id, String payload) {
+        this.id = id;
+        this.payload = payload;
+    }
+}
+
 
 final class VerifyRequest {
     @JsonProperty("id")
@@ -86,6 +113,16 @@ final class VerifyRequest {
         this.version = version;
     }
 }
+
+final class JWTVerifyRequest {
+    @JsonProperty("jws")
+    String jws;
+
+    public JWTVerifyRequest(String jws) {
+        this.jws = jws;
+    }
+}
+
 
 final class EncryptRequest {
     @JsonProperty("id")
@@ -254,11 +291,27 @@ public class VaultClient extends Client {
     }
 
     /**
+     * Store a Pangea Token
+     * @pangea.description Store a pangea token in vault service
+     * @param request - request parameters to send to /secret/store endpoint
+     * @return SecretStoreResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * // TODO:
+     * }
+     */
+    public SecretStoreResponse pangeaTokenStore(PangeaTokenStoreRequest request) throws PangeaException, PangeaAPIException{
+        return doPost("/v1/secret/store", request , SecretStoreResponse.class);
+    }
+
+    /**
      * Rotate a secret
      * @pangea.description Rotate a secret in vault service
      * @param id - secret id to rotate
      * @param secret - new secret value
-     * @return SecretStoreResponse
+     * @return SecretRotateResponse
      * @throws PangeaException
      * @throws PangeaAPIException
      * @pangea.code
@@ -269,6 +322,23 @@ public class VaultClient extends Client {
     public SecretRotateResponse secretRotate(String id, String secret) throws PangeaException, PangeaAPIException{
         return doPost("/v1/secret/rotate", new SecretRotateRequestBuilder(id, secret).build() , SecretRotateResponse.class);
     }
+
+    /**
+     * Rotate a Pangea Token
+     * @pangea.description Rotate a Pangea Token in vault service
+     * @param id - pangea token id to rotate
+     * @return SecretRotateResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * // TODO:
+     * }
+     */
+    public SecretRotateResponse pangeaTokenRotate(String id) throws PangeaException, PangeaAPIException{
+        return doPost("/v1/secret/rotate", new SecretRotateRequestBuilder(id, null).build() , SecretRotateResponse.class);
+    }
+
 
     /**
      * Generate a symmetric key
@@ -420,6 +490,24 @@ public class VaultClient extends Client {
     }
 
     /**
+     * Sign with JWT
+     * @pangea.description sign a payload with a JWT
+     * @param id - key id to sign payload
+     * @param payload - message to sign
+     * @return JWTSignResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * // TODO:
+     * }
+     */
+    public JWTSignResponse jwtSign(String id, String payload) throws PangeaException, PangeaAPIException{
+        return doPost("/v1/key/sign/jwt", new JWTSignRequest(id, payload) , JWTSignResponse.class);
+    }
+
+
+    /**
      * Verify
      * @pangea.description Verify a message/signature pair
      * @param id - key id to verify message/signature
@@ -437,7 +525,7 @@ public class VaultClient extends Client {
         return doPost("/v1/key/verify", new VerifyRequest(id, message, signature) , VerifyResponse.class);
     }
 
-        /**
+    /**
      * Verify
      * @pangea.description Verify a message/signature pair
      * @param id - key id to verify message/signature
@@ -454,6 +542,55 @@ public class VaultClient extends Client {
      */
     public VerifyResponse verify(String id, String message, String signature, Integer version) throws PangeaException, PangeaAPIException{
         return doPost("/v1/key/verify", new VerifyRequest(id, message, signature, version) , VerifyResponse.class);
+    }
+
+    /**
+     * Verify a JWT signature
+     * @pangea.description Verify a JWS
+     * @param jws - signature to verify
+     * @return JWTVerifyResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * // TODO:
+     * }
+     */
+    public JWTVerifyResponse jwtVerify(String jws) throws PangeaException, PangeaAPIException{
+        return doPost("/v1/key/verify/jwt", new JWTVerifyRequest(jws) , JWTVerifyResponse.class);
+    }
+
+    /**
+     * Get JWK
+     * @pangea.description Get a JWK
+     * @param id - item id to get
+     * @return GetResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * // TODO:
+     * }
+     */
+    public JWKGetResponse jwkGet(String id) throws PangeaException, PangeaAPIException{
+        return doPost("/v1/get/jwk", new JWKGetRequest(id, null) , JWKGetResponse.class);
+    }
+
+    /**
+     * Get JWK
+     * @pangea.description Get a JWK
+     * @param id - item id to get
+     * @param version - item version/versions to get
+     * @return GetResponse
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     * @pangea.code
+     * {@code
+     * // TODO:
+     * }
+     */
+    public JWKGetResponse jwkGet(String id, String version) throws PangeaException, PangeaAPIException{
+        return doPost("/v1/get/jwk", new JWKGetRequest(id, version) , JWKGetResponse.class);
     }
 
 

@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cloud.pangeacyber.pangea.vault.models.JWKSet;
 
-public class JWTGetResult {
+public class JWKGetResult {
     @JsonProperty("jwk")
     JWKSet jwk;
 
-    public JWTGetResult() {
+    public JWKGetResult() {
     }
 
     public JWKSet getJWK() {

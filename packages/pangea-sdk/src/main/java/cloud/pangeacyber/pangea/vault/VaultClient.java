@@ -36,7 +36,7 @@ final class GetRequest {
     }
 }
 
-final class JWTGetRequest {
+final class JWKGetRequest {
     @JsonProperty("id")
     String id;
 
@@ -44,7 +44,7 @@ final class JWTGetRequest {
     @JsonProperty("version")
     String version = null;
 
-    public JWTGetRequest(String id, String version) {
+    public JWKGetRequest(String id, String version) {
         this.id = id;
         this.version = version;
     }
@@ -572,8 +572,8 @@ public class VaultClient extends Client {
      * // TODO:
      * }
      */
-    public JWTGetResponse jwtGet(String id) throws PangeaException, PangeaAPIException{
-        return doPost("/v1/get/jwk", new JWTGetRequest(id, null) , JWTGetResponse.class);
+    public JWKGetResponse jwkGet(String id) throws PangeaException, PangeaAPIException{
+        return doPost("/v1/get/jwk", new JWKGetRequest(id, null) , JWKGetResponse.class);
     }
 
     /**
@@ -589,8 +589,8 @@ public class VaultClient extends Client {
      * // TODO:
      * }
      */
-    public JWTGetResponse jwtGet(String id, String version) throws PangeaException, PangeaAPIException{
-        return doPost("/v1/get/jwk", new JWTGetRequest(id, version) , JWTGetResponse.class);
+    public JWKGetResponse jwkGet(String id, String version) throws PangeaException, PangeaAPIException{
+        return doPost("/v1/get/jwk", new JWKGetRequest(id, version) , JWKGetResponse.class);
     }
 
 

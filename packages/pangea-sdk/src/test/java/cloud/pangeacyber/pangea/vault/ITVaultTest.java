@@ -150,15 +150,15 @@ public class ITVaultTest
         assertTrue(verifyResponse2.getResult().isValidSignature());
 
         // Gets default
-        JWTGetResponse getResponse = client.jwtGet(id);
+        JWKGetResponse getResponse = client.jwkGet(id);
         assertEquals(1, getResponse.getResult().getJWK().getKeys().length);
 
         // Gets all
-        getResponse = client.jwtGet(id, "all");
+        getResponse = client.jwkGet(id, "all");
         assertEquals(2, getResponse.getResult().getJWK().getKeys().length);
 
         // Gets -1
-        getResponse = client.jwtGet(id, "-1");
+        getResponse = client.jwkGet(id, "-1");
         assertEquals(2, getResponse.getResult().getJWK().getKeys().length);
 
         // Revoke key

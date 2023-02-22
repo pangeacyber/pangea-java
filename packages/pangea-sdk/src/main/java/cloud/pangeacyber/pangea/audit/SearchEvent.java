@@ -1,130 +1,129 @@
 package cloud.pangeacyber.pangea.audit;
-import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
 import cloud.pangeacyber.pangea.audit.utils.ConsistencyProof;
 import cloud.pangeacyber.pangea.audit.utils.Verification;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchEvent {
-    @JsonProperty("envelope")
-    Object rawEnvelope;
 
-    EventEnvelope eventEnvelope;
+	@JsonProperty("envelope")
+	Object rawEnvelope;
 
-    @JsonProperty("hash")
-    String hash;
+	EventEnvelope eventEnvelope;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("leaf_index")
-    Integer leafIndex;
+	@JsonProperty("hash")
+	String hash;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("membership_proof")
-    String membershipProof;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("leaf_index")
+	Integer leafIndex;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("published")
-    Boolean published;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("membership_proof")
+	String membershipProof;
 
-    @JsonIgnore
-    EventVerification membershipVerification = EventVerification.NOT_VERIFIED;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("published")
+	Boolean published;
 
-    @JsonIgnore
-    EventVerification consistencyVerification = EventVerification.NOT_VERIFIED;
+	@JsonIgnore
+	EventVerification membershipVerification = EventVerification.NOT_VERIFIED;
 
-    @JsonIgnore
-    EventVerification signatureVerification = EventVerification.NOT_VERIFIED;
+	@JsonIgnore
+	EventVerification consistencyVerification = EventVerification.NOT_VERIFIED;
 
-    public Object getRawEnvelope() {
-        return rawEnvelope;
-    }
+	@JsonIgnore
+	EventVerification signatureVerification = EventVerification.NOT_VERIFIED;
 
-    public EventEnvelope getEventEnvelope() {
-        return eventEnvelope;
-    }
+	public Object getRawEnvelope() {
+		return rawEnvelope;
+	}
 
-    public void setEventEnvelope(EventEnvelope eventEnvelope) {
-        this.eventEnvelope = eventEnvelope;
-    }
+	public EventEnvelope getEventEnvelope() {
+		return eventEnvelope;
+	}
 
-    public String getHash() {
-        return hash;
-    }
+	public void setEventEnvelope(EventEnvelope eventEnvelope) {
+		this.eventEnvelope = eventEnvelope;
+	}
 
-    public Integer getLeafIndex() {
-        return leafIndex;
-    }
+	public String getHash() {
+		return hash;
+	}
 
-    public String getMembershipProof() {
-        return membershipProof;
-    }
+	public Integer getLeafIndex() {
+		return leafIndex;
+	}
 
-    public boolean isPublished() {
-        return published == true;
-    }
+	public String getMembershipProof() {
+		return membershipProof;
+	}
 
-    public EventVerification getMembershipVerification() {
-        return membershipVerification;
-    }
+	public boolean isPublished() {
+		return published == true;
+	}
 
-    public EventVerification getConsistencyVerification() {
-        return consistencyVerification;
-    }
+	public EventVerification getMembershipVerification() {
+		return membershipVerification;
+	}
 
-    public EventVerification getSignatureVerification() {
-        return signatureVerification;
-    }
+	public EventVerification getConsistencyVerification() {
+		return consistencyVerification;
+	}
 
-    public void verifySignature() {
-        if(this.eventEnvelope != null){
-            this.signatureVerification = this.eventEnvelope.verifySignature();
-        } else {
-            this.signatureVerification = EventVerification.NOT_VERIFIED;
-        }
-    }
+	public EventVerification getSignatureVerification() {
+		return signatureVerification;
+	}
 
-    public void verifyConsistency(Map<Integer, PublishedRoot> publishedRoots){
-        // This should never happen.
-        if(!isPublished() || leafIndex == null){
-            this.consistencyVerification = EventVerification.NOT_VERIFIED;
-            return;
-        }
+	public void verifySignature() {
+		if (this.eventEnvelope != null) {
+			this.signatureVerification = this.eventEnvelope.verifySignature();
+		} else {
+			this.signatureVerification = EventVerification.NOT_VERIFIED;
+		}
+	}
 
-        if(leafIndex == 0){
-            this.consistencyVerification = EventVerification.SUCCESS;
-            return;
-        }
+	public void verifyConsistency(Map<Integer, PublishedRoot> publishedRoots) {
+		// This should never happen.
+		if (!isPublished() || leafIndex == null) {
+			this.consistencyVerification = EventVerification.NOT_VERIFIED;
+			return;
+		}
 
-        if(leafIndex < 0){
-            this.consistencyVerification = EventVerification.FAILED;
-            return;
-        }
+		if (leafIndex == 0) {
+			this.consistencyVerification = EventVerification.SUCCESS;
+			return;
+		}
 
-        if(!publishedRoots.containsKey(leafIndex) || !publishedRoots.containsKey(leafIndex+1)){
-            this.consistencyVerification = EventVerification.NOT_VERIFIED;
-            return;
-        }
+		if (leafIndex < 0) {
+			this.consistencyVerification = EventVerification.FAILED;
+			return;
+		}
 
-        PublishedRoot currRoot = publishedRoots.get(leafIndex+1);
-        PublishedRoot prevRoot = publishedRoots.get(leafIndex);
-        ConsistencyProof proof = Verification.decodeConsistencyProof(currRoot.getConsistencyProof());
-        this.consistencyVerification = Verification.verifyConsistencyProof(currRoot.getRootHash(), prevRoot.getRootHash(), proof);
-    }
+		if (!publishedRoots.containsKey(leafIndex) || !publishedRoots.containsKey(leafIndex + 1)) {
+			this.consistencyVerification = EventVerification.NOT_VERIFIED;
+			return;
+		}
 
-    public void verifyMembershipProof(String rootHashEnc){
-        if(this.membershipProof == null){
-            this.membershipVerification = EventVerification.NOT_VERIFIED;
-            return;
-        }
-        this.membershipVerification = Verification.verifyMembershipProof(rootHashEnc, this.hash, this.membershipProof);
-    }
+		PublishedRoot currRoot = publishedRoots.get(leafIndex + 1);
+		PublishedRoot prevRoot = publishedRoots.get(leafIndex);
+		ConsistencyProof proof = Verification.decodeConsistencyProof(currRoot.getConsistencyProof());
+		this.consistencyVerification =
+			Verification.verifyConsistencyProof(currRoot.getRootHash(), prevRoot.getRootHash(), proof);
+	}
 
+	public void verifyMembershipProof(String rootHashEnc) {
+		if (this.membershipProof == null) {
+			this.membershipVerification = EventVerification.NOT_VERIFIED;
+			return;
+		}
+		this.membershipVerification = Verification.verifyMembershipProof(rootHashEnc, this.hash, this.membershipProof);
+	}
 }

@@ -2,52 +2,53 @@ package cloud.pangeacyber.pangea.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Root {
-    @JsonProperty("tree_name")
-    String treeName;
 
-    @JsonProperty("size")
-    int size;
+	@JsonProperty("tree_name")
+	String treeName;
 
-    @JsonProperty("root_hash")
-    String rootHash;
+	@JsonProperty("size")
+	int size;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("url")
-    String url;
+	@JsonProperty("root_hash")
+	String rootHash;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("published_at")
-    String publishedAt;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("url")
+	String url;
 
-    @JsonProperty("consistency_proof")
-    String[] consistencyProof;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("published_at")
+	String publishedAt;
 
-    public String getTreeName() {
-        return treeName;
-    }
+	@JsonProperty("consistency_proof")
+	String[] consistencyProof;
 
-    public int getSize() {
-        return size;
-    }
+	public String getTreeName() {
+		return treeName;
+	}
 
-    public String getRootHash() {
-        return rootHash;
-    }
+	public int getSize() {
+		return size;
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public String getRootHash() {
+		return rootHash;
+	}
 
-    public String getPublishedAt() {
-        return publishedAt;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public String[] getConsistencyProof() {
-        return consistencyProof;
-    }
+	public String getPublishedAt() {
+		return publishedAt;
+	}
+
+	public String[] getConsistencyProof() {
+		return consistencyProof;
+	}
 }

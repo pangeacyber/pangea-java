@@ -5,24 +5,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IntelReputationData {
-    @JsonProperty("category")
-    String[] category;
 
-    @JsonProperty("score")
-    int score;
+	@JsonProperty("category")
+	String[] category;
 
-    @JsonProperty("verdict")
-    String verdict;
+	@JsonProperty("score")
+	int score;
 
-    public String[] getCategory() {
-        return category;
-    }
+	@JsonProperty("verdict")
+	String verdict;
 
-    public int getScore() {
-        return score;
-    }
+	public String[] getCategory() {
+		return category;
+	}
 
-    public String getVerdict() {
-        return verdict;
-    }
+	public int getScore() {
+		return score;
+	}
+
+	public String getVerdict() {
+		return verdict;
+	}
 }

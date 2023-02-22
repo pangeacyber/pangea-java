@@ -152,7 +152,7 @@ public class ITFileIntelTest {
 		assertTrue(response.isOk());
 
 		IntelLookupData data = response.getResult().getData();
-		assertEquals("", data.getVerdict());
+		assertEquals("unknown", data.getVerdict());
 		assertEquals("Not Provided", data.getCategory()[0]);
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
@@ -280,7 +280,7 @@ public class ITFileIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("", data.getVerdict());
+		assertEquals("unknown", data.getVerdict());
 		assertEquals("Not Provided", data.getCategory()[0]);
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());

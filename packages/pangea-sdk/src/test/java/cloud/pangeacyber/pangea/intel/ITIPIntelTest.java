@@ -27,6 +27,7 @@ public class ITIPIntelTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new IpIntelClient(Config.fromIntegrationEnvironment(environment));
+		client.setCustomUserAgent("test");
 	}
 
 	@Test

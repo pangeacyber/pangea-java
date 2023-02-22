@@ -31,7 +31,9 @@ public class ITAuditTest {
 	public void setUp() throws ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		client = new AuditClient(cfg);
+		client.setCustomUserAgent("test");
 		signClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
+		signClient.setCustomUserAgent("test");
 	}
 
 	@Test

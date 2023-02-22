@@ -28,6 +28,7 @@ public class ITFileIntelTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new FileIntelClient(Config.fromIntegrationEnvironment(environment));
+		client.setCustomUserAgent("test");
 	}
 
 	@Test

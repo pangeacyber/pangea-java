@@ -27,6 +27,7 @@ public class ITURLIntelTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new UrlIntelClient(Config.fromIntegrationEnvironment(environment));
+		client.setCustomUserAgent("test");
 	}
 
 	@Test

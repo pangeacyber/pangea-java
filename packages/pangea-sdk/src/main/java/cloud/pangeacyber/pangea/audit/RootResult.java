@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RootResult {
-    @JsonProperty("data")
-    Root root;
 
-    public Root getRoot() {
-        return root;
-    }
+	@JsonProperty("data")
+	Root root;
+
+	public Root getRoot() {
+		return root;
+	}
 }

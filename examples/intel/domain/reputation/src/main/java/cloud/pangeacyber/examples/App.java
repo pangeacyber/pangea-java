@@ -1,7 +1,7 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.DomainIntelClient;
-import cloud.pangeacyber.pangea.intel.DomainLookupResponse;
+import cloud.pangeacyber.pangea.intel.models.DomainReputationResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 
@@ -18,16 +18,16 @@ public class App
         }
 
         DomainIntelClient client = new DomainIntelClient(cfg);
-        DomainLookupResponse response = null;
+        DomainReputationResponse response = null;
         try {
-            response = client.lookup("737updatesboeing.com", "domaintools", true, true);
+            response = client.reputation("737updatesboeing.com", "domaintools", true, true);
         } catch (Exception e){
-            System.out.println("Fail to perfom lookup: " + e);
+            System.out.println("Fail to perfom request: " + e);
             System.exit(1);
         }
 
-        System.out.println("Lookup success");
-        System.out.println("Lookup data: " + response.getResult().getData());
-        System.out.println("Lookup raw data: " + response.getResult().getRawData());
+        System.out.println("Reputation success");
+        System.out.println("Reputation data: " + response.getResult().getData());
+        System.out.println("Reputation raw data: " + response.getResult().getRawData());
     }
 }

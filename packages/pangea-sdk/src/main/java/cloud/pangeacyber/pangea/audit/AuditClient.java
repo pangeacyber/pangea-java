@@ -86,16 +86,34 @@ public class AuditClient extends Client {
 	Map<Integer, PublishedRoot> publishedRoots;
 	boolean allowServerRoots = true; // In case of Arweave failure, ask the server for the roots
 	String prevUnpublishedRoot = null;
+	String tenantID = null;
 
+	/**
+	 * @deprecated use AuditClientBuilder instead.
+	 */
 	public AuditClient(Config config) {
 		super(config, serviceName);
 		this.signer = null;
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
 	}
 
+	/**
+	 * @deprecated use AuditClientBuilder instead.
+	 */
 	public AuditClient(Config config, String privateKeyFilename) {
 		super(config, serviceName);
 		this.signer = new LogSigner(privateKeyFilename);
+		publishedRoots = new HashMap<Integer, PublishedRoot>();
+	}
+
+	protected AuditClient(Config config, String privateKeyFilename, String tenantID) {
+		super(config, serviceName);
+		if (privateKeyFilename != null) {
+			this.signer = new LogSigner(privateKeyFilename);
+		} else {
+			this.signer = null;
+		}
+		this.tenantID = tenantID;
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
 	}
 
@@ -114,6 +132,10 @@ public class AuditClient extends Client {
 		throws PangeaException, PangeaAPIException {
 		String signature = null;
 		String publicKey = null;
+
+		if (this.tenantID != null) {
+			event.setTenantID(this.tenantID);
+		}
 
 		if (signMode == SignMode.LOCAL && this.signer == null) {
 			throw new SignerException("Signer not initialized", null);
@@ -421,5 +443,30 @@ public class AuditClient extends Client {
 		boolean verifyEvents
 	) throws PangeaException, PangeaAPIException {
 		return resultPost(id, limit, offset, verifyConsistency, verifyEvents);
+	}
+
+	public static class AuditClientBuilder {
+
+		String privateKeyFilename = null;
+		String tenantID = null;
+		Config config;
+
+		AuditClientBuilder(Config config) {
+			this.config = config;
+		}
+
+		public AuditClientBuilder withPrivateKey(String privateKeyFilename) {
+			this.privateKeyFilename = privateKeyFilename;
+			return this;
+		}
+
+		public AuditClientBuilder withTenantID(String tenantID) {
+			this.tenantID = tenantID;
+			return this;
+		}
+
+		public AuditClient build() {
+			return new AuditClient(this.config, this.privateKeyFilename, this.tenantID);
+		}
 	}
 }

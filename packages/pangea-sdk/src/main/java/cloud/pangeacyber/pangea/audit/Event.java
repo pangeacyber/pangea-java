@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
@@ -45,6 +46,10 @@ public class Event {
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("timestamp")
 	String timestamp = null;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("tenant_id")
+	String tenantID = null;
 
 	public Event() {}
 
@@ -147,8 +152,18 @@ public class Event {
 	}
 
 	public static String canonicalize(Event event) throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+		ObjectMapper mapper = JsonMapper
+			.builder()
+			.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+			.build();
 		return mapper.writeValueAsString(event);
+	}
+
+	public void setTenantID(String tenantID) {
+		this.tenantID = tenantID;
+	}
+
+	public String getTenantID() {
+		return tenantID;
 	}
 }

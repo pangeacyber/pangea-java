@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.TestEnvironment;
+import cloud.pangeacyber.pangea.audit.AuditClient.AuditClientBuilder;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -18,8 +19,8 @@ import org.junit.Test;
 
 public class ITAuditTest {
 
-	AuditClient client, signClient;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	AuditClient client, signClient, signNtenandIDClient;
+	Config cfg;
 
 	private static final String ACTOR = "java-sdk";
 	private static final String MSG_NO_SIGNED = "test-message";
@@ -29,9 +30,17 @@ public class ITAuditTest {
 
 	@Before
 	public void setUp() throws ConfigException {
-		Config cfg = Config.fromIntegrationEnvironment(environment);
-		client = new AuditClient(cfg);
-		signClient = new AuditClient(cfg, "./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
+		this.cfg = Config.fromIntegrationEnvironment(environment);
+		client = new AuditClientBuilder(cfg).build();
+		signClient =
+			new AuditClientBuilder(cfg)
+				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
+				.build();
+		signNtenandIDClient =
+			new AuditClientBuilder(cfg)
+				.withTenantID("mytenantid")
+				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
+				.build();
 	}
 
 	@Test
@@ -93,6 +102,27 @@ public class ITAuditTest {
 	}
 
 	@Test
+	public void testLogTenantID() throws PangeaAPIException, PangeaException, ConfigException {
+		Event event = new Event(MSG_NO_SIGNED);
+		event.setActor(ACTOR);
+		event.setStatus(STATUS_NO_SIGNED);
+
+		LogResponse response = signNtenandIDClient.log(event, SignMode.UNSIGNED, true, false);
+		assertTrue(response.isOk());
+
+		LogResult result = response.getResult();
+		assertNotNull(result.getEventEnvelope());
+		assertNotNull(result.getHash());
+		assertEquals(MSG_NO_SIGNED, result.getEventEnvelope().getEvent().getMessage());
+		assertNull(result.getConsistencyProof());
+		assertNotNull(result.getMembershipProof());
+		assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
+		assertEquals(EventVerification.NOT_VERIFIED, result.getMembershipVerification());
+		assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
+		assertEquals("mytenantid", result.getEventEnvelope().getEvent().getTenantID());
+	}
+
+	@Test
 	public void testLogVerify() throws PangeaAPIException, PangeaException {
 		Event event = new Event(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
@@ -145,6 +175,29 @@ public class ITAuditTest {
 		assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
 		assertEquals("lvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=", result.getEventEnvelope().getPublicKey());
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
+	}
+
+	@Test
+	public void testLogLocalSignatureAndTenantID() throws PangeaException, PangeaAPIException, ConfigException {
+		Event event = new Event(MSG_SIGNED_LOCAL);
+		event.setActor(ACTOR);
+		event.setAction("Action");
+		event.setSource("Source");
+		event.setStatus(STATUS_SIGNED);
+		event.setTarget("Target");
+		event.setNewField("New");
+		event.setOld("Old");
+
+		LogResponse response = signNtenandIDClient.log(event, SignMode.LOCAL, true, true);
+		assertTrue(response.isOk());
+
+		LogResult result = response.getResult();
+		assertNotNull(result.getEventEnvelope());
+		assertNotNull(result.getHash());
+		assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
+		assertEquals("lvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=", result.getEventEnvelope().getPublicKey());
+		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
+		assertEquals("mytenantid", result.getEventEnvelope().getEvent().getTenantID());
 	}
 
 	@Test(expected = ValidationException.class)
@@ -339,7 +392,7 @@ public class ITAuditTest {
 		int treeSize = 1;
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		AuditClient fakeClient = new AuditClient(cfg);
+		AuditClient fakeClient = new AuditClientBuilder(cfg).build();
 		RootResponse response = fakeClient.getRoot(treeSize);
 	}
 
@@ -347,7 +400,7 @@ public class ITAuditTest {
 	public void testLogUnathorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		AuditClient fakeClient = new AuditClient(cfg);
+		AuditClient fakeClient = new AuditClientBuilder(cfg).build();
 		Event event = new Event("Test msg");
 		LogResponse response = fakeClient.log(event);
 	}
@@ -371,7 +424,7 @@ public class ITAuditTest {
 	public void testSearchValidationException2() throws PangeaAPIException, PangeaException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		AuditClient fakeClient = new AuditClient(cfg);
+		AuditClient fakeClient = new AuditClientBuilder(cfg).build();
 		SearchInput input = new SearchInput("message:");
 		int searchLimit = 100;
 		input.setMaxResults(searchLimit);

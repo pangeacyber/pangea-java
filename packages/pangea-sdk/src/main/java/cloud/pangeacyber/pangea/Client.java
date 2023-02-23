@@ -8,6 +8,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.Map;
 
 public abstract class Client {
 
@@ -15,6 +16,8 @@ public abstract class Client {
 	HttpClient httpClient;
 	Builder httpRequestBuilder;
 	String serviceName;
+	Map<String, String> customHeaders = null;
+	String customUserAgent = null;
 
 	protected Client(Config config, String serviceName) {
 		this.serviceName = serviceName;
@@ -37,10 +40,22 @@ public abstract class Client {
 	}
 
 	protected void fillPostRequestBuilder(HttpRequest.Builder builder, String path, String body) {
+		String userAgent = "pangea-java/" + Version.VERSION;
+		if (customUserAgent != null && !customUserAgent.isEmpty()) {
+			userAgent += " " + customUserAgent;
+		}
+
+		builder.uri(config.getServiceUrl(serviceName, path));
+		if (customHeaders != null) {
+			for (Map.Entry<String, String> entry : customHeaders.entrySet()) {
+				String key = entry.getKey();
+				String value = entry.getValue();
+				builder.header(key, value);
+			}
+		}
 		builder
-			.uri(config.getServiceUrl(serviceName, path))
 			.header("Authorization", "Bearer " + config.getToken())
-			.header("User-Agent", "pangea-java/" + Version.VERSION)
+			.header("User-Agent", userAgent)
 			.POST(HttpRequest.BodyPublishers.ofString(body));
 	}
 
@@ -131,5 +146,13 @@ public abstract class Client {
 		} else {
 			throw new PangeaAPIException(String.format("%s: %s", status, summary), response);
 		}
+	}
+
+	public void setCustomHeaders(Map<String, String> customHeaders) {
+		this.customHeaders = customHeaders;
+	}
+
+	public void setCustomUserAgent(String customUserAgent) {
+		this.customUserAgent = customUserAgent;
 	}
 }

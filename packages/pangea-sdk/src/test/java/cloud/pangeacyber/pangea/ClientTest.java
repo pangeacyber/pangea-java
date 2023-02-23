@@ -26,6 +26,7 @@ public class ClientTest {
 	@Before
 	public void setUp() {
 		client = new TestClient();
+		client.setCustomUserAgent("test");
 	}
 
 	@Test

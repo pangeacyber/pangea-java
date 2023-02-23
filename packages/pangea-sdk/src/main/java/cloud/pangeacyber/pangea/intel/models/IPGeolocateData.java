@@ -5,45 +5,46 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IPGeolocateData {
-    @JsonProperty("country")
-    String Country;
 
-    @JsonProperty("city")
-    String City;
+	@JsonProperty("country")
+	String Country;
 
-    @JsonProperty("latitude")
-    Float Latitude;
+	@JsonProperty("city")
+	String City;
 
-    @JsonProperty("longitude")
-    Float Longitude;
+	@JsonProperty("latitude")
+	Float Latitude;
 
-    @JsonProperty("postal_code")
-    String PostalCode;
+	@JsonProperty("longitude")
+	Float Longitude;
 
-    @JsonProperty("country_code")
-    String CountryCode;
+	@JsonProperty("postal_code")
+	String PostalCode;
 
-    public String getCountry() {
-        return Country;
-    }
+	@JsonProperty("country_code")
+	String CountryCode;
 
-    public String getCity() {
-        return City;
-    }
+	public String getCountry() {
+		return Country;
+	}
 
-    public Float getLatitude() {
-        return Latitude;
-    }
+	public String getCity() {
+		return City;
+	}
 
-    public Float getLongitude() {
-        return Longitude;
-    }
+	public Float getLatitude() {
+		return Latitude;
+	}
 
-    public String getPostalCode() {
-        return PostalCode;
-    }
+	public Float getLongitude() {
+		return Longitude;
+	}
 
-    public String getCountryCode() {
-        return CountryCode;
-    }
+	public String getPostalCode() {
+		return PostalCode;
+	}
+
+	public String getCountryCode() {
+		return CountryCode;
+	}
 }

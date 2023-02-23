@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IPVPNData {
-    @JsonProperty("is_vpn")
-    boolean isVPN;
 
-    public boolean isVPN() {
-        return isVPN;
-    }
+	@JsonProperty("is_vpn")
+	boolean isVPN;
 
+	public boolean isVPN() {
+		return isVPN;
+	}
 }

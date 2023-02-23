@@ -5,17 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IPDomainData {
-    @JsonProperty("domain_found")
-    boolean domainFound;
 
-    @JsonProperty("domain")
-    String domain;
+	@JsonProperty("domain_found")
+	boolean domainFound;
 
-    public boolean isDomainFound() {
-        return domainFound;
-    }
+	@JsonProperty("domain")
+	String domain;
 
-    public String getDomain() {
-        return domain;
-    }
+	public boolean isDomainFound() {
+		return domainFound;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
 }

@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IPProxyData {
-    @JsonProperty("is_proxy")
-    boolean isProxy;
 
-    public boolean isProxy() {
-        return isProxy;
-    }
+	@JsonProperty("is_proxy")
+	boolean isProxy;
+
+	public boolean isProxy() {
+		return isProxy;
+	}
 }

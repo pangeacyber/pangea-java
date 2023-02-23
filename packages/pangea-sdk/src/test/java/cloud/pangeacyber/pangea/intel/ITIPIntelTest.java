@@ -422,7 +422,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
-		IPVPNResponse response = client.isVPN("1.46.128.165");
+		IPVPNResponse response = client.isVPN("2.25.119.42");
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -434,7 +434,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
-		IPVPNResponse response = client.isVPN("1.46.128.165", "digitalenvoy");
+		IPVPNResponse response = client.isVPN("2.25.119.42", "digitalenvoy");
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -446,7 +446,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_3() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, no raw;
-		IPVPNResponse response = client.isVPN("1.46.128.165", false, false);
+		IPVPNResponse response = client.isVPN("2.25.119.42", false, false);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -458,7 +458,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_4() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, no raw;
-		IPVPNResponse response = client.isVPN("1.46.128.165", true, false);
+		IPVPNResponse response = client.isVPN("2.25.119.42", true, false);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -470,7 +470,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_5() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, raw;
-		IPVPNResponse response = client.isVPN("1.46.128.165", false, true);
+		IPVPNResponse response = client.isVPN("2.25.119.42", false, true);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -482,7 +482,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_6() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, raw;
-		IPVPNResponse response = client.isVPN("1.46.128.165", true, true);
+		IPVPNResponse response = client.isVPN("2.25.119.42", true, true);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -494,7 +494,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
-		IPVPNResponse response = client.isVPN("1.46.128.165", "digitalenvoy", false, false);
+		IPVPNResponse response = client.isVPN("2.25.119.42", "digitalenvoy", false, false);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -506,7 +506,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
-		IPVPNResponse response = client.isVPN("1.46.128.165", "digitalenvoy", true, true);
+		IPVPNResponse response = client.isVPN("2.25.119.42", "digitalenvoy", true, true);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();

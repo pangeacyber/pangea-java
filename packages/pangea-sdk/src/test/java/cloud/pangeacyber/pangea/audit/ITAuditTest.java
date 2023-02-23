@@ -21,6 +21,7 @@ public class ITAuditTest {
 
 	AuditClient client, signClient, signNtenandIDClient;
 	Config cfg;
+	TestEnvironment environment = TestEnvironment.LIVE;
 
 	private static final String ACTOR = "java-sdk";
 	private static final String MSG_NO_SIGNED = "test-message";

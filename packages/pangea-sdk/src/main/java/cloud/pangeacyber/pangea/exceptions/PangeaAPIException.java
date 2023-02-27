@@ -5,16 +5,8 @@ import cloud.pangeacyber.pangea.PangeaErrors;
 import cloud.pangeacyber.pangea.Response;
 
 public class PangeaAPIException extends Exception {
-    Response<PangeaErrors> response;
 
-    public PangeaAPIException(String message, Response<PangeaErrors> response){
-        super(message);
-        this.response = response;
-    }
-
-    public Response<PangeaErrors> getResponse() {
-        return response;
-    }
+	Response<PangeaErrors> response;
 
     public String toString(){
         String ret = "";
@@ -28,4 +20,12 @@ public class PangeaAPIException extends Exception {
         return ret;
     }
 
+	public PangeaAPIException(String message, Response<PangeaErrors> response) {
+		super(message);
+		this.response = response;
+	}
+
+	public Response<PangeaErrors> getResponse() {
+		return response;
+	}
 }

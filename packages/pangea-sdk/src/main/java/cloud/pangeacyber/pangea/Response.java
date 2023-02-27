@@ -1,36 +1,34 @@
 package cloud.pangeacyber.pangea;
 
-import java.net.http.HttpResponse;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.net.http.HttpResponse;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Response<Result> extends ResponseHeader{
-    @JsonProperty("result")
-    Result result;
+public class Response<Result> extends ResponseHeader {
 
-    @JsonIgnore
-    HttpResponse<?> httpResponse;
+	@JsonProperty("result")
+	Result result;
 
-    public Response() {
-    }
+	@JsonIgnore
+	HttpResponse<?> httpResponse;
 
-    public Result getResult() {
-        return result;
-    }
+	public Response() {}
 
-    public void setResult(Result result) {
-        this.result = result;
-    }
+	public Result getResult() {
+		return result;
+	}
 
-    public HttpResponse<?> getHttpResponse() {
-        return httpResponse;
-    }
+	public void setResult(Result result) {
+		this.result = result;
+	}
 
-    public void setHttpResponse(HttpResponse<?> httpResponse) {
-        this.httpResponse = httpResponse;
-    }
+	public HttpResponse<?> getHttpResponse() {
+		return httpResponse;
+	}
 
+	public void setHttpResponse(HttpResponse<?> httpResponse) {
+		this.httpResponse = httpResponse;
+	}
 }

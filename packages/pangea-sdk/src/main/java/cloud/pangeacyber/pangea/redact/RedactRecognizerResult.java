@@ -5,53 +5,53 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RedactRecognizerResult {
-    @JsonProperty("field_type")
-    String fieldType;
 
-    @JsonProperty("score")
-    int score;
+	@JsonProperty("field_type")
+	String fieldType;
 
-    @JsonProperty("text")
-    String text;
+	@JsonProperty("score")
+	int score;
 
-    @JsonProperty("start")
-    int start;
+	@JsonProperty("text")
+	String text;
 
-    @JsonProperty("end")
-    int end;
+	@JsonProperty("start")
+	int start;
 
-    @JsonProperty("redacted")
-    boolean redacted;
+	@JsonProperty("end")
+	int end;
 
-    @JsonProperty("data_key")
-    String dataKey;
+	@JsonProperty("redacted")
+	boolean redacted;
 
-    public String getFieldType() {
-        return fieldType;
-    }
+	@JsonProperty("data_key")
+	String dataKey;
 
-    public int getScore() {
-        return score;
-    }
+	public String getFieldType() {
+		return fieldType;
+	}
 
-    public String getText() {
-        return text;
-    }
+	public int getScore() {
+		return score;
+	}
 
-    public int getStart() {
-        return start;
-    }
+	public String getText() {
+		return text;
+	}
 
-    public int getEnd() {
-        return end;
-    }
+	public int getStart() {
+		return start;
+	}
 
-    public boolean isRedacted() {
-        return redacted;
-    }
+	public int getEnd() {
+		return end;
+	}
 
-    public String getDataKey() {
-        return dataKey;
-    }
+	public boolean isRedacted() {
+		return redacted;
+	}
 
+	public String getDataKey() {
+		return dataKey;
+	}
 }

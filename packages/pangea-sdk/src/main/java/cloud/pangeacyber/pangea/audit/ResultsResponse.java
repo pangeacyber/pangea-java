@@ -2,6 +2,4 @@ package cloud.pangeacyber.pangea.audit;
 
 import cloud.pangeacyber.pangea.Response;
 
-final public class ResultsResponse extends Response<ResultsOutput>{
-
-}
+public final class ResultsResponse extends Response<ResultsOutput> {}

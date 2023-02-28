@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
+
 public class KeyRotateRequest extends CommonRotateRequest{
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("public_key")
@@ -41,8 +43,8 @@ public class KeyRotateRequest extends CommonRotateRequest{
         String encodedPrivateKey = null;
         String encodedSymmetricKey = null;
 
-        public KeyRotateRequestBuilder(String id) {
-            super(id);
+        public KeyRotateRequestBuilder(String id, ItemVersionState state) {
+            super(id, state);
         }
 
         public KeyRotateRequest build(){

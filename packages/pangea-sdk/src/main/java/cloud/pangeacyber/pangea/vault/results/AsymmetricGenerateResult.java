@@ -1,9 +1,9 @@
 package cloud.pangeacyber.pangea.vault.results;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AsymmetricGenerateResult extends CommonGenerateResult{
     @JsonProperty("algorithm")
     String algorithm;
@@ -11,33 +11,16 @@ public class AsymmetricGenerateResult extends CommonGenerateResult{
     @JsonProperty("public_key")
     String encodedPublicKey;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("private_key")
-    String encodedPrivateKey = null;
-
     public AsymmetricGenerateResult() {
-    }
-
-    public AsymmetricGenerateResult(String type, String id, int version, String encodedPublicKey, String algorithm) {
-        super(type, id, version);
-        this.encodedPublicKey = encodedPublicKey;
-        this.algorithm = algorithm;
+        super();
     }
 
     public String getEncodedPublicKey() {
         return encodedPublicKey;
     }
 
-    public String getEncodedPrivateKey() {
-        return encodedPrivateKey;
-    }
-
     public void setEncodedPublicKey(String encodedPublicKey) {
         this.encodedPublicKey = encodedPublicKey;
-    }
-
-    public void setEncodedPrivateKey(String encodedPrivateKey) {
-        this.encodedPrivateKey = encodedPrivateKey;
     }
 
     public String getAlgorithm() {

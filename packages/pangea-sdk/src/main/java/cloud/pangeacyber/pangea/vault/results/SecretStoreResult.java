@@ -1,17 +1,14 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SecretStoreResult extends CommonStoreResult{
     @JsonProperty("secret")
     String secret = null;
 
     public SecretStoreResult() {
-    }
-
-    public SecretStoreResult(String type, String id, Integer version, String secret) {
-        super(type, id, version);
-        this.secret = secret;
     }
 
     public String getSecret() {

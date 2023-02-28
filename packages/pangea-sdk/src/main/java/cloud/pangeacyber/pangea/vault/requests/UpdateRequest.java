@@ -28,16 +28,12 @@ public class UpdateRequest {
     Tags tags = null;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("auto_rotate")
-    Boolean autoRotate = null;
+    @JsonProperty("rotation_frequency")
+    String rotationFrequency = null;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("rotation_policy")
-    String rotationPolicy = null;
-
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("retain_previous_version")
-    Boolean retainPreviousVersion = null;
+    @JsonProperty("rotation_state")
+    String rotationState = null;
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("expiration")
@@ -49,9 +45,8 @@ public class UpdateRequest {
         this.folder = builder.folder;
         this.metadata = builder.metadata;
         this.tags = builder.tags;
-        this.autoRotate = builder.autoRotate;
-        this.rotationPolicy = builder.rotationPolicy;
-        this.retainPreviousVersion = builder.retainPreviousVersion;
+        this.rotationFrequency = builder.rotationFrequency;
+        this.rotationState = builder.rotationState;
         this.expiration = builder.expiration;
     }
 
@@ -75,16 +70,8 @@ public class UpdateRequest {
         return tags;
     }
 
-    public Boolean getAutoRotate() {
-        return autoRotate;
-    }
-
-    public String getRotationPolicy() {
-        return rotationPolicy;
-    }
-
-    public Boolean getRetainPreviousVersion() {
-        return retainPreviousVersion;
+    public String getRotationFrequency() {
+        return rotationFrequency;
     }
 
     public String getExpiration() {
@@ -98,8 +85,8 @@ public class UpdateRequest {
         Metadata metadata = null;
         Tags tags = null;
         Boolean autoRotate = null;
-        String rotationPolicy = null;
-        Boolean retainPreviousVersion = null;
+        String rotationFrequency = null;
+        String rotationState = null;
         String expiration = null;
 
         public UpdateRequestBuilder(String id) {
@@ -135,13 +122,13 @@ public class UpdateRequest {
             return this;
         }
 
-        public UpdateRequestBuilder setRotationPolicy(String rotationPolicy) {
-            this.rotationPolicy = rotationPolicy;
+        public UpdateRequestBuilder setRotationFrequency(String rotationFrequency) {
+            this.rotationFrequency = rotationFrequency;
             return this;
         }
 
-        public UpdateRequestBuilder setRetainPreviousVersion(Boolean retainPreviousVersion) {
-            this.retainPreviousVersion = retainPreviousVersion;
+        public UpdateRequestBuilder setRotationState(String rotationState) {
+            this.rotationState = rotationState;
             return this;
         }
 

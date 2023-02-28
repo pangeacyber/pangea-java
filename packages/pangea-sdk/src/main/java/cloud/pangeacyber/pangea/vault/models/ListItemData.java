@@ -13,8 +13,14 @@ public class ListItemData {
     @JsonProperty("type")
     String type;
 
-    @JsonProperty("version")
-    Boolean version;
+    @JsonProperty("current_version")
+    int currentVersion;
+
+    @JsonProperty("versions")
+    ItemVersionData[] versions;
+
+    @JsonProperty("has_compromised_versions")
+    boolean hasCompromisedVersions;
 
     @JsonProperty("identity")
     String identity;
@@ -36,12 +42,8 @@ public class ListItemData {
     Tags tags = null;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("auto_rotate")
-    Boolean autoRotate = null;
-
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("rotation_policy")
-    String rotationPolicy = null;
+    @JsonProperty("rotation_frequency")
+    String rotationFrequency = null;
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("last_rotated")
@@ -52,10 +54,6 @@ public class ListItemData {
     String nextRotation = null;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("retain_previous_version")
-    Boolean retainPreviousVersion = null;
-
-    @JsonInclude(Include.NON_NULL)
     @JsonProperty("expiration")
     String expiration = null;
 
@@ -63,24 +61,12 @@ public class ListItemData {
     @JsonProperty("created_at")
     String createdAt = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("revoked_at")
-    String revokedAt = null;
-
-    @JsonProperty("managed")
-    Boolean managed;
-
-
     public String getId() {
         return id;
     }
 
     public String getType() {
         return type;
-    }
-
-    public Boolean getVersion() {
-        return version;
     }
 
     public String getName() {
@@ -99,12 +85,8 @@ public class ListItemData {
         return tags;
     }
 
-    public Boolean getAutoRotate() {
-        return autoRotate;
-    }
-
-    public String getRotationPolicy() {
-        return rotationPolicy;
+    public String getRotationFrequency() {
+        return rotationFrequency;
     }
 
     public String getLastRotated() {
@@ -115,10 +97,6 @@ public class ListItemData {
         return nextRotation;
     }
 
-    public Boolean getRetainPreviousVersion() {
-        return retainPreviousVersion;
-    }
-
     public String getExpiration() {
         return expiration;
     }
@@ -127,15 +105,20 @@ public class ListItemData {
         return createdAt;
     }
 
-    public String getRevokedAt() {
-        return revokedAt;
-    }
-
     public String getIdentity() {
         return identity;
     }
 
-    public Boolean getManaged() {
-        return managed;
+    public int getCurrentVersion() {
+        return currentVersion;
     }
+
+    public ItemVersionData[] getVersions() {
+        return versions;
+    }
+
+    public boolean isHasCompromisedVersions() {
+        return hasCompromisedVersions;
+    }
+
 }

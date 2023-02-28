@@ -1,21 +1,21 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import cloud.pangeacyber.pangea.vault.models.ItemVersionData;
 import cloud.pangeacyber.pangea.vault.models.Metadata;
 import cloud.pangeacyber.pangea.vault.models.Tags;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CommonGetResult {
     @JsonProperty("id")
     String id;
 
     @JsonProperty("type")
     String type;
-
-    @JsonProperty("version")
-    Boolean version;
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("name")
@@ -34,12 +34,12 @@ public class CommonGetResult {
     Tags tags = null;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("auto_rotate")
-    Boolean autoRotate = null;
+    @JsonProperty("rotation_frequency")
+    String rotationFrequency = null;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("rotation_policy")
-    String rotationPolicy = null;
+    @JsonProperty("rotation_state")
+    String rotationState = null;
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("last_rotated")
@@ -50,10 +50,6 @@ public class CommonGetResult {
     String nextRotation = null;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("retain_previous_version")
-    Boolean retainPreviousVersion = null;
-
-    @JsonInclude(Include.NON_NULL)
     @JsonProperty("expiration")
     String expiration = null;
 
@@ -62,36 +58,17 @@ public class CommonGetResult {
     String createdAt = null;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("revoked_at")
-    String revokedAt = null;
+    @JsonProperty("destroyed_at")
+    String destroyedAt = null;
+
+    @JsonProperty("versions")
+    ItemVersionData[] versions;
+
+    public ItemVersionData[] getVersions() {
+        return versions;
+    }
 
     public CommonGetResult() {
-    }
-
-    public CommonGetResult(String id, String type, Boolean version, String name, String folder, Metadata metadata,
-            Tags tags, Boolean autoRotate, String rotationPolicy, String lastRotated, String nextRotation,
-            Boolean retainPreviousVersion, String expiration, String createdAt, String revokedAt) {
-        this.id = id;
-        this.type = type;
-        this.version = version;
-        this.name = name;
-        this.folder = folder;
-        this.metadata = metadata;
-        this.tags = tags;
-        this.autoRotate = autoRotate;
-        this.rotationPolicy = rotationPolicy;
-        this.lastRotated = lastRotated;
-        this.nextRotation = nextRotation;
-        this.retainPreviousVersion = retainPreviousVersion;
-        this.expiration = expiration;
-        this.createdAt = createdAt;
-        this.revokedAt = revokedAt;
-    }
-
-    public CommonGetResult(String id, String type, Boolean version) {
-        this.id = id;
-        this.type = type;
-        this.version = version;
     }
 
     public String getId() {
@@ -100,10 +77,6 @@ public class CommonGetResult {
 
     public String getType() {
         return type;
-    }
-
-    public Boolean getVersion() {
-        return version;
     }
 
     public String getName() {
@@ -122,12 +95,12 @@ public class CommonGetResult {
         return tags;
     }
 
-    public Boolean getAutoRotate() {
-        return autoRotate;
+    public String getRotationFrequency() {
+        return rotationFrequency;
     }
 
-    public String getRotationPolicy() {
-        return rotationPolicy;
+    public String getRotationState() {
+        return rotationState;
     }
 
     public String getLastRotated() {
@@ -138,10 +111,6 @@ public class CommonGetResult {
         return nextRotation;
     }
 
-    public Boolean getRetainPreviousVersion() {
-        return retainPreviousVersion;
-    }
-
     public String getExpiration() {
         return expiration;
     }
@@ -150,7 +119,7 @@ public class CommonGetResult {
         return createdAt;
     }
 
-    public String getRevokedAt() {
-        return revokedAt;
+    public String getDestroyedAt() {
+        return destroyedAt;
     }
 }

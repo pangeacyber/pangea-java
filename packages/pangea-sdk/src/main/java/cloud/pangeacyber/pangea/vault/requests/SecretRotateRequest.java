@@ -2,6 +2,8 @@ package cloud.pangeacyber.pangea.vault.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
+
 public class SecretRotateRequest extends CommonRotateRequest{
     @JsonProperty("secret")
     String secret = null;
@@ -23,8 +25,8 @@ public class SecretRotateRequest extends CommonRotateRequest{
             return new SecretRotateRequest(this);
         }
 
-        public SecretRotateRequestBuilder(String id, String secret) {
-            super(id);
+        public SecretRotateRequestBuilder(String id, String secret, ItemVersionState state) {
+            super(id, state);
             this.secret = secret;
         }
 

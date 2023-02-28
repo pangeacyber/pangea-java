@@ -1,7 +1,9 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class VerifyResult {
     @JsonProperty("id")
     String id;
@@ -16,13 +18,6 @@ public class VerifyResult {
     boolean validSignature;
 
     public VerifyResult() {
-    }
-
-    public VerifyResult(String id, Integer version, String algorithm, boolean validSignature) {
-        this.id = id;
-        this.version = version;
-        this.algorithm = algorithm;
-        this.validSignature = validSignature;
     }
 
     public String getAlgorithm() {

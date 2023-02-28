@@ -4,6 +4,7 @@ import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.requests.SecretRotateRequest.SecretRotateRequestBuilder;
 import cloud.pangeacyber.pangea.vault.responses.*;
@@ -50,13 +51,22 @@ final class JWKGetRequest {
     }
 }
 
-final class RevokeRequest {
+final class StateChangeRequest {
     @JsonProperty("id")
     String id;
 
-    public RevokeRequest(String id) {
+    @JsonProperty("version")
+    int version;
+
+    @JsonProperty("state")
+    ItemVersionState state;
+
+    public StateChangeRequest(String id, int version, ItemVersionState state) {
         this.id = id;
+        this.version = version;
+        this.state = state;
     }
+
 }
 
 final class SignRequest {
@@ -177,10 +187,12 @@ public class VaultClient extends Client {
     }
 
     /**
-     * Revoke
-     * @pangea.description Revoke an item
-     * @param id - item id to revoke
-     * @return RevokeResponse
+     * State change
+     * @pangea.description change an item version state
+     * @param id - item id to change
+     * @param version - item version to change
+     * @param state - state to set to item version
+     * @return StateChangeResponse
      * @throws PangeaException
      * @throws PangeaAPIException
      * @pangea.code
@@ -188,8 +200,8 @@ public class VaultClient extends Client {
      * // TODO:
      * }
      */
-    public RevokeResponse revoke(String id) throws PangeaException, PangeaAPIException{
-        return doPost("/v1/revoke", new RevokeRequest(id) , RevokeResponse.class);
+    public StateChangeResponse stateChange(String id, int version, ItemVersionState state) throws PangeaException, PangeaAPIException{
+        return doPost("/v1/revoke", new StateChangeRequest(id, version, state) , StateChangeResponse.class);
     }
 
     /**
@@ -319,8 +331,8 @@ public class VaultClient extends Client {
      * // TODO:
      * }
      */
-    public SecretRotateResponse secretRotate(String id, String secret) throws PangeaException, PangeaAPIException{
-        return doPost("/v1/secret/rotate", new SecretRotateRequestBuilder(id, secret).build() , SecretRotateResponse.class);
+    public SecretRotateResponse secretRotate(String id, String secret, ItemVersionState state) throws PangeaException, PangeaAPIException{
+        return doPost("/v1/secret/rotate", new SecretRotateRequestBuilder(id, secret, state).build() , SecretRotateResponse.class);
     }
 
     /**
@@ -336,7 +348,7 @@ public class VaultClient extends Client {
      * }
      */
     public SecretRotateResponse pangeaTokenRotate(String id) throws PangeaException, PangeaAPIException{
-        return doPost("/v1/secret/rotate", new SecretRotateRequestBuilder(id, null).build() , SecretRotateResponse.class);
+        return doPost("/v1/secret/rotate", new SecretRotateRequestBuilder(id, null, null).build() , SecretRotateResponse.class);
     }
 
 

@@ -1,9 +1,11 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DecryptResult {
     @JsonProperty("id")
     String id;
@@ -19,13 +21,6 @@ public class DecryptResult {
     String algorithm;
 
     public DecryptResult() {
-    }
-
-    public DecryptResult(String id, String plainText, Integer version, String algorithm) {
-        this.id = id;
-        this.plainText = plainText;
-        this.version = version;
-        this.algorithm = algorithm;
     }
 
     public String getId() {

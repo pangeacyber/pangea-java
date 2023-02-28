@@ -1,9 +1,11 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GetResult extends CommonGetResult{
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("public_key")
@@ -26,18 +28,11 @@ public class GetResult extends CommonGetResult{
     String encodedSymmetricKey = null;
 
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty("managed")
-    Boolean managed = null;
-
-    @JsonInclude(Include.NON_NULL)
     @JsonProperty("secret")
     String secret = null;
 
     public GetResult() {
-    }
-
-    public GetResult(String id, String type, Boolean version) {
-        super(id, type, version);
+        super();
     }
 
     public String getEncodedPublicKey() {
@@ -58,10 +53,6 @@ public class GetResult extends CommonGetResult{
 
     public String getEncodedSymmetricKey() {
         return encodedSymmetricKey;
-    }
-
-    public Boolean getManaged() {
-        return managed;
     }
 
     public String getSecret() {

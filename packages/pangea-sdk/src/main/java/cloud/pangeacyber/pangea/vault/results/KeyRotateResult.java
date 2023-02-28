@@ -1,9 +1,11 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class KeyRotateResult extends CommonRotateResult{
     @JsonInclude(Include.NON_NULL)
     @JsonProperty("public_key")
@@ -22,6 +24,7 @@ public class KeyRotateResult extends CommonRotateResult{
     String algorithm = null;
 
     public KeyRotateResult() {
+        super();
     }
 
     public String getEncodedPublicKey() {

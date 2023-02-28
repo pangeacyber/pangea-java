@@ -12,10 +12,6 @@ public class AsymmetricStoreRequest extends CommonStoreRequest{
     @JsonProperty("type")
     ItemType type;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("managed")
-    Boolean managed = null;
-
     @JsonProperty("algorithm")
     AsymmetricAlgorithm algorithm = null;
 
@@ -32,15 +28,10 @@ public class AsymmetricStoreRequest extends CommonStoreRequest{
     protected AsymmetricStoreRequest(AsymmetricStoreRequestBuilder builder){
         super(builder);
         this.type = builder.type;
-        this.managed = builder.managed;
         this.algorithm = builder.algorithm;
         this.purpose = builder.purpose;
         this.encodedPrivateKey = builder.encodedPrivateKey;
         this.encodedPublicKey = builder.encodedPublicKey;
-    }
-
-    public Boolean getManaged() {
-        return managed;
     }
 
     public AsymmetricAlgorithm getAlgorithm() {
@@ -61,7 +52,6 @@ public class AsymmetricStoreRequest extends CommonStoreRequest{
 
     public static class AsymmetricStoreRequestBuilder extends CommonStoreRequestBuilder<AsymmetricStoreRequestBuilder> {
         ItemType type;
-        Boolean managed = null;
         AsymmetricAlgorithm algorithm = null;
         KeyPurpose purpose = null;
         String encodedPublicKey;
@@ -77,11 +67,6 @@ public class AsymmetricStoreRequest extends CommonStoreRequest{
 
         public AsymmetricStoreRequest build(){
             return new AsymmetricStoreRequest(this);
-        }
-
-        public AsymmetricStoreRequestBuilder setManaged(Boolean managed) {
-            this.managed = managed;
-            return this;
         }
 
         public AsymmetricStoreRequestBuilder setPurpose(KeyPurpose purpose) {

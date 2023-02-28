@@ -27,6 +27,7 @@ public class ITDomainIntelTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new DomainIntelClient(Config.fromIntegrationEnvironment(environment));
+		client.setCustomUserAgent("test");
 	}
 
 	@Test

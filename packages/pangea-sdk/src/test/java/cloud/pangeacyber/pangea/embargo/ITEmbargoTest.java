@@ -21,6 +21,7 @@ public class ITEmbargoTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new EmbargoClient(Config.fromIntegrationEnvironment(environment));
+		client.setCustomUserAgent("test");
 	}
 
 	@Test

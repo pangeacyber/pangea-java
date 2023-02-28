@@ -14,13 +14,10 @@ public class ListItemData {
     String type;
 
     @JsonProperty("current_version")
-    int currentVersion;
+    ItemVersionData currentVersion;
 
-    @JsonProperty("versions")
-    ItemVersionData[] versions;
-
-    @JsonProperty("has_compromised_versions")
-    boolean hasCompromisedVersions;
+    @JsonProperty("compromised_versions")
+    ItemVersionData[] compromisedVersions;
 
     @JsonProperty("identity")
     String identity;
@@ -109,16 +106,12 @@ public class ListItemData {
         return identity;
     }
 
-    public int getCurrentVersion() {
+    public ItemVersionData getCurrentVersion() {
         return currentVersion;
     }
 
     public ItemVersionData[] getVersions() {
-        return versions;
-    }
-
-    public boolean isHasCompromisedVersions() {
-        return hasCompromisedVersions;
+        return compromisedVersions;
     }
 
 }

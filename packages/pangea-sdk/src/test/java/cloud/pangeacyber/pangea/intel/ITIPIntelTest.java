@@ -19,8 +19,7 @@ import org.junit.Test;
 public class ITIPIntelTest {
 
 	IpIntelClient client;
-	// FIXME: Update enviroment to LIVE once in prod
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	TestEnvironment environment = TestEnvironment.LIVE;
 
 	@Before
 	public void setUp() throws ConfigException {
@@ -226,7 +225,7 @@ public class ITIPIntelTest {
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
-		assertEquals("deu", data.getCountry());
+		assertEquals("Federal Republic Of Germany", data.getCountry());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -238,7 +237,7 @@ public class ITIPIntelTest {
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
-		assertEquals("deu", data.getCountry());
+		assertEquals("Federal Republic Of Germany", data.getCountry());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -250,7 +249,7 @@ public class ITIPIntelTest {
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
-		assertEquals("deu", data.getCountry());
+		assertEquals("Federal Republic Of Germany", data.getCountry());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -262,7 +261,7 @@ public class ITIPIntelTest {
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
-		assertEquals("deu", data.getCountry());
+		assertEquals("Federal Republic Of Germany", data.getCountry());
 		assertNotNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -274,7 +273,7 @@ public class ITIPIntelTest {
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
-		assertEquals("deu", data.getCountry());
+		assertEquals("Federal Republic Of Germany", data.getCountry());
 		assertNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}
@@ -286,7 +285,7 @@ public class ITIPIntelTest {
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
-		assertEquals("deu", data.getCountry());
+		assertEquals("Federal Republic Of Germany", data.getCountry());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}
@@ -298,7 +297,7 @@ public class ITIPIntelTest {
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
-		assertEquals("deu", data.getCountry());
+		assertEquals("Federal Republic Of Germany", data.getCountry());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -310,7 +309,7 @@ public class ITIPIntelTest {
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
-		assertEquals("deu", data.getCountry());
+		assertEquals("Federal Republic Of Germany", data.getCountry());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}
@@ -422,7 +421,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
-		IPVPNResponse response = client.isVPN("2.25.119.42");
+		IPVPNResponse response = client.isVPN("2.56.189.74");
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -434,7 +433,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
-		IPVPNResponse response = client.isVPN("2.25.119.42", "digitalenvoy");
+		IPVPNResponse response = client.isVPN("2.56.189.74", "digitalenvoy");
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -446,7 +445,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_3() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, no raw;
-		IPVPNResponse response = client.isVPN("2.25.119.42", false, false);
+		IPVPNResponse response = client.isVPN("2.56.189.74", false, false);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -458,7 +457,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_4() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, no raw;
-		IPVPNResponse response = client.isVPN("2.25.119.42", true, false);
+		IPVPNResponse response = client.isVPN("2.56.189.74", true, false);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -470,7 +469,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_5() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, raw;
-		IPVPNResponse response = client.isVPN("2.25.119.42", false, true);
+		IPVPNResponse response = client.isVPN("2.56.189.74", false, true);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -482,7 +481,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_6() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, raw;
-		IPVPNResponse response = client.isVPN("2.25.119.42", true, true);
+		IPVPNResponse response = client.isVPN("2.56.189.74", true, true);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -494,7 +493,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
-		IPVPNResponse response = client.isVPN("2.25.119.42", "digitalenvoy", false, false);
+		IPVPNResponse response = client.isVPN("2.56.189.74", "digitalenvoy", false, false);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -506,7 +505,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
-		IPVPNResponse response = client.isVPN("2.25.119.42", "digitalenvoy", true, true);
+		IPVPNResponse response = client.isVPN("2.56.189.74", "digitalenvoy", true, true);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();

@@ -3,8 +3,6 @@ package cloud.pangeacyber.pangea.vault.requests;
 import cloud.pangeacyber.pangea.vault.models.ItemType;
 import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SymmetricGenerateRequest extends CommonGenerateRequest {
@@ -12,11 +10,9 @@ public class SymmetricGenerateRequest extends CommonGenerateRequest {
 	@JsonProperty("type")
 	ItemType type;
 
-	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("algorithm")
 	SymmetricAlgorithm algorithm = null;
 
-	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("purpose")
 	KeyPurpose purpose = null;
 
@@ -42,9 +38,11 @@ public class SymmetricGenerateRequest extends CommonGenerateRequest {
 		SymmetricAlgorithm algorithm = null;
 		KeyPurpose purpose = null;
 
-		public SymmetricGenerateRequestBuilder() {
+		public SymmetricGenerateRequestBuilder(SymmetricAlgorithm algorithm, KeyPurpose purpose) {
 			super();
 			this.type = ItemType.SYMMETRIC_KEY;
+			this.algorithm = algorithm;
+			this.purpose = purpose;
 		}
 
 		public SymmetricGenerateRequest build() {

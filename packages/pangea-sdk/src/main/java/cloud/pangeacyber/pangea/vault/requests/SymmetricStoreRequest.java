@@ -37,10 +37,15 @@ public class SymmetricStoreRequest extends CommonStoreRequest {
 		String encodedSymmetricKey;
 		KeyPurpose purpose = null;
 
-		public SymmetricStoreRequestBuilder(SymmetricAlgorithm algorithm, String encodedSymmetricKey) {
+		public SymmetricStoreRequestBuilder(
+			String encodedSymmetricKey,
+			SymmetricAlgorithm algorithm,
+			KeyPurpose purpose
+		) {
 			this.type = ItemType.SYMMETRIC_KEY;
 			this.algorithm = algorithm;
 			this.encodedSymmetricKey = encodedSymmetricKey;
+			this.purpose = purpose;
 		}
 
 		public SymmetricStoreRequest build() {

@@ -183,9 +183,10 @@ public class ITVaultTest {
 	@Test
 	public void testAESEncryptingLifeCycle() throws PangeaException, PangeaAPIException {
 		try {
-			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder()
-				.setAlgorithm(SymmetricAlgorithm.AES)
-				.setPurpose(KeyPurpose.ENCRYPTION)
+			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
+				SymmetricAlgorithm.AES,
+				KeyPurpose.ENCRYPTION
+			)
 				.build();
 
 			SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
@@ -201,9 +202,10 @@ public class ITVaultTest {
 	@Test
 	public void testEd25519SigningLifeCycle() throws PangeaException, PangeaAPIException {
 		try {
-			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder()
-				.setAlgorithm(AsymmetricAlgorithm.ED25519)
-				.setPurpose(KeyPurpose.SIGNING)
+			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder(
+				AsymmetricAlgorithm.ED25519,
+				KeyPurpose.SIGNING
+			)
 				.build();
 
 			// Generate
@@ -223,9 +225,10 @@ public class ITVaultTest {
 		KeyPurpose purpose = KeyPurpose.JWT;
 		AsymmetricAlgorithm algorithm = AsymmetricAlgorithm.ES256;
 		try {
-			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder()
-				.setAlgorithm(algorithm)
-				.setPurpose(purpose)
+			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder(
+				algorithm,
+				purpose
+			)
 				.build();
 
 			// Generate
@@ -245,9 +248,10 @@ public class ITVaultTest {
 		KeyPurpose purpose = KeyPurpose.JWT;
 		SymmetricAlgorithm algorithm = SymmetricAlgorithm.HS256;
 		try {
-			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder()
-				.setAlgorithm(algorithm)
-				.setPurpose(purpose)
+			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
+				algorithm,
+				purpose
+			)
 				.build();
 
 			// Generate

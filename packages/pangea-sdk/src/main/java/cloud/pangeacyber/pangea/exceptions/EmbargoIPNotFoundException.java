@@ -4,10 +4,9 @@ import cloud.pangeacyber.pangea.PangeaErrors;
 import cloud.pangeacyber.pangea.Response;
 
 //IP address was not found
-public class EmbargoIPNotFoundException extends PangeaAPIException{
+public class EmbargoIPNotFoundException extends PangeaAPIException {
 
-    public EmbargoIPNotFoundException(String message, Response<PangeaErrors> response) {
-        super(message, response);
-    }
-
+	public EmbargoIPNotFoundException(String message, Response<PangeaErrors> response) {
+		super(message, response);
+	}
 }

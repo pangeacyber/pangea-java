@@ -1,92 +1,91 @@
 package cloud.pangeacyber.pangea.audit;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LogResult {
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("envelope")
-    Object rawEnvelope;
 
-    @JsonIgnore
-    EventEnvelope eventEnvelope = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("envelope")
+	Object rawEnvelope;
 
-    @JsonProperty("hash")
-    String hash;
+	@JsonIgnore
+	EventEnvelope eventEnvelope = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("unpublished_root")
-    String unpublishedRoot;
+	@JsonProperty("hash")
+	String hash;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("membership_proof")
-    String membershipProof;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("unpublished_root")
+	String unpublishedRoot;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("consistency_proof")
-    String[] consistencyProof;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("membership_proof")
+	String membershipProof;
 
-    @JsonIgnore
-    EventVerification membershipVerification = EventVerification.NOT_VERIFIED;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("consistency_proof")
+	String[] consistencyProof;
 
-    @JsonIgnore
-    EventVerification consistencyVerification = EventVerification.NOT_VERIFIED;
+	@JsonIgnore
+	EventVerification membershipVerification = EventVerification.NOT_VERIFIED;
 
-    @JsonIgnore
-    EventVerification signatureVerification = EventVerification.NOT_VERIFIED;
+	@JsonIgnore
+	EventVerification consistencyVerification = EventVerification.NOT_VERIFIED;
 
-    public Object getRawEnvelope() {
-        return rawEnvelope;
-    }
+	@JsonIgnore
+	EventVerification signatureVerification = EventVerification.NOT_VERIFIED;
 
-    public EventEnvelope getEventEnvelope() {
-        return eventEnvelope;
-    }
+	public Object getRawEnvelope() {
+		return rawEnvelope;
+	}
 
-    public void setEventEnvelope(EventEnvelope eventEnvelope) {
-        this.eventEnvelope = eventEnvelope;
-    }
+	public EventEnvelope getEventEnvelope() {
+		return eventEnvelope;
+	}
 
-    public String getHash() {
-        return hash;
-    }
+	public void setEventEnvelope(EventEnvelope eventEnvelope) {
+		this.eventEnvelope = eventEnvelope;
+	}
 
-    public String getUnpublishedRoot() {
-        return unpublishedRoot;
-    }
+	public String getHash() {
+		return hash;
+	}
 
-    public String getMembershipProof() {
-        return membershipProof;
-    }
+	public String getUnpublishedRoot() {
+		return unpublishedRoot;
+	}
 
-    public String[] getConsistencyProof() {
-        return consistencyProof;
-    }
+	public String getMembershipProof() {
+		return membershipProof;
+	}
 
-    public EventVerification getMembershipVerification() {
-        return membershipVerification;
-    }
+	public String[] getConsistencyProof() {
+		return consistencyProof;
+	}
 
-    public EventVerification getConsistencyVerification() {
-        return consistencyVerification;
-    }
+	public EventVerification getMembershipVerification() {
+		return membershipVerification;
+	}
 
-    public EventVerification getSignatureVerification() {
-        return signatureVerification;
-    }
+	public EventVerification getConsistencyVerification() {
+		return consistencyVerification;
+	}
 
-    public void verifySignature() {
-        if(this.eventEnvelope != null){
-            this.signatureVerification = this.eventEnvelope.verifySignature();
-        } else {
-            this.signatureVerification = EventVerification.NOT_VERIFIED;
-        }
-    }
+	public EventVerification getSignatureVerification() {
+		return signatureVerification;
+	}
+
+	public void verifySignature() {
+		if (this.eventEnvelope != null) {
+			this.signatureVerification = this.eventEnvelope.verifySignature();
+		} else {
+			this.signatureVerification = EventVerification.NOT_VERIFIED;
+		}
+	}
 }

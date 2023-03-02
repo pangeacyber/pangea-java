@@ -4,10 +4,9 @@ import cloud.pangeacyber.pangea.PangeaErrors;
 import cloud.pangeacyber.pangea.Response;
 
 //Too many requests were made
-public class RateLimitException extends PangeaAPIException{
+public class RateLimitException extends PangeaAPIException {
 
-    public RateLimitException(String message, Response<PangeaErrors> response) {
-        super(message, response);
-    }
-
+	public RateLimitException(String message, Response<PangeaErrors> response) {
+		super(message, response);
+	}
 }

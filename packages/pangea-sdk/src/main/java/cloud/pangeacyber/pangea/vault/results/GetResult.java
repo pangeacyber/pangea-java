@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GetResult extends ItemData {
-
+	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("versions")
 	ItemVersionData[] versions;
 

@@ -8,12 +8,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ItemData {
 
-	@JsonProperty("id")
-	String id;
-
 	@JsonProperty("type")
 	String type;
 
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("id")
+	String id;
+
+	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("current_version")
 	ItemVersionData currentVersion;
 

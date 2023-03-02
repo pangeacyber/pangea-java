@@ -98,7 +98,6 @@ public class ITFileIntelTest {
 		// the resulting verdict can change based on the provider set as default
 		// so only assert the response is successful
 		assertTrue(response.isOk());
-
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}

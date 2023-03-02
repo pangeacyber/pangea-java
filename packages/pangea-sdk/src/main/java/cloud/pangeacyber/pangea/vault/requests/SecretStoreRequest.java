@@ -1,7 +1,5 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SecretStoreRequest extends CommonStoreRequest {

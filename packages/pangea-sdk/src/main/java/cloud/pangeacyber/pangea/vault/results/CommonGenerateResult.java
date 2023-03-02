@@ -5,27 +5,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommonGenerateResult {
-    @JsonProperty("type")
-    String type;
 
-    @JsonProperty("id")
-    String id = null;
+	@JsonProperty("type")
+	String type;
 
-    @JsonProperty("version")
-    Integer version;
+	@JsonProperty("id")
+	String id = null;
 
-    public CommonGenerateResult() {
-    }
+	@JsonProperty("version")
+	Integer version;
 
-    public String getType() {
-        return type;
-    }
+	public CommonGenerateResult() {}
 
-    public String getId() {
-        return id;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public Integer getVersion() {
-        return version;
-    }
+	public String getId() {
+		return id;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
 }

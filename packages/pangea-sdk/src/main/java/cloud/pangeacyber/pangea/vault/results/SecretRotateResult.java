@@ -4,20 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SecretRotateResult extends CommonRotateResult{
-    @JsonProperty("secret")
-    String secret = null;
+public class SecretRotateResult extends CommonRotateResult {
 
-    public SecretRotateResult() {
-        super();
-    }
+	@JsonProperty("secret")
+	String secret = null;
 
-    public String getSecret() {
-        return secret;
-    }
+	public SecretRotateResult() {
+		super();
+	}
 
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
+	public String getSecret() {
+		return secret;
+	}
 
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
 }

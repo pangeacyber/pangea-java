@@ -5,14 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JWTVerifyResult {
-    @JsonProperty("valid_signature")
-    boolean validSignature;
 
-    public JWTVerifyResult() {
-    }
+	@JsonProperty("valid_signature")
+	boolean validSignature;
 
-    public boolean isValidSignature() {
-        return validSignature;
-    }
+	public JWTVerifyResult() {}
 
+	public boolean isValidSignature() {
+		return validSignature;
+	}
 }

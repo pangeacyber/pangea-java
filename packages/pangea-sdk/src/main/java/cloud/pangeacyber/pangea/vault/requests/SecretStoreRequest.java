@@ -1,32 +1,33 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SecretStoreRequest extends CommonStoreRequest{
-    @JsonProperty("secret")
-    String secret = null;
+public class SecretStoreRequest extends CommonStoreRequest {
 
-    protected SecretStoreRequest(SecretStoreRequestBuilder builder){
-        super(builder);
-        this.secret = builder.secret;
-    }
+	@JsonProperty("secret")
+	String secret = null;
 
-    public String getSecret() {
-        return secret;
-    }
+	protected SecretStoreRequest(SecretStoreRequestBuilder builder) {
+		super(builder);
+		this.secret = builder.secret;
+	}
 
-    public static class SecretStoreRequestBuilder extends CommonStoreRequestBuilder<SecretStoreRequestBuilder> {
-        String secret = null;
+	public String getSecret() {
+		return secret;
+	}
 
-        public SecretStoreRequestBuilder(String secret) {
-            this.secret = secret;
-        }
+	public static class SecretStoreRequestBuilder extends CommonStoreRequestBuilder<SecretStoreRequestBuilder> {
 
-        public SecretStoreRequest build(){
-            return new SecretStoreRequest(this);
-        }
+		String secret = null;
 
-    }
+		public SecretStoreRequestBuilder(String secret) {
+			this.secret = secret;
+		}
+
+		public SecretStoreRequest build() {
+			return new SecretStoreRequest(this);
+		}
+	}
 }

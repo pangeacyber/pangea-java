@@ -1,61 +1,31 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import cloud.pangeacyber.pangea.vault.models.ItemData;
+import cloud.pangeacyber.pangea.vault.models.ItemVersionData;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GetResult extends CommonGetResult{
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("public_key")
-    String encodedPublicKey = null;
+public class GetResult extends ItemData {
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("private_key")
-    String encodedPrivateKey = null;
+	@JsonProperty("versions")
+	ItemVersionData[] versions;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("algorithm")
-    String algorithm = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("rotation_grace_period")
+	String rotationGracePeriod = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("purpose")
-    String purpose = null;
+	public GetResult() {
+		super();
+	}
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("key")
-    String encodedSymmetricKey = null;
+	public ItemVersionData[] getVersions() {
+		return versions;
+	}
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("secret")
-    String secret = null;
-
-    public GetResult() {
-        super();
-    }
-
-    public String getEncodedPublicKey() {
-        return encodedPublicKey;
-    }
-
-    public String getEncodedPrivateKey() {
-        return encodedPrivateKey;
-    }
-
-    public String getAlgorithm() {
-        return algorithm;
-    }
-
-    public String getPurpose() {
-        return purpose;
-    }
-
-    public String getEncodedSymmetricKey() {
-        return encodedSymmetricKey;
-    }
-
-    public String getSecret() {
-        return secret;
-    }
+	public String getRotationGracePeriod() {
+		return rotationGracePeriod;
+	}
 }

@@ -1,30 +1,26 @@
 package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SymmetricStoreResult extends CommonStoreResult{
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("algorithm")
-    String algorithm;
+public class SymmetricStoreResult extends CommonStoreResult {
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("key")
-    String encodedSymmetricKey = null;
+	@JsonProperty("algorithm")
+	String algorithm;
 
-    public SymmetricStoreResult() {
-        super();
-    }
+	@JsonProperty("purpose")
+	String purpose;
 
-    public String getAlgorithm() {
-        return algorithm;
-    }
+	public SymmetricStoreResult() {
+		super();
+	}
 
-    public String getEncodedSymmetricKey() {
-        return encodedSymmetricKey;
-    }
+	public String getAlgorithm() {
+		return algorithm;
+	}
 
+	public String getPurpose() {
+		return purpose;
+	}
 }

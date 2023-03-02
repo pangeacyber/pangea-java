@@ -5,14 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DeleteResult {
-    @JsonProperty("id")
-    String id;
 
-    public DeleteResult() {
-    }
+	@JsonProperty("id")
+	String id;
 
-    public String getId() {
-        return id;
-    }
+	public DeleteResult() {}
 
+	public String getId() {
+		return id;
+	}
 }

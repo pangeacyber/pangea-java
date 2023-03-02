@@ -5,27 +5,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StateChangeResult {
-    @JsonProperty("id")
-    String id;
 
-    @JsonProperty("state")
-    String state;
+	@JsonProperty("id")
+	String id;
 
-    @JsonProperty("version")
-    int version;
+	@JsonProperty("state")
+	String state;
 
-    public StateChangeResult() {
-    }
+	@JsonProperty("version")
+	int version;
 
-    public String getId() {
-        return id;
-    }
+	@JsonProperty("destroy_at")
+	String destroyAt;
 
-    public String getState() {
-        return state;
-    }
+	public StateChangeResult() {}
 
-    public int getVersion() {
-        return version;
-    }
+	public String getId() {
+		return id;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public String getDestroyAt() {
+		return destroyAt;
+	}
 }

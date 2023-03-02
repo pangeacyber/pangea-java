@@ -5,35 +5,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VerifyResult {
-    @JsonProperty("id")
-    String id;
 
-    @JsonProperty("version")
-    Integer version;
+	@JsonProperty("id")
+	String id;
 
-    @JsonProperty("algorithm")
-    String algorithm;
+	@JsonProperty("version")
+	Integer version;
 
-    @JsonProperty("valid_signature")
-    boolean validSignature;
+	@JsonProperty("algorithm")
+	String algorithm;
 
-    public VerifyResult() {
-    }
+	@JsonProperty("valid_signature")
+	boolean validSignature;
 
-    public String getAlgorithm() {
-        return algorithm;
-    }
+	public VerifyResult() {}
 
-    public String getId() {
-        return id;
-    }
+	public String getAlgorithm() {
+		return algorithm;
+	}
 
-    public Integer getVersion() {
-        return version;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public boolean isValidSignature() {
-        return validSignature;
-    }
+	public Integer getVersion() {
+		return version;
+	}
 
+	public boolean isValidSignature() {
+		return validSignature;
+	}
 }

@@ -1,36 +1,67 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
+import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
-
 public class CommonRotateRequest {
-    @JsonProperty("id")
-    String id;
 
-    @JsonProperty("state")
-    ItemVersionState state;
+	@JsonProperty("id")
+	String id;
 
-    protected CommonRotateRequest(CommonRotateRequestBuilder<?> builder) {
-        this.id = builder.id;
-        this.state = builder.state;
-    }
+	@JsonProperty("rotation_state")
+	ItemVersionState rotationState;
 
-    public String getId() {
-        return id;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("rotation_frequency")
+	String rotationFrequency;
 
-    public static class CommonRotateRequestBuilder<B extends CommonRotateRequestBuilder<B>>{
-        String id;
-        ItemVersionState state;
+	protected CommonRotateRequest(CommonRotateRequestBuilder<?> builder) {
+		this.id = builder.id;
+		this.rotationState = builder.rotationState;
+		this.rotationFrequency = builder.rotationFrequency;
+	}
 
-        public CommonRotateRequestBuilder(String id, ItemVersionState state){
-            this.id = id;
-            this.state = state;
-        }
+	public String getRotationFrequency() {
+		return rotationFrequency;
+	}
 
-        public CommonRotateRequest build(){
-            return new CommonRotateRequest(this);
-        }
-    }
+	public String getId() {
+		return id;
+	}
+
+	public ItemVersionState getRotationState() {
+		return rotationState;
+	}
+
+	public static class CommonRotateRequestBuilder<B extends CommonRotateRequestBuilder<B>> {
+
+		String id;
+		ItemVersionState rotationState = null;
+		String rotationFrequency = null;
+
+		public CommonRotateRequestBuilder(String id) {
+			this.id = id;
+		}
+
+		@SuppressWarnings("unchecked")
+		final B self() {
+			return (B) this;
+		}
+
+		public CommonRotateRequest build() {
+			return new CommonRotateRequest(this);
+		}
+
+		public B setRotationState(ItemVersionState rotationState) {
+			this.rotationState = rotationState;
+			return self();
+		}
+
+		public B setRotationFrequency(String rotationFrequency) {
+			this.rotationFrequency = rotationFrequency;
+			return self();
+		}
+	}
 }

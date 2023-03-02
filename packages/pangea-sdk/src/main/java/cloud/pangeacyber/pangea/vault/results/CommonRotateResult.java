@@ -5,34 +5,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommonRotateResult {
-    @JsonProperty("type")
-    String type;
 
-    @JsonProperty("id")
-    String id = null;
+	@JsonProperty("type")
+	String type;
 
-    @JsonProperty("version")
-    Integer version = null;
+	@JsonProperty("id")
+	String id = null;
 
-    @JsonProperty("state")
-    Integer state = null;
+	@JsonProperty("version")
+	Integer version = null;
 
-    public CommonRotateResult() {
-    }
+	public CommonRotateResult() {}
 
-    public String getType() {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public Integer getState() {
-        return state;
-    }
+	public Integer getVersion() {
+		return version;
+	}
 }

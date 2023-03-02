@@ -1,63 +1,64 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.ItemType;
+import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SymmetricGenerateRequest extends CommonGenerateRequest{
-    @JsonProperty("type")
-    ItemType type;
+public class SymmetricGenerateRequest extends CommonGenerateRequest {
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("algorithm")
-    SymmetricAlgorithm algorithm = null;
+	@JsonProperty("type")
+	ItemType type;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("purpose")
-    KeyPurpose purpose = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("algorithm")
+	SymmetricAlgorithm algorithm = null;
 
-    public SymmetricGenerateRequest(SymmetricGenerateRequestBuilder builder) {
-        super(builder);
-        this.type = builder.type;
-        this.algorithm = builder.algorithm;
-        this.purpose = builder.purpose;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("purpose")
+	KeyPurpose purpose = null;
 
-    public SymmetricAlgorithm getAlgorithm() {
-        return algorithm;
-    }
+	public SymmetricGenerateRequest(SymmetricGenerateRequestBuilder builder) {
+		super(builder);
+		this.type = builder.type;
+		this.algorithm = builder.algorithm;
+		this.purpose = builder.purpose;
+	}
 
-    public KeyPurpose getPurpose() {
-        return purpose;
-    }
+	public SymmetricAlgorithm getAlgorithm() {
+		return algorithm;
+	}
 
-    public static class SymmetricGenerateRequestBuilder extends CommonGenerateRequestBuilder<SymmetricGenerateRequestBuilder> {
-        ItemType type;
-        SymmetricAlgorithm algorithm = null;
-        KeyPurpose purpose = null;
+	public KeyPurpose getPurpose() {
+		return purpose;
+	}
 
-        public SymmetricGenerateRequestBuilder() {
-            super();
-            this.type = ItemType.SYMMETRIC_KEY;
-        }
+	public static class SymmetricGenerateRequestBuilder
+		extends CommonGenerateRequestBuilder<SymmetricGenerateRequestBuilder> {
 
-        public SymmetricGenerateRequest build(){
-            return new SymmetricGenerateRequest(this);
-        }
+		ItemType type;
+		SymmetricAlgorithm algorithm = null;
+		KeyPurpose purpose = null;
 
-        public SymmetricGenerateRequestBuilder setAlgorithm(SymmetricAlgorithm algorithm) {
-            this.algorithm = algorithm;
-            return this;
-        }
+		public SymmetricGenerateRequestBuilder() {
+			super();
+			this.type = ItemType.SYMMETRIC_KEY;
+		}
 
-        public SymmetricGenerateRequestBuilder setPurpose(KeyPurpose purpose) {
-            this.purpose = purpose;
-            return this;
-        }
-    }
+		public SymmetricGenerateRequest build() {
+			return new SymmetricGenerateRequest(this);
+		}
 
+		public SymmetricGenerateRequestBuilder setAlgorithm(SymmetricAlgorithm algorithm) {
+			this.algorithm = algorithm;
+			return this;
+		}
+
+		public SymmetricGenerateRequestBuilder setPurpose(KeyPurpose purpose) {
+			this.purpose = purpose;
+			return this;
+		}
+	}
 }

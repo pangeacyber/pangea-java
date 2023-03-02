@@ -4,31 +4,38 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AsymmetricStoreResult extends CommonStoreResult{
-    @JsonProperty("algorithm")
-    String algorithm;
+public class AsymmetricStoreResult extends CommonStoreResult {
 
-    @JsonProperty("public_key")
-    String encodedPublicKey;
+	@JsonProperty("algorithm")
+	String algorithm;
 
-    public AsymmetricStoreResult() {
-        super();
-    }
+	@JsonProperty("purpose")
+	String purpose;
 
-    public String getEncodedPublicKey() {
-        return encodedPublicKey;
-    }
+	@JsonProperty("public_key")
+	String encodedPublicKey;
 
-    public void setEncodedPublicKey(String encodedPublicKey) {
-        this.encodedPublicKey = encodedPublicKey;
-    }
+	public AsymmetricStoreResult() {
+		super();
+	}
 
-    public String getAlgorithm() {
-        return algorithm;
-    }
+	public String getEncodedPublicKey() {
+		return encodedPublicKey;
+	}
 
-    public void setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
-    }
+	public void setEncodedPublicKey(String encodedPublicKey) {
+		this.encodedPublicKey = encodedPublicKey;
+	}
 
+	public String getAlgorithm() {
+		return algorithm;
+	}
+
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
+
+	public String getPurpose() {
+		return purpose;
+	}
 }

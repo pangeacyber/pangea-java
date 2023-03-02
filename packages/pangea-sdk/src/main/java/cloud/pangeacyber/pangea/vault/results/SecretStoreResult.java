@@ -4,19 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SecretStoreResult extends CommonStoreResult{
-    @JsonProperty("secret")
-    String secret = null;
+public class SecretStoreResult extends CommonStoreResult {
 
-    public SecretStoreResult() {
-    }
+	@JsonProperty("secret")
+	String secret = null;
 
-    public String getSecret() {
-        return secret;
-    }
+	public SecretStoreResult() {}
 
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
+	public String getSecret() {
+		return secret;
+	}
 
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
 }

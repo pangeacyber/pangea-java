@@ -1,71 +1,71 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class KeyRotateRequest extends CommonRotateRequest{
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("public_key")
-    String encodedPublicKey = null;
+public class KeyRotateRequest extends CommonRotateRequest {
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("private_key")
-    String encodedPrivateKey = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("public_key")
+	String encodedPublicKey = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("key")
-    String encodedSymmetricKey = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("private_key")
+	String encodedPrivateKey = null;
 
-    protected KeyRotateRequest(KeyRotateRequestBuilder builder){
-        super(builder);
-        this.encodedPrivateKey = builder.encodedPrivateKey;
-        this.encodedPublicKey = builder.encodedPublicKey;
-        this.encodedSymmetricKey = builder.encodedSymmetricKey;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("key")
+	String encodedSymmetricKey = null;
 
-    public String getEncodedPublicKey() {
-        return encodedPublicKey;
-    }
+	protected KeyRotateRequest(KeyRotateRequestBuilder builder) {
+		super(builder);
+		this.encodedPrivateKey = builder.encodedPrivateKey;
+		this.encodedPublicKey = builder.encodedPublicKey;
+		this.encodedSymmetricKey = builder.encodedSymmetricKey;
+	}
 
-    public String getEncodedPrivateKey() {
-        return encodedPrivateKey;
-    }
+	public String getEncodedPublicKey() {
+		return encodedPublicKey;
+	}
 
-    public String getEncodedSymmetricKey() {
-        return encodedSymmetricKey;
-    }
+	public String getEncodedPrivateKey() {
+		return encodedPrivateKey;
+	}
 
-    public static class KeyRotateRequestBuilder extends CommonRotateRequestBuilder<KeyRotateRequestBuilder>{
-        String encodedPublicKey = null;
-        String encodedPrivateKey = null;
-        String encodedSymmetricKey = null;
+	public String getEncodedSymmetricKey() {
+		return encodedSymmetricKey;
+	}
 
-        public KeyRotateRequestBuilder(String id, ItemVersionState state) {
-            super(id, state);
-        }
+	public static class KeyRotateRequestBuilder extends CommonRotateRequestBuilder<KeyRotateRequestBuilder> {
 
-        public KeyRotateRequest build(){
-            return new KeyRotateRequest(this);
-        }
+		String encodedPublicKey = null;
+		String encodedPrivateKey = null;
+		String encodedSymmetricKey = null;
 
-        public KeyRotateRequestBuilder setEncodedPublicKey(String encodedPublicKey) {
-            this.encodedPublicKey = encodedPublicKey;
-            return this;
-        }
+		public KeyRotateRequestBuilder(String id, ItemVersionState rotationState) {
+			super(id);
+			this.rotationState = rotationState;
+		}
 
-        public KeyRotateRequestBuilder setEncodedPrivateKey(String encodedPrivateKey) {
-            this.encodedPrivateKey = encodedPrivateKey;
-            return this;
-        }
+		public KeyRotateRequest build() {
+			return new KeyRotateRequest(this);
+		}
 
-        public KeyRotateRequestBuilder setEncodedSymmetricKey(String encodedSymmetricKey) {
-            this.encodedSymmetricKey = encodedSymmetricKey;
-            return this;
-        }
+		public KeyRotateRequestBuilder setEncodedPublicKey(String encodedPublicKey) {
+			this.encodedPublicKey = encodedPublicKey;
+			return this;
+		}
 
-    }
+		public KeyRotateRequestBuilder setEncodedPrivateKey(String encodedPrivateKey) {
+			this.encodedPrivateKey = encodedPrivateKey;
+			return this;
+		}
 
+		public KeyRotateRequestBuilder setEncodedSymmetricKey(String encodedSymmetricKey) {
+			this.encodedSymmetricKey = encodedSymmetricKey;
+			return this;
+		}
+	}
 }

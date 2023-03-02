@@ -1,59 +1,58 @@
 package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class KeyRotateResult extends CommonRotateResult{
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("public_key")
-    String encodedPublicKey = null;
+public class KeyRotateResult extends CommonRotateResult {
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("private_key")
-    String encodedPrivateKey = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("public_key")
+	String encodedPublicKey = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("key")
-    String encodedSymmetricKey = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("private_key")
+	String encodedPrivateKey = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("algorithm")
-    String algorithm = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("key")
+	String encodedSymmetricKey = null;
 
-    public KeyRotateResult() {
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("algorithm")
+	String algorithm = null;
 
-    public String getEncodedPublicKey() {
-        return encodedPublicKey;
-    }
+	public KeyRotateResult() {}
 
-    public String getEncodedPrivateKey() {
-        return encodedPrivateKey;
-    }
+	public String getEncodedPublicKey() {
+		return encodedPublicKey;
+	}
 
-    public String getEncodedSymmetricKey() {
-        return encodedSymmetricKey;
-    }
+	public String getEncodedPrivateKey() {
+		return encodedPrivateKey;
+	}
 
-    public void setEncodedPublicKey(String encodedPublicKey) {
-        this.encodedPublicKey = encodedPublicKey;
-    }
+	public String getEncodedSymmetricKey() {
+		return encodedSymmetricKey;
+	}
 
-    public void setEncodedPrivateKey(String encodedPrivateKey) {
-        this.encodedPrivateKey = encodedPrivateKey;
-    }
+	public void setEncodedPublicKey(String encodedPublicKey) {
+		this.encodedPublicKey = encodedPublicKey;
+	}
 
-    public void setEncodedSymmetricKey(String encodedSymmetricKey) {
-        this.encodedSymmetricKey = encodedSymmetricKey;
-    }
+	public void setEncodedPrivateKey(String encodedPrivateKey) {
+		this.encodedPrivateKey = encodedPrivateKey;
+	}
 
-    public String getAlgorithm() {
-        return algorithm;
-    }
+	public void setEncodedSymmetricKey(String encodedSymmetricKey) {
+		this.encodedSymmetricKey = encodedSymmetricKey;
+	}
 
-    public void setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
-    }
+	public String getAlgorithm() {
+		return algorithm;
+	}
 
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
 }

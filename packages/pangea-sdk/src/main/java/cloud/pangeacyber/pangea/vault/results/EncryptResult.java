@@ -3,42 +3,41 @@ package cloud.pangeacyber.pangea.vault.results;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class EncryptResult {
-    @JsonProperty("id")
-    String id;
 
-    @JsonProperty("version")
-    Integer version;
+	@JsonProperty("id")
+	String id;
 
-    @JsonProperty("cipher_text")
-    String cipherText;
+	@JsonProperty("version")
+	Integer version;
 
-    @JsonProperty("algorithm")
-    String algorithm;
+	@JsonProperty("cipher_text")
+	String cipherText;
 
-    public EncryptResult() {
-    }
+	@JsonProperty("algorithm")
+	String algorithm;
 
-    public EncryptResult(String id, Integer version, String cipherText, String algorithm) {
-        this.id = id;
-        this.version = version;
-        this.cipherText = cipherText;
-        this.algorithm = algorithm;
-    }
+	public EncryptResult() {}
 
-    public String getAlgorithm() {
-        return algorithm;
-    }
+	public EncryptResult(String id, Integer version, String cipherText, String algorithm) {
+		this.id = id;
+		this.version = version;
+		this.cipherText = cipherText;
+		this.algorithm = algorithm;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getAlgorithm() {
+		return algorithm;
+	}
 
-    public Integer getVersion() {
-        return version;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getCipherText() {
-        return cipherText;
-    }
+	public Integer getVersion() {
+		return version;
+	}
 
+	public String getCipherText() {
+		return cipherText;
+	}
 }

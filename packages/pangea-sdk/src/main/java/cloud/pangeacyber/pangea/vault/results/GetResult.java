@@ -1,70 +1,70 @@
 package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GetResult extends CommonGetResult{
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("public_key")
-    String encodedPublicKey = null;
+public class GetResult extends CommonGetResult {
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("private_key")
-    String encodedPrivateKey = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("public_key")
+	String encodedPublicKey = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("algorithm")
-    String algorithm = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("private_key")
+	String encodedPrivateKey = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("purpose")
-    String purpose = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("algorithm")
+	String algorithm = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("key")
-    String encodedSymmetricKey = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("purpose")
+	String purpose = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("managed")
-    Boolean managed = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("key")
+	String encodedSymmetricKey = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("secret")
-    String secret = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("managed")
+	Boolean managed = null;
 
-    public GetResult() {
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("secret")
+	String secret = null;
 
-    public GetResult(String id, String type, Boolean version) {
-        super(id, type, version);
-    }
+	public GetResult() {}
 
-    public String getEncodedPublicKey() {
-        return encodedPublicKey;
-    }
+	public GetResult(String id, String type, Boolean version) {
+		super(id, type, version);
+	}
 
-    public String getEncodedPrivateKey() {
-        return encodedPrivateKey;
-    }
+	public String getEncodedPublicKey() {
+		return encodedPublicKey;
+	}
 
-    public String getAlgorithm() {
-        return algorithm;
-    }
+	public String getEncodedPrivateKey() {
+		return encodedPrivateKey;
+	}
 
-    public String getPurpose() {
-        return purpose;
-    }
+	public String getAlgorithm() {
+		return algorithm;
+	}
 
-    public String getEncodedSymmetricKey() {
-        return encodedSymmetricKey;
-    }
+	public String getPurpose() {
+		return purpose;
+	}
 
-    public Boolean getManaged() {
-        return managed;
-    }
+	public String getEncodedSymmetricKey() {
+		return encodedSymmetricKey;
+	}
 
-    public String getSecret() {
-        return secret;
-    }
+	public Boolean getManaged() {
+		return managed;
+	}
+
+	public String getSecret() {
+		return secret;
+	}
 }

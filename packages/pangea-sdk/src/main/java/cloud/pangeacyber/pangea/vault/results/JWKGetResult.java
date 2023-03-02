@@ -1,18 +1,16 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import cloud.pangeacyber.pangea.vault.models.JWKSet;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import cloud.pangeacyber.pangea.vault.models.JWKSet;
-
 public class JWKGetResult {
-    @JsonProperty("jwk")
-    JWKSet jwk;
 
-    public JWKGetResult() {
-    }
+	@JsonProperty("jwk")
+	JWKSet jwk;
 
-    public JWKSet getJWK() {
-        return jwk;
-    }
+	public JWKGetResult() {}
 
+	public JWKSet getJWK() {
+		return jwk;
+	}
 }

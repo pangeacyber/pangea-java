@@ -2,98 +2,97 @@ package cloud.pangeacyber.pangea.vault.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JWK {
-    @JsonProperty("alg")
-    String alg;
 
-    @JsonProperty("kty")
-    String kty;
+	@JsonProperty("alg")
+	String alg;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("kid")
-    String kid;
+	@JsonProperty("kty")
+	String kty;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("use")
-    String use;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("kid")
+	String kid;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("crv")
-    String crv;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("use")
+	String use;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("d")
-    String d;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("crv")
+	String crv;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("x")
-    String x;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("d")
+	String d;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("y")
-    String y;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("x")
+	String x;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("n")
-    String n;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("y")
+	String y;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("e")
-    String e;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("n")
+	String n;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("k")
-    String k;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("e")
+	String e;
 
-    public JWK() {
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("k")
+	String k;
 
-    public String getAlg() {
-        return alg;
-    }
+	public JWK() {}
 
-    public String getKty() {
-        return kty;
-    }
+	public String getAlg() {
+		return alg;
+	}
 
-    public String getKid() {
-        return kid;
-    }
+	public String getKty() {
+		return kty;
+	}
 
-    public String getUse() {
-        return use;
-    }
+	public String getKid() {
+		return kid;
+	}
 
-    public String getCrv() {
-        return crv;
-    }
+	public String getUse() {
+		return use;
+	}
 
-    public String getD() {
-        return d;
-    }
+	public String getCrv() {
+		return crv;
+	}
 
-    public String getX() {
-        return x;
-    }
+	public String getD() {
+		return d;
+	}
 
-    public String getY() {
-        return y;
-    }
+	public String getX() {
+		return x;
+	}
 
-    public String getN() {
-        return n;
-    }
+	public String getY() {
+		return y;
+	}
 
-    public String getE() {
-        return e;
-    }
+	public String getN() {
+		return n;
+	}
 
-    public String getK() {
-        return k;
-    }
+	public String getE() {
+		return e;
+	}
 
+	public String getK() {
+		return k;
+	}
 }

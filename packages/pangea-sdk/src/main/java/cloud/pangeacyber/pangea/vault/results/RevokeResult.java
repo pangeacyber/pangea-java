@@ -3,17 +3,17 @@ package cloud.pangeacyber.pangea.vault.results;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RevokeResult {
-    @JsonProperty("id")
-    String id;
 
-    public RevokeResult() {
-    }
+	@JsonProperty("id")
+	String id;
 
-    public RevokeResult(String id) {
-        this.id = id;
-    }
+	public RevokeResult() {}
 
-    public String getId() {
-        return id;
-    }
+	public RevokeResult(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return id;
+	}
 }

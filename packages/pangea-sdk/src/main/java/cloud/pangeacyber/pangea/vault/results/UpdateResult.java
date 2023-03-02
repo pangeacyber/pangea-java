@@ -3,18 +3,17 @@ package cloud.pangeacyber.pangea.vault.results;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UpdateResult {
-    @JsonProperty("id")
-    String id;
 
-    public UpdateResult() {
-    }
+	@JsonProperty("id")
+	String id;
 
-    public UpdateResult(String id) {
-        this.id = id;
-    }
+	public UpdateResult() {}
 
-    public String getId() {
-        return id;
-    }
+	public UpdateResult(String id) {
+		this.id = id;
+	}
 
+	public String getId() {
+		return id;
+	}
 }

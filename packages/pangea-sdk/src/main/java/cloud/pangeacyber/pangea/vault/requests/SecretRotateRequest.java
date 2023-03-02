@@ -2,35 +2,36 @@ package cloud.pangeacyber.pangea.vault.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SecretRotateRequest extends CommonRotateRequest{
-    @JsonProperty("secret")
-    String secret = null;
+public class SecretRotateRequest extends CommonRotateRequest {
 
-    protected SecretRotateRequest(SecretRotateRequestBuilder builder) {
-        super(builder);
-        this.secret = builder.secret;
-    }
+	@JsonProperty("secret")
+	String secret = null;
 
-    public String getSecret() {
-        return secret;
-    }
+	protected SecretRotateRequest(SecretRotateRequestBuilder builder) {
+		super(builder);
+		this.secret = builder.secret;
+	}
 
+	public String getSecret() {
+		return secret;
+	}
 
-    public static class SecretRotateRequestBuilder extends CommonRotateRequestBuilder<SecretRotateRequestBuilder> {
-        String secret = null;
+	public static class SecretRotateRequestBuilder extends CommonRotateRequestBuilder<SecretRotateRequestBuilder> {
 
-        public SecretRotateRequest build(){
-            return new SecretRotateRequest(this);
-        }
+		String secret = null;
 
-        public SecretRotateRequestBuilder(String id, String secret) {
-            super(id);
-            this.secret = secret;
-        }
+		public SecretRotateRequest build() {
+			return new SecretRotateRequest(this);
+		}
 
-        public SecretRotateRequestBuilder setSecret(String secret) {
-            this.secret = secret;
-            return this;
-        }
-    }
+		public SecretRotateRequestBuilder(String id, String secret) {
+			super(id);
+			this.secret = secret;
+		}
+
+		public SecretRotateRequestBuilder setSecret(String secret) {
+			this.secret = secret;
+			return this;
+		}
+	}
 }

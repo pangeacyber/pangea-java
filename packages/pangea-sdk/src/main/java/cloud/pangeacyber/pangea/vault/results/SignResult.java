@@ -1,62 +1,61 @@
 package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SignResult {
-    @JsonProperty("id")
-    String id;
 
-    @JsonProperty("version")
-    Integer version;
+	@JsonProperty("id")
+	String id;
 
-    @JsonProperty("signature")
-    String signature;
+	@JsonProperty("version")
+	Integer version;
 
-    @JsonProperty("algorithm")
-    String algorithm;
+	@JsonProperty("signature")
+	String signature;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("public_key")
-    String encodedPublicKey = null;
+	@JsonProperty("algorithm")
+	String algorithm;
 
-    public SignResult() {
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("public_key")
+	String encodedPublicKey = null;
 
-    public SignResult(String id, Integer version, String signature, String algorithm, String encodedPublicKey) {
-        this.id = id;
-        this.version = version;
-        this.signature = signature;
-        this.algorithm = algorithm;
-        this.encodedPublicKey = encodedPublicKey;
-    }
+	public SignResult() {}
 
-    public SignResult(String id, Integer version, String signature, String algorithm) {
-        this.id = id;
-        this.version = version;
-        this.signature = signature;
-        this.algorithm = algorithm;
-    }
+	public SignResult(String id, Integer version, String signature, String algorithm, String encodedPublicKey) {
+		this.id = id;
+		this.version = version;
+		this.signature = signature;
+		this.algorithm = algorithm;
+		this.encodedPublicKey = encodedPublicKey;
+	}
 
-    public String getEncodedPublicKey() {
-        return encodedPublicKey;
-    }
+	public SignResult(String id, Integer version, String signature, String algorithm) {
+		this.id = id;
+		this.version = version;
+		this.signature = signature;
+		this.algorithm = algorithm;
+	}
 
-    public String getAlgorithm() {
-        return algorithm;
-    }
+	public String getEncodedPublicKey() {
+		return encodedPublicKey;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getAlgorithm() {
+		return algorithm;
+	}
 
-    public Integer getVersion() {
-        return version;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getSignature() {
-        return signature;
-    }
+	public Integer getVersion() {
+		return version;
+	}
 
+	public String getSignature() {
+		return signature;
+	}
 }

@@ -2,24 +2,23 @@ package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SecretStoreResult extends CommonStoreResult{
-    @JsonProperty("secret")
-    String secret = null;
+public class SecretStoreResult extends CommonStoreResult {
 
-    public SecretStoreResult() {
-    }
+	@JsonProperty("secret")
+	String secret = null;
 
-    public SecretStoreResult(String type, String id, Integer version, String secret) {
-        super(type, id, version);
-        this.secret = secret;
-    }
+	public SecretStoreResult() {}
 
-    public String getSecret() {
-        return secret;
-    }
+	public SecretStoreResult(String type, String id, Integer version, String secret) {
+		super(type, id, version);
+		this.secret = secret;
+	}
 
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
+	public String getSecret() {
+		return secret;
+	}
 
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
 }

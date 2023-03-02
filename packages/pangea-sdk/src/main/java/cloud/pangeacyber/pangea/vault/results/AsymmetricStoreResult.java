@@ -1,51 +1,50 @@
 package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class AsymmetricStoreResult extends CommonStoreResult{
-    @JsonProperty("algorithm")
-    String algorithm;
+public class AsymmetricStoreResult extends CommonStoreResult {
 
-    @JsonProperty("public_key")
-    String encodedPublicKey;
+	@JsonProperty("algorithm")
+	String algorithm;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("private_key")
-    String encodedPrivateKey = null;
+	@JsonProperty("public_key")
+	String encodedPublicKey;
 
-    public AsymmetricStoreResult() {
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("private_key")
+	String encodedPrivateKey = null;
 
-    public AsymmetricStoreResult(String type, String id, int version, String encodedPublicKey, String algorithm) {
-        super(type, id, version);
-        this.encodedPublicKey = encodedPublicKey;
-        this.algorithm = algorithm;
-    }
+	public AsymmetricStoreResult() {}
 
-    public String getEncodedPublicKey() {
-        return encodedPublicKey;
-    }
+	public AsymmetricStoreResult(String type, String id, int version, String encodedPublicKey, String algorithm) {
+		super(type, id, version);
+		this.encodedPublicKey = encodedPublicKey;
+		this.algorithm = algorithm;
+	}
 
-    public String getEncodedPrivateKey() {
-        return encodedPrivateKey;
-    }
+	public String getEncodedPublicKey() {
+		return encodedPublicKey;
+	}
 
-    public void setEncodedPublicKey(String encodedPublicKey) {
-        this.encodedPublicKey = encodedPublicKey;
-    }
+	public String getEncodedPrivateKey() {
+		return encodedPrivateKey;
+	}
 
-    public void setEncodedPrivateKey(String encodedPrivateKey) {
-        this.encodedPrivateKey = encodedPrivateKey;
-    }
+	public void setEncodedPublicKey(String encodedPublicKey) {
+		this.encodedPublicKey = encodedPublicKey;
+	}
 
-    public String getAlgorithm() {
-        return algorithm;
-    }
+	public void setEncodedPrivateKey(String encodedPrivateKey) {
+		this.encodedPrivateKey = encodedPrivateKey;
+	}
 
-    public void setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
-    }
+	public String getAlgorithm() {
+		return algorithm;
+	}
 
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
 }

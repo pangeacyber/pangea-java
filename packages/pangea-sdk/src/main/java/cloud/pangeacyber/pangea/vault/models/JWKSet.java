@@ -5,14 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JWKSet {
-    @JsonProperty("keys")
-    JWK[] keys;
 
-    public JWKSet() {
-    }
+	@JsonProperty("keys")
+	JWK[] keys;
 
-    public JWK[] getKeys() {
-        return keys;
-    }
+	public JWKSet() {}
 
+	public JWK[] getKeys() {
+		return keys;
+	}
 }

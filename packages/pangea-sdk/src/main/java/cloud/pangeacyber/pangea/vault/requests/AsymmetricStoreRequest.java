@@ -1,94 +1,96 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
-import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.ItemType;
+import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class AsymmetricStoreRequest extends CommonStoreRequest{
-    @JsonProperty("type")
-    ItemType type;
+public class AsymmetricStoreRequest extends CommonStoreRequest {
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("managed")
-    Boolean managed = null;
+	@JsonProperty("type")
+	ItemType type;
 
-    @JsonProperty("algorithm")
-    AsymmetricAlgorithm algorithm = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("managed")
+	Boolean managed = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("purpose")
-    KeyPurpose purpose = null;
+	@JsonProperty("algorithm")
+	AsymmetricAlgorithm algorithm = null;
 
-    @JsonProperty("public_key")
-    String encodedPublicKey;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("purpose")
+	KeyPurpose purpose = null;
 
-    @JsonProperty("private_key")
-    String encodedPrivateKey = null;
+	@JsonProperty("public_key")
+	String encodedPublicKey;
 
-    protected AsymmetricStoreRequest(AsymmetricStoreRequestBuilder builder){
-        super(builder);
-        this.type = builder.type;
-        this.managed = builder.managed;
-        this.algorithm = builder.algorithm;
-        this.purpose = builder.purpose;
-        this.encodedPrivateKey = builder.encodedPrivateKey;
-        this.encodedPublicKey = builder.encodedPublicKey;
-    }
+	@JsonProperty("private_key")
+	String encodedPrivateKey = null;
 
-    public Boolean getManaged() {
-        return managed;
-    }
+	protected AsymmetricStoreRequest(AsymmetricStoreRequestBuilder builder) {
+		super(builder);
+		this.type = builder.type;
+		this.managed = builder.managed;
+		this.algorithm = builder.algorithm;
+		this.purpose = builder.purpose;
+		this.encodedPrivateKey = builder.encodedPrivateKey;
+		this.encodedPublicKey = builder.encodedPublicKey;
+	}
 
-    public AsymmetricAlgorithm getAlgorithm() {
-        return algorithm;
-    }
+	public Boolean getManaged() {
+		return managed;
+	}
 
-    public KeyPurpose getPurpose() {
-        return purpose;
-    }
+	public AsymmetricAlgorithm getAlgorithm() {
+		return algorithm;
+	}
 
-    public String getEncodedPublicKey() {
-        return encodedPublicKey;
-    }
+	public KeyPurpose getPurpose() {
+		return purpose;
+	}
 
-    public String getEncodedPrivateKey() {
-        return encodedPrivateKey;
-    }
+	public String getEncodedPublicKey() {
+		return encodedPublicKey;
+	}
 
-    public static class AsymmetricStoreRequestBuilder extends CommonStoreRequestBuilder<AsymmetricStoreRequestBuilder> {
-        ItemType type;
-        Boolean managed = null;
-        AsymmetricAlgorithm algorithm = null;
-        KeyPurpose purpose = null;
-        String encodedPublicKey;
-        String encodedPrivateKey = null;
+	public String getEncodedPrivateKey() {
+		return encodedPrivateKey;
+	}
 
-        public AsymmetricStoreRequestBuilder(AsymmetricAlgorithm algorithm, String encodedPublicKey,
-                String encodedPrivateKey) {
-            this.type = ItemType.ASYMMETRIC_KEY;
-            this.algorithm = algorithm;
-            this.encodedPublicKey = encodedPublicKey;
-            this.encodedPrivateKey = encodedPrivateKey;
-        }
+	public static class AsymmetricStoreRequestBuilder extends CommonStoreRequestBuilder<AsymmetricStoreRequestBuilder> {
 
-        public AsymmetricStoreRequest build(){
-            return new AsymmetricStoreRequest(this);
-        }
+		ItemType type;
+		Boolean managed = null;
+		AsymmetricAlgorithm algorithm = null;
+		KeyPurpose purpose = null;
+		String encodedPublicKey;
+		String encodedPrivateKey = null;
 
-        public AsymmetricStoreRequestBuilder setManaged(Boolean managed) {
-            this.managed = managed;
-            return this;
-        }
+		public AsymmetricStoreRequestBuilder(
+			AsymmetricAlgorithm algorithm,
+			String encodedPublicKey,
+			String encodedPrivateKey
+		) {
+			this.type = ItemType.ASYMMETRIC_KEY;
+			this.algorithm = algorithm;
+			this.encodedPublicKey = encodedPublicKey;
+			this.encodedPrivateKey = encodedPrivateKey;
+		}
 
-        public AsymmetricStoreRequestBuilder setPurpose(KeyPurpose purpose) {
-            this.purpose = purpose;
-            return this;
-        }
+		public AsymmetricStoreRequest build() {
+			return new AsymmetricStoreRequest(this);
+		}
 
-    }
+		public AsymmetricStoreRequestBuilder setManaged(Boolean managed) {
+			this.managed = managed;
+			return this;
+		}
 
+		public AsymmetricStoreRequestBuilder setPurpose(KeyPurpose purpose) {
+			this.purpose = purpose;
+			return this;
+		}
+	}
 }

@@ -3,18 +3,17 @@ package cloud.pangeacyber.pangea.vault.results;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DeleteResult {
-    @JsonProperty("id")
-    String id;
 
-    public DeleteResult() {
-    }
+	@JsonProperty("id")
+	String id;
 
-    public DeleteResult(String id) {
-        this.id = id;
-    }
+	public DeleteResult() {}
 
-    public String getId() {
-        return id;
-    }
+	public DeleteResult(String id) {
+		this.id = id;
+	}
 
+	public String getId() {
+		return id;
+	}
 }

@@ -1,68 +1,66 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.ItemType;
+import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SymmetricStoreRequest extends CommonStoreRequest{
-    @JsonProperty("type")
-    ItemType type;
+public class SymmetricStoreRequest extends CommonStoreRequest {
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("managed")
-    Boolean managed = null;
+	@JsonProperty("type")
+	ItemType type;
 
-    @JsonProperty("algorithm")
-    SymmetricAlgorithm algorithm = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("managed")
+	Boolean managed = null;
 
-    @JsonProperty("key")
-    String encodedSymmetricKey;
+	@JsonProperty("algorithm")
+	SymmetricAlgorithm algorithm = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("purpose")
-    KeyPurpose purpose = null;
+	@JsonProperty("key")
+	String encodedSymmetricKey;
 
-    public SymmetricStoreRequest(SymmetricStoreRequestBuilder builder){
-        super(builder);
-        this.type = builder.type;
-        this.managed = builder.managed;
-        this.algorithm = builder.algorithm;
-        this.encodedSymmetricKey = builder.encodedSymmetricKey;
-        this.purpose = builder.purpose;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("purpose")
+	KeyPurpose purpose = null;
 
-    public static class SymmetricStoreRequestBuilder extends CommonStoreRequestBuilder<SymmetricStoreRequestBuilder>{
-        ItemType type;
-        Boolean managed = null;
-        SymmetricAlgorithm algorithm = null;
-        String encodedSymmetricKey;
-        KeyPurpose purpose = null;
+	public SymmetricStoreRequest(SymmetricStoreRequestBuilder builder) {
+		super(builder);
+		this.type = builder.type;
+		this.managed = builder.managed;
+		this.algorithm = builder.algorithm;
+		this.encodedSymmetricKey = builder.encodedSymmetricKey;
+		this.purpose = builder.purpose;
+	}
 
-        public SymmetricStoreRequestBuilder(SymmetricAlgorithm algorithm, String encodedSymmetricKey) {
-            this.type = ItemType.SYMMETRIC_KEY;
-            this.algorithm = algorithm;
-            this.encodedSymmetricKey = encodedSymmetricKey;
-        }
+	public static class SymmetricStoreRequestBuilder extends CommonStoreRequestBuilder<SymmetricStoreRequestBuilder> {
 
-        public SymmetricStoreRequest build(){
-            return new SymmetricStoreRequest(this);
-        }
+		ItemType type;
+		Boolean managed = null;
+		SymmetricAlgorithm algorithm = null;
+		String encodedSymmetricKey;
+		KeyPurpose purpose = null;
 
+		public SymmetricStoreRequestBuilder(SymmetricAlgorithm algorithm, String encodedSymmetricKey) {
+			this.type = ItemType.SYMMETRIC_KEY;
+			this.algorithm = algorithm;
+			this.encodedSymmetricKey = encodedSymmetricKey;
+		}
 
-        public SymmetricStoreRequestBuilder setManaged(Boolean managed) {
-            this.managed = managed;
-            return this;
-        }
+		public SymmetricStoreRequest build() {
+			return new SymmetricStoreRequest(this);
+		}
 
-        public SymmetricStoreRequestBuilder setPurpose(KeyPurpose purpose) {
-            this.purpose = purpose;
-            return this;
-        }
+		public SymmetricStoreRequestBuilder setManaged(Boolean managed) {
+			this.managed = managed;
+			return this;
+		}
 
-    }
-
+		public SymmetricStoreRequestBuilder setPurpose(KeyPurpose purpose) {
+			this.purpose = purpose;
+			return this;
+		}
+	}
 }

@@ -18,6 +18,9 @@ import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
 import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.responses.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,10 +28,26 @@ public class ITVaultTest {
 
 	VaultClient client;
 	TestEnvironment environment = TestEnvironment.DEVELOP;
+	String time;
+	Random random;
+	final String actor = "JavaSDKTest";
 
 	@Before
 	public void setUp() throws ConfigException {
 		client = new VaultClient(Config.fromIntegrationEnvironment(environment));
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+		LocalDateTime now = LocalDateTime.now();
+		time = dtf.format(now);
+		this.random = new Random();
+	}
+
+	private String getRandomID() {
+		return String.valueOf(this.random.nextInt(1000000));
+	}
+
+	private String getName() {
+		String callerName = new Throwable().getStackTrace()[1].getMethodName();
+		return String.format("%s_%s_%s_%s", this.time, actor, callerName, getRandomID());
 	}
 
 	private void encryptingCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
@@ -182,10 +201,12 @@ public class ITVaultTest {
 
 	@Test
 	public void testAESEncryptingLifeCycle() throws PangeaException, PangeaAPIException {
+		String name = getName();
 		try {
 			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
 				SymmetricAlgorithm.AES,
-				KeyPurpose.ENCRYPTION
+				KeyPurpose.ENCRYPTION,
+				name
 			)
 				.build();
 
@@ -201,10 +222,12 @@ public class ITVaultTest {
 
 	@Test
 	public void testEd25519SigningLifeCycle() throws PangeaException, PangeaAPIException {
+		String name = getName();
 		try {
 			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder(
 				AsymmetricAlgorithm.ED25519,
-				KeyPurpose.SIGNING
+				KeyPurpose.SIGNING,
+				name
 			)
 				.build();
 
@@ -224,10 +247,12 @@ public class ITVaultTest {
 	public void testJWTasymES256SigningLifeCycle() throws PangeaException, PangeaAPIException {
 		KeyPurpose purpose = KeyPurpose.JWT;
 		AsymmetricAlgorithm algorithm = AsymmetricAlgorithm.ES256;
+		String name = getName();
 		try {
 			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder(
 				algorithm,
-				purpose
+				purpose,
+				name
 			)
 				.build();
 
@@ -247,10 +272,12 @@ public class ITVaultTest {
 	public void testJWTsymHS256SigningLifeCycle() throws PangeaException, PangeaAPIException {
 		KeyPurpose purpose = KeyPurpose.JWT;
 		SymmetricAlgorithm algorithm = SymmetricAlgorithm.HS256;
+		String name = getName();
 		try {
 			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
 				algorithm,
-				purpose
+				purpose,
+				name
 			)
 				.build();
 
@@ -270,8 +297,10 @@ public class ITVaultTest {
 		String secretV1 = "mysecret";
 		String secretV2 = "mynewsecret";
 		SecretStoreResponse storeResponse = null;
+		String name = getName();
 		try {
-			storeResponse = client.secretStore(new SecretStoreRequest.SecretStoreRequestBuilder(secretV1).build());
+			storeResponse =
+				client.secretStore(new SecretStoreRequest.SecretStoreRequestBuilder(secretV1, name).build());
 			assertEquals(secretV1, storeResponse.getResult().getSecret());
 			assertEquals(Integer.valueOf(1), storeResponse.getResult().getVersion());
 			assertNotNull(storeResponse.getResult().getId());

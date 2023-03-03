@@ -80,7 +80,9 @@ public class CommonGenerateRequest {
 		String rotationState = null;
 		String expiration = null;
 
-		public CommonGenerateRequestBuilder() {}
+		public CommonGenerateRequestBuilder(String name) {
+			this.name = name;
+		}
 
 		public CommonGenerateRequest build() {
 			return new CommonGenerateRequest(this);

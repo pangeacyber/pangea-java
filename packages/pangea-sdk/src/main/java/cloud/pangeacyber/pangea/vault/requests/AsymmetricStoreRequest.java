@@ -62,8 +62,10 @@ public class AsymmetricStoreRequest extends CommonStoreRequest {
 			String encodedPrivateKey,
 			String encodedPublicKey,
 			AsymmetricAlgorithm algorithm,
-			KeyPurpose purpose
+			KeyPurpose purpose,
+			String name
 		) {
+			super(name);
 			this.type = ItemType.ASYMMETRIC_KEY;
 			this.algorithm = algorithm;
 			this.encodedPublicKey = encodedPublicKey;

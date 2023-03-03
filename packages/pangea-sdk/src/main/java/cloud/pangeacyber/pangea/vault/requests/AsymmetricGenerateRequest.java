@@ -38,8 +38,8 @@ public class AsymmetricGenerateRequest extends CommonGenerateRequest {
 		AsymmetricAlgorithm algorithm = null;
 		KeyPurpose purpose = null;
 
-		public AsymmetricGenerateRequestBuilder(AsymmetricAlgorithm algorithm, KeyPurpose purpose) {
-			super();
+		public AsymmetricGenerateRequestBuilder(AsymmetricAlgorithm algorithm, KeyPurpose purpose, String name) {
+			super(name);
 			this.type = ItemType.ASYMMETRIC_KEY;
 			this.algorithm = algorithm;
 			this.purpose = purpose;

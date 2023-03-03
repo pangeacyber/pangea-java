@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ListItemData extends ItemData {
+
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("compromised_versions")
 	ItemVersionData[] compromisedVersions;

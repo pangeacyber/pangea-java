@@ -20,7 +20,8 @@ public class SecretStoreRequest extends CommonStoreRequest {
 
 		String secret = null;
 
-		public SecretStoreRequestBuilder(String secret) {
+		public SecretStoreRequestBuilder(String secret, String name) {
+			super(name);
 			this.secret = secret;
 		}
 

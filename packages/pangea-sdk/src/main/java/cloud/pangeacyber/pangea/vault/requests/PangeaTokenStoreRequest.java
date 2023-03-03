@@ -29,7 +29,8 @@ public class PangeaTokenStoreRequest extends CommonStoreRequest {
 		String token = null;
 		String rotationGracePeriod = null;
 
-		public PangeaTokenStoreRequestBuilder(String token) {
+		public PangeaTokenStoreRequestBuilder(String token, String name) {
+			super(name);
 			this.token = token;
 		}
 

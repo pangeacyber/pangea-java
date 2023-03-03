@@ -81,7 +81,9 @@ public class CommonStoreRequest {
 		String rotationState = null;
 		String expiration = null;
 
-		public CommonStoreRequestBuilder() {}
+		public CommonStoreRequestBuilder(String name) {
+			this.name = name;
+		}
 
 		public CommonStoreRequest build() {
 			return new CommonStoreRequest(this);

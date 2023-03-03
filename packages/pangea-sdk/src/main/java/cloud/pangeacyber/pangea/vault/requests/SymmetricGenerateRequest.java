@@ -38,8 +38,8 @@ public class SymmetricGenerateRequest extends CommonGenerateRequest {
 		SymmetricAlgorithm algorithm = null;
 		KeyPurpose purpose = null;
 
-		public SymmetricGenerateRequestBuilder(SymmetricAlgorithm algorithm, KeyPurpose purpose) {
-			super();
+		public SymmetricGenerateRequestBuilder(SymmetricAlgorithm algorithm, KeyPurpose purpose, String name) {
+			super(name);
 			this.type = ItemType.SYMMETRIC_KEY;
 			this.algorithm = algorithm;
 			this.purpose = purpose;

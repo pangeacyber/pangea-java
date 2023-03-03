@@ -3,7 +3,6 @@ package cloud.pangeacyber.pangea.vault;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
@@ -27,7 +26,7 @@ import org.junit.Test;
 public class ITVaultTest {
 
 	VaultClient client;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	TestEnvironment environment = TestEnvironment.LIVE;
 	String time;
 	Random random;
 	final String actor = "JavaSDKTest";

@@ -198,7 +198,7 @@ public class FileIntelClient extends Client {
 	}
 
 	/**
-	 * File reputation
+	 * Reputation check
 	 * @pangea.description Retrieve file reputation from a default provider, using the file's hash.
 	 * @param hash hash of the file
 	 * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
@@ -217,7 +217,7 @@ public class FileIntelClient extends Client {
 	}
 
 	/**
-	 * File reputation - hash, hashType, provider
+	 * Reputation check - hash, hashType, provider
 	 * @pangea.description Retrieve file reputation from a provider, using the file's hash.
 	 * @param hash hash of the file
 	 * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
@@ -239,7 +239,7 @@ public class FileIntelClient extends Client {
 	}
 
 	/**
-	 * File reputation - hash, hashType, verbose, raw
+	 * Reputation check - hash, hashType, verbose, raw
 	 * @pangea.description Retrieve file reputation from a default provider, using the file's hash.
 	 * @param hash hash of the file
 	 * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
@@ -263,7 +263,7 @@ public class FileIntelClient extends Client {
 	}
 
 	/**
-	 * File reputation - hash, hashType, provider, verbose, raw
+	 * Reputation check - hash, hashType, provider, verbose, raw
 	 * @pangea.description Retrieve file reputation from a provider, using the file's hash.
 	 * @param hash hash of the file
 	 * @param hashType Type of hash, can be "sha256", "sha1" or "md5"

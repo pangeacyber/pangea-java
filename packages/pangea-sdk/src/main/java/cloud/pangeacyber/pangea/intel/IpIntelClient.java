@@ -157,19 +157,83 @@ public class IpIntelClient extends Client {
 		return resp;
 	}
 
+	/**
+	 * Geolocate
+	 * @pangea.description Retrieve information about the location of an IP address
+	 * @param ip The IP to be looked up
+	 * @return IPGeolocateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * IpVPNResponse response = client.geolocate(
+	 *     "93.231.182.110");
+	 * }
+	 */
 	public IPGeolocateResponse geolocate(String ip) throws PangeaException, PangeaAPIException {
 		return geolocatePost(ip, null, null, null);
 	}
 
+	/**
+	 * Geolocate - provider
+	 * @pangea.description Retrieve information about the location of an IP address
+	 * @param ip The IP to be looked up
+	 * @param provider Use reputation data from this provider
+	 * @return IPGeolocateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * IpVPNResponse response = client.geolocate(
+	 *     "93.231.182.110",
+	 *     "digitalenvoy");
+	 * }
+	 */
 	public IPGeolocateResponse geolocate(String ip, String provider) throws PangeaException, PangeaAPIException {
 		return geolocatePost(ip, provider, null, null);
 	}
 
+	/**
+	 * Geolocate - verbose, raw
+	 * @pangea.description Retrieve information about the location of an IP address
+	 * @param ip The IP to be looked up
+	 * @param verbose Echo the API parameters in the response
+	 * @param raw Include raw data from this provider
+	 * @return IPGeolocateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * IpVPNResponse response = client.geolocate(
+	 *     "93.231.182.110",
+	 *     true,
+	 *     true);
+	 * }
+	 */
 	public IPGeolocateResponse geolocate(String ip, boolean verbose, boolean raw)
 		throws PangeaException, PangeaAPIException {
 		return geolocatePost(ip, null, verbose, raw);
 	}
 
+	/**
+	 * Geolocate - provider, verbose, raw
+	 * @pangea.description Retrieve information about the location of an IP address
+	 * @param ip The IP to be looked up
+	 * @param provider Use reputation data from this provider
+	 * @param verbose Echo the API parameters in the response
+	 * @param raw Include raw data from this provider
+	 * @return IPGeolocateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * IpVPNResponse response = client.geolocate(
+	 *     "93.231.182.110",
+	 *     "digitalenvoy",
+	 *     true,
+	 *     true);
+	 * }
+	 */
 	public IPGeolocateResponse geolocate(String ip, String provider, boolean verbose, boolean raw)
 		throws PangeaException, PangeaAPIException {
 		return geolocatePost(ip, provider, verbose, raw);
@@ -183,7 +247,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Look up domain for an IP
+	 * Domain
 	 * @pangea.description Retrieve the domain name associated with an IP address
 	 * @param ip The IP to be looked up
 	 * @return IpDomainResponse
@@ -200,7 +264,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Look up domain for an IP
+	 * Domain - ip, provider
 	 * @pangea.description Retrieve the domain name associated with an IP address
 	 * @param ip The IP to be looked up
 	 * @return IpDomainResponse
@@ -218,7 +282,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Look up domain for an IP
+	 * Domain - ip, verbose, raw
 	 * @pangea.description Retrieve the domain name associated with an IP address
 	 * @param ip The IP to be looked up
 	 * @return IpDomainResponse
@@ -238,7 +302,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Look up domain for an IP
+	 * Domain - ip, provider, verbose, raw
 	 * @pangea.description Retrieve the domain name associated with an IP address
 	 * @param ip The IP to be looked up
 	 * @return IpDomainResponse
@@ -266,7 +330,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Check if an IP is a VPN
+	 * VPN
 	 * @pangea.description Determine if an IP address is provided by a VPN service
 	 * @param ip The IP to be looked up
 	 * @return IpVPNResponse
@@ -283,7 +347,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Check if an IP is a VPN
+	 * VPN - ip, provider
 	 * @pangea.description Determine if an IP address is provided by a VPN service
 	 * @param ip The IP to be looked up
 	 * @return IpVPNResponse
@@ -301,7 +365,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Check if an IP is a VPN
+	 * VPN - ip, verbose, raw
 	 * @pangea.description Determine if an IP address is provided by a VPN service
 	 * @param ip The IP to be looked up
 	 * @return IpVPNResponse
@@ -320,7 +384,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Check if an IP is a VPN
+	 * VPN - ip, provider, verbose, raw
 	 * @pangea.description Determine if an IP address is provided by a VPN service
 	 * @param ip The IP to be looked up
 	 * @return IpVPNResponse
@@ -348,7 +412,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Check for proxied IPs
+	 * Proxy
 	 * @pangea.description Determine if an IP address is provided by a proxy service
 	 * @param ip The IP to be looked up
 	 * @return IpProxyResponse
@@ -365,7 +429,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Check for proxied IPs
+	 * Proxy - provider
 	 * @pangea.description Determine if an IP address is provided by a proxy service
 	 * @param ip The IP to be looked up
 	 * @param provider Use reputation data from this provider
@@ -384,7 +448,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Check for proxied IPs
+	 * Proxy - verbose, raw
 	 * @pangea.description Determine if an IP address is provided by a proxy service
 	 * @param ip The IP to be looked up
 	 * @param verbose Echo the API parameters in the response
@@ -405,7 +469,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * Check for proxied IPs
+	 * Proxy - provider, verbose, raw
 	 * @pangea.description Determine if an IP address is provided by a proxy service
 	 * @param ip The IP to be looked up
 	 * @param provider Use reputation data from this provider
@@ -429,7 +493,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * IP reputation
+	 * Reputation
 	 * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
 	 * @param ip The IP to be looked up
 	 * @return IpReputationResponse
@@ -446,7 +510,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * IP reputation - provider
+	 * Reputation - provider
 	 * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
 	 * @param ip The IP to be looked up
 	 * @param provider Use reputation data from this provider
@@ -465,7 +529,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * IP reputation - verbose, raw
+	 * Reputation - verbose, raw
 	 * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
 	 * @param ip The IP to be looked up
 	 * @param verbose Echo the API parameters in the response
@@ -487,7 +551,7 @@ public class IpIntelClient extends Client {
 	}
 
 	/**
-	 * IP reputation - provider, verbose, raw
+	 * Reputation - provider, verbose, raw
 	 * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
 	 * @param ip The IP to be looked up
 	 * @param provider Use reputation data from this provider

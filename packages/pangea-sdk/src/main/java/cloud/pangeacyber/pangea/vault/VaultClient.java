@@ -4,36 +4,13 @@ import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.requests.SecretRotateRequest.SecretRotateRequestBuilder;
 import cloud.pangeacyber.pangea.vault.responses.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-final class GetRequest {
-
-	@JsonProperty("id")
-	String id;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("version")
-	Integer version = null;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("verbose")
-	Boolean verbose = null;
-
-	public GetRequest(String id, Integer version, Boolean verbose) {
-		this.id = id;
-		this.version = version;
-		this.verbose = verbose;
-	}
-
-	public GetRequest(String id) {
-		this.id = id;
-	}
-}
 
 final class JWKGetRequest {
 
@@ -50,13 +27,21 @@ final class JWKGetRequest {
 	}
 }
 
-final class RevokeRequest {
+final class StateChangeRequest {
 
 	@JsonProperty("id")
 	String id;
 
-	public RevokeRequest(String id) {
+	@JsonProperty("version")
+	int version;
+
+	@JsonProperty("state")
+	ItemVersionState state;
+
+	public StateChangeRequest(String id, int version, ItemVersionState state) {
 		this.id = id;
+		this.version = version;
+		this.state = state;
 	}
 }
 
@@ -68,9 +53,14 @@ final class SignRequest {
 	@JsonProperty("message")
 	String message;
 
-	public SignRequest(String id, String message) {
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("version")
+	Integer version;
+
+	public SignRequest(String id, String message, Integer version) {
 		this.id = id;
 		this.message = message;
+		this.version = version;
 	}
 }
 
@@ -135,9 +125,14 @@ final class EncryptRequest {
 	@JsonProperty("plain_text")
 	String plainText;
 
-	public EncryptRequest(String id, String plainText) {
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("version")
+	Integer version;
+
+	public EncryptRequest(String id, String plainText, Integer version) {
 		this.id = id;
 		this.plainText = plainText;
+		this.version = version;
 	}
 }
 
@@ -184,10 +179,12 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Revoke
-	 * @pangea.description Revoke an item
-	 * @param id - item id to revoke
-	 * @return RevokeResponse
+	 * State change
+	 * @pangea.description change an item version state
+	 * @param id - item id to change
+	 * @param version - item version to change
+	 * @param state - state to set to item version
+	 * @return StateChangeResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
@@ -195,8 +192,9 @@ public class VaultClient extends Client {
 	 * // TODO:
 	 * }
 	 */
-	public RevokeResponse revoke(String id) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/revoke", new RevokeRequest(id), RevokeResponse.class);
+	public StateChangeResponse stateChange(String id, int version, ItemVersionState state)
+		throws PangeaException, PangeaAPIException {
+		return doPost("/v1/state/change", new StateChangeRequest(id, version, state), StateChangeResponse.class);
 	}
 
 	/**
@@ -218,7 +216,7 @@ public class VaultClient extends Client {
 	/**
 	 * Get
 	 * @pangea.description Get an item of any type
-	 * @param id - item id to get
+	 * @param request - request to /get endpoint
 	 * @return GetResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
@@ -227,26 +225,8 @@ public class VaultClient extends Client {
 	 * // TODO:
 	 * }
 	 */
-	public GetResponse get(String id) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/get", new GetRequest(id), GetResponse.class);
-	}
-
-	/**
-	 * Get
-	 * @pangea.description Get an item of any type
-	 * @param id - item id to get
-	 * @param version - item version to get
-	 * @param verbose - true to get detailed item information
-	 * @return GetResponse
-	 * @throws PangeaException
-	 * @throws PangeaAPIException
-	 * @pangea.code
-	 * {@code
-	 * // TODO:
-	 * }
-	 */
-	public GetResponse get(String id, Integer version, Boolean verbose) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/get", new GetRequest(id, version, verbose), GetResponse.class);
+	public GetResponse get(GetRequest request) throws PangeaException, PangeaAPIException {
+		return doPost("/v1/get", request, GetResponse.class);
 	}
 
 	/**
@@ -327,12 +307,8 @@ public class VaultClient extends Client {
 	 * // TODO:
 	 * }
 	 */
-	public SecretRotateResponse secretRotate(String id, String secret) throws PangeaException, PangeaAPIException {
-		return doPost(
-			"/v1/secret/rotate",
-			new SecretRotateRequestBuilder(id, secret).build(),
-			SecretRotateResponse.class
-		);
+	public SecretRotateResponse secretRotate(SecretRotateRequest request) throws PangeaException, PangeaAPIException {
+		return doPost("/v1/secret/rotate", request, SecretRotateResponse.class);
 	}
 
 	/**
@@ -347,12 +323,9 @@ public class VaultClient extends Client {
 	 * // TODO:
 	 * }
 	 */
-	public SecretRotateResponse pangeaTokenRotate(String id) throws PangeaException, PangeaAPIException {
-		return doPost(
-			"/v1/secret/rotate",
-			new SecretRotateRequestBuilder(id, null).build(),
-			SecretRotateResponse.class
-		);
+	public SecretRotateResponse pangeaTokenRotate(PangeaTokenStoreRequest request)
+		throws PangeaException, PangeaAPIException {
+		return doPost("/v1/secret/rotate", request, SecretRotateResponse.class);
 	}
 
 	/**
@@ -453,7 +426,26 @@ public class VaultClient extends Client {
 	 * }
 	 */
 	public EncryptResponse encrypt(String id, String plainText) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/key/encrypt", new EncryptRequest(id, plainText), EncryptResponse.class);
+		return doPost("/v1/key/encrypt", new EncryptRequest(id, plainText, null), EncryptResponse.class);
+	}
+
+	/**
+	 * Encrypt
+	 * @pangea.description Encrypt a message
+	 * @param id - key id to encrypt message
+	 * @param plainText - message to encrypt
+	 * @param version - key version to encrypt message
+	 * @return EncryptResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * // TODO:
+	 * }
+	 */
+	public EncryptResponse encrypt(String id, String plainText, int version)
+		throws PangeaException, PangeaAPIException {
+		return doPost("/v1/key/encrypt", new EncryptRequest(id, plainText, version), EncryptResponse.class);
 	}
 
 	/**
@@ -506,7 +498,25 @@ public class VaultClient extends Client {
 	 * }
 	 */
 	public SignResponse sign(String id, String message) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/key/sign", new SignRequest(id, message), SignResponse.class);
+		return doPost("/v1/key/sign", new SignRequest(id, message, null), SignResponse.class);
+	}
+
+	/**
+	 * Sign
+	 * @pangea.description sign a message
+	 * @param id - key id to sign message
+	 * @param message - message to sign
+	 * @param version - key version to sign message
+	 * @return SignResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * // TODO:
+	 * }
+	 */
+	public SignResponse sign(String id, String message, int version) throws PangeaException, PangeaAPIException {
+		return doPost("/v1/key/sign", new SignRequest(id, message, version), SignResponse.class);
 	}
 
 	/**

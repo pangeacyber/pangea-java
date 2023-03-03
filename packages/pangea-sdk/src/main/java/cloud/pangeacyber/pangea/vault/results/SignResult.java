@@ -1,9 +1,11 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SignResult {
 
 	@JsonProperty("id")
@@ -23,21 +25,6 @@ public class SignResult {
 	String encodedPublicKey = null;
 
 	public SignResult() {}
-
-	public SignResult(String id, Integer version, String signature, String algorithm, String encodedPublicKey) {
-		this.id = id;
-		this.version = version;
-		this.signature = signature;
-		this.algorithm = algorithm;
-		this.encodedPublicKey = encodedPublicKey;
-	}
-
-	public SignResult(String id, Integer version, String signature, String algorithm) {
-		this.id = id;
-		this.version = version;
-		this.signature = signature;
-		this.algorithm = algorithm;
-	}
 
 	public String getEncodedPublicKey() {
 		return encodedPublicKey;

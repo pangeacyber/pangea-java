@@ -2,21 +2,16 @@ package cloud.pangeacyber.pangea.vault.models;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ItemOrderBy {
-	TYPE("type"),
-	CREATED_AT("created_at"),
-	DESTROY_AT("destroy_at"),
-	PURPOSE("purpose"),
-	EXPIRATION("expiration"),
-	LAST_ROTATED("last_rotated"),
-	NEXT_ROTATION("next_rotation"),
-	NAME("name"),
-	FOLDER("folder"),
-	VERSION("version");
+public enum ItemVersionState {
+	ACTIVE("active"),
+	DEACTIVATED("deactivated"),
+	SUSPENDED("suspended"),
+	COMPROMISED("compromised"),
+	DESTROYED("destroyed");
 
 	private final String text;
 
-	ItemOrderBy(String text) {
+	ItemVersionState(String text) {
 		this.text = text;
 	}
 

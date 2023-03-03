@@ -3,8 +3,6 @@ package cloud.pangeacyber.pangea.vault.requests;
 import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
 import cloud.pangeacyber.pangea.vault.models.ItemType;
 import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AsymmetricGenerateRequest extends CommonGenerateRequest {
@@ -12,11 +10,9 @@ public class AsymmetricGenerateRequest extends CommonGenerateRequest {
 	@JsonProperty("type")
 	ItemType type;
 
-	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("algorithm")
 	AsymmetricAlgorithm algorithm = null;
 
-	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("purpose")
 	KeyPurpose purpose = null;
 
@@ -42,9 +38,11 @@ public class AsymmetricGenerateRequest extends CommonGenerateRequest {
 		AsymmetricAlgorithm algorithm = null;
 		KeyPurpose purpose = null;
 
-		public AsymmetricGenerateRequestBuilder() {
-			super();
+		public AsymmetricGenerateRequestBuilder(AsymmetricAlgorithm algorithm, KeyPurpose purpose, String name) {
+			super(name);
 			this.type = ItemType.ASYMMETRIC_KEY;
+			this.algorithm = algorithm;
+			this.purpose = purpose;
 		}
 
 		public AsymmetricGenerateRequest build() {

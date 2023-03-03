@@ -25,12 +25,12 @@ public class CommonStoreRequest {
 	Tags tags = null;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("auto_rotate")
-	Boolean autoRotate = null;
+	@JsonProperty("rotation_frequency")
+	String rotationFrequency = null;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("rotation_policy")
-	String rotationPolicy = null;
+	@JsonProperty("rotation_state")
+	String rotationState = null;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("expiration")
@@ -41,8 +41,8 @@ public class CommonStoreRequest {
 		this.folder = builder.folder;
 		this.metadata = builder.metadata;
 		this.tags = builder.tags;
-		this.autoRotate = builder.autoRotate;
-		this.rotationPolicy = builder.rotationPolicy;
+		this.rotationFrequency = builder.rotationFrequency;
+		this.rotationState = builder.rotationState;
 		this.expiration = builder.expiration;
 	}
 
@@ -62,12 +62,8 @@ public class CommonStoreRequest {
 		return tags;
 	}
 
-	public Boolean getAutoRotate() {
-		return autoRotate;
-	}
-
-	public String getRotationPolicy() {
-		return rotationPolicy;
+	public String getRotationFrequency() {
+		return rotationFrequency;
 	}
 
 	public String getExpiration() {
@@ -81,10 +77,13 @@ public class CommonStoreRequest {
 		Metadata metadata = null;
 		Tags tags = null;
 		Boolean autoRotate = null;
-		String rotationPolicy = null;
+		String rotationFrequency = null;
+		String rotationState = null;
 		String expiration = null;
 
-		public CommonStoreRequestBuilder() {}
+		public CommonStoreRequestBuilder(String name) {
+			this.name = name;
+		}
 
 		public CommonStoreRequest build() {
 			return new CommonStoreRequest(this);
@@ -120,8 +119,8 @@ public class CommonStoreRequest {
 			return self();
 		}
 
-		public B setRotationPolicy(String rotationPolicy) {
-			this.rotationPolicy = rotationPolicy;
+		public B setRotationFrequency(String rotationFrequency) {
+			this.rotationFrequency = rotationFrequency;
 			return self();
 		}
 

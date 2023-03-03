@@ -4,28 +4,35 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CommonStoreResult {
-
-	@JsonProperty("type")
-	String type;
+public class StateChangeResult {
 
 	@JsonProperty("id")
-	String id = null;
+	String id;
+
+	@JsonProperty("state")
+	String state;
 
 	@JsonProperty("version")
-	Integer version = null;
+	int version;
 
-	public CommonStoreResult() {}
+	@JsonProperty("destroy_at")
+	String destroyAt;
 
-	public String getType() {
-		return type;
-	}
+	public StateChangeResult() {}
 
 	public String getId() {
 		return id;
 	}
 
-	public Integer getVersion() {
+	public String getState() {
+		return state;
+	}
+
+	public int getVersion() {
 		return version;
+	}
+
+	public String getDestroyAt() {
+		return destroyAt;
 	}
 }

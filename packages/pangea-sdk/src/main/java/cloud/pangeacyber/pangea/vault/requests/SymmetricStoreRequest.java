@@ -12,10 +12,6 @@ public class SymmetricStoreRequest extends CommonStoreRequest {
 	@JsonProperty("type")
 	ItemType type;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("managed")
-	Boolean managed = null;
-
 	@JsonProperty("algorithm")
 	SymmetricAlgorithm algorithm = null;
 
@@ -29,7 +25,6 @@ public class SymmetricStoreRequest extends CommonStoreRequest {
 	public SymmetricStoreRequest(SymmetricStoreRequestBuilder builder) {
 		super(builder);
 		this.type = builder.type;
-		this.managed = builder.managed;
 		this.algorithm = builder.algorithm;
 		this.encodedSymmetricKey = builder.encodedSymmetricKey;
 		this.purpose = builder.purpose;
@@ -38,24 +33,25 @@ public class SymmetricStoreRequest extends CommonStoreRequest {
 	public static class SymmetricStoreRequestBuilder extends CommonStoreRequestBuilder<SymmetricStoreRequestBuilder> {
 
 		ItemType type;
-		Boolean managed = null;
 		SymmetricAlgorithm algorithm = null;
 		String encodedSymmetricKey;
 		KeyPurpose purpose = null;
 
-		public SymmetricStoreRequestBuilder(SymmetricAlgorithm algorithm, String encodedSymmetricKey) {
+		public SymmetricStoreRequestBuilder(
+			String encodedSymmetricKey,
+			SymmetricAlgorithm algorithm,
+			KeyPurpose purpose,
+			String name
+		) {
+			super(name);
 			this.type = ItemType.SYMMETRIC_KEY;
 			this.algorithm = algorithm;
 			this.encodedSymmetricKey = encodedSymmetricKey;
+			this.purpose = purpose;
 		}
 
 		public SymmetricStoreRequest build() {
 			return new SymmetricStoreRequest(this);
-		}
-
-		public SymmetricStoreRequestBuilder setManaged(Boolean managed) {
-			this.managed = managed;
-			return this;
 		}
 
 		public SymmetricStoreRequestBuilder setPurpose(KeyPurpose purpose) {

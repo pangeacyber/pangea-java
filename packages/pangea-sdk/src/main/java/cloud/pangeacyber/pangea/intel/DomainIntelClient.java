@@ -169,7 +169,7 @@ public class DomainIntelClient extends Client {
 	}
 
 	/**
-	 * Domain reputation reputation
+	 * Reputation check
 	 * @pangea.description Retrieve domain reputation from a default provider.
 	 * @param domain domain address to be looked up
 	 * @return DomainReputationResponse
@@ -186,7 +186,7 @@ public class DomainIntelClient extends Client {
 	}
 
 	/**
-	 * Domain reputation - domain, provider
+	 * Reputation check - domain, provider
 	 * @pangea.description Retrieve domain reputation for a particular provider
 	 * @param domain domain address to be looked up
 	 * @param provider provider to get reputation from
@@ -206,7 +206,7 @@ public class DomainIntelClient extends Client {
 	}
 
 	/**
-	 * Domain reputation - domain, verbose, raw
+	 * Reputation check - domain, verbose, raw
 	 * @pangea.description Retrieve domain reputation from a default provider.
 	 * @param domain domain address to be looked up
 	 * @param verbose select a more verbose response
@@ -228,7 +228,7 @@ public class DomainIntelClient extends Client {
 	}
 
 	/**
-	 * Domain reputation - domain, provider, verbose, raw
+	 * Reputation check - domain, provider, verbose, raw
 	 * @pangea.description Retrieve domain reputation for a particular provider
 	 * @param domain domain address to be looked up
 	 * @param provider provider to get reputation from

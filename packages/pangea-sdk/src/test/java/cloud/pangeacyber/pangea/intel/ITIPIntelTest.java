@@ -517,7 +517,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
-		IPProxyResponse response = client.isProxy("1.0.136.28");
+		IPProxyResponse response = client.isProxy("34.201.32.172");
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();
@@ -529,7 +529,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
-		IPProxyResponse response = client.isProxy("1.0.136.28", "digitalenvoy");
+		IPProxyResponse response = client.isProxy("34.201.32.172", "digitalenvoy");
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();
@@ -541,7 +541,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_3() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, no raw;
-		IPProxyResponse response = client.isProxy("1.0.136.28", false, false);
+		IPProxyResponse response = client.isProxy("34.201.32.172", false, false);
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();
@@ -553,7 +553,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_4() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, no raw;
-		IPProxyResponse response = client.isProxy("1.0.136.28", true, false);
+		IPProxyResponse response = client.isProxy("34.201.32.172", true, false);
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();
@@ -565,7 +565,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_5() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, raw;
-		IPProxyResponse response = client.isProxy("1.0.136.28", false, true);
+		IPProxyResponse response = client.isProxy("34.201.32.172", false, true);
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();
@@ -577,7 +577,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_6() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, raw;
-		IPProxyResponse response = client.isProxy("1.0.136.28", true, true);
+		IPProxyResponse response = client.isProxy("34.201.32.172", true, true);
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();
@@ -589,7 +589,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
-		IPProxyResponse response = client.isProxy("1.0.136.28", "digitalenvoy", false, false);
+		IPProxyResponse response = client.isProxy("34.201.32.172", "digitalenvoy", false, false);
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();
@@ -601,7 +601,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
-		IPProxyResponse response = client.isProxy("1.0.136.28", "digitalenvoy", true, true);
+		IPProxyResponse response = client.isProxy("34.201.32.172", "digitalenvoy", true, true);
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();

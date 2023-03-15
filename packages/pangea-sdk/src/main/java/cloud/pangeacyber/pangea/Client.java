@@ -143,6 +143,17 @@ public abstract class Client {
 			throw new ServiceNotAvailableException(summary, response);
 		} else if (status.equals(ResponseStatus.IP_NOT_FOUND.toString())) {
 			throw new EmbargoIPNotFoundException(summary, response);
+		} else if (status.equals(ResponseStatus.INTERNAL_ERROR.toString())) {
+			throw new InternalServerError(
+				String.format(
+					"Summary: %s. request_id: %s. request_time: %s. response_time: %s",
+					response.getSummary(),
+					response.getRequestId(),
+					response.getRequestTime(),
+					response.getResponseTime()
+				),
+				response
+			);
 		} else {
 			throw new PangeaAPIException(String.format("%s: %s", status, summary), response);
 		}

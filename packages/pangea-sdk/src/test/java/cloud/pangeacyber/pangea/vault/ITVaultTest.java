@@ -150,7 +150,7 @@ public class ITVaultTest {
 		assertTrue(verifyResponseAfterSuspend.getResult().isValidSignature());
 	}
 
-	private void jwtSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
+	private void jwtAsymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
 		String payload = """
             {'message': 'message to sign', 'data': 'Some extra data'}
             """;
@@ -179,15 +179,51 @@ public class ITVaultTest {
 
 		// Gets default
 		JWKGetResponse getResponse = client.jwkGet(id);
-		assertEquals(1, getResponse.getResult().getJWK().getKeys().length);
+		assertEquals(1, getResponse.getResult().getKeys().length);
 
 		// Gets all
 		getResponse = client.jwkGet(id, "all");
-		assertEquals(2, getResponse.getResult().getJWK().getKeys().length);
+		assertEquals(2, getResponse.getResult().getKeys().length);
 
 		// Gets -1
 		getResponse = client.jwkGet(id, "-1");
-		assertEquals(2, getResponse.getResult().getJWK().getKeys().length);
+		assertEquals(2, getResponse.getResult().getKeys().length);
+
+		// Suspend key
+		StateChangeResponse stateChangeResponse = client.stateChange(id, 1, ItemVersionState.DEACTIVATED);
+		assertEquals(id, stateChangeResponse.getResult().getId());
+
+		// Verify after revoke
+		JWTVerifyResponse verifyResponseAfterSuspend = client.jwtVerify(signResponse1.getResult().getJws());
+		assertTrue(verifyResponseAfterSuspend.getResult().isValidSignature());
+	}
+
+	private void jwtSymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
+		String payload = """
+            {'message': 'message to sign', 'data': 'Some extra data'}
+            """;
+
+		// Sign 1
+		JWTSignResponse signResponse1 = client.jwtSign(id, payload);
+		assertNotNull(signResponse1.getResult().getJws());
+
+		// Rotate
+		KeyRotateResponse rotateResponse = client.keyRotate(
+			new KeyRotateRequest.KeyRotateRequestBuilder(id, ItemVersionState.SUSPENDED).build()
+		);
+		assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
+
+		// Sign 2
+		JWTSignResponse signResponse2 = client.jwtSign(id, payload);
+		assertNotNull(signResponse2.getResult().getJws());
+
+		// Verify 1
+		JWTVerifyResponse verifyResponse1 = client.jwtVerify(signResponse1.getResult().getJws());
+		assertTrue(verifyResponse1.getResult().isValidSignature());
+
+		// Verify 2
+		JWTVerifyResponse verifyResponse2 = client.jwtVerify(signResponse2.getResult().getJws());
+		assertTrue(verifyResponse2.getResult().isValidSignature());
 
 		// Suspend key
 		StateChangeResponse stateChangeResponse = client.stateChange(id, 1, ItemVersionState.DEACTIVATED);
@@ -260,7 +296,7 @@ public class ITVaultTest {
 			assertNotNull(generateResp.getResult().getEncodedPublicKey());
 			assertNotNull(generateResp.getResult().getId());
 			assertEquals(Integer.valueOf(1), generateResp.getResult().getVersion());
-			jwtSigningCycle(generateResp.getResult().getId());
+			jwtAsymSigningCycle(generateResp.getResult().getId());
 		} catch (PangeaAPIException e) {
 			System.out.println(e.toString());
 			assertTrue(false);
@@ -284,7 +320,7 @@ public class ITVaultTest {
 			SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
 			assertNotNull(generateResp.getResult().getId());
 			assertEquals(Integer.valueOf(1), generateResp.getResult().getVersion());
-			jwtSigningCycle(generateResp.getResult().getId());
+			jwtSymSigningCycle(generateResp.getResult().getId());
 		} catch (PangeaAPIException e) {
 			System.out.println(e.toString());
 			assertTrue(false);

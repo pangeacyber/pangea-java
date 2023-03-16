@@ -66,29 +66,71 @@ public class ITRedactTest {
 		);
 		assertTrue(response.isOk());
 
-		RedactTextResult result = response.getResult();
-		assertEquals("Jenny Jenny... <PHONE_NUMBER>", result.getRedactedText());
-		assertNull(result.getReport());
+public class ITRedactTest
+{
+    RedactClient client;
+    TestEnvironment environment = TestEnvironment.LIVE;
+
+    @Before
+    public void setUp() throws ConfigException {
+        client = new RedactClient(Config.fromIntegrationEnvironment(environment));
+    }
+
+    @Test
+    public void testRedact_1() throws PangeaException, PangeaAPIException{
+        RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309");
+        assertTrue(response.isOk());
+
+        RedactTextResult result = response.getResult();
+        assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
+        assertEquals(2, result.getCount());
+        assertNull(result.getReport());
+    }
+
+    @Test
+    public void testRedact_2() throws PangeaException, PangeaAPIException {
+        RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", true);
+        assertTrue(response.isOk());
+
+        RedactTextResult result = response.getResult();
+        assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
+        assertNotNull(result.getReport());
+    }
+
+    @Test
+    public void testRedact_3() throws PangeaException, PangeaAPIException {
+        RedactTextResponse response = client.redactText("Jenny Jenny... 415-867-5309", false);
+        assertTrue(response.isOk());
+
+        RedactTextResult result = response.getResult();
+        assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
+        assertNull(result.getReport());
+    }
+
+    @Test
+    public void testStructured_1() throws PangeaException, PangeaAPIException {
+        Map<String, Object> data = new LinkedHashMap<String, Object>();
+        data.put("Name", "Jenny Jenny");
+        data.put("Phone", "This is its number: 415-867-5309");
+
+        RedactStructuredResponse response = client.redactStructured(data);
+        assertTrue(response.isOk());
+
+        RedactStructuredResult result = response.getResult();
+
+        Map<String, Object> expected = new LinkedHashMap<String, Object>();
+        expected.put("Name", "<PERSON>");
+        expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+        assertEquals(2, result.getCount());
+
+        assertEquals(expected, result.getRedactedData());
+        assertNull(result.getReport());
+
+        RedactTextResult result = response.getResult();
+        assertEquals("Jenny Jenny... <PHONE_NUMBER>", result.getRedactedText());
+        assertNull(result.getReport());
 	}
 
-	@Test
-	public void testStructured_1() throws PangeaException, PangeaAPIException {
-		Map<String, Object> data = new LinkedHashMap<String, Object>();
-		data.put("Name", "Jenny Jenny");
-		data.put("Phone", "This is its number: 415-867-5309");
-
-		RedactStructuredResponse response = client.redactStructured(data);
-		assertTrue(response.isOk());
-
-		RedactStructuredResult result = response.getResult();
-
-		Map<String, Object> expected = new LinkedHashMap<String, Object>();
-		expected.put("Name", "<PERSON>");
-		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
-
-		assertEquals(expected, result.getRedactedData());
-		assertNull(result.getReport());
-	}
 
 	@Test
 	public void testStructured_2() throws PangeaException, PangeaAPIException {

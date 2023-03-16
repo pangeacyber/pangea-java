@@ -6,24 +6,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RedactStructuredResult {
 
-    @JsonProperty("count")
-    int count;
+	@JsonProperty("count")
+	int count;
 
-    @JsonProperty("report")
-    RedactDebugReport report;
+	@JsonProperty("report")
+	RedactDebugReport report;
 
-    @JsonProperty("redacted_data")
-    Object redactedData;
+	@JsonProperty("redacted_data")
+	Object redactedData;
 
-    public int getCount() {
-      return count;
-    }
+	public int getCount() {
+		return count;
+	}
 
-    public RedactDebugReport getReport() {
-        return report;
-    }
+	public RedactDebugReport getReport() {
+		return report;
+	}
 
-    public Object getRedactedData() {
-      return redactedData;
-    }
+	public Object getRedactedData() {
+		return redactedData;
+	}
 }

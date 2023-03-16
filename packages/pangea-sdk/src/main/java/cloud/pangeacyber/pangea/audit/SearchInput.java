@@ -18,10 +18,6 @@ public class SearchInput {
 	String orderBy = null;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("last")
-	Integer last = null;
-
-	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("start")
 	String start = null;
 
@@ -75,14 +71,6 @@ public class SearchInput {
 
 	public void setOrderBy(String orderBy) {
 		this.orderBy = orderBy;
-	}
-
-	public Integer getLast() {
-		return last;
-	}
-
-	public void setLast(Integer last) {
-		this.last = last;
 	}
 
 	public String getStart() {

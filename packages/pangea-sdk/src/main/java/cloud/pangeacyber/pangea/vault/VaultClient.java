@@ -6,7 +6,6 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import cloud.pangeacyber.pangea.vault.requests.*;
-import cloud.pangeacyber.pangea.vault.requests.SecretRotateRequest.SecretRotateRequestBuilder;
 import cloud.pangeacyber.pangea.vault.responses.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -200,7 +199,7 @@ public class VaultClient extends Client {
 	/**
 	 * Delete
 	 * @pangea.description Delete an item
-	 * @param item id to delete
+	 * @param id - item id to delete
 	 * @return DeleteResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
@@ -297,8 +296,7 @@ public class VaultClient extends Client {
 	/**
 	 * Rotate a secret
 	 * @pangea.description Rotate a secret in vault service
-	 * @param id - secret id to rotate
-	 * @param secret - new secret value
+	 * @param request - secret rotate request
 	 * @return SecretRotateResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
@@ -314,7 +312,7 @@ public class VaultClient extends Client {
 	/**
 	 * Rotate a Pangea Token
 	 * @pangea.description Rotate a Pangea Token in vault service
-	 * @param id - pangea token id to rotate
+	 * @param request - pangea token store request
 	 * @return SecretRotateResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException

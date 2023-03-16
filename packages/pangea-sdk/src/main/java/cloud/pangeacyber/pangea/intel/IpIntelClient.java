@@ -186,7 +186,7 @@ public class IpIntelClient extends Client {
 	 * {@code
 	 * IpVPNResponse response = client.geolocate(
 	 *     "93.231.182.110",
-	 *     "digitalenvoy");
+	 *     "digitalelement");
 	 * }
 	 */
 	public IPGeolocateResponse geolocate(String ip, String provider) throws PangeaException, PangeaAPIException {
@@ -229,7 +229,7 @@ public class IpIntelClient extends Client {
 	 * {@code
 	 * IpVPNResponse response = client.geolocate(
 	 *     "93.231.182.110",
-	 *     "digitalenvoy",
+	 *     "digitalelement",
 	 *     true,
 	 *     true);
 	 * }
@@ -274,7 +274,7 @@ public class IpIntelClient extends Client {
 	 * {@code
 	 * IpVPNResponse response = client.getDomain(
 	 *     "93.231.182.110",
-	 *      "digitalenvoy");
+	 *      "digitalelement");
 	 * }
 	 */
 	public IPDomainResponse getDomain(String ip, String provider) throws PangeaException, PangeaAPIException {
@@ -312,7 +312,7 @@ public class IpIntelClient extends Client {
 	 * {@code
 	 * IpVPNResponse response = client.getDomain(
 	 *     "93.231.182.110",
-	 *      "digitalenvoy",
+	 *      "digitalelement",
 	 *      true,
 	 *      true);
 	 * }
@@ -357,7 +357,7 @@ public class IpIntelClient extends Client {
 	 * {@code
 	 * IpVPNResponse response = client.isVPN(
 	 *     "93.231.182.110",
-	 *      "digitalenvoy");
+	 *      "digitalelement");
 	 * }
 	 */
 	public IPVPNResponse isVPN(String ip, String provider) throws PangeaException, PangeaAPIException {
@@ -394,7 +394,7 @@ public class IpIntelClient extends Client {
 	 * {@code
 	 * IpVPNResponse response = client.isVPN(
 	 *     "93.231.182.110",
-	 *      "digitalenvoy",
+	 *      "digitalelement",
 	 *      true,
 	 *      true);
 	 * }
@@ -440,7 +440,7 @@ public class IpIntelClient extends Client {
 	 * {@code
 	 * IpProxyResponse response = client.isProxy(
 	 *     "93.231.182.110",
-	 *      "digitalenvoy");
+	 *      "digitalelement");
 	 * }
 	 */
 	public IPProxyResponse isProxy(String ip, String provider) throws PangeaException, PangeaAPIException {
@@ -482,7 +482,7 @@ public class IpIntelClient extends Client {
 	 * {@code
 	 * IpProxyResponse response = client.isProxy(
 	 *     "93.231.182.110",
-	 *      "digitalenvoy",
+	 *      "digitalelement",
 	 *      true,
 	 *      true);
 	 * }

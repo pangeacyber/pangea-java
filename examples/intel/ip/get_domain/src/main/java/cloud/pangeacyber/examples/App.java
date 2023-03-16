@@ -20,7 +20,7 @@ public class App
         IpIntelClient client = new IpIntelClient(cfg);
         IPDomainResponse response = null;
         try {
-            response = client.getDomain("24.235.114.61", "digitalenvoy", true, true);
+            response = client.getDomain("24.235.114.61", "digitalelement", true, true);
         } catch (Exception e){
             System.out.println("Fail to perfom request: " + e);
             System.exit(1);

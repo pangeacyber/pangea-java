@@ -1,46 +1,47 @@
 package cloud.pangeacyber.pangea;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ErrorField {
-    // """
-    // Field errors denote errors in fields provided in request payloads
 
-    // Fields:
-    //     code(str): The field code
-    //     detail(str): A human readable detail explaining the error
-    //     source(str): A JSON pointer where the error occurred
-    //     path(str): If verbose mode was enabled, a path to the JSON Schema used to validate the field
-    // """
+	// """
+	// Field errors denote errors in fields provided in request payloads
 
-    @JsonProperty("code")
-    String code;
+	// Fields:
+	//     code(str): The field code
+	//     detail(str): A human readable detail explaining the error
+	//     source(str): A JSON pointer where the error occurred
+	//     path(str): If verbose mode was enabled, a path to the JSON Schema used to validate the field
+	// """
 
-    @JsonProperty("detail")
-    String detail;
+	@JsonProperty("code")
+	String code;
 
-    @JsonProperty("source")
-    String source;
+	@JsonProperty("detail")
+	String detail;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("path")
-    String path;
+	@JsonProperty("source")
+	String source;
 
-    public String getCode() {
-        return code;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("path")
+	String path;
 
-    public String getDetail() {
-        return detail;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public String getDetail() {
+		return detail;
+	}
 
-    public String getPath() {
-        return path;
-    }
+	public String getSource() {
+		return source;
+	}
+
+	public String getPath() {
+		return path;
+	}
 }

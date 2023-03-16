@@ -2,144 +2,168 @@ package cloud.pangeacyber.pangea.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("actor")
-    String actor = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("action")
-    String action = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("actor")
+	String actor = null;
 
-    @JsonProperty("message")
-    String message;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("action")
+	String action = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("new")
-    String newField = null;
+	@JsonProperty("message")
+	String message;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("old")
-    String old = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("new")
+	String newField = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("source")
-    String source = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("old")
+	String old = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("status")
-    String status = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("source")
+	String source = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("target")
-    String target = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("status")
+	String status = null;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("timestamp")
-    String timestamp = null;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("target")
+	String target = null;
 
-    public Event() {
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("timestamp")
+	String timestamp = null;
 
-    public Event(String message) {
-        this.message = message;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("tenant_id")
+	String tenantID = null;
 
-    public Event(String actor, String action, String message, String newField, String old, String source, String status,
-            String target, String timestamp) {
-        this.actor = actor;
-        this.action = action;
-        this.message = message;
-        this.newField = newField;
-        this.old = old;
-        this.source = source;
-        this.status = status;
-        this.target = target;
-        this.timestamp = timestamp;
-    }
+	public Event() {}
 
-    public String getActor() {
-        return actor;
-    }
+	public Event(String message) {
+		this.message = message;
+	}
 
-    public void setActor(String actor) {
-        this.actor = actor;
-    }
+	public Event(
+		String actor,
+		String action,
+		String message,
+		String newField,
+		String old,
+		String source,
+		String status,
+		String target,
+		String timestamp
+	) {
+		this.actor = actor;
+		this.action = action;
+		this.message = message;
+		this.newField = newField;
+		this.old = old;
+		this.source = source;
+		this.status = status;
+		this.target = target;
+		this.timestamp = timestamp;
+	}
 
-    public String getAction() {
-        return action;
-    }
+	public String getActor() {
+		return actor;
+	}
 
-    public void setAction(String action) {
-        this.action = action;
-    }
+	public void setActor(String actor) {
+		this.actor = actor;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public String getAction() {
+		return action;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public void setAction(String action) {
+		this.action = action;
+	}
 
-    public String getNewField() {
-        return newField;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    public void setNewField(String newField) {
-        this.newField = newField;
-    }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-    public String getOld() {
-        return old;
-    }
+	public String getNewField() {
+		return newField;
+	}
 
-    public void setOld(String old) {
-        this.old = old;
-    }
+	public void setNewField(String newField) {
+		this.newField = newField;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public String getOld() {
+		return old;
+	}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public void setOld(String old) {
+		this.old = old;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public String getSource() {
+		return source;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public void setSource(String source) {
+		this.source = source;
+	}
 
-    public String getTarget() {
-        return target;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setTarget(String target) {
-        this.target = target;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public String getTimestamp() {
-        return timestamp;
-    }
+	public String getTarget() {
+		return target;
+	}
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
+	public void setTarget(String target) {
+		this.target = target;
+	}
 
-    static public String canonicalize(Event event) throws JsonProcessingException{
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        return mapper.writeValueAsString(event);
-    }
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public static String canonicalize(Event event) throws JsonProcessingException {
+		ObjectMapper mapper = JsonMapper
+			.builder()
+			.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+			.build();
+		return mapper.writeValueAsString(event);
+	}
+
+	public void setTenantID(String tenantID) {
+		this.tenantID = tenantID;
+	}
+
+	public String getTenantID() {
+		return tenantID;
+	}
 }

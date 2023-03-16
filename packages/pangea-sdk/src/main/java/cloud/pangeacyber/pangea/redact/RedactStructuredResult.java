@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RedactStructuredResult {
-    @JsonProperty("redacted_data")
-    Object redactedData;
 
     @JsonProperty("count")
     int count;
@@ -14,9 +12,8 @@ public class RedactStructuredResult {
     @JsonProperty("report")
     RedactDebugReport report;
 
-    public Object getRedactedData() {
-        return redactedData;
-    }
+    @JsonProperty("redacted_data")
+    Object redactedData;
 
     public int getCount() {
       return count;
@@ -24,5 +21,9 @@ public class RedactStructuredResult {
 
     public RedactDebugReport getReport() {
         return report;
+    }
+
+    public Object getRedactedData() {
+      return redactedData;
     }
 }

@@ -13,7 +13,8 @@ public enum ResponseStatus {
 	MISSING_CONFIG_ID("MissingConfigID"),
 	SERVICE_NOT_AVAILABLE("ServiceNotAvailable"),
 	TREE_NOT_FOUND("TreeNotFound"),
-	IP_NOT_FOUND("IPNotFound");
+	IP_NOT_FOUND("IPNotFound"),
+	INTERNAL_ERROR("InternalError");
 
 	private final String text;
 

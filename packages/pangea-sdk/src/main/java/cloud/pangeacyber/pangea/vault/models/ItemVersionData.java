@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ItemVersionData {
 
 	@JsonProperty("version")
-	Boolean version;
+	Integer version;
 
 	@JsonProperty("state")
 	String State = null;
@@ -31,7 +31,7 @@ public class ItemVersionData {
 
 	public ItemVersionData() {}
 
-	public Boolean getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 

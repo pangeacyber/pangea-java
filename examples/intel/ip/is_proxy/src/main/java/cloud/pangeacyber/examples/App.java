@@ -20,7 +20,7 @@ public class App
         IpIntelClient client = new IpIntelClient(cfg);
         IPProxyResponse response = null;
         try {
-            response = client.isProxy("1.0.136.28", "digitalenvoy", true, true);
+            response = client.isProxy("1.0.136.28", "digitalelement", true, true);
         } catch (Exception e){
             System.out.println("Fail to perfom request: " + e);
             System.exit(1);

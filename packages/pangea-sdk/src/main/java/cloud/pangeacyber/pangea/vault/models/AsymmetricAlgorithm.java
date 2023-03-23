@@ -10,7 +10,7 @@ public enum AsymmetricAlgorithm {
 	RSA2048_PKCS1V15_SHA256("RSA-PKCS1V15-2048-SHA256"),
 	RSA2048_OAEP_SHA256("RSA-OAEP-2048-SHA256"),
 
-	RSA("RSA-PKCS1V15-2048-SHA256");		// deprecated, use RSA2048_PKCS1V15_SHA256 instead
+	RSA("RSA-PKCS1V15-2048-SHA256"); // deprecated, use RSA2048_PKCS1V15_SHA256 instead
 
 	private final String text;
 

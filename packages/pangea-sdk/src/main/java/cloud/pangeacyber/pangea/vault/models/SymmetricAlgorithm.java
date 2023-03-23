@@ -9,7 +9,7 @@ public enum SymmetricAlgorithm {
 	AES128_CFB("AES-CFB-128"),
 	AES256_CFB("AES-CFB-256"),
 
-	AES("AES-CFB-128");	// deprecated, use AES128_CFB instead
+	AES("AES-CFB-128"); // deprecated, use AES128_CFB instead
 
 	private final String text;
 

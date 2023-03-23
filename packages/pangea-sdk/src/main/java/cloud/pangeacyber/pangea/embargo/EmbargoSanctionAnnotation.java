@@ -5,18 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class EmbargoSanctionAnnotation {
-    @JsonProperty("reference")
-    EmbargoSanctionAnnotationReference reference;
 
-    @JsonProperty("restriction_name")
-    String restrictionName;
+	@JsonProperty("reference")
+	EmbargoSanctionAnnotationReference reference;
 
-    public EmbargoSanctionAnnotationReference getReference() {
-        return reference;
-    }
+	@JsonProperty("restriction_name")
+	String restrictionName;
 
-    public String getRestrictionName() {
-        return restrictionName;
-    }
+	public EmbargoSanctionAnnotationReference getReference() {
+		return reference;
+	}
 
+	public String getRestrictionName() {
+		return restrictionName;
+	}
 }

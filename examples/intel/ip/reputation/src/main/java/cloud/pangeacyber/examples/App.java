@@ -27,7 +27,7 @@ public class App
         }
 
         System.out.println("Reputation success");
-        System.out.println("Reputation data: " + response.getResult().getData());
+        System.out.println("Reputation verdict: " + response.getResult().getData().getVerdict());
         System.out.println("Reputation raw data: " + response.getResult().getRawData());
     }
 }

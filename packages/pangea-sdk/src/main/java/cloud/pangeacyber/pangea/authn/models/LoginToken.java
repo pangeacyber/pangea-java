@@ -1,6 +1,8 @@
 package cloud.pangeacyber.pangea.authn.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,6 +30,10 @@ public class LoginToken {
 
     @JsonProperty("profile")
     Profile profile;
+
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("scopes")
+    Scopes scopes;
 
     @JsonProperty("created_at")
     String createdAt;
@@ -66,6 +72,10 @@ public class LoginToken {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+    public Scopes getScopes() {
+        return scopes;
     }
 
 }

@@ -29,6 +29,10 @@ public class UserUpdateRequest {
     @JsonProperty("require_mfa")
     Boolean requireMFA;
 
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty("verified")
+    Boolean verified;
+
 
     private UserUpdateRequest(UserUpdateRequestBuilder builder) {
         this.identity = builder.identity;
@@ -36,6 +40,7 @@ public class UserUpdateRequest {
         this.authenticator = builder.authenticator;
         this.disabled = builder.disabled;
         this.requireMFA = builder.requireMFA;
+        this.verified = builder.verified;
 	}
 
 	public static class UserUpdateRequestBuilder{
@@ -44,6 +49,7 @@ public class UserUpdateRequest {
         String authenticator;
         Boolean disabled;
         Boolean requireMFA;
+        Boolean verified;
 
 		public UserUpdateRequestBuilder() {
         }
@@ -77,6 +83,10 @@ public class UserUpdateRequest {
             return this;
         }
 
+        public UserUpdateRequestBuilder setVerified(Boolean verified) {
+            this.verified = verified;
+            return this;
+        }
 
 
 	}

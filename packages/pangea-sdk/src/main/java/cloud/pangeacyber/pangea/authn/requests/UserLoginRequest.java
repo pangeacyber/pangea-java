@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import cloud.pangeacyber.pangea.authn.models.IDProvider;
-import cloud.pangeacyber.pangea.authn.models.Profile;
 import cloud.pangeacyber.pangea.authn.models.Scopes;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

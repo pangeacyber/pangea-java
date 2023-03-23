@@ -40,8 +40,7 @@ public class FlowEnrollMFA extends Client {
 
 
     // TODO: Doc
-    public FlowEnrollMFAStartResponse start(String flowID, MFAProvider mfaProvider) throws PangeaException, PangeaAPIException{
-        FlowEnrollMFAStartRequest request = new FlowEnrollMFAStartRequest(flowID, mfaProvider);
+    public FlowEnrollMFAStartResponse start(FlowEnrollMFAStartRequest request) throws PangeaException, PangeaAPIException{
         return doPost("/v1/flow/enroll/mfa/start", request, FlowEnrollMFAStartResponse.class);
     }
 }

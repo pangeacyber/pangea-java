@@ -19,6 +19,7 @@ public class UserProfileGetResult {
     @JsonProperty("profile")
     Profile profile;
 
+    @JsonInclude(Include.NON_NULL)
     @JsonProperty("id_provider")
     String idProvider;
 

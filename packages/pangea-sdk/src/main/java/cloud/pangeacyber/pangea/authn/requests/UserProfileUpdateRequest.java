@@ -21,34 +21,16 @@ public class UserProfileUpdateRequest {
     @JsonProperty("identity")
     String identity;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("require_mfa")
-    Boolean requireMFA;
-
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("mfa_value")
-    String mfaValue;
-
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("mfa_provider")
-    MFAProvider mfaProvider;
-
     private UserProfileUpdateRequest(UserProfileUpdateRequestBuilder builder) {
         this.profile = builder.profile;
         this.email = builder.email;
         this.identity = builder.identity;
-        this.requireMFA = builder.requireMFA;
-        this.mfaProvider = builder.mfaProvider;
-        this.mfaValue = builder.mfaValue;
 	}
 
 	public static class UserProfileUpdateRequestBuilder{
         Profile profile;
         String email;
         String identity;
-        Boolean requireMFA;
-        String mfaValue;
-        MFAProvider mfaProvider;
 
 		public UserProfileUpdateRequestBuilder(Profile profile) {
             this.profile = profile;
@@ -66,16 +48,5 @@ public class UserProfileUpdateRequest {
             this.identity = identity;
         }
 
-        public void setRequireMFA(Boolean requireMFA) {
-            this.requireMFA = requireMFA;
-        }
-
-        public void setMfaValue(String mfaValue) {
-            this.mfaValue = mfaValue;
-        }
-
-        public void setMfaProvider(MFAProvider mfaProvider) {
-            this.mfaProvider = mfaProvider;
-        }
 	}
 }

@@ -24,6 +24,7 @@ public class UserUpdateResult {
     @JsonProperty("scopes")
     Scopes scopes;
 
+    @JsonInclude(Include.NON_NULL)
     @JsonProperty("id_provider")
     String idProvider;
 

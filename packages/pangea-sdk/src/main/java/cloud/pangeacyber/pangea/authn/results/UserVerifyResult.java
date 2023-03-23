@@ -1,6 +1,8 @@
 package cloud.pangeacyber.pangea.authn.results;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
@@ -21,8 +23,12 @@ public class UserVerifyResult {
     @JsonProperty("scopes")
     Scopes scopes;
 
+    @JsonInclude(Include.NON_NULL)
     @JsonProperty("id_provider")
     IDProvider idProvider;
+
+    @JsonProperty("mfa_providers")
+    String[] mfaProviders;
 
     @JsonProperty("require_mfa")
     boolean requireMFA;
@@ -33,6 +39,7 @@ public class UserVerifyResult {
     @JsonProperty("diabled")
     boolean disabled;
 
+    @JsonInclude(Include.NON_NULL)
     @JsonProperty("last_login_at")
     String lastLoginAt;
 
@@ -70,6 +77,10 @@ public class UserVerifyResult {
 
     public String getLastLoginAt() {
         return lastLoginAt;
+    }
+
+    public String[] getMfaProviders() {
+        return mfaProviders;
     }
 
 }

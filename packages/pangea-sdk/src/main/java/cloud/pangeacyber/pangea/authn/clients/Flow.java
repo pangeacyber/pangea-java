@@ -25,12 +25,30 @@ public class Flow extends Client {
     private FlowEnroll enroll;
     private FlowSignup signup;
     private FlowVerify verify;
+    private FlowReset reset;
 
     public Flow(Config config) {
         super(config, serviceName);
         enroll = new FlowEnroll(config);
         signup = new FlowSignup(config);
         verify = new FlowVerify(config);
+        reset = new FlowReset(config);
+    }
+
+    public FlowEnroll getEnroll() {
+        return enroll;
+    }
+
+    public FlowSignup getSignup() {
+        return signup;
+    }
+
+    public FlowVerify getVerify() {
+        return verify;
+    }
+
+    public FlowReset getReset() {
+        return reset;
     }
 
     // TODO: Doc

@@ -3,5 +3,4 @@ package cloud.pangeacyber.pangea.authn.results;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserMFAVerifyResult extends CommonFlowResult{
-}
+public class UserMFAVerifyResult extends CommonFlowResult {}

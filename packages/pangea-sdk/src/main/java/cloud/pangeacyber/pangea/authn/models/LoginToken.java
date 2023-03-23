@@ -7,75 +7,75 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LoginToken {
-    @JsonProperty("token")
-    String token;
 
-    @JsonProperty("id")
-    String id;
+	@JsonProperty("token")
+	String token;
 
-    @JsonProperty("type")
-    String type;
+	@JsonProperty("id")
+	String id;
 
-    @JsonProperty("life")
-    int life;
+	@JsonProperty("type")
+	String type;
 
-    @JsonProperty("expire")
-    String expire;
+	@JsonProperty("life")
+	int life;
 
-    @JsonProperty("identity")
-    String identity;
+	@JsonProperty("expire")
+	String expire;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("identity")
+	String identity;
 
-    @JsonProperty("profile")
-    Profile profile;
+	@JsonProperty("email")
+	String email;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("scopes")
-    Scopes scopes;
+	@JsonProperty("profile")
+	Profile profile;
 
-    @JsonProperty("created_at")
-    String createdAt;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("scopes")
+	Scopes scopes;
 
-    public String getToken() {
-        return token;
-    }
+	@JsonProperty("created_at")
+	String createdAt;
 
-    public String getId() {
-        return id;
-    }
+	public String getToken() {
+		return token;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public int getLife() {
-        return life;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getExpire() {
-        return expire;
-    }
+	public int getLife() {
+		return life;
+	}
 
-    public String getIdentity() {
-        return identity;
-    }
+	public String getExpire() {
+		return expire;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getIdentity() {
+		return identity;
+	}
 
-    public Profile getProfile() {
-        return profile;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
+	public Profile getProfile() {
+		return profile;
+	}
 
-    public Scopes getScopes() {
-        return scopes;
-    }
+	public String getCreatedAt() {
+		return createdAt;
+	}
 
+	public Scopes getScopes() {
+		return scopes;
+	}
 }

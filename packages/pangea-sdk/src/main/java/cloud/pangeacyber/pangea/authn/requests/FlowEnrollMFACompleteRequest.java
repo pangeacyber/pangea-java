@@ -2,44 +2,45 @@ package cloud.pangeacyber.pangea.authn.requests;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FlowEnrollMFACompleteRequest {
-    @JsonProperty("flow_id")
-    String flowID;
 
-    @JsonProperty("code")
-    String code;
+	@JsonProperty("flow_id")
+	String flowID;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("cancel")
-    Boolean cancel;
+	@JsonProperty("code")
+	String code;
 
-    private FlowEnrollMFACompleteRequest(FlowEnrollMFACompleteRequestBuilder builder) {
-        this.flowID = builder.flowID;
-        this.code = builder.code;
-        this.cancel = builder.cancel;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("cancel")
+	Boolean cancel;
+
+	private FlowEnrollMFACompleteRequest(FlowEnrollMFACompleteRequestBuilder builder) {
+		this.flowID = builder.flowID;
+		this.code = builder.code;
+		this.cancel = builder.cancel;
 	}
 
-	public static class FlowEnrollMFACompleteRequestBuilder{
-        String flowID;
-        String code;
-        Boolean cancel;
+	public static class FlowEnrollMFACompleteRequestBuilder {
+
+		String flowID;
+		String code;
+		Boolean cancel;
 
 		public FlowEnrollMFACompleteRequestBuilder(String flowID, String code) {
-            this.flowID = flowID;
-            this.code = code;
-        }
+			this.flowID = flowID;
+			this.code = code;
+		}
 
-        public FlowEnrollMFACompleteRequest build(){
+		public FlowEnrollMFACompleteRequest build() {
 			return new FlowEnrollMFACompleteRequest(this);
 		}
 
-        public void setCancel(Boolean cancel) {
-            this.cancel = cancel;
-        }
+		public void setCancel(Boolean cancel) {
+			this.cancel = cancel;
+		}
 	}
 }

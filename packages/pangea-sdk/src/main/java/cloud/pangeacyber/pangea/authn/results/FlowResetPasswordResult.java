@@ -3,5 +3,4 @@ package cloud.pangeacyber.pangea.authn.results;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FlowResetPasswordResult extends CommonFlowResult{
-}
+public class FlowResetPasswordResult extends CommonFlowResult {}

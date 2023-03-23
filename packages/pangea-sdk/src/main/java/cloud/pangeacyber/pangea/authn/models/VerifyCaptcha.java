@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VerifyCaptcha {
-    @JsonProperty("site_key")
-    String siteKey;
 
-    public String getSiteKey() {
-        return siteKey;
-    }
+	@JsonProperty("site_key")
+	String siteKey;
 
+	public String getSiteKey() {
+		return siteKey;
+	}
 }

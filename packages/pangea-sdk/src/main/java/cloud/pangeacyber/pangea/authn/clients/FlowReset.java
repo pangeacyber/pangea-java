@@ -8,14 +8,15 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
 public class FlowReset extends Client {
-    public static final String serviceName = "authn";
 
-    public FlowReset(Config config) {
-        super(config, serviceName);
-    }
+	public static final String serviceName = "authn";
 
-    public FlowResetPasswordResponse password(FlowResetPasswordRequest request) throws PangeaException, PangeaAPIException{
-        return doPost("/v1/flow/reset/password", request, FlowResetPasswordResponse.class);
-    }
+	public FlowReset(Config config) {
+		super(config, serviceName);
+	}
 
+	public FlowResetPasswordResponse password(FlowResetPasswordRequest request)
+		throws PangeaException, PangeaAPIException {
+		return doPost("/v1/flow/reset/password", request, FlowResetPasswordResponse.class);
+	}
 }

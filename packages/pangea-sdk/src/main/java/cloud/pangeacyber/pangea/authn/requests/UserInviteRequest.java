@@ -1,73 +1,71 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
 import cloud.pangeacyber.pangea.authn.models.Profile;
 import cloud.pangeacyber.pangea.authn.models.Scopes;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserInviteRequest {
-    @JsonProperty("inviter")
-    String inviter;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("inviter")
+	String inviter;
 
-    @JsonProperty("callback")
-    String callback;
+	@JsonProperty("email")
+	String email;
 
-    @JsonProperty("state")
-    String state;
+	@JsonProperty("callback")
+	String callback;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("invite_org")
-    String inviteOrg;
+	@JsonProperty("state")
+	String state;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("require_mfa")
-    Boolean requireMFA;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("invite_org")
+	String inviteOrg;
 
-    private UserInviteRequest(UserInviteRequestBuilder builder) {
-        this.email = builder.email;
-        this.inviter = builder.inviter;
-        this.callback = builder.callback;
-        this.state = builder.state;
-        this.inviteOrg = builder.inviteOrg;
-        this.requireMFA = builder.requireMFA;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("require_mfa")
+	Boolean requireMFA;
+
+	private UserInviteRequest(UserInviteRequestBuilder builder) {
+		this.email = builder.email;
+		this.inviter = builder.inviter;
+		this.callback = builder.callback;
+		this.state = builder.state;
+		this.inviteOrg = builder.inviteOrg;
+		this.requireMFA = builder.requireMFA;
 	}
 
-	public static class UserInviteRequestBuilder{
-        String inviter;
-        String email;
-        String callback;
-        String state;
-        String inviteOrg;
-        Boolean requireMFA;
+	public static class UserInviteRequestBuilder {
+
+		String inviter;
+		String email;
+		String callback;
+		String state;
+		String inviteOrg;
+		Boolean requireMFA;
 
 		public UserInviteRequestBuilder(String inviter, String email, String callback, String state) {
-            this.inviter = inviter;
-            this.email = email;
-            this.callback = callback;
-            this.state = state;
-        }
+			this.inviter = inviter;
+			this.email = email;
+			this.callback = callback;
+			this.state = state;
+		}
 
-        public UserInviteRequest build(){
+		public UserInviteRequest build() {
 			return new UserInviteRequest(this);
 		}
 
-        public void setInviteOrg(String inviteOrg) {
-            this.inviteOrg = inviteOrg;
-        }
+		public void setInviteOrg(String inviteOrg) {
+			this.inviteOrg = inviteOrg;
+		}
 
-        public void setRequireMFA(Boolean requireMFA) {
-            this.requireMFA = requireMFA;
-        }
-
-
+		public void setRequireMFA(Boolean requireMFA) {
+			this.requireMFA = requireMFA;
+		}
 	}
-
 }

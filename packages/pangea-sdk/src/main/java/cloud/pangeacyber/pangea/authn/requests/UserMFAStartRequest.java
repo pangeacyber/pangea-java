@@ -1,59 +1,59 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
+import cloud.pangeacyber.pangea.authn.models.MFAProvider;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import cloud.pangeacyber.pangea.authn.models.MFAProvider;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserMFAStartRequest {
-    @JsonProperty("user_id")
-    String userID;
 
-    @JsonProperty("mfa_provider")
-    MFAProvider mfaProvider;
+	@JsonProperty("user_id")
+	String userID;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("enroll")
-    Boolean enroll;
+	@JsonProperty("mfa_provider")
+	MFAProvider mfaProvider;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("phone")
-    String phone;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("enroll")
+	Boolean enroll;
 
-    private UserMFAStartRequest(UserMFAStartRequestBuilder builder) {
-        this.userID = builder.userID;
-        this.mfaProvider = builder.mfaProvider;
-        this.enroll = builder.enroll;
-        this.phone = builder.phone;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("phone")
+	String phone;
+
+	private UserMFAStartRequest(UserMFAStartRequestBuilder builder) {
+		this.userID = builder.userID;
+		this.mfaProvider = builder.mfaProvider;
+		this.enroll = builder.enroll;
+		this.phone = builder.phone;
 	}
 
-	public static class UserMFAStartRequestBuilder{
-        String userID;
-        MFAProvider mfaProvider;
-        Boolean enroll;
-        String phone;
+	public static class UserMFAStartRequestBuilder {
 
+		String userID;
+		MFAProvider mfaProvider;
+		Boolean enroll;
+		String phone;
 
 		public UserMFAStartRequestBuilder(String userID, MFAProvider mfaProvider) {
-            this.userID = userID;
-            this.mfaProvider = mfaProvider;
-        }
+			this.userID = userID;
+			this.mfaProvider = mfaProvider;
+		}
 
-		public UserMFAStartRequest build(){
+		public UserMFAStartRequest build() {
 			return new UserMFAStartRequest(this);
 		}
 
-        public UserMFAStartRequestBuilder setEnroll(Boolean enroll) {
-            this.enroll = enroll;
-            return this;
-        }
+		public UserMFAStartRequestBuilder setEnroll(Boolean enroll) {
+			this.enroll = enroll;
+			return this;
+		}
 
-        public UserMFAStartRequestBuilder setPhone(String phone) {
-            this.phone = phone;
-            return this;
-        }
+		public UserMFAStartRequestBuilder setPhone(String phone) {
+			this.phone = phone;
+			return this;
+		}
 	}
 }

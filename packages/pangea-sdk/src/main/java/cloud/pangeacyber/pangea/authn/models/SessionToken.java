@@ -5,61 +5,60 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SessionToken {
-    @JsonProperty("id")
-    String id;
 
-    @JsonProperty("type")
-    String type;
+	@JsonProperty("id")
+	String id;
 
-    @JsonProperty("life")
-    int life;
+	@JsonProperty("type")
+	String type;
 
-    @JsonProperty("expire")
-    String expire;
+	@JsonProperty("life")
+	int life;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("expire")
+	String expire;
 
-    @JsonProperty("scopes")
-    Scopes scopes;
+	@JsonProperty("email")
+	String email;
 
-    @JsonProperty("profile")
-    Profile profile;
+	@JsonProperty("scopes")
+	Scopes scopes;
 
-    @JsonProperty("created_at")
-    String createdAt;
+	@JsonProperty("profile")
+	Profile profile;
 
+	@JsonProperty("created_at")
+	String createdAt;
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public int getLife() {
-        return life;
-    }
+	public int getLife() {
+		return life;
+	}
 
-    public String getExpire() {
-        return expire;
-    }
+	public String getExpire() {
+		return expire;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public Profile getProfile() {
-        return profile;
-    }
+	public Profile getProfile() {
+		return profile;
+	}
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
+	public String getCreatedAt() {
+		return createdAt;
+	}
 
-    public Scopes getScopes() {
-        return scopes;
-    }
-
+	public Scopes getScopes() {
+		return scopes;
+	}
 }

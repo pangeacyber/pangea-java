@@ -5,17 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Signup {
-    @JsonProperty("social_signup")
-    SocialSignup socialSignup;
 
-    @JsonProperty("password_signup")
-    PasswordSignup passwordSignup;
+	@JsonProperty("social_signup")
+	SocialSignup socialSignup;
 
-    public SocialSignup getSocialSignup() {
-        return socialSignup;
-    }
+	@JsonProperty("password_signup")
+	PasswordSignup passwordSignup;
 
-    public PasswordSignup getPasswordSignup() {
-        return passwordSignup;
-    }
+	public SocialSignup getSocialSignup() {
+		return socialSignup;
+	}
+
+	public PasswordSignup getPasswordSignup() {
+		return passwordSignup;
+	}
 }

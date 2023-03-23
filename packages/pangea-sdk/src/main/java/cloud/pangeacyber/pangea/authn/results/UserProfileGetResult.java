@@ -1,78 +1,77 @@
 package cloud.pangeacyber.pangea.authn.results;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import cloud.pangeacyber.pangea.authn.models.MFAProviders;
 import cloud.pangeacyber.pangea.authn.models.Profile;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserProfileGetResult {
-    @JsonProperty("identity")
-    String identity;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("identity")
+	String identity;
 
-    @JsonProperty("profile")
-    Profile profile;
+	@JsonProperty("email")
+	String email;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("id_provider")
-    String idProvider;
+	@JsonProperty("profile")
+	Profile profile;
 
-    @JsonProperty("mfa_providers")
-    MFAProviders mfaProviders;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("id_provider")
+	String idProvider;
 
-    @JsonProperty("require_mfa")
-    boolean requireMFA;
+	@JsonProperty("mfa_providers")
+	MFAProviders mfaProviders;
 
-    @JsonProperty("verified")
-    boolean verified;
+	@JsonProperty("require_mfa")
+	boolean requireMFA;
 
-    @JsonProperty("last_login_at")
-    String lastLoginAt;
+	@JsonProperty("verified")
+	boolean verified;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("disabled")
-    Boolean disabled;
+	@JsonProperty("last_login_at")
+	String lastLoginAt;
 
-    public String getIdentity() {
-        return identity;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("disabled")
+	Boolean disabled;
 
-    public String getEmail() {
-        return email;
-    }
+	public String getIdentity() {
+		return identity;
+	}
 
-    public Profile getProfile() {
-        return profile;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getIdProvider() {
-        return idProvider;
-    }
+	public Profile getProfile() {
+		return profile;
+	}
 
-    public MFAProviders getMfaProviders() {
-        return mfaProviders;
-    }
+	public String getIdProvider() {
+		return idProvider;
+	}
 
-    public boolean isRequireMFA() {
-        return requireMFA;
-    }
+	public MFAProviders getMfaProviders() {
+		return mfaProviders;
+	}
 
-    public boolean isVerified() {
-        return verified;
-    }
+	public boolean isRequireMFA() {
+		return requireMFA;
+	}
 
-    public String getLastLoginAt() {
-        return lastLoginAt;
-    }
+	public boolean isVerified() {
+		return verified;
+	}
 
-    public Boolean getDisabled() {
-        return disabled;
-    }
+	public String getLastLoginAt() {
+		return lastLoginAt;
+	}
 
+	public Boolean getDisabled() {
+		return disabled;
+	}
 }

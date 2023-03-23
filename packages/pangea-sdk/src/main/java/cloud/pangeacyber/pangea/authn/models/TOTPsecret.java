@@ -5,18 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TOTPsecret {
-    @JsonProperty("qr_image")
-    String qrImage;
 
-    @JsonProperty("secret")
-    String secret;
+	@JsonProperty("qr_image")
+	String qrImage;
 
-    public String getQrImage() {
-        return qrImage;
-    }
+	@JsonProperty("secret")
+	String secret;
 
-    public String getSecret() {
-        return secret;
-    }
+	public String getQrImage() {
+		return qrImage;
+	}
 
+	public String getSecret() {
+		return secret;
+	}
 }

@@ -2,38 +2,39 @@ package cloud.pangeacyber.pangea.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResultsOutput {
-    @JsonProperty("count")
-    int count;
 
-    @JsonProperty("events")
-    SearchEvent[] events;
+	@JsonProperty("count")
+	int count;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("root")
-    Root root;
+	@JsonProperty("events")
+	SearchEvent[] events;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("unpublished_root")
-    Root unpublishedRoot;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("root")
+	Root root;
 
-    public int getCount() {
-        return count;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("unpublished_root")
+	Root unpublishedRoot;
 
-    public SearchEvent[] getEvents() {
-        return events;
-    }
+	public int getCount() {
+		return count;
+	}
 
-    public Root getRoot() {
-        return root;
-    }
+	public SearchEvent[] getEvents() {
+		return events;
+	}
 
-    public Root getUnpublishedRoot() {
-        return unpublishedRoot;
-    }
+	public Root getRoot() {
+		return root;
+	}
+
+	public Root getUnpublishedRoot() {
+		return unpublishedRoot;
+	}
 }

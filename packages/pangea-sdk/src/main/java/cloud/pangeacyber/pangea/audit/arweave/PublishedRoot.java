@@ -5,59 +5,58 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 public class PublishedRoot {
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("size")
-    int size;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("root_hash")
-    String rootHash;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("size")
+	int size;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("published_at")
-    String publishedAt;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("root_hash")
+	String rootHash;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("consistency_proof")
-    String[] consistencyProof;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("published_at")
+	String publishedAt;
 
-    @JsonIgnore
-    String source = "unknown";
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("consistency_proof")
+	String[] consistencyProof;
 
-    public PublishedRoot() {
-    }
+	@JsonIgnore
+	String source = "unknown";
 
-    public PublishedRoot(int size, String rootHash, String publishedAt, String[] consistencyProof, String source) {
-        this.size = size;
-        this.rootHash = rootHash;
-        this.publishedAt = publishedAt;
-        this.consistencyProof = consistencyProof;
-        this.source = source;
-    }
+	public PublishedRoot() {}
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+	public PublishedRoot(int size, String rootHash, String publishedAt, String[] consistencyProof, String source) {
+		this.size = size;
+		this.rootHash = rootHash;
+		this.publishedAt = publishedAt;
+		this.consistencyProof = consistencyProof;
+		this.source = source;
+	}
 
-    public int getSize() {
-        return size;
-    }
+	public void setSource(String source) {
+		this.source = source;
+	}
 
-    public String getRootHash() {
-        return rootHash;
-    }
+	public int getSize() {
+		return size;
+	}
 
-    public String getPublishedAt() {
-        return publishedAt;
-    }
+	public String getRootHash() {
+		return rootHash;
+	}
 
-    public String[] getConsistencyProof() {
-        return consistencyProof;
-    }
+	public String getPublishedAt() {
+		return publishedAt;
+	}
 
-    public String getSource() {
-        return source;
-    }
+	public String[] getConsistencyProof() {
+		return consistencyProof;
+	}
+
+	public String getSource() {
+		return source;
+	}
 }

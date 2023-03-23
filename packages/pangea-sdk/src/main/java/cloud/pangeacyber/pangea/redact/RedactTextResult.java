@@ -5,17 +5,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RedactTextResult {
-    @JsonProperty("redacted_text")
-    String redactedText;
 
-    @JsonProperty("report")
-    RedactDebugReport report;
+	@JsonProperty("count")
+	int count;
 
-    public String getRedactedText() {
-        return redactedText;
-    }
+	@JsonProperty("report")
+	RedactDebugReport report;
 
-    public RedactDebugReport getReport() {
-        return report;
-    }
+	@JsonProperty("redacted_text")
+	String redactedText;
+
+	public int getCount() {
+		return count;
+	}
+
+	public RedactDebugReport getReport() {
+		return report;
+	}
+
+	public String getRedactedText() {
+		return redactedText;
+	}
 }

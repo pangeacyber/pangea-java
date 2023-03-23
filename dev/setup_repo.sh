@@ -5,3 +5,6 @@ brew install pre-commit
 
 echo "Installing pre-commit hooks"
 pre-commit install
+
+echo "Config git blame"
+git config blame.ignoreRevsFile .git-blame-ignore-revs

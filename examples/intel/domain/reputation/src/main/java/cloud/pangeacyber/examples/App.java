@@ -1,7 +1,7 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.DomainIntelClient;
-import cloud.pangeacyber.pangea.intel.DomainLookupResponse;
+import cloud.pangeacyber.pangea.intel.models.DomainReputationResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 
@@ -27,7 +27,7 @@ public class App
         }
 
         System.out.println("Reputation success");
-        System.out.println("Reputation data: " + response.getResult().getData());
+        System.out.println("Reputation verdict: " + response.getResult().getData().getVerdict());
         System.out.println("Reputation raw data: " + response.getResult().getRawData());
     }
 }

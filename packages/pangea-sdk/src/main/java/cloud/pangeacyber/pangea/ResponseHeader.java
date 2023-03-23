@@ -1,67 +1,67 @@
 package cloud.pangeacyber.pangea;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseHeader {
-    @JsonProperty("request_id")
-    String requestId;
 
-    @JsonProperty("request_time")
-    String requestTime; // TODO: datetime
+	@JsonProperty("request_id")
+	String requestId;
 
-    @JsonProperty("response_time")
-    String responseTime; // TODO: datetime
+	@JsonProperty("request_time")
+	String requestTime; // TODO: datetime
 
-    @JsonProperty("status")
-    String status;
+	@JsonProperty("response_time")
+	String responseTime; // TODO: datetime
 
-    @JsonProperty("summary")
-    String summary;
+	@JsonProperty("status")
+	String status;
 
-    public String getRequestId() {
-        return requestId;
-    }
+	@JsonProperty("summary")
+	String summary;
 
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
+	public String getRequestId() {
+		return requestId;
+	}
 
-    public String getRequestTime() {
-        return requestTime;
-    }
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
+	}
 
-    public void setRequestTime(String requestTime) {
-        this.requestTime = requestTime;
-    }
+	public String getRequestTime() {
+		return requestTime;
+	}
 
-    public String getResponseTime() {
-        return responseTime;
-    }
+	public void setRequestTime(String requestTime) {
+		this.requestTime = requestTime;
+	}
 
-    public void setResponseTime(String responseTime) {
-        this.responseTime = responseTime;
-    }
+	public String getResponseTime() {
+		return responseTime;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public void setResponseTime(String responseTime) {
+		this.responseTime = responseTime;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public String getSummary() {
-        return summary;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
+	public String getSummary() {
+		return summary;
+	}
 
-    public boolean isOk() {
-        return status.equals(ResponseStatus.SUCCESS.toString());
-    }
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public boolean isOk() {
+		return status.equals(ResponseStatus.SUCCESS.toString());
+	}
 }

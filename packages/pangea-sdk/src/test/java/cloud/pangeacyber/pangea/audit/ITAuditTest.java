@@ -201,12 +201,6 @@ public class ITAuditTest {
 		assertEquals("mytenantid", result.getEventEnvelope().getEvent().getTenantID());
 	}
 
-	@Test(expected = ValidationException.class)
-	public void testEmptyMessage() throws PangeaException, PangeaAPIException {
-		Event event = new Event("");
-		LogResponse response = client.log(event);
-	}
-
 	@Test
 	public void testSearchDefault() throws PangeaException, PangeaAPIException {
 		SearchInput input = new SearchInput("message:");

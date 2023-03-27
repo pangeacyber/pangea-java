@@ -41,12 +41,14 @@ public class UserProfileUpdateRequest {
 			return new UserProfileUpdateRequest(this);
 		}
 
-		public void setEmail(String email) {
+		public UserProfileUpdateRequestBuilder setEmail(String email) {
 			this.email = email;
+			return this;
 		}
 
-		public void setIdentity(String identity) {
+		public UserProfileUpdateRequestBuilder setIdentity(String identity) {
 			this.identity = identity;
+			return this;
 		}
 	}
 }

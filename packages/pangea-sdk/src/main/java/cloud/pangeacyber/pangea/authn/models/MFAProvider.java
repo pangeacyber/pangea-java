@@ -1,5 +1,7 @@
 package cloud.pangeacyber.pangea.authn.models;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum MFAProvider {
 	TOTP("totp"),
 	EMAIL_OTP("email_otp"),
@@ -16,6 +18,11 @@ public enum MFAProvider {
 	 */
 	@Override
 	public String toString() {
+		return text;
+	}
+
+	@JsonValue
+	final String value() {
 		return text;
 	}
 }

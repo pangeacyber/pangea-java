@@ -5,6 +5,7 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
 import cloud.pangeacyber.pangea.authn.models.Scopes;
 import cloud.pangeacyber.pangea.authn.requests.UserCreateRequest;
+import cloud.pangeacyber.pangea.authn.requests.UserInviteRequest;
 import cloud.pangeacyber.pangea.authn.requests.UserUpdateRequest;
 import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -82,11 +83,11 @@ public class User extends Client {
 
 	// TODO: Doc
 	public UserUpdateResponse update(UserUpdateRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/create", request, UserUpdateResponse.class);
+		return doPost("/v1/user/update", request, UserUpdateResponse.class);
 	}
 
 	// TODO: Doc
-	public UserInviteResponse invite(UserUpdateRequest request) throws PangeaException, PangeaAPIException {
+	public UserInviteResponse invite(UserInviteRequest request) throws PangeaException, PangeaAPIException {
 		return doPost("/v1/user/invite", request, UserInviteResponse.class);
 	}
 

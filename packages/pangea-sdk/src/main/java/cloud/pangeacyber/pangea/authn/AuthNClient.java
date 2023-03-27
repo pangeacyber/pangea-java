@@ -9,9 +9,9 @@ import cloud.pangeacyber.pangea.authn.clients.User;
 public class AuthNClient extends Client {
 
 	public static final String serviceName = "authn";
-	User user;
-	Password password;
-	Flow flow;
+	private User user;
+	private Password password;
+	private Flow flow;
 
 	public AuthNClient(Config config) {
 		super(config, serviceName);

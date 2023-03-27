@@ -1,5 +1,7 @@
 package cloud.pangeacyber.pangea.authn.models;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum SessionOrderBy {
 	ID("id"),
 	CREATED_AT("created_at"),
@@ -20,6 +22,11 @@ public enum SessionOrderBy {
 	 */
 	@Override
 	public String toString() {
+		return text;
+	}
+
+	@JsonValue
+	final String value() {
 		return text;
 	}
 }

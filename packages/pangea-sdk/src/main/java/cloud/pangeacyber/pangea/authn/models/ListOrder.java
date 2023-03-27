@@ -1,5 +1,7 @@
 package cloud.pangeacyber.pangea.authn.models;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum ListOrder {
 	ASC("asc"),
 	DESC("desc");
@@ -15,6 +17,11 @@ public enum ListOrder {
 	 */
 	@Override
 	public String toString() {
+		return text;
+	}
+
+	@JsonValue
+	final String value() {
 		return text;
 	}
 }

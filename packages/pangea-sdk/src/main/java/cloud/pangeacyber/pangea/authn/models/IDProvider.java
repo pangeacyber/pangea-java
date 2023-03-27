@@ -1,5 +1,7 @@
 package cloud.pangeacyber.pangea.authn.models;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum IDProvider {
 	FACEBOOK("facebook"),
 	GITHUB("github"),
@@ -18,6 +20,11 @@ public enum IDProvider {
 	 */
 	@Override
 	public String toString() {
+		return text;
+	}
+
+	@JsonValue
+	final String value() {
 		return text;
 	}
 }

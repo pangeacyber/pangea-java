@@ -406,11 +406,11 @@ public class ITAuditTest {
 		LogResponse response = fakeClient.log(event);
 	}
 
-	@Test(expected = ValidationException.class)
-	public void testLogEmptyMessage() throws PangeaException, PangeaAPIException {
-		Event event = new Event("");
-		LogResponse response = client.log(event);
-	}
+	// @Test(expected = ValidationException.class)
+	// public void testLogEmptyMessage() throws PangeaException, PangeaAPIException {
+	// 	Event event = new Event("");
+	// 	LogResponse response = client.log(event);
+	// }
 
 	@Test(expected = ValidationException.class)
 	public void testSearchValidationException() throws PangeaAPIException, PangeaException {

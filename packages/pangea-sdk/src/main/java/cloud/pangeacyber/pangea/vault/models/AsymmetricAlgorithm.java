@@ -3,11 +3,14 @@ package cloud.pangeacyber.pangea.vault.models;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum AsymmetricAlgorithm {
-	ED25519("ed25519"),
-	RSA("rsa"),
-	ES256("es256"),
-	ES384("es384"),
-	ES512("es512");
+	ED25519("ED25519"),
+	ES256("ES256"),
+	ES384("ES384"),
+	ES512("ES512"),
+	RSA2048_PKCS1V15_SHA256("RSA-PKCS1V15-2048-SHA256"),
+	RSA2048_OAEP_SHA256("RSA-OAEP-2048-SHA256"),
+
+	RSA("RSA-PKCS1V15-2048-SHA256"); // deprecated, use RSA2048_PKCS1V15_SHA256 instead
 
 	private final String text;
 

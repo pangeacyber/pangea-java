@@ -100,7 +100,8 @@ public class ITVaultTest {
 	}
 
 	private void asymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
-		String data = "thisisamessagetosign";
+		String message = "thisisamessagetosign";
+		String data = Utils.stringToStringB64(message);
 
 		// Sign 1
 		SignResponse signResponse1 = client.sign(id, data);

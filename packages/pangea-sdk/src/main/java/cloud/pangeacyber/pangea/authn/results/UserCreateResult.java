@@ -1,78 +1,79 @@
 package cloud.pangeacyber.pangea.authn.results;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import cloud.pangeacyber.pangea.authn.models.MFAProviders;
 import cloud.pangeacyber.pangea.authn.models.Profile;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserCreateResult {
-    @JsonProperty("identity")
-    String identity;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("identity")
+	String identity;
 
-    @JsonProperty("profile")
-    Profile profile;
+	@JsonProperty("email")
+	String email;
 
-    @JsonProperty("id_provider")
-    String id_provider;
+	@JsonProperty("profile")
+	Profile profile;
 
-    @JsonProperty("require_mfa")
-    Boolean require_mfa;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("id_provider")
+	String id_provider;
 
-    @JsonProperty("verified")
-    Boolean verified;
+	@JsonProperty("require_mfa")
+	Boolean require_mfa;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("last_login_at")
-    String lastLoginAt;
+	@JsonProperty("verified")
+	Boolean verified;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("disabled")
-    Boolean disabled;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("last_login_at")
+	String lastLoginAt;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("mfa_providers")
-    MFAProviders mfaProviders;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("disabled")
+	Boolean disabled;
 
-    public String getIdentity() {
-        return identity;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("mfa_providers")
+	MFAProviders mfaProviders;
 
-    public String getEmail() {
-        return email;
-    }
+	public String getIdentity() {
+		return identity;
+	}
 
-    public Profile getProfile() {
-        return profile;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getId_provider() {
-        return id_provider;
-    }
+	public Profile getProfile() {
+		return profile;
+	}
 
-    public Boolean getRequire_mfa() {
-        return require_mfa;
-    }
+	public String getId_provider() {
+		return id_provider;
+	}
 
-    public Boolean getVerified() {
-        return verified;
-    }
+	public Boolean getRequire_mfa() {
+		return require_mfa;
+	}
 
-    public String getLastLoginAt() {
-        return lastLoginAt;
-    }
+	public Boolean getVerified() {
+		return verified;
+	}
 
-    public Boolean getDisabled() {
-        return disabled;
-    }
+	public String getLastLoginAt() {
+		return lastLoginAt;
+	}
 
-    public MFAProviders getMfaProviders() {
-        return mfaProviders;
-    }
+	public Boolean getDisabled() {
+		return disabled;
+	}
+
+	public MFAProviders getMfaProviders() {
+		return mfaProviders;
+	}
 }

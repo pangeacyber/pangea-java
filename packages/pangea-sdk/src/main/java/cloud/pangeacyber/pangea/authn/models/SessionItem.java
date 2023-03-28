@@ -5,81 +5,81 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SessionItem {
-    @JsonProperty("id")
-    String id;
 
-    @JsonProperty("type")
-    String type;
+	@JsonProperty("id")
+	String id;
 
-    @JsonProperty("life")
-    int life;
+	@JsonProperty("type")
+	String type;
 
-    @JsonProperty("expire")
-    String expire;
+	@JsonProperty("life")
+	int life;
 
-    @JsonProperty("identity")
-    String identity;
+	@JsonProperty("expire")
+	String expire;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("identity")
+	String identity;
 
-    @JsonProperty("scopes")
-    Scopes scopes;
+	@JsonProperty("email")
+	String email;
 
-    @JsonProperty("profile")
-    Profile profile;
+	@JsonProperty("scopes")
+	Scopes scopes;
 
-    @JsonProperty("created_at")
-    String createdAt;
+	@JsonProperty("profile")
+	Profile profile;
 
-    @JsonProperty("active_token")
-    SessionToken activeToken;
+	@JsonProperty("created_at")
+	String createdAt;
 
-    @JsonProperty("last")
-    String last;
+	@JsonProperty("active_token")
+	SessionToken activeToken;
 
-    public String getId() {
-        return id;
-    }
+	@JsonProperty("last")
+	String last;
 
-    public String getType() {
-        return type;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public int getLife() {
-        return life;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getExpire() {
-        return expire;
-    }
+	public int getLife() {
+		return life;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getExpire() {
+		return expire;
+	}
 
-    public Profile getProfile() {
-        return profile;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
+	public Profile getProfile() {
+		return profile;
+	}
 
-    public Scopes getScopes() {
-        return scopes;
-    }
+	public String getCreatedAt() {
+		return createdAt;
+	}
 
-    public String getIdentity() {
-        return identity;
-    }
+	public Scopes getScopes() {
+		return scopes;
+	}
 
-    public SessionToken getActiveToken() {
-        return activeToken;
-    }
+	public String getIdentity() {
+		return identity;
+	}
 
-    public String getLast() {
-        return last;
-    }
+	public SessionToken getActiveToken() {
+		return activeToken;
+	}
 
+	public String getLast() {
+		return last;
+	}
 }

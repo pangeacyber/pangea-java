@@ -1,71 +1,81 @@
 package cloud.pangeacyber.pangea.authn.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LoginToken {
-    @JsonProperty("token")
-    String token;
 
-    @JsonProperty("id")
-    String id;
+	@JsonProperty("token")
+	String token;
 
-    @JsonProperty("type")
-    String type;
+	@JsonProperty("id")
+	String id;
 
-    @JsonProperty("life")
-    int life;
+	@JsonProperty("type")
+	String type;
 
-    @JsonProperty("expire")
-    String expire;
+	@JsonProperty("life")
+	int life;
 
-    @JsonProperty("identity")
-    String identity;
+	@JsonProperty("expire")
+	String expire;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("identity")
+	String identity;
 
-    @JsonProperty("profile")
-    Profile profile;
+	@JsonProperty("email")
+	String email;
 
-    @JsonProperty("created_at")
-    String createdAt;
+	@JsonProperty("profile")
+	Profile profile;
 
-    public String getToken() {
-        return token;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("scopes")
+	Scopes scopes;
 
-    public String getId() {
-        return id;
-    }
+	@JsonProperty("created_at")
+	String createdAt;
 
-    public String getType() {
-        return type;
-    }
+	public String getToken() {
+		return token;
+	}
 
-    public int getLife() {
-        return life;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getExpire() {
-        return expire;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getIdentity() {
-        return identity;
-    }
+	public int getLife() {
+		return life;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getExpire() {
+		return expire;
+	}
 
-    public Profile getProfile() {
-        return profile;
-    }
+	public String getIdentity() {
+		return identity;
+	}
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
+	public String getEmail() {
+		return email;
+	}
 
+	public Profile getProfile() {
+		return profile;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public Scopes getScopes() {
+		return scopes;
+	}
 }

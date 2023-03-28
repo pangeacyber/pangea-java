@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EnrollMFAComplete {
-    @JsonProperty("totp_secret")
-    TOTPsecret totpSecret;
 
-    public TOTPsecret getTotpSecret() {
-        return totpSecret;
-    }
+	@JsonProperty("totp_secret")
+	TOTPsecret totpSecret;
+
+	public TOTPsecret getTotpSecret() {
+		return totpSecret;
+	}
 }

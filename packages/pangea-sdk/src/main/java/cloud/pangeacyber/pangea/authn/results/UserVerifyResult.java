@@ -1,75 +1,85 @@
 package cloud.pangeacyber.pangea.authn.results;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
 import cloud.pangeacyber.pangea.authn.models.Profile;
 import cloud.pangeacyber.pangea.authn.models.Scopes;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserVerifyResult {
-    @JsonProperty("identity")
-    String identity;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("identity")
+	String identity;
 
-    @JsonProperty("profile")
-    Profile profile;
+	@JsonProperty("email")
+	String email;
 
-    @JsonProperty("scopes")
-    Scopes scopes;
+	@JsonProperty("profile")
+	Profile profile;
 
-    @JsonProperty("id_provider")
-    IDProvider idProvider;
+	@JsonProperty("scopes")
+	Scopes scopes;
 
-    @JsonProperty("require_mfa")
-    boolean requireMFA;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("id_provider")
+	IDProvider idProvider;
 
-    @JsonProperty("verified")
-    boolean verified;
+	@JsonProperty("mfa_providers")
+	String[] mfaProviders;
 
-    @JsonProperty("diabled")
-    boolean disabled;
+	@JsonProperty("require_mfa")
+	boolean requireMFA;
 
-    @JsonProperty("last_login_at")
-    String lastLoginAt;
+	@JsonProperty("verified")
+	boolean verified;
 
-    public String getIdentity() {
-        return identity;
-    }
+	@JsonProperty("diabled")
+	boolean disabled;
 
-    public String getEmail() {
-        return email;
-    }
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("last_login_at")
+	String lastLoginAt;
 
-    public Profile getProfile() {
-        return profile;
-    }
+	public String getIdentity() {
+		return identity;
+	}
 
-    public Scopes getScopes() {
-        return scopes;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public IDProvider getIdProvider() {
-        return idProvider;
-    }
+	public Profile getProfile() {
+		return profile;
+	}
 
-    public boolean isRequireMFA() {
-        return requireMFA;
-    }
+	public Scopes getScopes() {
+		return scopes;
+	}
 
-    public boolean isVerified() {
-        return verified;
-    }
+	public IDProvider getIdProvider() {
+		return idProvider;
+	}
 
-    public boolean isDisabled() {
-        return disabled;
-    }
+	public boolean isRequireMFA() {
+		return requireMFA;
+	}
 
-    public String getLastLoginAt() {
-        return lastLoginAt;
-    }
+	public boolean isVerified() {
+		return verified;
+	}
 
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public String getLastLoginAt() {
+		return lastLoginAt;
+	}
+
+	public String[] getMfaProviders() {
+		return mfaProviders;
+	}
 }

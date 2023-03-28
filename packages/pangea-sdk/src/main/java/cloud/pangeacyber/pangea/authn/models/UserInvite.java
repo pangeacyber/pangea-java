@@ -5,66 +5,67 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserInvite {
-    @JsonProperty("id")
-    String id;
 
-    @JsonProperty("inviter")
-    String inviter;
+	@JsonProperty("id")
+	String id;
 
-    @JsonProperty("invite_org")
-    String inviteOrg;
+	@JsonProperty("inviter")
+	String inviter;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("invite_org")
+	String inviteOrg;
 
-    @JsonProperty("callback")
-    String callback;
+	@JsonProperty("email")
+	String email;
 
-    @JsonProperty("state")
-    String state;
+	@JsonProperty("callback")
+	String callback;
 
-    @JsonProperty("require_mfa")
-    Boolean require_mfa;
+	@JsonProperty("state")
+	String state;
 
-    @JsonProperty("created_at")
-    String createdAt;
+	@JsonProperty("require_mfa")
+	Boolean require_mfa;
 
-    @JsonProperty("expire")
-    String expire;
+	@JsonProperty("created_at")
+	String createdAt;
 
-    public String getId() {
-        return id;
-    }
+	@JsonProperty("expire")
+	String expire;
 
-    public String getInviter() {
-        return inviter;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getInviteOrg() {
-        return inviteOrg;
-    }
+	public String getInviter() {
+		return inviter;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getInviteOrg() {
+		return inviteOrg;
+	}
 
-    public String getCallback() {
-        return callback;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getState() {
-        return state;
-    }
+	public String getCallback() {
+		return callback;
+	}
 
-    public Boolean getRequire_mfa() {
-        return require_mfa;
-    }
+	public String getState() {
+		return state;
+	}
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
+	public Boolean getRequire_mfa() {
+		return require_mfa;
+	}
 
-    public String getExpire() {
-        return expire;
-    }
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public String getExpire() {
+		return expire;
+	}
 }

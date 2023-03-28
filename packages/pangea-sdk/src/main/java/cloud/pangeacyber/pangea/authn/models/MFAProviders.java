@@ -1,9 +1,7 @@
 package cloud.pangeacyber.pangea.authn.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MFAProviders extends ArrayList<String> {
-}
+public class MFAProviders extends ArrayList<String> {}

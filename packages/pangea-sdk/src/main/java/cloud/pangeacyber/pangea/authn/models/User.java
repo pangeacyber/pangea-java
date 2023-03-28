@@ -5,31 +5,32 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
-    @JsonProperty("profile")
-    Profile profile;
 
-    @JsonProperty("identity")
-    String identity;
+	@JsonProperty("profile")
+	Profile profile;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("identity")
+	String identity;
 
-    @JsonProperty("scopes")
-    Scopes scopes;
+	@JsonProperty("email")
+	String email;
 
-    public Profile getProfile() {
-        return profile;
-    }
+	@JsonProperty("scopes")
+	Scopes scopes;
 
-    public String getIdentity() {
-        return identity;
-    }
+	public Profile getProfile() {
+		return profile;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getIdentity() {
+		return identity;
+	}
 
-    public Scopes getScopes() {
-        return scopes;
-    }
+	public String getEmail() {
+		return email;
+	}
+
+	public Scopes getScopes() {
+		return scopes;
+	}
 }

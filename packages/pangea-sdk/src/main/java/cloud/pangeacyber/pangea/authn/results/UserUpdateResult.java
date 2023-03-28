@@ -1,85 +1,86 @@
 package cloud.pangeacyber.pangea.authn.results;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import cloud.pangeacyber.pangea.authn.models.MFAProviders;
 import cloud.pangeacyber.pangea.authn.models.Profile;
 import cloud.pangeacyber.pangea.authn.models.Scopes;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserUpdateResult {
-    @JsonProperty("identity")
-    String identity;
 
-    @JsonProperty("email")
-    String email;
+	@JsonProperty("identity")
+	String identity;
 
-    @JsonProperty("profile")
-    Profile profile;
+	@JsonProperty("email")
+	String email;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("scopes")
-    Scopes scopes;
+	@JsonProperty("profile")
+	Profile profile;
 
-    @JsonProperty("id_provider")
-    String idProvider;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("scopes")
+	Scopes scopes;
 
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty("mfa_providers")
-    MFAProviders mfaProviders;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("id_provider")
+	String idProvider;
 
-    @JsonProperty("require_mfa")
-    Boolean requireMFA;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("mfa_providers")
+	MFAProviders mfaProviders;
 
-    @JsonProperty("verified")
-    Boolean verified;
+	@JsonProperty("require_mfa")
+	Boolean requireMFA;
 
-    @JsonProperty("disabled")
-    Boolean disabled;
+	@JsonProperty("verified")
+	Boolean verified;
 
-    @JsonProperty("last_login_at")
-    String lastLoginAt;
+	@JsonProperty("disabled")
+	Boolean disabled;
 
-    public String getIdentity() {
-        return identity;
-    }
+	@JsonProperty("last_login_at")
+	String lastLoginAt;
 
-    public String getEmail() {
-        return email;
-    }
+	public String getIdentity() {
+		return identity;
+	}
 
-    public Profile getProfile() {
-        return profile;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public Scopes getScopes() {
-        return scopes;
-    }
+	public Profile getProfile() {
+		return profile;
+	}
 
-    public String getIdProvider() {
-        return idProvider;
-    }
+	public Scopes getScopes() {
+		return scopes;
+	}
 
-    public MFAProviders getMfaProviders() {
-        return mfaProviders;
-    }
+	public String getIdProvider() {
+		return idProvider;
+	}
 
-    public Boolean getRequireMFA() {
-        return requireMFA;
-    }
+	public MFAProviders getMfaProviders() {
+		return mfaProviders;
+	}
 
-    public Boolean getVerified() {
-        return verified;
-    }
+	public Boolean getRequireMFA() {
+		return requireMFA;
+	}
 
-    public Boolean getDisabled() {
-        return disabled;
-    }
+	public Boolean getVerified() {
+		return verified;
+	}
 
-    public String getLastLoginAt() {
-        return lastLoginAt;
-    }
+	public Boolean getDisabled() {
+		return disabled;
+	}
+
+	public String getLastLoginAt() {
+		return lastLoginAt;
+	}
 }

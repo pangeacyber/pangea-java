@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EnrollMFAStart {
-    @JsonProperty("mfa_providers")
-    MFAProviders mfaProviders;
 
-    public MFAProviders getMfaProviders() {
-        return mfaProviders;
-    }
+	@JsonProperty("mfa_providers")
+	MFAProviders mfaProviders;
+
+	public MFAProviders getMfaProviders() {
+		return mfaProviders;
+	}
 }

@@ -14,6 +14,6 @@ cd audit/log
 
 and then run example with:
 ```
-mvn clean && mvn compile \\
+mvn clean && mvn compile
 mvn exec:java -Dexec.mainClass=cloud.pangeacyber.examples.App
 ```

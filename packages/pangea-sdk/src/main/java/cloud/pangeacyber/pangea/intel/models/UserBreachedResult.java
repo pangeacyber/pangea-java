@@ -2,12 +2,12 @@ package cloud.pangeacyber.pangea.intel.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public final class URLReputationResult extends IntelCommonResult {
+public final class UserBreachedResult extends IntelCommonResult {
 
 	@JsonProperty("data")
-	URLReputationData data;
+	UserBreachedData data;
 
-	public URLReputationData getData() {
+	public UserBreachedData getData() {
 		return data;
 	}
 }

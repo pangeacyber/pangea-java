@@ -2,7 +2,7 @@ package cloud.pangeacyber.pangea.intel.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public final class IPReputationResult extends IntelReputationResult {
+public final class IPReputationResult extends IntelCommonResult {
 
 	@JsonProperty("data")
 	IPReputationData data;

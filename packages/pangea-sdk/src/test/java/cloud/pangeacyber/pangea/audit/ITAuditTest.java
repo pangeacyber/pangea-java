@@ -274,7 +274,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testSearchDefault() throws PangeaException, PangeaAPIException {
-		SearchInput input = new SearchInput("message:");
+		SearchInput input = new SearchInput("message:\"\"");
 		int limit = 4;
 		int maxResults = 6;
 		input.setMaxResults(limit);
@@ -313,7 +313,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testSearchVerifyConsistency() throws PangeaAPIException, PangeaException {
-		SearchInput input = new SearchInput("message:");
+		SearchInput input = new SearchInput("message:\"\"");
 		int limit = 10;
 		input.setMaxResults(limit);
 		input.setOrder("asc");
@@ -366,7 +366,7 @@ public class ITAuditTest {
 	}
 
 	public void testResultsVerify() throws PangeaAPIException, PangeaException {
-		SearchInput input = new SearchInput("message:");
+		SearchInput input = new SearchInput("message:\"\"");
 		int searchLimit = 10;
 		input.setMaxResults(searchLimit);
 		input.setOrder("asc");
@@ -401,6 +401,7 @@ public class ITAuditTest {
 		SearchResponse searchResponse = client.search(input, true, true);
 		assertTrue(searchResponse.isOk());
 		assertTrue(searchResponse.getResult().getCount() <= searchLimit);
+		assertTrue(searchResponse.getResult().getCount() > 0);
 
 		int resultsLimit = 3;
 		// Skip verifications
@@ -479,7 +480,7 @@ public class ITAuditTest {
 
 	@Test(expected = ValidationException.class)
 	public void testSearchValidationException() throws PangeaAPIException, PangeaException {
-		SearchInput input = new SearchInput("message:");
+		SearchInput input = new SearchInput("message:\"\"");
 		int searchLimit = 100;
 		input.setMaxResults(searchLimit);
 		input.setOrder("notavalidorder");

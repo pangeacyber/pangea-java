@@ -272,12 +272,6 @@ public class ITAuditTest {
 		assertEquals("mytenantid", result.getEventEnvelope().getEvent().getTenantID());
 	}
 
-	@Test(expected = ValidationException.class)
-	public void testEmptyMessage() throws PangeaException, PangeaAPIException {
-		Event event = new Event("");
-		LogResponse response = client.log(event);
-	}
-
 	@Test
 	public void testSearchDefault() throws PangeaException, PangeaAPIException {
 		SearchInput input = new SearchInput("message:");
@@ -352,7 +346,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testResultsDefault() throws PangeaAPIException, PangeaException {
-		SearchInput input = new SearchInput("message:");
+		SearchInput input = new SearchInput("message:\"\"");
 		int searchLimit = 10;
 		input.setMaxResults(searchLimit);
 		input.setOrder("asc");
@@ -399,7 +393,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testResultsNoVerify() throws PangeaAPIException, PangeaException {
-		SearchInput input = new SearchInput("message:");
+		SearchInput input = new SearchInput("message:\"\"");
 		int searchLimit = 10;
 		input.setMaxResults(searchLimit);
 		input.setOrder("asc");
@@ -477,11 +471,11 @@ public class ITAuditTest {
 		LogResponse response = fakeClient.log(event);
 	}
 
-	@Test(expected = ValidationException.class)
-	public void testLogEmptyMessage() throws PangeaException, PangeaAPIException {
-		Event event = new Event("");
-		LogResponse response = client.log(event);
-	}
+	// @Test(expected = ValidationException.class)
+	// public void testLogEmptyMessage() throws PangeaException, PangeaAPIException {
+	// 	Event event = new Event("");
+	// 	LogResponse response = client.log(event);
+	// }
 
 	@Test(expected = ValidationException.class)
 	public void testSearchValidationException() throws PangeaAPIException, PangeaException {

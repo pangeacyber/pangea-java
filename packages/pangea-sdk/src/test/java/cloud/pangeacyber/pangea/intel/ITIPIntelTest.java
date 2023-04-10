@@ -233,7 +233,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpGeolocate_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
-		IPGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy");
+		IPGeolocateResponse response = client.geolocate("93.231.182.110", "digitalelement");
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
@@ -293,7 +293,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpGeolocate_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
-		IPGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy", false, false);
+		IPGeolocateResponse response = client.geolocate("93.231.182.110", "digitalelement", false, false);
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
@@ -305,7 +305,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpGeolocate_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
-		IPGeolocateResponse response = client.geolocate("93.231.182.110", "digitalenvoy", true, true);
+		IPGeolocateResponse response = client.geolocate("93.231.182.110", "digitalelement", true, true);
 		assertTrue(response.isOk());
 
 		IPGeolocateData data = response.getResult().getData();
@@ -330,7 +330,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpDomain_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
-		IPDomainResponse response = client.getDomain("24.235.114.61", "digitalenvoy");
+		IPDomainResponse response = client.getDomain("24.235.114.61", "digitalelement");
 		assertTrue(response.isOk());
 
 		IPDomainData data = response.getResult().getData();
@@ -395,7 +395,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpDomain_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
-		IPDomainResponse response = client.getDomain("24.235.114.61", "digitalenvoy", false, false);
+		IPDomainResponse response = client.getDomain("24.235.114.61", "digitalelement", false, false);
 		assertTrue(response.isOk());
 
 		IPDomainData data = response.getResult().getData();
@@ -408,7 +408,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpDomain_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
-		IPDomainResponse response = client.getDomain("24.235.114.61", "digitalenvoy", true, true);
+		IPDomainResponse response = client.getDomain("24.235.114.61", "digitalelement", true, true);
 		assertTrue(response.isOk());
 
 		IPDomainData data = response.getResult().getData();
@@ -433,7 +433,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
-		IPVPNResponse response = client.isVPN("2.56.189.74", "digitalenvoy");
+		IPVPNResponse response = client.isVPN("2.56.189.74", "digitalelement");
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -493,7 +493,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
-		IPVPNResponse response = client.isVPN("2.56.189.74", "digitalenvoy", false, false);
+		IPVPNResponse response = client.isVPN("2.56.189.74", "digitalelement", false, false);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -505,7 +505,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpVPN_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
-		IPVPNResponse response = client.isVPN("2.56.189.74", "digitalenvoy", true, true);
+		IPVPNResponse response = client.isVPN("2.56.189.74", "digitalelement", true, true);
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
@@ -529,7 +529,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
-		IPProxyResponse response = client.isProxy("34.201.32.172", "digitalenvoy");
+		IPProxyResponse response = client.isProxy("34.201.32.172", "digitalelement");
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();
@@ -589,7 +589,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
-		IPProxyResponse response = client.isProxy("34.201.32.172", "digitalenvoy", false, false);
+		IPProxyResponse response = client.isProxy("34.201.32.172", "digitalelement", false, false);
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();
@@ -601,7 +601,7 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpProxy_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
-		IPProxyResponse response = client.isProxy("34.201.32.172", "digitalenvoy", true, true);
+		IPProxyResponse response = client.isProxy("34.201.32.172", "digitalelement", true, true);
 		assertTrue(response.isOk());
 
 		IPProxyData data = response.getResult().getData();

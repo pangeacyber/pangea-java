@@ -26,7 +26,7 @@ public class App
         try {
             System.out.println("Create key...");
 			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
-				SymmetricAlgorithm.AES,
+				SymmetricAlgorithm.AES128_CFB,
 				KeyPurpose.ENCRYPTION,
 				name
 			).build();

@@ -20,7 +20,7 @@ public class App
         IpIntelClient client = new IpIntelClient(cfg);
         IPVPNResponse response = null;
         try {
-            response = client.isVPN("2.56.189.74", "digitalenvoy", true, true);
+            response = client.isVPN("2.56.189.74", "digitalelement", true, true);
         } catch (Exception e){
             System.out.println("Fail to perfom request: " + e);
             System.exit(1);

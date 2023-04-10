@@ -17,12 +17,13 @@ public abstract class Client {
 	Builder httpRequestBuilder;
 	String serviceName;
 	Map<String, String> customHeaders = null;
-	String customUserAgent = null;
+	String userAgent = "pangea-java/default";
 
 	protected Client(Config config, String serviceName) {
 		this.serviceName = serviceName;
 		this.config = config;
 		this.httpClient = buildClient();
+		this.setCustomUserAgent(config.getCustomUserAgent());
 	}
 
 	protected HttpClient buildClient() {
@@ -40,11 +41,6 @@ public abstract class Client {
 	}
 
 	protected void fillPostRequestBuilder(HttpRequest.Builder builder, String path, String body) {
-		String userAgent = "pangea-java/" + Version.VERSION;
-		if (customUserAgent != null && !customUserAgent.isEmpty()) {
-			userAgent += " " + customUserAgent;
-		}
-
 		builder.uri(config.getServiceUrl(serviceName, path));
 		if (customHeaders != null) {
 			for (Map.Entry<String, String> entry : customHeaders.entrySet()) {
@@ -55,7 +51,7 @@ public abstract class Client {
 		}
 		builder
 			.header("Authorization", "Bearer " + config.getToken())
-			.header("User-Agent", userAgent)
+			.header("User-Agent", this.userAgent)
 			.POST(HttpRequest.BodyPublishers.ofString(body));
 	}
 
@@ -164,6 +160,9 @@ public abstract class Client {
 	}
 
 	public void setCustomUserAgent(String customUserAgent) {
-		this.customUserAgent = customUserAgent;
+		this.userAgent = "pangea-java/" + Version.VERSION;
+		if (customUserAgent != null && !customUserAgent.isEmpty()) {
+			this.userAgent += " " + customUserAgent;
+		}
 	}
 }

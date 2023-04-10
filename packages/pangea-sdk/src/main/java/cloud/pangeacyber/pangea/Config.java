@@ -21,12 +21,28 @@ public final class Config {
 	// Set to "local" to debug
 	String enviroment;
 
+	// Extra custom user-agent to send on requests
+	String customUserAgent;
+
+	/**
+	 * @deprecated use ConfigBuilder instead
+	 */
 	public Config(String token, String domain) {
 		this.token = token;
 		this.domain = domain;
 		this.insecure = false;
 		this.enviroment = "production";
 		this.connectionTimeout = Duration.ofSeconds(20);
+		this.customUserAgent = "";
+	}
+
+	protected Config(ConfigBuilder builder) {
+		this.domain = builder.domain;
+		this.token = builder.token;
+		this.insecure = builder.insecure;
+		this.enviroment = builder.enviroment;
+		this.connectionTimeout = builder.connectionTimeout;
+		this.customUserAgent = builder.customUserAgent;
 	}
 
 	public String getToken() {
@@ -69,6 +85,14 @@ public final class Config {
 		this.connectionTimeout = connectionTimeout;
 	}
 
+	public String getCustomUserAgent() {
+		return customUserAgent;
+	}
+
+	public void setCustomUserAgent(String customUserAgent) {
+		this.customUserAgent = customUserAgent;
+	}
+
 	URI getServiceUrl(String serviceName, String path) {
 		StringBuilder b = new StringBuilder();
 		b.append(insecure ? "http://" : "https://");
@@ -96,7 +120,7 @@ public final class Config {
 			throw new ConfigException("Need to set up PANGEA_DOMAIN environment variable");
 		}
 
-		Config config = new Config(token, domain);
+		Config config = new Config.ConfigBuilder(token, domain).build();
 		return config;
 	}
 
@@ -139,5 +163,48 @@ public final class Config {
 			throw new ConfigException("Need to set up " + domainEnvVarName + " environment variable");
 		}
 		return domain;
+	}
+
+	public static class ConfigBuilder {
+
+		String token;
+		String domain;
+		boolean insecure = false;
+		Duration connectionTimeout;
+		String enviroment;
+		String customUserAgent;
+
+		public ConfigBuilder(String token, String domain) {
+			this.token = token;
+			this.domain = domain;
+			this.insecure = false;
+			this.enviroment = "production";
+			this.connectionTimeout = Duration.ofSeconds(20);
+			this.customUserAgent = "";
+		}
+
+		public ConfigBuilder setInsecure(boolean insecure) {
+			this.insecure = insecure;
+			return this;
+		}
+
+		public ConfigBuilder setConnectionTimeout(Duration connectionTimeout) {
+			this.connectionTimeout = connectionTimeout;
+			return this;
+		}
+
+		public ConfigBuilder setEnviroment(String enviroment) {
+			this.enviroment = enviroment;
+			return this;
+		}
+
+		public ConfigBuilder setCustomUserAgent(String customUserAgent) {
+			this.customUserAgent = customUserAgent;
+			return this;
+		}
+
+		public Config build() {
+			return new Config(this);
+		}
 	}
 }

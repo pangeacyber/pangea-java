@@ -125,20 +125,44 @@ public final class Config {
 	}
 
 	public static Config fromIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
+		String token = getTestToken(environment);
+		String domain = getTestDomain(environment);
+		Config config = new Config(token, domain);
+		return config;
+	}
+
+	public static Config fromVaultIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
+		String token = getVaultSignatureTestToken(environment);
+		String domain = getTestDomain(environment);
+		Config config = new Config(token, domain);
+		return config;
+	}
+
+	public static String getTestToken(TestEnvironment environment) throws ConfigException {
 		String tokenEnvVarName = "PANGEA_INTEGRATION_TOKEN_" + environment.toString();
 		String token = System.getenv(tokenEnvVarName);
 		if (token == null || token.isEmpty()) {
 			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
 		}
+		return token;
+	}
 
+	public static String getVaultSignatureTestToken(TestEnvironment environment) throws ConfigException {
+		String tokenEnvVarName = "PANGEA_INTEGRATION_VAULT_TOKEN_" + environment.toString();
+		String token = System.getenv(tokenEnvVarName);
+		if (token == null || token.isEmpty()) {
+			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
+		}
+		return token;
+	}
+
+	public static String getTestDomain(TestEnvironment environment) throws ConfigException {
 		String domainEnvVarName = "PANGEA_INTEGRATION_DOMAIN_" + environment.toString();
 		String domain = System.getenv(domainEnvVarName);
 		if (domain == null || domain.isEmpty()) {
 			throw new ConfigException("Need to set up " + domainEnvVarName + " environment variable");
 		}
-
-		Config config = new Config.ConfigBuilder(token, domain).setCustomUserAgent("sdk-test").build();
-		return config;
+		return domain;
 	}
 
 	public static class ConfigBuilder {

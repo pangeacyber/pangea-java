@@ -14,26 +14,35 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.SignerException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
 public class ITAuditTest {
 
-	AuditClient client, signClient, signNtenandIDClient;
 	Config cfg;
+	AuditClient client, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient;
 	TestEnvironment environment = TestEnvironment.LIVE;
 
 	private static final String ACTOR = "java-sdk";
 	private static final String MSG_NO_SIGNED = "test-message";
 	private static final String MSG_SIGNED_LOCAL = "sign-test-local";
+	private static final String MSG_SIGNED_VAULT = "sign-test-vault";
 	private static final String STATUS_NO_SIGNED = "no-signed";
 	private static final String STATUS_SIGNED = "signed";
 
 	@Before
 	public void setUp() throws ConfigException {
+		Config vaultCfg = Config.fromVaultIntegrationEnvironment(environment);
 		this.cfg = Config.fromIntegrationEnvironment(environment);
+		Map<String, Object> pkInfo = new LinkedHashMap<String, Object>();
+		pkInfo.put("ExtraInfo", "LocalKey");
+
 		client = new AuditClientBuilder(cfg).build();
-		signClient =
+		vaultSignClient = new AuditClientBuilder(vaultCfg).build();
+
+		localSignClient =
 			new AuditClientBuilder(cfg)
 				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
 				.build();
@@ -41,6 +50,11 @@ public class ITAuditTest {
 			new AuditClientBuilder(cfg)
 				.withTenantID("mytenantid")
 				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
+				.build();
+		localSignInfoClient =
+			new AuditClientBuilder(cfg)
+				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
+				.withPkInfo(pkInfo)
 				.build();
 	}
 
@@ -167,14 +181,67 @@ public class ITAuditTest {
 		event.setNewField("New");
 		event.setOld("Old");
 
-		LogResponse response = signClient.log(event, SignMode.LOCAL, true, true);
+		LogResponse response = localSignClient.log(event, SignMode.LOCAL, true, true);
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
 		assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
-		assertEquals("lvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=", result.getEventEnvelope().getPublicKey());
+		assertEquals(
+			"""
+{"key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			result.getEventEnvelope().getPublicKey()
+		);
+		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
+	}
+
+	@Test
+	public void testLogLocalSignatureWithPublicKeyInfo() throws PangeaException, PangeaAPIException, ConfigException {
+		Event event = new Event(MSG_SIGNED_LOCAL);
+		event.setActor(ACTOR);
+		event.setAction("Action");
+		event.setSource("Source");
+		event.setStatus(STATUS_SIGNED);
+		event.setTarget("Target");
+		event.setNewField("New");
+		event.setOld("Old");
+
+		LogResponse response = localSignInfoClient.log(event, SignMode.LOCAL, true, true);
+		assertTrue(response.isOk());
+
+		LogResult result = response.getResult();
+		assertNotNull(result.getEventEnvelope());
+		assertNotNull(result.getHash());
+		assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
+		assertEquals(
+			"""
+{"ExtraInfo":"LocalKey","key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			result.getEventEnvelope().getPublicKey()
+		);
+		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
+	}
+
+	@Test
+	public void testLogVaultSignature() throws PangeaException, PangeaAPIException, ConfigException {
+		Event event = new Event(MSG_SIGNED_VAULT);
+		event.setActor(ACTOR);
+		event.setAction("Action");
+		event.setSource("Source");
+		event.setStatus(STATUS_SIGNED);
+		event.setTarget("Target");
+		event.setNewField("New");
+		event.setOld("Old");
+
+		LogResponse response = vaultSignClient.log(event, SignMode.UNSIGNED, true, true);
+		assertTrue(response.isOk());
+
+		LogResult result = response.getResult();
+		assertNotNull(result.getEventEnvelope());
+		assertNotNull(result.getHash());
+		assertEquals(MSG_SIGNED_VAULT, result.getEventEnvelope().getEvent().getMessage());
+		assertNotNull(result.getEventEnvelope().getPublicKey());
+		assertNotNull(result.getEventEnvelope().getSignature());
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
 	}
 
@@ -196,7 +263,11 @@ public class ITAuditTest {
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
 		assertEquals(MSG_SIGNED_LOCAL, result.getEventEnvelope().getEvent().getMessage());
-		assertEquals("lvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=", result.getEventEnvelope().getPublicKey());
+		assertEquals(
+			"""
+{"key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			result.getEventEnvelope().getPublicKey()
+		);
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
 		assertEquals("mytenantid", result.getEventEnvelope().getEvent().getTenantID());
 	}
@@ -275,7 +346,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testResultsDefault() throws PangeaAPIException, PangeaException {
-		SearchInput input = new SearchInput("message:");
+		SearchInput input = new SearchInput("message:\"\"");
 		int searchLimit = 10;
 		input.setMaxResults(searchLimit);
 		input.setOrder("asc");
@@ -322,7 +393,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testResultsNoVerify() throws PangeaAPIException, PangeaException {
-		SearchInput input = new SearchInput("message:");
+		SearchInput input = new SearchInput("message:\"\"");
 		int searchLimit = 10;
 		input.setMaxResults(searchLimit);
 		input.setOrder("asc");

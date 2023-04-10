@@ -14,6 +14,7 @@ public enum ResponseStatus {
 	SERVICE_NOT_AVAILABLE("ServiceNotAvailable"),
 	TREE_NOT_FOUND("TreeNotFound"),
 	IP_NOT_FOUND("IPNotFound"),
+	NOT_FOUND("NotFound"),
 	INTERNAL_ERROR("InternalError");
 
 	private final String text;

@@ -116,49 +116,6 @@ final class JWTVerifyRequest {
 	}
 }
 
-final class EncryptRequest {
-
-	@JsonProperty("id")
-	String id;
-
-	@JsonProperty("plain_text")
-	String plainText;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("version")
-	Integer version;
-
-	public EncryptRequest(String id, String plainText, Integer version) {
-		this.id = id;
-		this.plainText = plainText;
-		this.version = version;
-	}
-}
-
-final class DecryptRequest {
-
-	@JsonProperty("id")
-	String id;
-
-	@JsonProperty("cipher_text")
-	String cipherText;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("version")
-	Integer version = null;
-
-	public DecryptRequest(String id, String cipherText, Integer version) {
-		this.id = id;
-		this.cipherText = cipherText;
-		this.version = version;
-	}
-
-	public DecryptRequest(String id, String cipherText) {
-		this.id = id;
-		this.cipherText = cipherText;
-	}
-}
-
 final class DeleteRequest {
 
 	@JsonProperty("id")
@@ -413,6 +370,7 @@ public class VaultClient extends Client {
 	/**
 	 * Encrypt
 	 * @pangea.description Encrypt a message
+	 * @deprecated use encrypt(EncryptRequest request) instead.
 	 * @param id - key id to encrypt message
 	 * @param plainText - message to encrypt
 	 * @return EncryptResponse
@@ -424,12 +382,17 @@ public class VaultClient extends Client {
 	 * }
 	 */
 	public EncryptResponse encrypt(String id, String plainText) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/key/encrypt", new EncryptRequest(id, plainText, null), EncryptResponse.class);
+		return doPost(
+			"/v1/key/encrypt",
+			new EncryptRequest.EncryptRequestBuilder(id, plainText).build(),
+			EncryptResponse.class
+		);
 	}
 
 	/**
 	 * Encrypt
 	 * @pangea.description Encrypt a message
+	 * @deprecated use encrypt(EncryptRequest request) instead.
 	 * @param id - key id to encrypt message
 	 * @param plainText - message to encrypt
 	 * @param version - key version to encrypt message
@@ -443,12 +406,33 @@ public class VaultClient extends Client {
 	 */
 	public EncryptResponse encrypt(String id, String plainText, int version)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/key/encrypt", new EncryptRequest(id, plainText, version), EncryptResponse.class);
+		return doPost(
+			"/v1/key/encrypt",
+			new EncryptRequest.EncryptRequestBuilder(id, plainText).setVersion(version).build(),
+			EncryptResponse.class
+		);
+	}
+
+	/**
+	 * Encrypt
+	 * @pangea.description Encrypt a message
+	 * @param request - request to be send to /key/encrypt
+	 * @return EncryptResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * // TODO:
+	 * }
+	 */
+	public EncryptResponse encrypt(EncryptRequest request) throws PangeaException, PangeaAPIException {
+		return doPost("/v1/key/encrypt", request, EncryptResponse.class);
 	}
 
 	/**
 	 * Decrypt
 	 * @pangea.description Decrypt a message
+	 * @deprecated use decrypt(DecryptRequest request) instead.
 	 * @param id - key id to encrypt message
 	 * @param cipherText - message to decrypt
 	 * @return DecryptResponse
@@ -460,12 +444,17 @@ public class VaultClient extends Client {
 	 * }
 	 */
 	public DecryptResponse decrypt(String id, String cipherText) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/key/decrypt", new DecryptRequest(id, cipherText), DecryptResponse.class);
+		return doPost(
+			"/v1/key/decrypt",
+			new DecryptRequest.DecryptRequestBuilder(id, cipherText).build(),
+			DecryptResponse.class
+		);
 	}
 
 	/**
 	 * Decrypt
 	 * @pangea.description Decrypt a message
+	 * @deprecated use decrypt(DecryptRequest request) instead.
 	 * @param id - key id to encrypt message
 	 * @param cipherText - message to decrypt
 	 * @param version - key version to use on decryption
@@ -479,7 +468,27 @@ public class VaultClient extends Client {
 	 */
 	public DecryptResponse decrypt(String id, String cipherText, Integer version)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/key/decrypt", new DecryptRequest(id, cipherText, version), DecryptResponse.class);
+		return doPost(
+			"/v1/key/decrypt",
+			new DecryptRequest.DecryptRequestBuilder(id, cipherText).setVersion(version).build(),
+			DecryptResponse.class
+		);
+	}
+
+	/**
+	 * Decrypt
+	 * @pangea.description Decrypt a message
+	 * @param request - request to be send to /key/decrypt
+	 * @return DecryptResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * // TODO:
+	 * }
+	 */
+	public DecryptResponse decrypt(DecryptRequest request) throws PangeaException, PangeaAPIException {
+		return doPost("/v1/key/decrypt", request, DecryptResponse.class);
 	}
 
 	/**

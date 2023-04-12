@@ -8,6 +8,7 @@ public enum SymmetricAlgorithm {
 	HS512("HS512"),
 	AES128_CFB("AES-CFB-128"),
 	AES256_CFB("AES-CFB-256"),
+	AES256_GCM("AES-GCM-256"),
 
 	AES("AES-CFB-128"); // deprecated, use AES128_CFB instead
 

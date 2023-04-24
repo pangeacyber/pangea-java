@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -93,8 +94,10 @@ public class EventEnvelope {
 	}
 
 	public static String canonicalize(Object rawEnvelope) throws PangeaException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+		ObjectMapper mapper = JsonMapper
+			.builder()
+			.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+			.build();
 		LinkedHashMap<String, Object> mapEnvelope = (LinkedHashMap<String, Object>) rawEnvelope;
 		String canon;
 

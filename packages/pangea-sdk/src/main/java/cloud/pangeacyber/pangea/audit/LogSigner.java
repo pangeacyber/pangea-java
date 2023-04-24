@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
@@ -67,10 +71,17 @@ public class LogSigner {
 	}
 
 	public String getPublicKey() throws SignerException {
-		if (this.privateKey == null || this.publicKey == null) {
-			this.loadKeys();
+		// Wrap public key in ASN.1 format so we can use X509EncodedKeySpec to read it
+		var pubKeyInfo = new SubjectPublicKeyInfo(
+			new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
+			this.publicKey.getEncoded()
+		);
+		try {
+			var x509KeySpec = new X509EncodedKeySpec(pubKeyInfo.getEncoded());
+			String key = new String(Base64.getEncoder().encode(x509KeySpec.getEncoded()));
+			return "-----BEGIN PUBLIC KEY-----\n" + key + "\n-----END PUBLIC KEY-----\n";
+		} catch (Exception e) {
+			throw new SignerException("Failed to get encoded public key", e);
 		}
-
-		return new String(Base64.getEncoder().encode(this.publicKey.getEncoded()));
 	}
 }

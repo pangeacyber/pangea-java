@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class IntelReputationResult {
+public class IntelCommonResult {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("parameters")

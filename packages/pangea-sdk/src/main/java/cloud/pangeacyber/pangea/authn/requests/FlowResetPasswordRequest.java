@@ -16,6 +16,10 @@ public class FlowResetPasswordRequest {
 	String password;
 
 	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("cancel")
+	Boolean cancel;
+
+	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("cb_state")
 	String cbState;
 
@@ -23,21 +27,23 @@ public class FlowResetPasswordRequest {
 	@JsonProperty("cb_code")
 	String cbCode;
 
-	private FlowResetPasswordRequest(FlowResetPasswordRequestBuilder builder) {
+	private FlowResetPasswordRequest(Builder builder) {
 		this.password = builder.password;
 		this.flowID = builder.flowID;
 		this.cbState = builder.cbState;
 		this.cbCode = builder.cbCode;
+		this.cancel = builder.cancel;
 	}
 
-	public static class FlowResetPasswordRequestBuilder {
+	public static class Builder {
 
 		String flowID;
 		String password;
 		String cbState;
 		String cbCode;
+		Boolean cancel;
 
-		public FlowResetPasswordRequestBuilder(String flowID, String password) {
+		public Builder(String flowID, String password) {
 			this.flowID = flowID;
 			this.password = password;
 		}
@@ -46,13 +52,18 @@ public class FlowResetPasswordRequest {
 			return new FlowResetPasswordRequest(this);
 		}
 
-		public FlowResetPasswordRequestBuilder setCBState(String cbState) {
+		public Builder setCBState(String cbState) {
 			this.cbState = cbState;
 			return this;
 		}
 
-		public FlowResetPasswordRequestBuilder setCBCode(String cbCode) {
+		public Builder setCBCode(String cbCode) {
 			this.cbCode = cbCode;
+			return this;
+		}
+
+		public Builder setCancel(Boolean cancel) {
+			this.cancel = cancel;
 			return this;
 		}
 	}

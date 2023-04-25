@@ -10,7 +10,21 @@ public class UserListResult {
 	@JsonProperty("users")
 	User[] users;
 
+	@JsonProperty("last")
+	String last;
+
+	@JsonProperty("count")
+	Integer count;
+
 	public User[] getUsers() {
 		return users;
+	}
+
+	public String getLast() {
+		return last;
+	}
+
+	public Integer getCount() {
+		return count;
 	}
 }

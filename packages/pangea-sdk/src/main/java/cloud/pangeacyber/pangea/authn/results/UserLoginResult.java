@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserLoginResult {
 
-	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("refresh_token")
 	LoginToken refreshToken;
 

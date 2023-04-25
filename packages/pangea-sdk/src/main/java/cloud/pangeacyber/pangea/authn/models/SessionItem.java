@@ -36,9 +36,6 @@ public class SessionItem {
 	@JsonProperty("active_token")
 	SessionToken activeToken;
 
-	@JsonProperty("last")
-	String last;
-
 	public String getId() {
 		return id;
 	}
@@ -77,9 +74,5 @@ public class SessionItem {
 
 	public SessionToken getActiveToken() {
 		return activeToken;
-	}
-
-	public String getLast() {
-		return last;
 	}
 }

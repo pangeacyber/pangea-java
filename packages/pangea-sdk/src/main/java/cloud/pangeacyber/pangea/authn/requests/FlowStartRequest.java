@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FlowStartRequest {
 
+	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("cb_uri")
 	String cbURI;
 
@@ -25,41 +26,44 @@ public class FlowStartRequest {
 	@JsonProperty("provider")
 	IDProvider provider;
 
-	private FlowStartRequest(FlowStartRequestBuilder builder) {
-		this.email = builder.email;
+	private FlowStartRequest(Builder builder) {
 		this.cbURI = builder.cbURI;
+		this.email = builder.email;
 		this.flowType = builder.flowType;
 		this.provider = builder.provider;
 	}
 
-	public static class FlowStartRequestBuilder {
+	public static class Builder {
 
-		String cbURI;
-		String email;
-		FlowType flowType;
-		IDProvider provider;
+		private String cbURI;
+		private String email;
+		private FlowType flowType;
+		private IDProvider provider;
 
-		public FlowStartRequestBuilder(String cbURI) {
+		public Builder() {}
+
+		public Builder setCbURI(String cbURI) {
 			this.cbURI = cbURI;
+			return this;
 		}
 
-		public FlowStartRequest build() {
-			return new FlowStartRequest(this);
-		}
-
-		public FlowStartRequestBuilder setEmail(String email) {
+		public Builder setEmail(String email) {
 			this.email = email;
 			return this;
 		}
 
-		public FlowStartRequestBuilder setFlowType(FlowType flowType) {
+		public Builder setFlowType(FlowType flowType) {
 			this.flowType = flowType;
 			return this;
 		}
 
-		public FlowStartRequestBuilder setProvider(IDProvider provider) {
+		public Builder setProvider(IDProvider provider) {
 			this.provider = provider;
 			return this;
+		}
+
+		public FlowStartRequest build() {
+			return new FlowStartRequest(this);
 		}
 	}
 }

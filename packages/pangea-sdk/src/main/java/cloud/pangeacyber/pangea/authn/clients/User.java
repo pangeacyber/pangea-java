@@ -3,36 +3,32 @@ package cloud.pangeacyber.pangea.authn.clients;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
-import cloud.pangeacyber.pangea.authn.models.Scopes;
 import cloud.pangeacyber.pangea.authn.requests.UserCreateRequest;
 import cloud.pangeacyber.pangea.authn.requests.UserInviteRequest;
+import cloud.pangeacyber.pangea.authn.requests.UserListRequest;
 import cloud.pangeacyber.pangea.authn.requests.UserUpdateRequest;
 import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class UserDeleteRequest {
+final class UserDeleteByEmailRequest {
 
 	@JsonProperty("email")
 	String email;
 
-	public UserDeleteRequest(String email) {
+	public UserDeleteByEmailRequest(String email) {
 		this.email = email;
 	}
 }
 
-final class UserListRequest {
+final class UserDeleteByIDRequest {
 
-	@JsonProperty("scopes")
-	Scopes scopes;
+	@JsonProperty("id")
+	String id;
 
-	@JsonProperty("glob_scopes")
-	Scopes globScopes;
-
-	public UserListRequest(Scopes scopes, Scopes globScopes) {
-		this.scopes = scopes;
-		this.globScopes = globScopes;
+	public UserDeleteByIDRequest(String id) {
+		this.id = id;
 	}
 }
 
@@ -76,9 +72,12 @@ public class User extends Client {
 	}
 
 	// TODO: Doc
-	public UserDeleteResponse delete(String email) throws PangeaException, PangeaAPIException {
-		UserDeleteRequest request = new UserDeleteRequest(email);
-		return doPost("/v1/user/delete", request, UserDeleteResponse.class);
+	public UserDeleteResponse deleteByEmail(String email) throws PangeaException, PangeaAPIException {
+		return doPost("/v1/user/delete", new UserDeleteByEmailRequest(email), UserDeleteResponse.class);
+	}
+
+	public UserDeleteResponse deleteByID(String id) throws PangeaException, PangeaAPIException {
+		return doPost("/v1/user/delete", new UserDeleteByIDRequest(id), UserDeleteResponse.class);
 	}
 
 	// TODO: Doc
@@ -92,8 +91,7 @@ public class User extends Client {
 	}
 
 	// TODO: Doc
-	public UserListResponse list(Scopes scopes, Scopes globScopes) throws PangeaException, PangeaAPIException {
-		UserListRequest request = new UserListRequest(scopes, globScopes);
+	public UserListResponse list(UserListRequest request) throws PangeaException, PangeaAPIException {
 		return doPost("/v1/user/list", request, UserListResponse.class);
 	}
 

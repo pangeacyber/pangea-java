@@ -19,19 +19,19 @@ public class FlowEnrollMFAStartRequest {
 	@JsonProperty("phone")
 	String phone;
 
-	private FlowEnrollMFAStartRequest(FlowEnrollMFAStartRequestBuilder builder) {
+	private FlowEnrollMFAStartRequest(Builder builder) {
 		this.flowID = builder.flowID;
 		this.mfaProvider = builder.mfaProvider;
 		this.phone = builder.phone;
 	}
 
-	public static class FlowEnrollMFAStartRequestBuilder {
+	public static class Builder {
 
 		String flowID;
 		MFAProvider mfaProvider;
 		String phone;
 
-		public FlowEnrollMFAStartRequestBuilder(String flowID, MFAProvider mfaProvider) {
+		public Builder(String flowID, MFAProvider mfaProvider) {
 			this.flowID = flowID;
 			this.mfaProvider = mfaProvider;
 		}

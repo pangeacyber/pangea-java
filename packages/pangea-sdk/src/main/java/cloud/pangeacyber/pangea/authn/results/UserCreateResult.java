@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.results;
 
+import cloud.pangeacyber.pangea.authn.models.IDProviders;
 import cloud.pangeacyber.pangea.authn.models.MFAProviders;
 import cloud.pangeacyber.pangea.authn.models.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -10,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserCreateResult {
 
-	@JsonProperty("identity")
-	String identity;
+	@JsonProperty("id")
+	String id;
 
 	@JsonProperty("email")
 	String email;
@@ -19,9 +20,8 @@ public class UserCreateResult {
 	@JsonProperty("profile")
 	Profile profile;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("id_provider")
-	String id_provider;
+	@JsonProperty("id_providers")
+	IDProviders idProviders;
 
 	@JsonProperty("require_mfa")
 	Boolean require_mfa;
@@ -41,20 +41,12 @@ public class UserCreateResult {
 	@JsonProperty("mfa_providers")
 	MFAProviders mfaProviders;
 
-	public String getIdentity() {
-		return identity;
-	}
-
 	public String getEmail() {
 		return email;
 	}
 
 	public Profile getProfile() {
 		return profile;
-	}
-
-	public String getId_provider() {
-		return id_provider;
 	}
 
 	public Boolean getRequire_mfa() {
@@ -75,5 +67,13 @@ public class UserCreateResult {
 
 	public MFAProviders getMfaProviders() {
 		return mfaProviders;
+	}
+
+	public String getID() {
+		return id;
+	}
+
+	public IDProviders getIdProviders() {
+		return idProviders;
 	}
 }

@@ -18,22 +18,22 @@ public class UserProfileUpdateRequest {
 	String email;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("identity")
-	String identity;
+	@JsonProperty("id")
+	String id;
 
-	private UserProfileUpdateRequest(UserProfileUpdateRequestBuilder builder) {
+	private UserProfileUpdateRequest(Builder builder) {
 		this.profile = builder.profile;
 		this.email = builder.email;
-		this.identity = builder.identity;
+		this.id = builder.id;
 	}
 
-	public static class UserProfileUpdateRequestBuilder {
+	public static class Builder {
 
 		Profile profile;
 		String email;
-		String identity;
+		String id;
 
-		public UserProfileUpdateRequestBuilder(Profile profile) {
+		public Builder(Profile profile) {
 			this.profile = profile;
 		}
 
@@ -41,13 +41,13 @@ public class UserProfileUpdateRequest {
 			return new UserProfileUpdateRequest(this);
 		}
 
-		public UserProfileUpdateRequestBuilder setEmail(String email) {
+		public Builder setEmail(String email) {
 			this.email = email;
 			return this;
 		}
 
-		public UserProfileUpdateRequestBuilder setIdentity(String identity) {
-			this.identity = identity;
+		public Builder setId(String id) {
+			this.id = id;
 			return this;
 		}
 	}

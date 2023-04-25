@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.results;
 
+import cloud.pangeacyber.pangea.authn.models.IDProviders;
 import cloud.pangeacyber.pangea.authn.models.MFAProviders;
 import cloud.pangeacyber.pangea.authn.models.Profile;
 import cloud.pangeacyber.pangea.authn.models.Scopes;
@@ -11,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserUpdateResult {
 
-	@JsonProperty("identity")
-	String identity;
+	@JsonProperty("id")
+	String id;
 
 	@JsonProperty("email")
 	String email;
@@ -24,9 +25,8 @@ public class UserUpdateResult {
 	@JsonProperty("scopes")
 	Scopes scopes;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("id_provider")
-	String idProvider;
+	@JsonProperty("id_providers")
+	IDProviders idProviders;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("mfa_providers")
@@ -41,11 +41,19 @@ public class UserUpdateResult {
 	@JsonProperty("disabled")
 	Boolean disabled;
 
+	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("last_login_at")
 	String lastLoginAt;
 
-	public String getIdentity() {
-		return identity;
+	@JsonProperty("created_at")
+	String createdAt;
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public String getID() {
+		return id;
 	}
 
 	public String getEmail() {
@@ -60,8 +68,8 @@ public class UserUpdateResult {
 		return scopes;
 	}
 
-	public String getIdProvider() {
-		return idProvider;
+	public IDProviders getIdProviders() {
+		return idProviders;
 	}
 
 	public MFAProviders getMfaProviders() {

@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
+import cloud.pangeacyber.pangea.authn.models.Filter;
 import cloud.pangeacyber.pangea.authn.models.ListOrder;
 import cloud.pangeacyber.pangea.authn.models.SessionOrderBy;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,7 +14,7 @@ public class CommonSessionListRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("filter")
-	HashMap<String, String> filter;
+	Filter filter;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("last")
@@ -31,7 +32,7 @@ public class CommonSessionListRequest {
 	@JsonProperty("size")
 	Integer size;
 
-	protected CommonSessionListRequest(CommonSessionListRequestBuilder<?> builder) {
+	protected CommonSessionListRequest(CommonBuilder<?> builder) {
 		this.filter = builder.filter;
 		this.last = builder.last;
 		this.order = builder.order;
@@ -39,15 +40,15 @@ public class CommonSessionListRequest {
 		this.size = builder.size;
 	}
 
-	public static class CommonSessionListRequestBuilder<B extends CommonSessionListRequestBuilder<B>> {
+	public static class CommonBuilder<B extends CommonBuilder<B>> {
 
-		HashMap<String, String> filter;
+		Filter filter;
 		String last;
 		ListOrder order;
 		SessionOrderBy orderBy;
 		Integer size;
 
-		public CommonSessionListRequestBuilder() {}
+		public CommonBuilder() {}
 
 		public CommonSessionListRequest build() {
 			return new CommonSessionListRequest(this);
@@ -58,7 +59,7 @@ public class CommonSessionListRequest {
 			return (B) this;
 		}
 
-		public B setFilter(HashMap<String, String> filter) {
+		public B setFilter(Filter filter) {
 			this.filter = filter;
 			return self();
 		}

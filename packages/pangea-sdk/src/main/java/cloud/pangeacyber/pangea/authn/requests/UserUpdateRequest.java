@@ -18,8 +18,8 @@ public class UserUpdateRequest {
 	String authenticator;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("identity")
-	IDProvider identity;
+	@JsonProperty("id")
+	IDProvider id;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("disabled")
@@ -33,8 +33,8 @@ public class UserUpdateRequest {
 	@JsonProperty("verified")
 	Boolean verified;
 
-	private UserUpdateRequest(UserUpdateRequestBuilder builder) {
-		this.identity = builder.identity;
+	private UserUpdateRequest(Builder builder) {
+		this.id = builder.id;
 		this.email = builder.email;
 		this.authenticator = builder.authenticator;
 		this.disabled = builder.disabled;
@@ -42,47 +42,47 @@ public class UserUpdateRequest {
 		this.verified = builder.verified;
 	}
 
-	public static class UserUpdateRequestBuilder {
+	public static class Builder {
 
-		IDProvider identity;
+		IDProvider id;
 		String email;
 		String authenticator;
 		Boolean disabled;
 		Boolean requireMFA;
 		Boolean verified;
 
-		public UserUpdateRequestBuilder() {}
+		public Builder() {}
 
 		public UserUpdateRequest build() {
 			return new UserUpdateRequest(this);
 		}
 
-		public UserUpdateRequestBuilder setIdentity(IDProvider identity) {
-			this.identity = identity;
+		public Builder setId(IDProvider id) {
+			this.id = id;
 			return this;
 		}
 
-		public UserUpdateRequestBuilder setEmail(String email) {
+		public Builder setEmail(String email) {
 			this.email = email;
 			return this;
 		}
 
-		public UserUpdateRequestBuilder setAuthenticator(String authenticator) {
+		public Builder setAuthenticator(String authenticator) {
 			this.authenticator = authenticator;
 			return this;
 		}
 
-		public UserUpdateRequestBuilder setDisabled(Boolean disabled) {
+		public Builder setDisabled(Boolean disabled) {
 			this.disabled = disabled;
 			return this;
 		}
 
-		public UserUpdateRequestBuilder setRequireMFA(Boolean requireMFA) {
+		public Builder setRequireMFA(Boolean requireMFA) {
 			this.requireMFA = requireMFA;
 			return this;
 		}
 
-		public UserUpdateRequestBuilder setVerified(Boolean verified) {
+		public Builder setVerified(Boolean verified) {
 			this.verified = verified;
 			return this;
 		}

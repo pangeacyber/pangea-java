@@ -33,7 +33,7 @@ public class UserInvite {
 	@JsonProperty("expire")
 	String expire;
 
-	public String getId() {
+	public String getID() {
 		return id;
 	}
 

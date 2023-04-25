@@ -18,19 +18,19 @@ public class FlowVerifyPasswordRequest {
 	@JsonProperty("cancel")
 	Boolean cancel;
 
-	private FlowVerifyPasswordRequest(FlowVerifyPasswordRequestBuilder builder) {
+	private FlowVerifyPasswordRequest(Builder builder) {
 		this.flowID = builder.flowID;
 		this.password = builder.password;
 		this.cancel = builder.cancel;
 	}
 
-	public static class FlowVerifyPasswordRequestBuilder {
+	public static class Builder {
 
 		String flowID;
 		String password;
 		Boolean cancel;
 
-		public FlowVerifyPasswordRequestBuilder(String flowID, String password) {
+		public Builder(String flowID, String password) {
 			this.flowID = flowID;
 			this.password = password;
 		}

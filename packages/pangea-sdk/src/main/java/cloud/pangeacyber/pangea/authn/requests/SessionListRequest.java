@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SessionListRequest extends CommonSessionListRequest {
 
-	private SessionListRequest(SessionListRequestBuilder builder) {
+	private SessionListRequest(Builder builder) {
 		super(builder);
 	}
 
-	public static class SessionListRequestBuilder extends CommonSessionListRequestBuilder<SessionListRequestBuilder> {
+	public static class Builder extends CommonBuilder<Builder> {
 
-		public SessionListRequestBuilder() {}
+		public Builder() {}
 
 		public SessionListRequest build() {
 			return new SessionListRequest(this);

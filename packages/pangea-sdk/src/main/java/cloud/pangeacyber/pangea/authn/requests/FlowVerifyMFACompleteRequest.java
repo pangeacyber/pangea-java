@@ -18,19 +18,19 @@ public class FlowVerifyMFACompleteRequest {
 	@JsonProperty("cancel")
 	Boolean cancel;
 
-	private FlowVerifyMFACompleteRequest(FlowVerifyMFACompleteRequestBuilder builder) {
+	private FlowVerifyMFACompleteRequest(Builder builder) {
 		this.flowID = builder.flowID;
 		this.code = builder.code;
 		this.cancel = builder.cancel;
 	}
 
-	public static class FlowVerifyMFACompleteRequestBuilder {
+	public static class Builder {
 
 		String flowID;
 		String code;
 		Boolean cancel;
 
-		public FlowVerifyMFACompleteRequestBuilder(String flowID, String code) {
+		public Builder(String flowID, String code) {
 			this.flowID = flowID;
 			this.code = code;
 		}

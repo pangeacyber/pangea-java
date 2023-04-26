@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Map;
+import java.util.TreeMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LogResult {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("envelope")
-	Object rawEnvelope;
+	TreeMap<String, Object> rawEnvelope;
 
 	@JsonIgnore
 	EventEnvelope eventEnvelope = null;
@@ -41,7 +41,7 @@ public class LogResult {
 	@JsonIgnore
 	EventVerification signatureVerification = EventVerification.NOT_VERIFIED;
 
-	public Object getRawEnvelope() {
+	protected TreeMap<String, Object> getRawEnvelope() {
 		return rawEnvelope;
 	}
 
@@ -49,7 +49,7 @@ public class LogResult {
 		return eventEnvelope;
 	}
 
-	public void setEventEnvelope(EventEnvelope eventEnvelope) {
+	protected void setEventEnvelope(EventEnvelope eventEnvelope) {
 		this.eventEnvelope = eventEnvelope;
 	}
 

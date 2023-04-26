@@ -3,6 +3,7 @@ package cloud.pangeacyber.pangea.audit;
 import cloud.pangeacyber.pangea.audit.utils.Hash;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.VerificationFailed;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -19,8 +20,8 @@ import java.util.TreeMap;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EventEnvelope {
 
-	@JsonProperty("event")
-	Event event;
+	@JsonIgnore
+	IEvent ievent = null;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("signature")
@@ -34,8 +35,15 @@ public class EventEnvelope {
 	@JsonProperty("received_at")
 	String receivedAt;
 
-	public Event getEvent() {
-		return event;
+	protected EventEnvelope(IEvent ievent, String signature, String publicKey, String receivedAt) {
+		this.ievent = ievent;
+		this.signature = signature;
+		this.publicKey = publicKey;
+		this.receivedAt = receivedAt;
+	}
+
+	public IEvent getEvent() {
+		return ievent;
 	}
 
 	public String getSignature() {
@@ -66,9 +74,9 @@ public class EventEnvelope {
 			return EventVerification.FAILED;
 		}
 
-		String canonicalJson;
+		String canonicalJson = "";
 		try {
-			canonicalJson = Event.canonicalize(this.event);
+			canonicalJson = IEvent.canonicalize(this.ievent);
 		} catch (JsonProcessingException e) {
 			return EventVerification.FAILED;
 		}
@@ -82,10 +90,10 @@ public class EventEnvelope {
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
-		Map<Object, Object> pkJSON;
+		Map<String, Object> pkJSON;
 		try {
 			// This to parse publicKey field as JSON
-			pkJSON = mapper.readValue(this.publicKey, (Map.class));
+			pkJSON = mapper.readValue(this.publicKey, Map.class);
 			return (String) pkJSON.get("key");
 		} catch (JacksonException e) {
 			// If it's not JSON format just return raw publicKey
@@ -93,23 +101,22 @@ public class EventEnvelope {
 		}
 	}
 
-	public static String canonicalize(Object rawEnvelope) throws PangeaException {
+	public static String canonicalize(Map<String, Object> rawEnvelope) throws PangeaException {
 		ObjectMapper mapper = JsonMapper
 			.builder()
 			.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
 			.build();
-		LinkedHashMap<String, Object> mapEnvelope = (LinkedHashMap<String, Object>) rawEnvelope;
 		String canon;
 
-		if (mapEnvelope.containsKey("event")) {
+		if (rawEnvelope.containsKey("event")) {
 			// TreeMap to store sorted values of HashMap
 			TreeMap<String, Object> sortedEvent = new TreeMap<>();
-			sortedEvent.putAll((LinkedHashMap<String, Object>) mapEnvelope.get("event"));
-			mapEnvelope.put("event", sortedEvent);
+			sortedEvent.putAll((LinkedHashMap<String, Object>) rawEnvelope.get("event"));
+			rawEnvelope.put("event", sortedEvent);
 		}
 		// TreeMap to store sorted values of HashMap
 		TreeMap<String, Object> sortedEnvelope = new TreeMap<>();
-		sortedEnvelope.putAll(mapEnvelope);
+		sortedEnvelope.putAll(rawEnvelope);
 
 		try {
 			canon = mapper.writeValueAsString(sortedEnvelope);
@@ -120,23 +127,32 @@ public class EventEnvelope {
 		return canon;
 	}
 
-	public static EventEnvelope fromRaw(Object raw) throws PangeaException {
+	public static <EventType extends IEvent> EventEnvelope fromRaw(Map<String, Object> raw, Class<EventType> eventType)
+		throws PangeaException {
 		if (raw == null) {
 			return null;
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
-		EventEnvelope eventEnvelope;
+		EventEnvelopeDeserializer eventEnvelopeDeserializer;
 		try {
-			eventEnvelope = mapper.readValue(mapper.writeValueAsString(raw), EventEnvelope.class);
+			eventEnvelopeDeserializer =
+				mapper.readValue(mapper.writeValueAsString(raw), EventEnvelopeDeserializer.class);
 		} catch (JsonProcessingException e) {
+			System.out.println(e.toString());
 			throw new PangeaException("Failed to process event envelope", e);
 		}
 
-		return eventEnvelope;
+		IEvent event = IEvent.fromRaw(eventEnvelopeDeserializer.getRawEvent(), eventType);
+		return new EventEnvelope(
+			event,
+			eventEnvelopeDeserializer.getSignature(),
+			eventEnvelopeDeserializer.getPublicKey(),
+			eventEnvelopeDeserializer.getReceivedAt()
+		);
 	}
 
-	public static void verifyHash(Object rawEnvelope, String hash) throws VerificationFailed {
+	public static void verifyHash(Map<String, Object> rawEnvelope, String hash) throws VerificationFailed {
 		if (rawEnvelope == null || hash == null || hash.isEmpty()) {
 			return;
 		}
@@ -160,5 +176,40 @@ public class EventEnvelope {
 				hash
 			);
 		}
+	}
+}
+
+final class EventEnvelopeDeserializer {
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("event")
+	TreeMap<String, Object> rawEvent;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("signature")
+	String signature;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("public_key")
+	String publicKey;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("received_at")
+	String receivedAt;
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public String getPublicKey() {
+		return publicKey;
+	}
+
+	public String getReceivedAt() {
+		return receivedAt;
+	}
+
+	protected Object getRawEvent() {
+		return rawEvent;
 	}
 }

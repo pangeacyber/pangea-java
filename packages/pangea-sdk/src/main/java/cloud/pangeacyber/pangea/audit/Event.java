@@ -2,54 +2,49 @@ package cloud.pangeacyber.pangea.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Event {
+public class Event implements IEvent {
 
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("actor")
-	String actor = null;
+	private String actor;
 
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("action")
-	String action = null;
+	private String action;
 
 	@JsonProperty("message")
-	String message;
+	private String message;
 
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("new")
-	String newField = null;
+	private String newField;
 
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("old")
-	String old = null;
+	private String old;
 
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("source")
-	String source = null;
+	private String source;
 
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("status")
-	String status = null;
+	private String status;
 
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("target")
-	String target = null;
+	private String target;
 
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("timestamp")
-	String timestamp = null;
+	private String timestamp;
 
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("tenant_id")
-	String tenantID = null;
+	private String tenantID;
 
 	public Event() {}
 
@@ -57,113 +52,163 @@ public class Event {
 		this.message = message;
 	}
 
-	public Event(
-		String actor,
-		String action,
-		String message,
-		String newField,
-		String old,
-		String source,
-		String status,
-		String target,
-		String timestamp
-	) {
-		this.actor = actor;
-		this.action = action;
-		this.message = message;
-		this.newField = newField;
-		this.old = old;
-		this.source = source;
-		this.status = status;
-		this.target = target;
-		this.timestamp = timestamp;
+	private Event(EventBuilder builder) {
+		this.actor = builder.actor;
+		this.action = builder.action;
+		this.message = builder.message;
+		this.newField = builder.newField;
+		this.old = builder.old;
+		this.source = builder.source;
+		this.status = builder.status;
+		this.target = builder.target;
+		this.timestamp = builder.timestamp;
+		this.tenantID = builder.tenantID;
+	}
+
+	public static class EventBuilder {
+
+		private String actor;
+		private String action;
+		private String message;
+		private String newField;
+		private String old;
+		private String source;
+		private String status;
+		private String target;
+		private String timestamp;
+		private String tenantID;
+
+		public EventBuilder(String message) {
+			this.message = message;
+		}
+
+		public EventBuilder actor(String actor) {
+			this.actor = actor;
+			return this;
+		}
+
+		public EventBuilder action(String action) {
+			this.action = action;
+			return this;
+		}
+
+		public EventBuilder newField(String newField) {
+			this.newField = newField;
+			return this;
+		}
+
+		public EventBuilder old(String old) {
+			this.old = old;
+			return this;
+		}
+
+		public EventBuilder source(String source) {
+			this.source = source;
+			return this;
+		}
+
+		public EventBuilder status(String status) {
+			this.status = status;
+			return this;
+		}
+
+		public EventBuilder target(String target) {
+			this.target = target;
+			return this;
+		}
+
+		public EventBuilder timestamp(String timestamp) {
+			this.timestamp = timestamp;
+			return this;
+		}
+
+		public EventBuilder tenantID(String tenantID) {
+			this.tenantID = tenantID;
+			return this;
+		}
+
+		public Event build() {
+			return new Event(this);
+		}
 	}
 
 	public String getActor() {
 		return actor;
 	}
 
-	public void setActor(String actor) {
-		this.actor = actor;
-	}
-
 	public String getAction() {
 		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
 	}
 
 	public String getMessage() {
 		return message;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
 	public String getNewField() {
 		return newField;
-	}
-
-	public void setNewField(String newField) {
-		this.newField = newField;
 	}
 
 	public String getOld() {
 		return old;
 	}
 
-	public void setOld(String old) {
-		this.old = old;
-	}
-
 	public String getSource() {
 		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
 	}
 
 	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	public String getTarget() {
 		return target;
-	}
-
-	public void setTarget(String target) {
-		this.target = target;
 	}
 
 	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public static String canonicalize(Event event) throws JsonProcessingException {
-		ObjectMapper mapper = JsonMapper
-			.builder()
-			.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
-			.build();
-		return mapper.writeValueAsString(event);
+	public String getTenantID() {
+		return tenantID;
 	}
 
 	public void setTenantID(String tenantID) {
 		this.tenantID = tenantID;
 	}
 
-	public String getTenantID() {
-		return tenantID;
+	public void setActor(String actor) {
+		this.actor = actor;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public void setNewField(String newField) {
+		this.newField = newField;
+	}
+
+	public void setOld(String old) {
+		this.old = old;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 }

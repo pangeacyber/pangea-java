@@ -9,12 +9,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
+import java.util.TreeMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchEvent {
 
 	@JsonProperty("envelope")
-	Object rawEnvelope;
+	TreeMap<String, Object> rawEnvelope;
 
 	EventEnvelope eventEnvelope;
 
@@ -42,7 +43,7 @@ public class SearchEvent {
 	@JsonIgnore
 	EventVerification signatureVerification = EventVerification.NOT_VERIFIED;
 
-	public Object getRawEnvelope() {
+	protected Map<String, Object> getRawEnvelope() {
 		return rawEnvelope;
 	}
 

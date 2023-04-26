@@ -138,6 +138,13 @@ public final class Config {
 		return config;
 	}
 
+	public static Config fromCustomSchemaIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
+		String token = getCustomSchemaTestToken(environment);
+		String domain = getTestDomain(environment);
+		Config config = new Config(token, domain);
+		return config;
+	}
+
 	public static String getTestToken(TestEnvironment environment) throws ConfigException {
 		String tokenEnvVarName = "PANGEA_INTEGRATION_TOKEN_" + environment.toString();
 		String token = System.getenv(tokenEnvVarName);
@@ -149,6 +156,15 @@ public final class Config {
 
 	public static String getVaultSignatureTestToken(TestEnvironment environment) throws ConfigException {
 		String tokenEnvVarName = "PANGEA_INTEGRATION_VAULT_TOKEN_" + environment.toString();
+		String token = System.getenv(tokenEnvVarName);
+		if (token == null || token.isEmpty()) {
+			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
+		}
+		return token;
+	}
+
+	public static String getCustomSchemaTestToken(TestEnvironment environment) throws ConfigException {
+		String tokenEnvVarName = "PANGEA_INTEGRATION_CUSTOM_SCHEMA_TOKEN_" + environment.toString();
 		String token = System.getenv(tokenEnvVarName);
 		if (token == null || token.isEmpty()) {
 			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");

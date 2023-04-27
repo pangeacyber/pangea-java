@@ -7,9 +7,13 @@ public class SecretStoreRequest extends CommonStoreRequest {
 	@JsonProperty("secret")
 	String secret = null;
 
+	@JsonProperty("type")
+	String type;
+
 	protected SecretStoreRequest(SecretStoreRequestBuilder builder) {
 		super(builder);
 		this.secret = builder.secret;
+		this.type = "secret";
 	}
 
 	public String getSecret() {

@@ -1,6 +1,8 @@
 package cloud.pangeacyber.pangea.audit;
 
 import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
+import cloud.pangeacyber.pangea.audit.models.EventEnvelope;
+import cloud.pangeacyber.pangea.audit.models.EventVerification;
 import cloud.pangeacyber.pangea.audit.utils.ConsistencyProof;
 import cloud.pangeacyber.pangea.audit.utils.Verification;
 import com.fasterxml.jackson.annotation.JsonIgnore;

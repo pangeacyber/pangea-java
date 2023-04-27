@@ -4,10 +4,8 @@ import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import cloud.pangeacyber.pangea.intel.models.UserBreachedRequest;
-import cloud.pangeacyber.pangea.intel.models.UserBreachedResponse;
-import cloud.pangeacyber.pangea.intel.models.UserPasswordBreachedRequest;
-import cloud.pangeacyber.pangea.intel.models.UserPasswordBreachedResponse;
+import cloud.pangeacyber.pangea.intel.requests.*;
+import cloud.pangeacyber.pangea.intel.responses.*;
 
 public class UserIntelClient extends Client {
 

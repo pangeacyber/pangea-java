@@ -2,6 +2,7 @@ package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.UserIntelClient;
 import cloud.pangeacyber.pangea.intel.models.*;
+import cloud.pangeacyber.pangea.intel.responses.UserBreachedResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 

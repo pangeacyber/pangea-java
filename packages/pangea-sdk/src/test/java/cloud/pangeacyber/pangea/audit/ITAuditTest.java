@@ -8,12 +8,11 @@ import static org.junit.Assert.assertTrue;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.audit.AuditClient.AuditClientBuilder;
-import cloud.pangeacyber.pangea.exceptions.ConfigException;
-import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
-import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import cloud.pangeacyber.pangea.exceptions.SignerException;
-import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
-import cloud.pangeacyber.pangea.exceptions.ValidationException;
+import cloud.pangeacyber.pangea.audit.models.*;
+import cloud.pangeacyber.pangea.audit.requests.*;
+import cloud.pangeacyber.pangea.audit.responses.*;
+import cloud.pangeacyber.pangea.audit.results.RootResult;
+import cloud.pangeacyber.pangea.exceptions.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.junit.Before;
@@ -86,7 +85,11 @@ public class ITAuditTest {
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
-		LogResponse response = client.log(event, Event.class);
+		LogResponse response = client.log(
+			event,
+			Event.class,
+			new LogConfig.Builder().verbose(false).verify(false).build()
+		);
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -101,7 +104,11 @@ public class ITAuditTest {
 
 	@Test
 	public void testLog_customSchema() throws PangeaException, PangeaAPIException {
-		LogResponse response = customSchemaClient.log(customEvent, CustomEvent.class);
+		LogResponse response = customSchemaClient.log(
+			customEvent,
+			CustomEvent.class,
+			new LogConfig.Builder().verbose(false).verify(false).build()
+		);
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -120,7 +127,11 @@ public class ITAuditTest {
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
-		LogResponse response = client.log(event, false, false, false, Event.class);
+		LogResponse response = client.log(
+			event,
+			Event.class,
+			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
+		);
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -135,7 +146,12 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogNoVerbose_customSchema() throws PangeaException, PangeaAPIException {
-		LogResponse response = customSchemaClient.log(customEvent, false, false, false, CustomEvent.class);
+		LogResponse response = customSchemaClient.log(
+			customEvent,
+			CustomEvent.class,
+			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
+		);
+
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -155,7 +171,12 @@ public class ITAuditTest {
 		event.setStatus(STATUS_NO_SIGNED);
 
 		try {
-			LogResponse response = client.log(event, false, true, false, Event.class);
+			LogResponse response = client.log(
+				event,
+				Event.class,
+				new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
+			);
+
 			assertTrue(response.isOk());
 
 			LogResult result = response.getResult();
@@ -176,7 +197,12 @@ public class ITAuditTest {
 	@Test
 	public void testLogVerbose_customSchema() throws PangeaAPIException, PangeaException {
 		try {
-			LogResponse response = customSchemaClient.log(customEvent, false, true, false, CustomEvent.class);
+			LogResponse response = customSchemaClient.log(
+				customEvent,
+				CustomEvent.class,
+				new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
+			);
+
 			assertTrue(response.isOk());
 
 			LogResult result = response.getResult();
@@ -204,7 +230,11 @@ public class ITAuditTest {
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
-		LogResponse response = signNtenandIDClient.log(event, false, true, false, Event.class);
+		LogResponse response = signNtenandIDClient.log(
+			event,
+			Event.class,
+			new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
+		);
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -226,7 +256,12 @@ public class ITAuditTest {
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
-		LogResponse response = client.log(event, false, true, true, Event.class);
+		LogResponse response = client.log(
+			event,
+			Event.class,
+			new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
+		);
+
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -242,7 +277,9 @@ public class ITAuditTest {
 		event = new Event(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
-		response = client.log(event, false, true, true, Event.class);
+		response =
+			client.log(event, Event.class, new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build());
+
 		assertTrue(response.isOk());
 
 		result = response.getResult();
@@ -257,7 +294,12 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogVerify_customSchema() throws PangeaAPIException, PangeaException {
-		LogResponse response = customSchemaClient.log(customEvent, false, true, true, CustomEvent.class);
+		LogResponse response = customSchemaClient.log(
+			customEvent,
+			CustomEvent.class,
+			new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
+		);
+
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -274,7 +316,13 @@ public class ITAuditTest {
 		assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
 
 		// Second log
-		response = customSchemaClient.log(customEvent, false, true, true, CustomEvent.class);
+		response =
+			customSchemaClient.log(
+				customEvent,
+				CustomEvent.class,
+				new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
+			);
+
 		assertTrue(response.isOk());
 
 		result = response.getResult();
@@ -302,7 +350,12 @@ public class ITAuditTest {
 		event.setNewField("New");
 		event.setOld("Old");
 
-		LogResponse response = localSignClient.log(event, true, true, true, Event.class);
+		LogResponse response = localSignClient.log(
+			event,
+			Event.class,
+			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
+		);
+
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -327,7 +380,12 @@ public class ITAuditTest {
 			.fieldStrLong(LONG_FIELD)
 			.build();
 
-		LogResponse response = localSignCustomSchemaClient.log(event, true, true, true, CustomEvent.class);
+		LogResponse response = localSignCustomSchemaClient.log(
+			event,
+			CustomEvent.class,
+			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
+		);
+
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -354,7 +412,12 @@ public class ITAuditTest {
 		event.setNewField("New");
 		event.setOld("Old");
 
-		LogResponse response = localSignInfoClient.log(event, true, true, true, Event.class);
+		LogResponse response = localSignInfoClient.log(
+			event,
+			Event.class,
+			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
+		);
+
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -381,7 +444,12 @@ public class ITAuditTest {
 		event.setNewField("New");
 		event.setOld("Old");
 
-		LogResponse response = vaultSignClient.log(event, false, true, true, Event.class);
+		LogResponse response = vaultSignClient.log(
+			event,
+			Event.class,
+			new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
+		);
+
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -405,7 +473,12 @@ public class ITAuditTest {
 		event.setNewField("New");
 		event.setOld("Old");
 
-		LogResponse response = signNtenandIDClient.log(event, true, true, true, Event.class);
+		LogResponse response = signNtenandIDClient.log(
+			event,
+			Event.class,
+			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
+		);
+
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -817,7 +890,11 @@ public class ITAuditTest {
 		cfg.setToken("notarealtoken");
 		AuditClient fakeClient = new AuditClientBuilder(cfg).build();
 		Event event = new Event("Test msg");
-		LogResponse response = fakeClient.log(event, Event.class);
+		LogResponse response = fakeClient.log(
+			event,
+			Event.class,
+			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
+		);
 	}
 
 	// @Test(expected = ValidationException.class)
@@ -848,6 +925,10 @@ public class ITAuditTest {
 	@Test(expected = SignerException.class)
 	public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException {
 		Event event = new Event(MSG_NO_SIGNED);
-		LogResponse response = client.log(event, true, true, true, Event.class);
+		LogResponse response = client.log(
+			event,
+			Event.class,
+			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
+		);
 	}
 }

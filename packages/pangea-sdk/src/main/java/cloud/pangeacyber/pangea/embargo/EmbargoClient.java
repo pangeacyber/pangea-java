@@ -2,6 +2,8 @@ package cloud.pangeacyber.pangea.embargo;
 
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.embargo.responses.IpCheckResponse;
+import cloud.pangeacyber.pangea.embargo.responses.IsoCheckResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;

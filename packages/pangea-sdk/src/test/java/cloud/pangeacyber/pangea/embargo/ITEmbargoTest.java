@@ -5,6 +5,10 @@ import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.TestEnvironment;
+import cloud.pangeacyber.pangea.embargo.models.EmbargoSanction;
+import cloud.pangeacyber.pangea.embargo.models.EmbargoSanctions;
+import cloud.pangeacyber.pangea.embargo.responses.IpCheckResponse;
+import cloud.pangeacyber.pangea.embargo.responses.IsoCheckResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;

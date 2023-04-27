@@ -2,14 +2,13 @@ package cloud.pangeacyber.pangea.audit;
 
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.audit.arweave.Arweave;
-import cloud.pangeacyber.pangea.audit.arweave.PublishedRoot;
-import cloud.pangeacyber.pangea.audit.utils.ConsistencyProof;
-import cloud.pangeacyber.pangea.audit.utils.Verification;
-import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
-import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import cloud.pangeacyber.pangea.exceptions.SignerException;
-import cloud.pangeacyber.pangea.exceptions.VerificationFailed;
+import cloud.pangeacyber.pangea.audit.arweave.*;
+import cloud.pangeacyber.pangea.audit.models.*;
+import cloud.pangeacyber.pangea.audit.requests.*;
+import cloud.pangeacyber.pangea.audit.responses.*;
+import cloud.pangeacyber.pangea.audit.results.*;
+import cloud.pangeacyber.pangea.audit.utils.*;
+import cloud.pangeacyber.pangea.exceptions.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -74,35 +73,6 @@ public class AuditClient extends Client {
 	Map<String, Object> pkInfo = null;
 	String tenantID = null;
 
-	/**
-	 * @deprecated use AuditClientBuilder instead.
-	 */
-	public AuditClient(Config config) {
-		super(config, serviceName);
-		this.signer = null;
-		this.pkInfo = null;
-		publishedRoots = new HashMap<Integer, PublishedRoot>();
-	}
-
-	/**
-	 * @deprecated use AuditClientBuilder instead.
-	 */
-	public AuditClient(Config config, String privateKeyFilename, Map<String, Object> pkInfo) {
-		super(config, serviceName);
-		this.signer = new LogSigner(privateKeyFilename);
-		this.pkInfo = pkInfo;
-		publishedRoots = new HashMap<Integer, PublishedRoot>();
-	}
-
-	/**
-	 * @deprecated use AuditClientBuilder instead.
-	 */
-	public AuditClient(Config config, String privateKeyFilename) {
-		super(config, serviceName);
-		this.signer = new LogSigner(privateKeyFilename);
-		publishedRoots = new HashMap<Integer, PublishedRoot>();
-	}
-
 	protected AuditClient(AuditClientBuilder builder) {
 		super(builder.config, serviceName);
 		if (builder.privateKeyFilename != null) {
@@ -126,13 +96,8 @@ public class AuditClient extends Client {
 		return doPost("/v1/log", request, LogResponse.class);
 	}
 
-	private <EventType extends IEvent> LogResponse doLog(
-		IEvent event,
-		Boolean signLocal,
-		Boolean verbose,
-		boolean verify,
-		Class<EventType> eventType
-	) throws PangeaException, PangeaAPIException {
+	private <EventType extends IEvent> LogResponse doLog(IEvent event, Class<EventType> eventType, LogConfig config)
+		throws PangeaException, PangeaAPIException {
 		String signature = null;
 		String publicKey = null;
 
@@ -140,7 +105,7 @@ public class AuditClient extends Client {
 			event.setTenantID(this.tenantID);
 		}
 
-		if (signLocal == true) {
+		if (config.getSignLocal() == true) {
 			if (this.signer == null) {
 				throw new SignerException("Signer not initialized", null);
 			} else {
@@ -155,8 +120,8 @@ public class AuditClient extends Client {
 			}
 		}
 
-		LogResponse response = logPost(event, verbose, signature, publicKey, verify);
-		processLogResponse(response.getResult(), verify, eventType);
+		LogResponse response = logPost(event, config.getVerbose(), signature, publicKey, config.getVerify());
+		processLogResponse(response.getResult(), config.getVerify(), eventType);
 		return response;
 	}
 
@@ -190,9 +155,13 @@ public class AuditClient extends Client {
 			result.verifySignature();
 			if (newUnpublishedRoot != null) {
 				result.membershipVerification =
-					Verification.verifyMembershipProof(newUnpublishedRoot, result.hash, result.membershipProof);
-				if (result.consistencyProof != null && this.prevUnpublishedRoot != null) {
-					ConsistencyProof conProof = Verification.decodeConsistencyProof(result.consistencyProof);
+					Verification.verifyMembershipProof(
+						newUnpublishedRoot,
+						result.getHash(),
+						result.getMembershipProof()
+					);
+				if (result.getConsistencyProof() != null && this.prevUnpublishedRoot != null) {
+					ConsistencyProof conProof = Verification.decodeConsistencyProof(result.getConsistencyProof());
 					result.consistencyVerification =
 						Verification.verifyConsistencyProof(newUnpublishedRoot, this.prevUnpublishedRoot, conProof);
 				}
@@ -202,27 +171,6 @@ public class AuditClient extends Client {
 		if (newUnpublishedRoot != null) {
 			this.prevUnpublishedRoot = newUnpublishedRoot;
 		}
-	}
-
-	/**
-	 * Log an entry
-	 * @pangea.description Log an event to Audit Secure Log. By default does not sign event and verbose is left as server default
-	 * @param event event to log
-	 * @return LogResponse
-	 * @throws PangeaException
-	 * @throws PangeaAPIException
-	 * @pangea.code
-	 * {@code
-	 * String msg = "Event's message";
-	 *
-	 * Event event = new Event(msg);
-	 *
-	 * LogResponse response = client.log(event);
-	 * }
-	 */
-	public <EventType extends IEvent> LogResponse log(IEvent event, Class<EventType> eventType)
-		throws PangeaException, PangeaAPIException {
-		return doLog(event, false, null, false, eventType);
 	}
 
 	/**
@@ -237,21 +185,15 @@ public class AuditClient extends Client {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * String msg = "Event's message";
-	 *
-	 * Event event = new Event(msg);
-	 *
-	 * LogResponse response = client.log(event, "Local", true);
+		// FIXME:
 	 * }
 	 */
-	public <EventType extends IEvent> LogResponse log(
-		IEvent event,
-		Boolean signLocal,
-		boolean verbose,
-		boolean verify,
-		Class<EventType> eventType
-	) throws PangeaException, PangeaAPIException {
-		return doLog(event, signLocal, verbose, verify, eventType);
+	public <EventType extends IEvent> LogResponse log(IEvent event, Class<EventType> eventType, LogConfig config)
+		throws PangeaException, PangeaAPIException {
+		if (config == null) {
+			config = new LogConfig.Builder().build();
+		}
+		return doLog(event, eventType, config);
 	}
 
 	private RootResponse rootPost(Integer treeSize) throws PangeaException, PangeaAPIException {
@@ -295,6 +237,10 @@ public class AuditClient extends Client {
 		Class<EventType> eventType,
 		SearchConfig config
 	) throws PangeaException, PangeaAPIException {
+		if (config == null) {
+			config = new SearchConfig.Builder().build();
+		}
+
 		for (SearchEvent searchEvent : result.getEvents()) {
 			searchEvent.setEventEnvelope(EventEnvelope.fromRaw(searchEvent.getRawEnvelope(), eventType));
 		}
@@ -331,7 +277,7 @@ public class AuditClient extends Client {
 
 		Set<Integer> treeSizes = new HashSet<Integer>();
 		for (SearchEvent searchEvent : result.getEvents()) {
-			if (searchEvent.published) {
+			if (searchEvent.isPublished()) {
 				int leafIndex = searchEvent.getLeafIndex();
 				treeSizes.add(leafIndex + 1);
 				if (leafIndex > 0) {
@@ -394,14 +340,6 @@ public class AuditClient extends Client {
 	 * }
 	 */
 	public <EventType extends IEvent> SearchResponse search(
-		SearchRequest input,
-		Class<EventType> eventType,
-		SearchConfig config
-	) throws PangeaException, PangeaAPIException {
-		return searchPost(input, eventType, config);
-	}
-
-	private <EventType extends IEvent> SearchResponse searchPost(
 		SearchRequest request,
 		Class<EventType> eventType,
 		SearchConfig config

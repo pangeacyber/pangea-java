@@ -2,6 +2,8 @@ package cloud.pangeacyber.pangea.audit;
 
 import static org.junit.Assert.assertEquals;
 
+import cloud.pangeacyber.pangea.audit.models.EventVerification;
+import cloud.pangeacyber.pangea.audit.utils.Verifier;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.SignerException;
 import org.junit.Before;

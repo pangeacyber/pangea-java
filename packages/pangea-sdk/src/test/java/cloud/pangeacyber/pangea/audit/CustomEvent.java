@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.audit;
 
+import cloud.pangeacyber.pangea.audit.models.IEvent;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

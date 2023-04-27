@@ -9,6 +9,9 @@ public class PangeaTokenStoreRequest extends CommonStoreRequest {
 	@JsonProperty("secret")
 	String token = null;
 
+	@JsonProperty("type")
+	String type;
+
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_grace_period")
 	String rotationGracePeriod = null;
@@ -17,6 +20,7 @@ public class PangeaTokenStoreRequest extends CommonStoreRequest {
 		super(builder);
 		this.token = builder.token;
 		this.rotationGracePeriod = builder.rotationGracePeriod;
+		this.type = "pangea_token";
 	}
 
 	public String getToken() {

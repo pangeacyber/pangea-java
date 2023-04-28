@@ -115,21 +115,21 @@ public final class Config {
 	public static Config fromIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getTestToken(environment);
 		String domain = getTestDomain(environment);
-		Config config = new Config(token, domain);
+		Config config = new Config.ConfigBuilder(token, domain).build();
 		return config;
 	}
 
 	public static Config fromVaultIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getVaultSignatureTestToken(environment);
 		String domain = getTestDomain(environment);
-		Config config = new Config(token, domain);
+		Config config = new Config.ConfigBuilder(token, domain).build();
 		return config;
 	}
 
 	public static Config fromCustomSchemaIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getCustomSchemaTestToken(environment);
 		String domain = getTestDomain(environment);
-		Config config = new Config(token, domain);
+		Config config = new Config.ConfigBuilder(token, domain).build();
 		return config;
 	}
 

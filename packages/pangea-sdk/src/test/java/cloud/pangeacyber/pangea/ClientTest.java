@@ -10,7 +10,7 @@ import org.junit.Test;
 class TestClient extends Client {
 
 	public TestClient() {
-		super(new Config("token", "domain.com"), "test");
+		super(new Config.ConfigBuilder("token", "domain.com").build(), "test");
 	}
 
 	@Override

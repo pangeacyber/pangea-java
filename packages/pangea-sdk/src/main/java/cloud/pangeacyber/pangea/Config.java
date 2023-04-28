@@ -24,18 +24,6 @@ public final class Config {
 	// Extra custom user-agent to send on requests
 	String customUserAgent;
 
-	/**
-	 * @deprecated use ConfigBuilder instead
-	 */
-	public Config(String token, String domain) {
-		this.token = token;
-		this.domain = domain;
-		this.insecure = false;
-		this.enviroment = "production";
-		this.connectionTimeout = Duration.ofSeconds(20);
-		this.customUserAgent = "";
-	}
-
 	protected Config(ConfigBuilder builder) {
 		this.domain = builder.domain;
 		this.token = builder.token;

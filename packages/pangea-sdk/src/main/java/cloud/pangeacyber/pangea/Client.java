@@ -40,9 +40,9 @@ public abstract class Client {
 
 		RequestConfig config = RequestConfig
 			.custom()
-			.setConnectTimeout(timeout * 1000)
-			.setConnectionRequestTimeout(timeout * 1000)
-			.setSocketTimeout(timeout * 1000)
+			.setConnectTimeout(timeout)
+			.setConnectionRequestTimeout(timeout)
+			.setSocketTimeout(timeout)
 			.setCookieSpec(CookieSpecs.STANDARD)
 			.build();
 		CloseableHttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();

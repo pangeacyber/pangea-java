@@ -3,17 +3,23 @@ package cloud.pangeacyber.pangea;
 import cloud.pangeacyber.pangea.exceptions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
+import java.io.UnsupportedEncodingException;
 import java.net.http.HttpRequest.Builder;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 
 public abstract class Client {
 
 	Config config;
-	HttpClient httpClient;
+	CloseableHttpClient httpClient;
 	Builder httpRequestBuilder;
 	String serviceName;
 	Map<String, String> customHeaders = null;
@@ -26,33 +32,41 @@ public abstract class Client {
 		this.setCustomUserAgent(config.getCustomUserAgent());
 	}
 
-	protected HttpClient buildClient() {
-		java.net.http.HttpClient.Builder builder = HttpClient.newBuilder();
+	protected CloseableHttpClient buildClient() {
+		int timeout = 5000;
 		if (config.connectionTimeout != null) {
-			builder.connectTimeout(config.connectionTimeout);
+			timeout = (int) config.connectionTimeout.toMillis();
 		}
-		return builder.build();
+
+		RequestConfig config = RequestConfig
+			.custom()
+			.setConnectTimeout(timeout * 1000)
+			.setConnectionRequestTimeout(timeout * 1000)
+			.setSocketTimeout(timeout * 1000)
+			.setCookieSpec(CookieSpecs.STANDARD)
+			.build();
+		CloseableHttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
+		return client;
 	}
 
-	protected HttpRequest buildPostRequest(String path, String body) {
-		Builder builder = HttpRequest.newBuilder();
-		fillPostRequestBuilder(builder, path, body);
-		return builder.build();
+	protected HttpPost buildPostRequest(String path, String body) throws UnsupportedEncodingException {
+		HttpPost httpPost = new HttpPost(config.getServiceUrl(serviceName, path));
+		httpPost.setEntity(new StringEntity(body));
+		fillPostHeaders(httpPost);
+		return httpPost;
 	}
 
-	protected void fillPostRequestBuilder(HttpRequest.Builder builder, String path, String body) {
-		builder.uri(config.getServiceUrl(serviceName, path));
+	protected void fillPostHeaders(HttpPost request) {
 		if (customHeaders != null) {
 			for (Map.Entry<String, String> entry : customHeaders.entrySet()) {
 				String key = entry.getKey();
 				String value = entry.getValue();
-				builder.header(key, value);
+				request.setHeader(key, value);
 			}
 		}
-		builder
-			.header("Authorization", "Bearer " + config.getToken())
-			.header("User-Agent", this.userAgent)
-			.POST(HttpRequest.BodyPublishers.ofString(body));
+		request.setHeader("Authorization", "Bearer " + config.getToken());
+		request.setHeader("User-Agent", this.userAgent);
+		return;
 	}
 
 	public <Req, ResponseType extends Response<?>> ResponseType doPost(
@@ -68,11 +82,11 @@ public abstract class Client {
 			throw new PangeaException("Failed to write request", e);
 		}
 
-		HttpRequest httpRequest = buildPostRequest(path, body);
-		HttpResponse<String> httpResponse;
+		CloseableHttpResponse httpResponse;
 
 		try {
-			httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());
+			HttpPost httpRequest = buildPostRequest(path, body);
+			httpResponse = httpClient.execute(httpRequest);
 		} catch (Exception e) {
 			throw new PangeaException("Failed to send request", e);
 		}
@@ -81,10 +95,17 @@ public abstract class Client {
 	}
 
 	private <ResponseType extends Response<?>> ResponseType checkResponse(
-		HttpResponse<String> httpResponse,
+		CloseableHttpResponse httpResponse,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
-		String body = httpResponse.body();
+		String body = null;
+
+		try {
+			body = EntityUtils.toString(httpResponse.getEntity(), StandardCharsets.UTF_8);
+		} catch (Exception e) {
+			throw new PangeaException("Failed to read response body", e);
+		}
+
 		ObjectMapper mapper = new ObjectMapper();
 		ResponseHeader header;
 

@@ -44,9 +44,6 @@ public class User {
 	@JsonProperty("created_at")
 	String createdAt;
 
-	@JsonProperty("identity")
-	String identity;
-
 	public Profile getProfile() {
 		return profile;
 	}
@@ -89,9 +86,5 @@ public class User {
 
 	public String getCreatedAt() {
 		return createdAt;
-	}
-
-	public String getIdentity() {
-		return identity;
 	}
 }

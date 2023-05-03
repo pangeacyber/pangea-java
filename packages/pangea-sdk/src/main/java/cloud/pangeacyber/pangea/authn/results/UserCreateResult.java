@@ -41,6 +41,9 @@ public class UserCreateResult {
 	@JsonProperty("mfa_providers")
 	MFAProviders mfaProviders;
 
+	@JsonProperty("created_at")
+	String createdAt;
+
 	public String getEmail() {
 		return email;
 	}
@@ -75,5 +78,9 @@ public class UserCreateResult {
 
 	public IDProviders getIdProviders() {
 		return idProviders;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
 	}
 }

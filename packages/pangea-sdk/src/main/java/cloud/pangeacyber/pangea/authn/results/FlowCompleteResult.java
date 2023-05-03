@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class FlowCompleteResult {
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("login_token")
+	@JsonProperty("active_token")
 	LoginToken loginToken;
 
 	@JsonInclude(Include.NON_NULL)

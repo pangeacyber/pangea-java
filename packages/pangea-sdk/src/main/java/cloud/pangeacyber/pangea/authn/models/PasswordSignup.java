@@ -21,6 +21,9 @@ public class PasswordSignup {
 	@JsonProperty("password_punct_min")
 	int punctMin;
 
+	@JsonProperty("password_number_min")
+	int numberMin;
+
 	public int getCharsMin() {
 		return charsMin;
 	}
@@ -39,5 +42,9 @@ public class PasswordSignup {
 
 	public int getPunctMin() {
 		return punctMin;
+	}
+
+	public int getNumberMin() {
+		return numberMin;
 	}
 }

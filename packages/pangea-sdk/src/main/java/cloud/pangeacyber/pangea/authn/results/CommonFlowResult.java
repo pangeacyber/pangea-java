@@ -16,6 +16,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommonFlowResult {
 
+	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("flow_id")
 	String flowID;
 
@@ -65,6 +66,10 @@ public class CommonFlowResult {
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("verify_social")
 	VerifySocial verifySocial;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("reset_password")
+	VerifyPassword resetPassword;
 
 	public String getFlowID() {
 		return flowID;
@@ -116,5 +121,9 @@ public class CommonFlowResult {
 
 	public VerifySocial getVerifySocial() {
 		return verifySocial;
+	}
+
+	public VerifyPassword getResetPassword() {
+		return resetPassword;
 	}
 }

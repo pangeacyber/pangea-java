@@ -158,7 +158,7 @@ public class ITAuthNTest {
 					new UserInviteRequest.Builder(
 						emailTest,
 						emailInviteKeep,
-						"https://www.usgs.gov/faqs/what-was-pangea",
+						"https://someurl.com/callbacklink",
 						"somestate"
 					)
 						.build()
@@ -180,7 +180,7 @@ public class ITAuthNTest {
 						new UserInviteRequest.Builder(
 							emailTest,
 							emailInviteDelete,
-							"https://www.usgs.gov/faqs/what-was-pangea",
+							"https://someurl.com/callbacklink",
 							"somestate"
 						)
 							.build()

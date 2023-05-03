@@ -3,6 +3,7 @@ package cloud.pangeacyber.pangea.authn.clients;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.models.MFAProvider;
+import cloud.pangeacyber.pangea.authn.requests.UserMFAStartRequest;
 import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -39,31 +40,6 @@ final class UserMFAEnrollRequest {
 		this.userID = userID;
 		this.mfaProvider = mfaProvider;
 		this.code = code;
-	}
-}
-
-final class UserMFAStartRequest {
-
-	@JsonProperty("user_id")
-	String userID;
-
-	@JsonProperty("mfa_provider")
-	MFAProvider mfaProvider;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("enroll")
-	Boolean enroll;
-
-	public UserMFAStartRequest(String userID, MFAProvider mfaProvider) {
-		this.userID = userID;
-		this.mfaProvider = mfaProvider;
-		this.enroll = null;
-	}
-
-	public UserMFAStartRequest(String userID, MFAProvider mfaProvider, Boolean enroll) {
-		this.userID = userID;
-		this.mfaProvider = mfaProvider;
-		this.enroll = enroll;
 	}
 }
 
@@ -108,16 +84,7 @@ public class UserMFA extends Client {
 	}
 
 	// TODO: Doc
-	public UserMFAStartResponse start(String userID, MFAProvider mfaProvider, Boolean enroll)
-		throws PangeaException, PangeaAPIException {
-		UserMFAStartRequest request = new UserMFAStartRequest(userID, mfaProvider, enroll);
-		return doPost("/v1/user/mfa/start", request, UserMFAStartResponse.class);
-	}
-
-	// TODO: Doc
-	public UserMFAStartResponse start(String userID, MFAProvider mfaProvider)
-		throws PangeaException, PangeaAPIException {
-		UserMFAStartRequest request = new UserMFAStartRequest(userID, mfaProvider, null);
+	public UserMFAStartResponse start(UserMFAStartRequest request) throws PangeaException, PangeaAPIException {
 		return doPost("/v1/user/mfa/start", request, UserMFAStartResponse.class);
 	}
 

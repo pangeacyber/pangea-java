@@ -3,6 +3,7 @@ package cloud.pangeacyber.pangea.authn.clients;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyEmailRequest;
+import cloud.pangeacyber.pangea.authn.requests.FlowVerifyPasswordRequest;
 import cloud.pangeacyber.pangea.authn.responses.FlowVerifyCaptchaResponse;
 import cloud.pangeacyber.pangea.authn.responses.FlowVerifyEmailResponse;
 import cloud.pangeacyber.pangea.authn.responses.FlowVerifyPasswordResponse;
@@ -22,20 +23,6 @@ final class FlowVerifyCaptchaRequest {
 	public FlowVerifyCaptchaRequest(String flowID, String code) {
 		this.flowID = flowID;
 		this.code = code;
-	}
-}
-
-final class FlowVerifyPasswordRequest {
-
-	@JsonProperty("flow_id")
-	String flowID;
-
-	@JsonProperty("password")
-	String password;
-
-	public FlowVerifyPasswordRequest(String flowID, String password) {
-		this.flowID = flowID;
-		this.password = password;
 	}
 }
 
@@ -79,16 +66,13 @@ public class FlowVerify extends Client {
 	}
 
 	// TODO: doc
-	public FlowVerifyPasswordResponse password(String flowId, String password)
+	public FlowVerifyPasswordResponse password(FlowVerifyPasswordRequest request)
 		throws PangeaException, PangeaAPIException {
-		FlowVerifyPasswordRequest request = new FlowVerifyPasswordRequest(flowId, password);
 		return doPost("/v1/flow/verify/password", request, FlowVerifyPasswordResponse.class);
 	}
 
 	// TODO: doc
-	public FlowVerifySocialResponse social(String flowId, String cbState, String cbCode)
-		throws PangeaException, PangeaAPIException {
-		FlowVerifySocialRequest request = new FlowVerifySocialRequest(flowId, cbState, cbCode);
+	public FlowVerifySocialResponse social(FlowVerifySocialRequest request) throws PangeaException, PangeaAPIException {
 		return doPost("/v1/flow/verify/social", request, FlowVerifySocialResponse.class);
 	}
 

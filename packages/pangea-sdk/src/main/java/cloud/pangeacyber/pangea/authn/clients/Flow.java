@@ -2,6 +2,7 @@ package cloud.pangeacyber.pangea.authn.clients;
 
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.requests.FlowStartRequest;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyMFACompleteRequest;
 import cloud.pangeacyber.pangea.authn.responses.FlowCompleteResponse;
 import cloud.pangeacyber.pangea.authn.responses.FlowStartResponse;
@@ -58,7 +59,7 @@ public class Flow extends Client {
 	}
 
 	// TODO: Doc
-	public FlowStartResponse start(FlowVerifyMFACompleteRequest request) throws PangeaException, PangeaAPIException {
+	public FlowStartResponse start(FlowStartRequest request) throws PangeaException, PangeaAPIException {
 		return doPost("/v1/flow/start", request, FlowStartResponse.class);
 	}
 

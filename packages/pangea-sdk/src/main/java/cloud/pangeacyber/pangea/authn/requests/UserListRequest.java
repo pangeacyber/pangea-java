@@ -31,16 +31,12 @@ public class UserListRequest {
 	@JsonProperty("size")
 	private Integer size;
 
-	@JsonProperty("use_new")
-	private Boolean useNew;
-
 	private UserListRequest(Builder builder) {
 		this.filter = builder.filter;
 		this.last = builder.last;
 		this.order = builder.order;
 		this.orderBy = builder.orderBy;
 		this.size = builder.size;
-		this.useNew = true; // Temporary
 	}
 
 	public static class Builder {

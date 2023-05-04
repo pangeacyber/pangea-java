@@ -18,12 +18,12 @@ final class UserProfileGetRequest {
 	String email;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("identity")
-	String identity;
+	@JsonProperty("id")
+	String id;
 
-	public UserProfileGetRequest(String email, String identity) {
+	public UserProfileGetRequest(String email, String id) {
 		this.email = email;
-		this.identity = identity;
+		this.id = id;
 	}
 }
 
@@ -36,14 +36,14 @@ public class UserProfile extends Client {
 	}
 
 	// TODO: Doc
-	public UserProfileGetResponse getWithEmail(String email) throws PangeaException, PangeaAPIException {
+	public UserProfileGetResponse getByEmail(String email) throws PangeaException, PangeaAPIException {
 		UserProfileGetRequest request = new UserProfileGetRequest(email, null);
 		return doPost("/v1/user/profile/get", request, UserProfileGetResponse.class);
 	}
 
 	// TODO: Doc
-	public UserProfileGetResponse getWithIdentity(String identity) throws PangeaException, PangeaAPIException {
-		UserProfileGetRequest request = new UserProfileGetRequest(null, identity);
+	public UserProfileGetResponse getByID(String id) throws PangeaException, PangeaAPIException {
+		UserProfileGetRequest request = new UserProfileGetRequest(null, id);
 		return doPost("/v1/user/profile/get", request, UserProfileGetResponse.class);
 	}
 

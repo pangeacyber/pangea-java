@@ -2,12 +2,12 @@ package cloud.pangeacyber.pangea.authn.clients;
 
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.requests.UserInviteListRequest;
 import cloud.pangeacyber.pangea.authn.responses.UserInviteDeleteResponse;
 import cloud.pangeacyber.pangea.authn.responses.UserInviteListResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.HashMap;
 
 final class UserInviteDeleteRequest {
 
@@ -28,8 +28,8 @@ public class UserInvite extends Client {
 	}
 
 	// TODO: Doc
-	public UserInviteListResponse list() throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/invite/list", new HashMap<String, String>(), UserInviteListResponse.class);
+	public UserInviteListResponse list(UserInviteListRequest request) throws PangeaException, PangeaAPIException {
+		return doPost("/v1/user/invite/list", request, UserInviteListResponse.class);
 	}
 
 	// TODO: Doc

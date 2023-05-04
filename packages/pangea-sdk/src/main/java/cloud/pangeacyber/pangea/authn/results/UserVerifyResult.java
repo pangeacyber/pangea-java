@@ -1,6 +1,6 @@
 package cloud.pangeacyber.pangea.authn.results;
 
-import cloud.pangeacyber.pangea.authn.models.IDProvider;
+import cloud.pangeacyber.pangea.authn.models.IDProviders;
 import cloud.pangeacyber.pangea.authn.models.Profile;
 import cloud.pangeacyber.pangea.authn.models.Scopes;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserVerifyResult {
 
-	@JsonProperty("identity")
-	String identity;
+	@JsonProperty("id")
+	String id;
 
 	@JsonProperty("email")
 	String email;
@@ -23,9 +23,8 @@ public class UserVerifyResult {
 	@JsonProperty("scopes")
 	Scopes scopes;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("id_provider")
-	IDProvider idProvider;
+	@JsonProperty("id_providers")
+	IDProviders idProviders;
 
 	@JsonProperty("mfa_providers")
 	String[] mfaProviders;
@@ -43,8 +42,15 @@ public class UserVerifyResult {
 	@JsonProperty("last_login_at")
 	String lastLoginAt;
 
-	public String getIdentity() {
-		return identity;
+	@JsonProperty("created_at")
+	String createdAt;
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public String getID() {
+		return id;
 	}
 
 	public String getEmail() {
@@ -59,8 +65,8 @@ public class UserVerifyResult {
 		return scopes;
 	}
 
-	public IDProvider getIdProvider() {
-		return idProvider;
+	public IDProviders getIdProviders() {
+		return idProviders;
 	}
 
 	public boolean isRequireMFA() {

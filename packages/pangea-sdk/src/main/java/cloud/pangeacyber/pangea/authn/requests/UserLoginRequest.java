@@ -19,19 +19,19 @@ public class UserLoginRequest {
 	@JsonProperty("scopes")
 	Scopes scopes;
 
-	private UserLoginRequest(UserLoginRequestBuilder builder) {
+	private UserLoginRequest(Builder builder) {
 		this.email = builder.email;
 		this.secret = builder.secret;
 		this.scopes = builder.scopes;
 	}
 
-	public static class UserLoginRequestBuilder {
+	public static class Builder {
 
 		String email;
 		String secret;
 		Scopes scopes;
 
-		public UserLoginRequestBuilder(String email, String secret) {
+		public Builder(String email, String secret) {
 			this.email = email;
 			this.secret = secret;
 		}
@@ -40,7 +40,7 @@ public class UserLoginRequest {
 			return new UserLoginRequest(this);
 		}
 
-		public UserLoginRequestBuilder setScopes(Scopes scopes) {
+		public Builder setScopes(Scopes scopes) {
 			this.scopes = scopes;
 			return this;
 		}

@@ -2,14 +2,15 @@ package cloud.pangeacyber.pangea.authn.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SocialSignup {
 
 	@JsonProperty("redirect_uri")
-	String redirectURI;
+	HashMap<String, String> redirectURI;
 
-	public String getRedirectURI() {
+	public HashMap<String, String> getRedirectURI() {
 		return redirectURI;
 	}
 }

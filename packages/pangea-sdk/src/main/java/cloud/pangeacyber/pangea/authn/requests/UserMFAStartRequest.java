@@ -23,21 +23,21 @@ public class UserMFAStartRequest {
 	@JsonProperty("phone")
 	String phone;
 
-	private UserMFAStartRequest(UserMFAStartRequestBuilder builder) {
+	private UserMFAStartRequest(Builder builder) {
 		this.userID = builder.userID;
 		this.mfaProvider = builder.mfaProvider;
 		this.enroll = builder.enroll;
 		this.phone = builder.phone;
 	}
 
-	public static class UserMFAStartRequestBuilder {
+	public static class Builder {
 
 		String userID;
 		MFAProvider mfaProvider;
 		Boolean enroll;
 		String phone;
 
-		public UserMFAStartRequestBuilder(String userID, MFAProvider mfaProvider) {
+		public Builder(String userID, MFAProvider mfaProvider) {
 			this.userID = userID;
 			this.mfaProvider = mfaProvider;
 		}
@@ -46,12 +46,12 @@ public class UserMFAStartRequest {
 			return new UserMFAStartRequest(this);
 		}
 
-		public UserMFAStartRequestBuilder setEnroll(Boolean enroll) {
+		public Builder setEnroll(Boolean enroll) {
 			this.enroll = enroll;
 			return this;
 		}
 
-		public UserMFAStartRequestBuilder setPhone(String phone) {
+		public Builder setPhone(String phone) {
 			this.phone = phone;
 			return this;
 		}

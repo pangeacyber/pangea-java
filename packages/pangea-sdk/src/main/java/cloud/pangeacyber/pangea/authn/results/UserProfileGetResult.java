@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.results;
 
+import cloud.pangeacyber.pangea.authn.models.IDProviders;
 import cloud.pangeacyber.pangea.authn.models.MFAProviders;
 import cloud.pangeacyber.pangea.authn.models.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -10,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserProfileGetResult {
 
-	@JsonProperty("identity")
-	String identity;
+	@JsonProperty("id")
+	String id;
 
 	@JsonProperty("email")
 	String email;
@@ -19,9 +20,8 @@ public class UserProfileGetResult {
 	@JsonProperty("profile")
 	Profile profile;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("id_provider")
-	String idProvider;
+	@JsonProperty("id_providers")
+	IDProviders idProviders;
 
 	@JsonProperty("mfa_providers")
 	MFAProviders mfaProviders;
@@ -32,15 +32,23 @@ public class UserProfileGetResult {
 	@JsonProperty("verified")
 	boolean verified;
 
-	@JsonProperty("last_login_at")
-	String lastLoginAt;
-
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("disabled")
 	Boolean disabled;
 
-	public String getIdentity() {
-		return identity;
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("last_login_at")
+	String lastLoginAt;
+
+	@JsonProperty("created_at")
+	String createdAt;
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public String getID() {
+		return id;
 	}
 
 	public String getEmail() {
@@ -51,8 +59,8 @@ public class UserProfileGetResult {
 		return profile;
 	}
 
-	public String getIdProvider() {
-		return idProvider;
+	public IDProviders getIdProviders() {
+		return idProviders;
 	}
 
 	public MFAProviders getMfaProviders() {

@@ -13,4 +13,11 @@ public class ClientSessionListResult {
 	public SessionItem[] getSessions() {
 		return sessions;
 	}
+
+	@JsonProperty("last")
+	String last;
+
+	public String getLast() {
+		return last;
+	}
 }

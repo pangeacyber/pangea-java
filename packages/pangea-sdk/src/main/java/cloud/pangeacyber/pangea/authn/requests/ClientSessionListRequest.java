@@ -9,17 +9,16 @@ public class ClientSessionListRequest extends CommonSessionListRequest {
 	@JsonProperty("token")
 	String token;
 
-	private ClientSessionListRequest(ClientSessionListRequestBuilder builder) {
+	private ClientSessionListRequest(Builder builder) {
 		super(builder);
 		this.token = builder.token;
 	}
 
-	public static class ClientSessionListRequestBuilder
-		extends CommonSessionListRequestBuilder<ClientSessionListRequestBuilder> {
+	public static class Builder extends CommonBuilder<Builder> {
 
 		String token;
 
-		public ClientSessionListRequestBuilder(String token) {
+		public Builder(String token) {
 			this.token = token;
 		}
 

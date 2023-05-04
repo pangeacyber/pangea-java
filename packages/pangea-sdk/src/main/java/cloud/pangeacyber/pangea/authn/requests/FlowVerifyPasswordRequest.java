@@ -15,22 +15,22 @@ public class FlowVerifyPasswordRequest {
 	String password;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("cancel")
-	Boolean cancel;
+	@JsonProperty("reset")
+	Boolean reset;
 
-	private FlowVerifyPasswordRequest(FlowVerifyPasswordRequestBuilder builder) {
+	private FlowVerifyPasswordRequest(Builder builder) {
 		this.flowID = builder.flowID;
 		this.password = builder.password;
-		this.cancel = builder.cancel;
+		this.reset = builder.reset;
 	}
 
-	public static class FlowVerifyPasswordRequestBuilder {
+	public static class Builder {
 
 		String flowID;
 		String password;
-		Boolean cancel;
+		Boolean reset;
 
-		public FlowVerifyPasswordRequestBuilder(String flowID, String password) {
+		public Builder(String flowID, String password) {
 			this.flowID = flowID;
 			this.password = password;
 		}
@@ -39,8 +39,8 @@ public class FlowVerifyPasswordRequest {
 			return new FlowVerifyPasswordRequest(this);
 		}
 
-		public void setCancel(Boolean cancel) {
-			this.cancel = cancel;
+		public void setReset(Boolean reset) {
+			this.reset = reset;
 		}
 	}
 }

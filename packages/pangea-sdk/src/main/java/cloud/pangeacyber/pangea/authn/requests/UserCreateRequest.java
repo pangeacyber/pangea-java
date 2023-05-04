@@ -36,7 +36,7 @@ public class UserCreateRequest {
 	@JsonProperty("profile")
 	Profile profile;
 
-	private UserCreateRequest(UserCreateRequestBuilder builder) {
+	private UserCreateRequest(Builder builder) {
 		this.email = builder.email;
 		this.authenticator = builder.authenticator;
 		this.idProvider = builder.idProvider;
@@ -46,7 +46,7 @@ public class UserCreateRequest {
 		this.profile = builder.profile;
 	}
 
-	public static class UserCreateRequestBuilder {
+	public static class Builder {
 
 		String email;
 		String authenticator;
@@ -56,7 +56,7 @@ public class UserCreateRequest {
 		Scopes scopes;
 		Profile profile;
 
-		public UserCreateRequestBuilder(String email, String authenticator, IDProvider idProvider) {
+		public Builder(String email, String authenticator, IDProvider idProvider) {
 			this.email = email;
 			this.authenticator = authenticator;
 			this.idProvider = idProvider;
@@ -66,22 +66,22 @@ public class UserCreateRequest {
 			return new UserCreateRequest(this);
 		}
 
-		public UserCreateRequestBuilder setVerified(Boolean verified) {
+		public Builder setVerified(Boolean verified) {
 			this.verified = verified;
 			return this;
 		}
 
-		public UserCreateRequestBuilder setRequireMFA(Boolean requireMFA) {
+		public Builder setRequireMFA(Boolean requireMFA) {
 			this.requireMFA = requireMFA;
 			return this;
 		}
 
-		public UserCreateRequestBuilder setScopes(Scopes scopes) {
+		public Builder setScopes(Scopes scopes) {
 			this.scopes = scopes;
 			return this;
 		}
 
-		public UserCreateRequestBuilder setProfile(Profile profile) {
+		public Builder setProfile(Profile profile) {
 			this.profile = profile;
 			return this;
 		}

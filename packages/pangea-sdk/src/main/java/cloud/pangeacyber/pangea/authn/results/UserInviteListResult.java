@@ -10,7 +10,21 @@ public class UserInviteListResult {
 	@JsonProperty("invites")
 	UserInvite[] invites;
 
+	@JsonProperty("last")
+	String last;
+
+	@JsonProperty("count")
+	Integer count;
+
 	public UserInvite[] getInvites() {
 		return invites;
+	}
+
+	public String getLast() {
+		return last;
+	}
+
+	public Integer getCount() {
+		return count;
 	}
 }

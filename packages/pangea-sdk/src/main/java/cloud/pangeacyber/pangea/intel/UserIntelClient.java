@@ -32,6 +32,7 @@ public class UserIntelClient extends Client {
 	 *		.setVerbose(true)
 	 *		.build()
 	 *	);
+	 * }
 	 */
 	public UserBreachedResponse breached(UserBreachedRequest request) throws PangeaException, PangeaAPIException {
 		return doPost("/v1/user/breached", request, UserBreachedResponse.class);
@@ -51,6 +52,7 @@ public class UserIntelClient extends Client {
 	 *		.setProvider("spycloud")
 	 *		.build()
 	 *	);
+	 * }
 	 */
 	public UserPasswordBreachedResponse breached(UserPasswordBreachedRequest request)
 		throws PangeaException, PangeaAPIException {

@@ -109,7 +109,7 @@ public abstract class Client {
 		return internalDoPost(path, request, file, responseClass);
 	}
 
-	public <Req, ResponseType extends Response<?>> ResponseType doGet(
+	public <ResponseType extends Response<?>> ResponseType doGet(
 		String path,
 		boolean checkResponse,
 		Class<ResponseType> responseClass
@@ -127,6 +127,14 @@ public abstract class Client {
 			System.out.println(e);
 			throw new PangeaException("Failed to send get request", e);
 		}
+	}
+
+	public <ResponseType extends Response<?>> ResponseType pollResult(
+		String requestId,
+		Class<ResponseType> responseClass
+	) throws PangeaException, PangeaAPIException {
+		String path = pollResultPath(requestId);
+		return doGet(path, true, responseClass);
 	}
 
 	private <Req, ResponseType extends Response<?>> ResponseType internalDoPost(
@@ -180,6 +188,10 @@ public abstract class Client {
 		return now >= start.toSeconds() + this.config.getPollResultTimeout();
 	}
 
+	private String pollResultPath(String requestId) {
+		return String.format("/request/%s", requestId);
+	}
+
 	private CloseableHttpResponse handleQueued(CloseableHttpResponse response) throws PangeaException {
 		if (
 			response.getStatusLine().getStatusCode() != 202 ||
@@ -194,7 +206,7 @@ public abstract class Client {
 		long delay;
 		ResponseHeader header = parseHeader(readBody(response));
 		String requestId = header.getRequestId();
-		String path = String.format("/request/%s", requestId);
+		String path = pollResultPath(requestId);
 
 		while (response.getStatusLine().getStatusCode() == 202 && !reachedTimeout(start)) {
 			delay = getDelay(retryCounter, start);

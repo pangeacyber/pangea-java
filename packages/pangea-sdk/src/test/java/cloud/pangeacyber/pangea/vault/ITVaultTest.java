@@ -35,8 +35,7 @@ public class ITVaultTest {
 	public void setUp() throws ConfigException {
 		client = new VaultClient(Config.fromIntegrationEnvironment(environment));
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
-		LocalDateTime now = LocalDateTime.now();
-		time = dtf.format(now);
+		time = dtf.format(LocalDateTime.now());
 		this.random = new Random();
 	}
 
@@ -67,7 +66,9 @@ public class ITVaultTest {
 		assertEquals(id, rotateResponse.getResult().getId());
 
 		// Encrypt 2
-		EncryptResponse encryptResponse2 = client.encrypt(id, dataB64);
+		EncryptResponse encryptResponse2 = client.encrypt(
+			new EncryptRequest.EncryptRequestBuilder(id, dataB64).setVersion(2).build()
+		);
 		assertEquals(id, encryptResponse1.getResult().getId());
 		assertEquals(Integer.valueOf(2), encryptResponse2.getResult().getVersion());
 		assertNotNull(encryptResponse2.getResult().getCipherText());
@@ -77,7 +78,11 @@ public class ITVaultTest {
 		assertEquals(dataB64, decryptResponse1.getResult().getPlainText());
 
 		// Decrypt 2
-		DecryptResponse decryptResponse2 = client.decrypt(id, encryptResponse2.getResult().getCipherText(), 2);
+		DecryptResponse decryptResponse2 = client.decrypt(
+			new DecryptRequest.DecryptRequestBuilder(id, encryptResponse2.getResult().getCipherText())
+				.setVersion(2)
+				.build()
+		);
 		assertEquals(dataB64, decryptResponse2.getResult().getPlainText());
 
 		// Decrypt default

@@ -84,6 +84,7 @@ public class RedactClient extends Client {
 	/**
 	 * Redact
 	 * @pangea.description Redact sensitive information from provided text.
+	 * @pangea.operationId redact_post_v1_redact
 	 * @param request redact request with text and optional parameters
 	 * @return RedactTextResponse
 	 * @throws PangeaException
@@ -284,6 +285,7 @@ public class RedactClient extends Client {
 	/**
 	 * Redact structured
 	 * @pangea.description Redact sensitive information from structured data (e.g., JSON).
+	 * @pangea.operationId redact_post_v1_redact_structured
 	 * @param request redact structured request with object data and optional parameters
 	 * @return RedactStructuredResponse
 	 * @throws PangeaException

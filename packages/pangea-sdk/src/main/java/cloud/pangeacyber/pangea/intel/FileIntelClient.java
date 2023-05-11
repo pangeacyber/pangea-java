@@ -200,6 +200,7 @@ public class FileIntelClient extends Client {
 	/**
 	 * Reputation check
 	 * @pangea.description Retrieve file reputation from a default provider, using the file's hash.
+	 * @pangea.operationId file_intel_post_v1_reputation
 	 * @param hash hash of the file
 	 * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
 	 * @return FileReputationResponse

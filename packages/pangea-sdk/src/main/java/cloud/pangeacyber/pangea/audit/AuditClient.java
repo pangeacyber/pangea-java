@@ -217,6 +217,7 @@ public class AuditClient extends Client {
 	/**
 	 * Log an entry
 	 * @pangea.description Log an event to Audit Secure Log. By default does not sign event and verbose is left as server default
+	 * @pangea.operationId audit_post_v1_log
 	 * @param event event to log
 	 * @return LogResponse
 	 * @throws PangeaException
@@ -278,8 +279,9 @@ public class AuditClient extends Client {
 	}
 
 	/**
-	 * Get root from Pangea Server
-	 * @pangea.description Get root from three of treeSize from Pangea Server
+	 * Tamperproof verification
+	 * @pangea.description Returns current root hash and consistency proof.
+	 * @pangea.operationId audit_post_v1_root
 	 * @param treeSize tree size to get root
 	 * @return RootResponse
 	 * @throws PangeaException
@@ -380,6 +382,7 @@ public class AuditClient extends Client {
 	/**
 	 * Search
 	 * @pangea.description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
+	 * @pangea.operationId audit_post_v1_search
 	 * @param input query filters to perform search
 	 * @return SearchResponse
 	 * @throws PangeaException
@@ -444,9 +447,10 @@ public class AuditClient extends Client {
 	}
 
 	/**
-	 * Results
-	 * @pangea.description Return result's page from search id.
-	 * @param id A search results identifier returned by the search call. By default verify events and do not verify consistency.
+	 * Results of a search
+	 * @pangea.description Fetch paginated results of a previously executed search. By default: `verifyEvents` is true and `verifyConsistency` is false.
+	 * @pangea.operationId audit_post_v1_results
+	 * @param id A search results identifier returned by the search call.
 	 * @param limit Number of audit records to include in a single set of results.
 	 * @param offset Offset from the start of the result set to start returning results from.
 	 * @return ResultsResponse
@@ -460,7 +464,7 @@ public class AuditClient extends Client {
 
 	/**
 	 * Results - id, limit, offset, verifyConsistency, verifyEvents
-	 * @pangea.description Return result's page from search id. Allow to select to verify or nor consistency proof and events.
+	 * @pangea.description Fetch paginated results of a previously executed search.
 	 * @param id A search results identifier returned by the search call.
 	 * @param limit Number of audit records to include in a single set of results.
 	 * @param offset Offset from the start of the result set to start returning results from.

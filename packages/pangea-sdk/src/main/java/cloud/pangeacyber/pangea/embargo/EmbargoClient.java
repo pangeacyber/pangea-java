@@ -37,6 +37,7 @@ public class EmbargoClient extends Client {
 	/**
 	 * ISO Code Check
 	 * @pangea.description Check a country code against known sanction and trade embargo lists.
+	 * @pangea.operationId embargo_post_v1_iso_check
 	 * @param isoCode Check the country against code the enabled embargo lists.
 	 * @return IsoCheckResponse
 	 * @throws PangeaException
@@ -55,6 +56,7 @@ public class EmbargoClient extends Client {
 	/**
 	 * Check IP
 	 * @pangea.description Check an IP against known sanction and trade embargo lists.
+	 * @pangea.operationId embargo_post_v1_ip_check
 	 * @param ip Geolocate this IP and check the corresponding country against the enabled embargo lists.
 	 * @return IpCheckResponse
 	 * @throws PangeaException

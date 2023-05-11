@@ -1,18 +1,25 @@
 package cloud.pangeacyber.pangea.intel;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.intel.requests.URLReputationRequest;
 import cloud.pangeacyber.pangea.intel.responses.URLReputationResponse;
 
-public class URLIntelClient extends Client {
+public class URLIntelClient extends BaseClient {
+	public URLIntelClient(Builder builder) {
+		super(builder);
+	}
 
-	public static String serviceName = "url-intel";
+	public static class Builder extends BaseClient.Builder<Builder> {
+		public Builder(Config config) {
+			super(config, "url-intel");
+		}
 
-	public URLIntelClient(Config config) {
-		super(config, serviceName);
+		public URLIntelClient build() {
+			return new URLIntelClient(this);
+		}
 	}
 
 	/**
@@ -35,6 +42,6 @@ public class URLIntelClient extends Client {
 	 * }
 	 */
 	public URLReputationResponse reputation(URLReputationRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/reputation", request, URLReputationResponse.class);
+		return post("/v1/reputation", request, URLReputationResponse.class);
 	}
 }

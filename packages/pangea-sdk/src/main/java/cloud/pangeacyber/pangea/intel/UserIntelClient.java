@@ -1,18 +1,26 @@
 package cloud.pangeacyber.pangea.intel;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.intel.requests.*;
 import cloud.pangeacyber.pangea.intel.responses.*;
 
-public class UserIntelClient extends Client {
+public class UserIntelClient extends BaseClient {
 
-	public static String serviceName = "user-intel";
+	public UserIntelClient(Builder builder) {
+		super(builder);
+	}
 
-	public UserIntelClient(Config config) {
-		super(config, serviceName);
+	public static class Builder extends BaseClient.Builder<Builder> {
+		public Builder(Config config) {
+			super(config, "user-intel");
+		}
+
+		public UserIntelClient build() {
+			return new UserIntelClient(this);
+		}
 	}
 
 	/**
@@ -33,7 +41,7 @@ public class UserIntelClient extends Client {
 	 * }
 	 */
 	public UserBreachedResponse breached(UserBreachedRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/breached", request, UserBreachedResponse.class);
+		return post("/v1/user/breached", request, UserBreachedResponse.class);
 	}
 
 	/**
@@ -54,6 +62,6 @@ public class UserIntelClient extends Client {
 	 */
 	public UserPasswordBreachedResponse breached(UserPasswordBreachedRequest request)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/password/breached", request, UserPasswordBreachedResponse.class);
+		return post("/v1/password/breached", request, UserPasswordBreachedResponse.class);
 	}
 }

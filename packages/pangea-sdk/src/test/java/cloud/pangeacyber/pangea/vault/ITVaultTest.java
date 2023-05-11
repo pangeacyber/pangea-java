@@ -33,7 +33,7 @@ public class ITVaultTest {
 
 	@Before
 	public void setUp() throws ConfigException {
-		client = new VaultClient(Config.fromIntegrationEnvironment(environment));
+		client = new VaultClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 		LocalDateTime now = LocalDateTime.now();
 		time = dtf.format(now);

@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.models.MFAProvider;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyMFACompleteRequest;
 import cloud.pangeacyber.pangea.authn.responses.FlowEnrollMFACompleteResponse;
@@ -24,23 +25,23 @@ final class FlowEnrollMFAStartRequest {
 	}
 }
 
-public class FlowEnrollMFA extends Client {
+public class FlowEnrollMFA extends BaseClient {
 
-	public static final String serviceName = "authn";
 
-	public FlowEnrollMFA(Config config) {
-		super(config, serviceName);
+
+	public FlowEnrollMFA(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: Doc
 	public FlowEnrollMFACompleteResponse complete(FlowVerifyMFACompleteRequest request)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/flow/enroll/mfa/complete", request, FlowEnrollMFACompleteResponse.class);
+		return post("/v1/flow/enroll/mfa/complete", request, FlowEnrollMFACompleteResponse.class);
 	}
 
 	// TODO: Doc
 	public FlowEnrollMFAStartResponse start(FlowEnrollMFAStartRequest request)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/flow/enroll/mfa/start", request, FlowEnrollMFAStartResponse.class);
+		return post("/v1/flow/enroll/mfa/start", request, FlowEnrollMFAStartResponse.class);
 	}
 }

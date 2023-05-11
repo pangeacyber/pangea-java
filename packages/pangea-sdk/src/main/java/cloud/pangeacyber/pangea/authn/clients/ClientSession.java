@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.*;
 import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -49,42 +50,42 @@ final class ClientSessionLogoutRequest {
 	}
 }
 
-public class ClientSession extends Client {
+public class ClientSession extends BaseClient {
 
-	public static final String serviceName = "authn";
 
-	public ClientSession(Config config) {
-		super(config, serviceName);
+
+	public ClientSession(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: Doc
 	public ClientSessionInvalidateResponse invalidate(String token, String sessionID)
 		throws PangeaException, PangeaAPIException {
 		ClientSessionInvalidateRequest request = new ClientSessionInvalidateRequest(token, sessionID);
-		return doPost("/v1/client/session/invalidate", request, ClientSessionInvalidateResponse.class);
+		return post("/v1/client/session/invalidate", request, ClientSessionInvalidateResponse.class);
 	}
 
 	// TODO: Doc
 	public ClientSessionListResponse list(ClientSessionListRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/client/session/list", request, ClientSessionListResponse.class);
+		return post("/v1/client/session/list", request, ClientSessionListResponse.class);
 	}
 
 	// TODO: Doc
 	public ClientSessionLogoutResponse logout(String token) throws PangeaException, PangeaAPIException {
 		ClientSessionLogoutRequest request = new ClientSessionLogoutRequest(token);
-		return doPost("/v1/client/session/logout", request, ClientSessionLogoutResponse.class);
+		return post("/v1/client/session/logout", request, ClientSessionLogoutResponse.class);
 	}
 
 	// TODO: Doc
 	public ClientSessionRefreshResponse refresh(String refreshToken) throws PangeaException, PangeaAPIException {
 		ClientSessionRefreshRequest request = new ClientSessionRefreshRequest(refreshToken, null);
-		return doPost("/v1/client/session/refresh", request, ClientSessionRefreshResponse.class);
+		return post("/v1/client/session/refresh", request, ClientSessionRefreshResponse.class);
 	}
 
 	// TODO: Doc
 	public ClientSessionRefreshResponse refresh(String refreshToken, String userToken)
 		throws PangeaException, PangeaAPIException {
 		ClientSessionRefreshRequest request = new ClientSessionRefreshRequest(refreshToken, userToken);
-		return doPost("/v1/client/session/refresh", request, ClientSessionRefreshResponse.class);
+		return post("/v1/client/session/refresh", request, ClientSessionRefreshResponse.class);
 	}
 }

@@ -17,7 +17,7 @@ public class App
             System.exit(1);
         }
 
-        IpIntelClient client = new IpIntelClient(cfg);
+        IpIntelClient client = new IpIntelClient.Builder(cfg).build();
         IPDomainResponse response = null;
         try {
             response = client.getDomain("24.235.114.61", "digitalelement", true, true);

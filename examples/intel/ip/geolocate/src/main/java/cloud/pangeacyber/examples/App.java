@@ -17,7 +17,7 @@ public class App
             System.exit(1);
         }
 
-        IpIntelClient client = new IpIntelClient(cfg);
+        IpIntelClient client = new IpIntelClient.Builder(cfg).build();
         IPGeolocateResponse response = null;
         try {
             response = client.geolocate("93.231.182.110", "digitalelement", true, true);

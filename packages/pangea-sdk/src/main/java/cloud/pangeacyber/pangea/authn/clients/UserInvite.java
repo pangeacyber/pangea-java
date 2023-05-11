@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.UserInviteListRequest;
 import cloud.pangeacyber.pangea.authn.responses.UserInviteDeleteResponse;
 import cloud.pangeacyber.pangea.authn.responses.UserInviteListResponse;
@@ -19,22 +20,19 @@ final class UserInviteDeleteRequest {
 	}
 }
 
-public class UserInvite extends Client {
-
-	public static final String serviceName = "authn";
-
-	public UserInvite(Config config) {
-		super(config, serviceName);
+public class UserInvite extends BaseClient {
+	public UserInvite(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: Doc
 	public UserInviteListResponse list(UserInviteListRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/invite/list", request, UserInviteListResponse.class);
+		return post("/v1/user/invite/list", request, UserInviteListResponse.class);
 	}
 
 	// TODO: Doc
 	public UserInviteDeleteResponse delete(String id) throws PangeaException, PangeaAPIException {
 		UserInviteDeleteRequest request = new UserInviteDeleteRequest(id);
-		return doPost("/v1/user/invite/delete", request, UserInviteDeleteResponse.class);
+		return post("/v1/user/invite/delete", request, UserInviteDeleteResponse.class);
 	}
 }

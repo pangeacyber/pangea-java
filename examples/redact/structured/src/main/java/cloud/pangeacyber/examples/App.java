@@ -20,7 +20,7 @@ public class App
             System.exit(1);
         }
 
-        RedactClient client = new RedactClient(cfg);
+        RedactClient client = new RedactClient.Builder(cfg).build();
         RedactStructuredResponse response = null;
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("Name", "My name is Andres");

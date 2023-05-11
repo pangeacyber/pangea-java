@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.TestEnvironment;
@@ -26,8 +25,8 @@ public class ITDomainIntelTest {
 
 	@Before
 	public void setUp() throws ConfigException {
-		client = new DomainIntelClient(Config.fromIntegrationEnvironment(environment));
-		client.setCustomUserAgent("test");
+		client = new DomainIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
+
 	}
 
 	@Test
@@ -173,7 +172,7 @@ public class ITDomainIntelTest {
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		DomainIntelClient fakeClient = new DomainIntelClient(cfg);
+		DomainIntelClient fakeClient = new DomainIntelClient.Builder(cfg).build();
 		DomainReputationResponse response = fakeClient.reputation(
 			new DomainReputationRequest.Builder("737updatesboeing.com").build()
 		);

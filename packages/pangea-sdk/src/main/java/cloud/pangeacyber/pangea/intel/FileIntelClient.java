@@ -1,6 +1,6 @@
 package cloud.pangeacyber.pangea.intel;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -14,12 +14,19 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.binary.Hex;
 
-public class FileIntelClient extends Client {
+public class FileIntelClient extends BaseClient {
+	public FileIntelClient(Builder builder) {
+		super(builder);
+	}
 
-	public static String serviceName = "file-intel";
+	public static class Builder extends BaseClient.Builder<Builder> {
+		public Builder(Config config) {
+			super(config, "file-intel");
+		}
 
-	public FileIntelClient(Config config) {
-		super(config, serviceName);
+		public FileIntelClient build() {
+			return new FileIntelClient(this);
+		}
 	}
 
 	/**
@@ -39,7 +46,7 @@ public class FileIntelClient extends Client {
 	 */
 	public FileReputationResponse reputation(FileHashReputationRequest request)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/reputation", request, FileReputationResponse.class);
+		return post("/v1/reputation", request, FileReputationResponse.class);
 	}
 
 	public static String calculateSHA256fromFile(String filepath) throws PangeaException {

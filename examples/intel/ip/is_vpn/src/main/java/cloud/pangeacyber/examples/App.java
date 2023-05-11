@@ -17,7 +17,7 @@ public class App
             System.exit(1);
         }
 
-        IpIntelClient client = new IpIntelClient(cfg);
+        IpIntelClient client = new IpIntelClient.Builder(cfg).build();
         IPVPNResponse response = null;
         try {
             response = client.isVPN("2.56.189.74", "digitalelement", true, true);

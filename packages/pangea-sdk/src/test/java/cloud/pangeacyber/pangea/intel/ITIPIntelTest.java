@@ -33,8 +33,8 @@ public class ITIPIntelTest {
 
 	@Before
 	public void setUp() throws ConfigException {
-		client = new IPIntelClient(Config.fromIntegrationEnvironment(environment));
-		client.setCustomUserAgent("test");
+		client = new IPIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
+
 	}
 
 	@Test
@@ -629,7 +629,7 @@ public class ITIPIntelTest {
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		IPIntelClient fakeClient = new IPIntelClient(cfg);
+		IPIntelClient fakeClient = new IPIntelClient.Builder(cfg).build();
 		IPReputationResponse response = fakeClient.reputation(
 			new IPReputationRequest.Builder("93.231.182.110").provider("crowdstrike").verbose(false).raw(false).build()
 		);

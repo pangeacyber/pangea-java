@@ -1,18 +1,26 @@
 package cloud.pangeacyber.pangea.intel;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.intel.requests.DomainReputationRequest;
 import cloud.pangeacyber.pangea.intel.responses.DomainReputationResponse;
 
-public class DomainIntelClient extends Client {
+public class DomainIntelClient extends BaseClient {
 
-	public static String serviceName = "domain-intel";
+	public DomainIntelClient(Builder builder) {
+		super(builder);
+	}
 
-	public DomainIntelClient(Config config) {
-		super(config, serviceName);
+	public static class Builder extends BaseClient.Builder<Builder> {
+		public Builder(Config config) {
+			super(config, "domain-intel");
+		}
+
+		public DomainIntelClient build() {
+			return new DomainIntelClient(this);
+		}
 	}
 
 	/**
@@ -31,6 +39,6 @@ public class DomainIntelClient extends Client {
 	 */
 	public DomainReputationResponse reputation(DomainReputationRequest request)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/reputation", request, DomainReputationResponse.class);
+		return post("/v1/reputation", request, DomainReputationResponse.class);
 	}
 }

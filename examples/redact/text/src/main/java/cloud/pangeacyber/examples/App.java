@@ -17,7 +17,7 @@ public class App
             System.exit(1);
         }
 
-        RedactClient client = new RedactClient(cfg);
+        RedactClient client = new RedactClient.Builder(cfg).build();
         String text = "Hello, my phone number is 123-456-7890";
         RedactTextResponse response = null;
         try {

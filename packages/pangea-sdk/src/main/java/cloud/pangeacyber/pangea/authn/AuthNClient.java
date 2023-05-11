@@ -1,23 +1,31 @@
 package cloud.pangeacyber.pangea.authn;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.authn.clients.ClientEndpoint;
+import cloud.pangeacyber.pangea.authn.clients.Client;
 import cloud.pangeacyber.pangea.authn.clients.Flow;
 import cloud.pangeacyber.pangea.authn.clients.User;
 
-public class AuthNClient extends Client {
-
-	public static final String serviceName = "authn";
+public class AuthNClient extends BaseClient {
 	private User user;
 	private Flow flow;
-	private ClientEndpoint client;
+	private Client client;
 
-	public AuthNClient(Config config) {
-		super(config, serviceName);
-		user = new User(config);
-		flow = new Flow(config);
-		client = new ClientEndpoint(config);
+	public AuthNClient(Builder builder) {
+		super(builder);
+		user = new User(builder);
+		flow = new Flow(builder);
+		client = new Client(builder);
+	}
+
+	public static class Builder extends BaseClient.Builder<Builder> {
+		public Builder(Config config) {
+			super(config, "authn");
+		}
+
+		public AuthNClient build() {
+			return new AuthNClient(this);
+		}
 	}
 
 	public User user() {
@@ -28,7 +36,7 @@ public class AuthNClient extends Client {
 		return flow;
 	}
 
-	public ClientEndpoint client() {
+	public Client client() {
 		return client;
 	}
 }

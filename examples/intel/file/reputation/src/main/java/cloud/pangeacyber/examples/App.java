@@ -17,7 +17,7 @@ public class App
             System.exit(1);
         }
 
-        FileIntelClient client = new FileIntelClient(cfg);
+        FileIntelClient client = new FileIntelClient.Builder(cfg).build();
         FileReputationResponse response = null;
         try {
             response = client.reputation("142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", "sha256", "reversinglabs", true, true);

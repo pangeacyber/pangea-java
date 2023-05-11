@@ -1,18 +1,25 @@
 package cloud.pangeacyber.pangea.intel;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.intel.requests.*;
 import cloud.pangeacyber.pangea.intel.responses.*;
 
-public class IPIntelClient extends Client {
+public class IPIntelClient extends BaseClient {
+	public IPIntelClient(Builder builder) {
+		super(builder);
+	}
 
-	public static String serviceName = "ip-intel";
+	public static class Builder extends BaseClient.Builder<Builder> {
+		public Builder(Config config) {
+			super(config, "ip-intel");
+		}
 
-	public IPIntelClient(Config config) {
-		super(config, serviceName);
+		public IPIntelClient build() {
+			return new IPIntelClient(this);
+		}
 	}
 
 	/**
@@ -30,7 +37,7 @@ public class IPIntelClient extends Client {
 		// FIXME:
 	 */
 	public IPGeolocateResponse geolocate(IPGeolocateRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/geolocate", request, IPGeolocateResponse.class);
+		return post("/v1/geolocate", request, IPGeolocateResponse.class);
 	}
 
 	/**
@@ -45,7 +52,7 @@ public class IPIntelClient extends Client {
 		// FIXME:
 	 */
 	public IPDomainResponse getDomain(IPDomainRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/domain", request, IPDomainResponse.class);
+		return post("/v1/domain", request, IPDomainResponse.class);
 	}
 
 	/**
@@ -60,7 +67,7 @@ public class IPIntelClient extends Client {
 		// FIXME:
 	 */
 	public IPVPNResponse isVPN(IPVPNRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/vpn", request, IPVPNResponse.class);
+		return post("/v1/vpn", request, IPVPNResponse.class);
 	}
 
 	/**
@@ -78,7 +85,7 @@ public class IPIntelClient extends Client {
 		//FIXME:
 	 */
 	public IPProxyResponse isProxy(IPProxyRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/proxy", request, IPProxyResponse.class);
+		return post("/v1/proxy", request, IPProxyResponse.class);
 	}
 
 	/**
@@ -96,6 +103,6 @@ public class IPIntelClient extends Client {
 		//FIXME:
 	 */
 	public IPReputationResponse reputation(IPReputationRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/reputation", request, IPReputationResponse.class);
+		return post("/v1/reputation", request, IPReputationResponse.class);
 	}
 }

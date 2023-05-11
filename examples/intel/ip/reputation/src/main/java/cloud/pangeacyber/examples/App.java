@@ -17,7 +17,7 @@ public class App
             System.exit(1);
         }
 
-        IpIntelClient client = new IpIntelClient(cfg);
+        IpIntelClient client = new IpIntelClient.Builder(cfg).build();
         IPReputationResponse response = null;
         try {
             response = client.reputation("93.231.182.110", "crowdstrike", true, true);

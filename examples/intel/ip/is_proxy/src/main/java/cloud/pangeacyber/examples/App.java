@@ -17,7 +17,7 @@ public class App
             System.exit(1);
         }
 
-        IpIntelClient client = new IpIntelClient(cfg);
+        IpIntelClient client = new IpIntelClient.Builder(cfg).build();
         IPProxyResponse response = null;
         try {
             response = client.isProxy("1.0.136.28", "digitalelement", true, true);

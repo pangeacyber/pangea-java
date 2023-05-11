@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
 import cloud.pangeacyber.pangea.authn.models.Profile;
 import cloud.pangeacyber.pangea.authn.responses.UserLoginResponse;
@@ -53,38 +54,36 @@ final class UserLoginSocialRequest {
 	}
 }
 
-public class UserLogin extends Client {
+public class UserLogin extends BaseClient {
 
-	public static final String serviceName = "authn";
-
-	public UserLogin(Config config) {
-		super(config, serviceName);
+	public UserLogin(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: Doc
 	public UserLoginResponse Password(String email, String password) throws PangeaException, PangeaAPIException {
 		UserLoginPasswordRequest request = new UserLoginPasswordRequest(email, password, null);
-		return doPost("/v1/user/login/password", request, UserLoginResponse.class);
+		return post("/v1/user/login/password", request, UserLoginResponse.class);
 	}
 
 	// TODO: Doc
 	public UserLoginResponse Password(String email, String password, Profile extraProfile)
 		throws PangeaException, PangeaAPIException {
 		UserLoginPasswordRequest request = new UserLoginPasswordRequest(email, password, extraProfile);
-		return doPost("/v1/user/login/password", request, UserLoginResponse.class);
+		return post("/v1/user/login/password", request, UserLoginResponse.class);
 	}
 
 	// TODO: Doc
 	public UserLoginResponse Social(IDProvider provider, String email, String socialID)
 		throws PangeaException, PangeaAPIException {
 		UserLoginSocialRequest request = new UserLoginSocialRequest(provider, email, socialID, null);
-		return doPost("/v1/user/login/social", request, UserLoginResponse.class);
+		return post("/v1/user/login/social", request, UserLoginResponse.class);
 	}
 
 	// TODO: Doc
 	public UserLoginResponse Social(IDProvider provider, String email, String socialID, Profile extraProfile)
 		throws PangeaException, PangeaAPIException {
 		UserLoginSocialRequest request = new UserLoginSocialRequest(provider, email, socialID, extraProfile);
-		return doPost("/v1/user/login/social", request, UserLoginResponse.class);
+		return post("/v1/user/login/social", request, UserLoginResponse.class);
 	}
 }

@@ -25,8 +25,8 @@ public class ITURLIntelTest {
 
 	@Before
 	public void setUp() throws ConfigException {
-		client = new URLIntelClient(Config.fromIntegrationEnvironment(environment));
-		client.setCustomUserAgent("test");
+		client = new URLIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
+
 	}
 
 	@Test
@@ -184,7 +184,7 @@ public class ITURLIntelTest {
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		URLIntelClient fakeClient = new URLIntelClient(cfg);
+		URLIntelClient fakeClient = new URLIntelClient.Builder(cfg).build();
 		URLReputationResponse response = fakeClient.reputation(
 			new URLReputationRequest.Builder("http://113.235.101.11:54384")
 				.provider("crowdstrike")

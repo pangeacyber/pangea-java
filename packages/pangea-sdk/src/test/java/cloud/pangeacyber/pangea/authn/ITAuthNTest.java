@@ -42,7 +42,7 @@ public class ITAuthNTest {
 	@Before
 	public void setUp() throws ConfigException {
 		this.cfg = Config.fromIntegrationEnvironment(environment);
-		client = new AuthNClient(cfg);
+		client = new AuthNClient.Builder(cfg).build();
 
 		profileOld.put("name", "User name");
 		profileOld.put("country", "Argentina");

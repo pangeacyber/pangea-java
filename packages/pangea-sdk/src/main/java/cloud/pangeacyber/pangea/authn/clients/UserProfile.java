@@ -1,7 +1,7 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
-import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.BaseClient;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.UserProfileUpdateRequest;
 import cloud.pangeacyber.pangea.authn.responses.UserProfileGetResponse;
 import cloud.pangeacyber.pangea.authn.responses.UserProfileUpdateResponse;
@@ -27,29 +27,26 @@ final class UserProfileGetRequest {
 	}
 }
 
-public class UserProfile extends Client {
-
-	public static final String serviceName = "authn";
-
-	public UserProfile(Config config) {
-		super(config, serviceName);
+public class UserProfile extends BaseClient {
+	public UserProfile(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: Doc
 	public UserProfileGetResponse getByEmail(String email) throws PangeaException, PangeaAPIException {
 		UserProfileGetRequest request = new UserProfileGetRequest(email, null);
-		return doPost("/v1/user/profile/get", request, UserProfileGetResponse.class);
+		return post("/v1/user/profile/get", request, UserProfileGetResponse.class);
 	}
 
 	// TODO: Doc
 	public UserProfileGetResponse getByID(String id) throws PangeaException, PangeaAPIException {
 		UserProfileGetRequest request = new UserProfileGetRequest(null, id);
-		return doPost("/v1/user/profile/get", request, UserProfileGetResponse.class);
+		return post("/v1/user/profile/get", request, UserProfileGetResponse.class);
 	}
 
 	// TODO: Doc
 	public UserProfileUpdateResponse update(UserProfileUpdateRequest request)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/profile/update", request, UserProfileUpdateResponse.class);
+		return post("/v1/user/profile/update", request, UserProfileUpdateResponse.class);
 	}
 }

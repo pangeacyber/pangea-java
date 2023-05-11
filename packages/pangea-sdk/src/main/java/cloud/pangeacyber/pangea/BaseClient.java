@@ -5,10 +5,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.net.http.HttpRequest.Builder;
+import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Map;
+import java.util.logging.Logger;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -24,20 +26,63 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
-public abstract class Client {
+public class BaseClient {
 
 	Config config;
+	protected Logger logger;
 	CloseableHttpClient httpClient;
-	Builder httpRequestBuilder;
-	String serviceName;
+	HttpRequest.Builder httpRequestBuilder;
+	public final String serviceName;
 	Map<String, String> customHeaders = null;
 	String userAgent = "pangea-java/default";
 
-	protected Client(Config config, String serviceName) {
-		this.serviceName = serviceName;
-		this.config = config;
+	protected BaseClient(Builder<?> builder) {
+		this.serviceName = builder.serviceName;
+		this.config = builder.config;
+		this.logger = builder.logger;
 		this.httpClient = buildClient();
-		this.setCustomUserAgent(config.getCustomUserAgent());
+		this.setUserAgent(config.getCustomUserAgent());
+	}
+
+	public static class Builder<B extends Builder<B>>{
+		Config config;
+		String serviceName;
+		Logger logger;
+		Map<String, String> customHeaders;
+		String customUserAgent;
+
+		public Builder(Config config, String serviceName) {
+			this.config = config;
+			this.serviceName = serviceName;
+			this.logger = Logger.getLogger("pangea");
+			this.customHeaders = null;
+		}
+
+		public BaseClient build() {
+			return new BaseClient(this);
+		}
+
+		@SuppressWarnings("unchecked")
+		final B self() {
+			return (B) this;
+		}
+
+		public B logger(Logger logger) {
+			this.logger = logger;
+			return self();
+		}
+
+		public B customHeaders(Map<String, String> customHeaders) {
+			this.customHeaders = customHeaders;
+			return self();
+		}
+	}
+
+	private void setUserAgent(String customUserAgent) {
+		this.userAgent = "pangea-java/" + Version.VERSION;
+		if (customUserAgent != null && !customUserAgent.isEmpty()) {
+			this.userAgent += " " + customUserAgent;
+		}
 	}
 
 	protected CloseableHttpClient buildClient() {
@@ -92,33 +137,33 @@ public abstract class Client {
 		return;
 	}
 
-	public <Req, ResponseType extends Response<?>> ResponseType doPost(
+	protected <Req, ResponseType extends Response<?>> ResponseType post(
 		String path,
 		Req request,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
-		return internalDoPost(path, request, null, responseClass);
+		return doPost(path, request, null, responseClass);
 	}
 
-	public <Req, ResponseType extends Response<?>> ResponseType doPost(
+	protected <Req, ResponseType extends Response<?>> ResponseType post(
 		String path,
 		Req request,
 		File file,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
-		return internalDoPost(path, request, file, responseClass);
+		return doPost(path, request, file, responseClass);
 	}
 
-	public <ResponseType extends Response<?>> ResponseType doGet(
+	protected <ResponseType extends Response<?>> ResponseType get(
 		String path,
 		boolean checkResponse,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
-		CloseableHttpResponse httpResponse = internalGet(path);
+		CloseableHttpResponse httpResponse = doGet(path);
 		return checkResponse(httpResponse, responseClass);
 	}
 
-	private CloseableHttpResponse internalGet(String path) throws PangeaException {
+	private CloseableHttpResponse doGet(String path) throws PangeaException {
 		try {
 			HttpGet httpGet = new HttpGet(config.getServiceUrl(serviceName, path));
 			fillHeaders(httpGet);
@@ -134,10 +179,10 @@ public abstract class Client {
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
 		String path = pollResultPath(requestId);
-		return doGet(path, true, responseClass);
+		return get(path, true, responseClass);
 	}
 
-	private <Req, ResponseType extends Response<?>> ResponseType internalDoPost(
+	private <Req, ResponseType extends Response<?>> ResponseType doPost(
 		String path,
 		Req request,
 		File file,
@@ -214,7 +259,7 @@ public abstract class Client {
 			try {
 				Thread.sleep(Duration.ofSeconds(delay));
 				EntityUtils.consumeQuietly(response.getEntity()); //response need to be consumed
-				response = internalGet(path);
+				response = doGet(path);
 				retryCounter++;
 			} catch (InterruptedException e) {}
 		}
@@ -316,14 +361,4 @@ public abstract class Client {
 		}
 	}
 
-	public void setCustomHeaders(Map<String, String> customHeaders) {
-		this.customHeaders = customHeaders;
-	}
-
-	public void setCustomUserAgent(String customUserAgent) {
-		this.userAgent = "pangea-java/" + Version.VERSION;
-		if (customUserAgent != null && !customUserAgent.isEmpty()) {
-			this.userAgent += " " + customUserAgent;
-		}
-	}
 }

@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.*;
 import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -45,28 +46,28 @@ final class SessionLogoutRequest {
 	}
 }
 
-public class Session extends Client {
+public class Session extends BaseClient {
 
-	public static final String serviceName = "authn";
 
-	public Session(Config config) {
-		super(config, serviceName);
+
+	public Session(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: Doc
 	public SessionInvalidateResponse invalidate(String sessionID) throws PangeaException, PangeaAPIException {
 		SessionInvalidateRequest request = new SessionInvalidateRequest(sessionID);
-		return doPost("/v1/session/invalidate", request, SessionInvalidateResponse.class);
+		return post("/v1/session/invalidate", request, SessionInvalidateResponse.class);
 	}
 
 	// TODO: Doc
 	public SessionListResponse list(SessionListRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/session/list", request, SessionListResponse.class);
+		return post("/v1/session/list", request, SessionListResponse.class);
 	}
 
 	// TODO: Doc
 	public SessionLogoutResponse logout(String userID) throws PangeaException, PangeaAPIException {
 		SessionLogoutRequest request = new SessionLogoutRequest(userID);
-		return doPost("/v1/session/logout", request, SessionLogoutResponse.class);
+		return post("/v1/session/logout", request, SessionLogoutResponse.class);
 	}
 }

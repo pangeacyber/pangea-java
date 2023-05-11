@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.ClientJWKSResponse;
 import cloud.pangeacyber.pangea.authn.responses.ClientUserinfoResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -19,29 +20,28 @@ final class UserinfoResquest {
 	}
 }
 
-public class ClientEndpoint extends Client {
+public class Client extends BaseClient {
 
-	public static final String serviceName = "authn";
 	private ClientSession session;
 	private ClientPassword password;
 	private ClientToken token;
 
-	public ClientEndpoint(Config config) {
-		super(config, serviceName);
-		session = new ClientSession(config);
-		password = new ClientPassword(config);
-		token = new ClientToken(config);
+	public Client(AuthNClient.Builder builder) {
+		super(builder);
+		session = new ClientSession(builder);
+		password = new ClientPassword(builder);
+		token = new ClientToken(builder);
 	}
 
 	// TODO: Doc
 	public ClientUserinfoResponse userinfo(String code) throws PangeaException, PangeaAPIException {
 		UserinfoResquest request = new UserinfoResquest(code);
-		ClientUserinfoResponse resp = doPost("/v1/client/userinfo", request, ClientUserinfoResponse.class);
+		ClientUserinfoResponse resp = post("/v1/client/userinfo", request, ClientUserinfoResponse.class);
 		return resp;
 	}
 
 	public ClientJWKSResponse jwks() throws PangeaException, PangeaAPIException {
-		return doPost("/v1/client/jwks", new HashMap<String, String>(), ClientJWKSResponse.class);
+		return post("/v1/client/jwks", new HashMap<String, String>(), ClientJWKSResponse.class);
 	}
 
 	public ClientSession session() {

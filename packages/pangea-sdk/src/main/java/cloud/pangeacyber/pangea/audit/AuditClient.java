@@ -1,6 +1,6 @@
 package cloud.pangeacyber.pangea.audit;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.audit.arweave.*;
 import cloud.pangeacyber.pangea.audit.models.*;
@@ -63,7 +63,7 @@ final class LogRequest {
 	}
 }
 
-public class AuditClient extends Client {
+public class AuditClient extends BaseClient {
 
 	public static String serviceName = "audit";
 	LogSigner signer;
@@ -73,8 +73,8 @@ public class AuditClient extends Client {
 	Map<String, Object> pkInfo = null;
 	String tenantID = null;
 
-	protected AuditClient(AuditClientBuilder builder) {
-		super(builder.config, serviceName);
+	public AuditClient(Builder builder) {
+		super(builder);
 		if (builder.privateKeyFilename != null) {
 			this.signer = new LogSigner(builder.privateKeyFilename);
 		} else {
@@ -85,6 +85,37 @@ public class AuditClient extends Client {
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
 	}
 
+	public static class Builder extends BaseClient.Builder<Builder> {
+
+		String privateKeyFilename = null;
+		String tenantID = null;
+		Config config;
+		Map<String, Object> pkInfo = null;
+
+		public Builder(Config config) {
+			super(config, "audit");
+		}
+
+		public AuditClient build() {
+			return new AuditClient(this);
+		}
+
+		public Builder withPrivateKey(String privateKeyFilename) {
+			this.privateKeyFilename = privateKeyFilename;
+			return this;
+		}
+
+		public Builder withTenantID(String tenantID) {
+			this.tenantID = tenantID;
+			return this;
+		}
+
+		public Builder withPkInfo(Map<String, Object> pkInfo) {
+			this.pkInfo = pkInfo;
+			return this;
+		}
+	}
+
 	private LogResponse logPost(IEvent event, Boolean verbose, String signature, String publicKey, boolean verify)
 		throws PangeaException, PangeaAPIException {
 		String prevRoot = null;
@@ -93,7 +124,7 @@ public class AuditClient extends Client {
 			prevRoot = this.prevUnpublishedRoot;
 		}
 		LogRequest request = new LogRequest(event, verbose, signature, publicKey, prevRoot);
-		return doPost("/v1/log", request, LogResponse.class);
+		return post("/v1/log", request, LogResponse.class);
 	}
 
 	private <EventType extends IEvent> LogResponse doLog(IEvent event, Class<EventType> eventType, LogConfig config)
@@ -197,7 +228,7 @@ public class AuditClient extends Client {
 
 	private RootResponse rootPost(Integer treeSize) throws PangeaException, PangeaAPIException {
 		RootRequest request = new RootRequest(treeSize);
-		return doPost("/v1/root", request, RootResponse.class);
+		return post("/v1/root", request, RootResponse.class);
 	}
 
 	/**
@@ -343,7 +374,7 @@ public class AuditClient extends Client {
 		Class<EventType> eventType,
 		SearchConfig config
 	) throws PangeaException, PangeaAPIException {
-		SearchResponse response = doPost("/v1/search", request, SearchResponse.class);
+		SearchResponse response = post("/v1/search", request, SearchResponse.class);
 		processSearchResult(response.getResult(), eventType, config);
 		return response;
 	}
@@ -353,7 +384,7 @@ public class AuditClient extends Client {
 		Class<EventType> eventType,
 		SearchConfig config
 	) throws PangeaException, PangeaAPIException {
-		ResultsResponse response = doPost("/v1/results", request, ResultsResponse.class);
+		ResultsResponse response = post("/v1/results", request, ResultsResponse.class);
 		processSearchResult(response.getResult(), eventType, config);
 		return response;
 	}
@@ -374,36 +405,5 @@ public class AuditClient extends Client {
 		SearchConfig config
 	) throws PangeaException, PangeaAPIException {
 		return resultPost(request, eventType, config);
-	}
-
-	public static class AuditClientBuilder {
-
-		String privateKeyFilename = null;
-		String tenantID = null;
-		Config config;
-		Map<String, Object> pkInfo = null;
-
-		AuditClientBuilder(Config config) {
-			this.config = config;
-		}
-
-		public AuditClient build() {
-			return new AuditClient(this);
-		}
-
-		public AuditClientBuilder withPrivateKey(String privateKeyFilename) {
-			this.privateKeyFilename = privateKeyFilename;
-			return this;
-		}
-
-		public AuditClientBuilder withTenantID(String tenantID) {
-			this.tenantID = tenantID;
-			return this;
-		}
-
-		public AuditClientBuilder withPkInfo(Map<String, Object> pkInfo) {
-			this.pkInfo = pkInfo;
-			return this;
-		}
 	}
 }

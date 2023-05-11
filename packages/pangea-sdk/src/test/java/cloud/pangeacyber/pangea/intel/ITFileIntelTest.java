@@ -26,8 +26,8 @@ public class ITFileIntelTest {
 
 	@Before
 	public void setUp() throws ConfigException {
-		client = new FileIntelClient(Config.fromIntegrationEnvironment(environment));
-		client.setCustomUserAgent("test");
+		client = new FileIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
+
 	}
 
 	@Test
@@ -261,7 +261,7 @@ public class ITFileIntelTest {
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		FileIntelClient fakeClient = new FileIntelClient(cfg);
+		FileIntelClient fakeClient = new FileIntelClient.Builder(cfg).build();
 		FileReputationResponse response = fakeClient.reputation(
 			new FileHashReputationRequest.Builder(
 				"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",

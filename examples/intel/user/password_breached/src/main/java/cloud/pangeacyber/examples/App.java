@@ -18,7 +18,7 @@ public class App
             System.exit(1);
         }
 
-        UserIntelClient client = new UserIntelClient(cfg);
+        UserIntelClient client = new UserIntelClient.Builder(cfg).build();
         UserPasswordBreachedResponse response = null;
         try {
             response = client.breached(

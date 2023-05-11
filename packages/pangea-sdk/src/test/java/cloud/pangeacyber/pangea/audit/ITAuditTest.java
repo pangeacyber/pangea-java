@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.TestEnvironment;
-import cloud.pangeacyber.pangea.audit.AuditClient.AuditClientBuilder;
+import cloud.pangeacyber.pangea.audit.AuditClient;
 import cloud.pangeacyber.pangea.audit.models.*;
 import cloud.pangeacyber.pangea.audit.requests.*;
 import cloud.pangeacyber.pangea.audit.responses.*;
@@ -45,27 +45,27 @@ public class ITAuditTest {
 		Map<String, Object> pkInfo = new LinkedHashMap<String, Object>();
 		pkInfo.put("ExtraInfo", "LocalKey");
 
-		client = new AuditClientBuilder(cfg).build();
-		vaultSignClient = new AuditClientBuilder(vaultCfg).build();
-		customSchemaClient = new AuditClientBuilder(customSchemaCfg).build();
+		client = new AuditClient.Builder(cfg).build();
+		vaultSignClient = new AuditClient.Builder(vaultCfg).build();
+		customSchemaClient = new AuditClient.Builder(customSchemaCfg).build();
 
 		localSignClient =
-			new AuditClientBuilder(cfg)
+			new AuditClient.Builder(cfg)
 				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
 				.build();
 
 		localSignCustomSchemaClient =
-			new AuditClientBuilder(customSchemaCfg)
+			new AuditClient.Builder(customSchemaCfg)
 				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
 				.build();
 
 		signNtenandIDClient =
-			new AuditClientBuilder(cfg)
+			new AuditClient.Builder(cfg)
 				.withTenantID("mytenantid")
 				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
 				.build();
 		localSignInfoClient =
-			new AuditClientBuilder(cfg)
+			new AuditClient.Builder(cfg)
 				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
 				.withPkInfo(pkInfo)
 				.build();
@@ -880,7 +880,7 @@ public class ITAuditTest {
 		int treeSize = 1;
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		AuditClient fakeClient = new AuditClientBuilder(cfg).build();
+		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
 		RootResponse response = fakeClient.getRoot(treeSize);
 	}
 
@@ -888,7 +888,7 @@ public class ITAuditTest {
 	public void testLogUnathorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		AuditClient fakeClient = new AuditClientBuilder(cfg).build();
+		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
 		Event event = new Event("Test msg");
 		LogResponse response = fakeClient.log(
 			event,
@@ -915,7 +915,7 @@ public class ITAuditTest {
 	public void testSearchValidationException2() throws PangeaAPIException, PangeaException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		AuditClient fakeClient = new AuditClientBuilder(cfg).build();
+		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
 
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").build();
 		SearchConfig config = new SearchConfig.Builder().build();

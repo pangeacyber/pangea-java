@@ -1,6 +1,6 @@
 package cloud.pangeacyber.pangea.redact;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -9,12 +9,19 @@ import cloud.pangeacyber.pangea.redact.requests.RedactTextRequest;
 import cloud.pangeacyber.pangea.redact.responses.RedactStructuredResponse;
 import cloud.pangeacyber.pangea.redact.responses.RedactTextResponse;
 
-public class RedactClient extends Client {
+public class RedactClient extends BaseClient {
+	public RedactClient(Builder builder) {
+		super(builder);
+	}
 
-	public static String serviceName = "redact";
+	public static class Builder extends BaseClient.Builder<Builder> {
+		public Builder(Config config) {
+			super(config, "redact");
+		}
 
-	public RedactClient(Config config) {
-		super(config, serviceName);
+		public RedactClient build() {
+			return new RedactClient(this);
+		}
 	}
 
 	/**
@@ -32,7 +39,7 @@ public class RedactClient extends Client {
 	 * }
 	 */
 	public RedactTextResponse redactText(RedactTextRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/redact", request, RedactTextResponse.class);
+		return post("/v1/redact", request, RedactTextResponse.class);
 	}
 
 	/**
@@ -60,6 +67,6 @@ public class RedactClient extends Client {
 	 */
 	public RedactStructuredResponse redactStructured(RedactStructuredRequest request)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/redact_structured", request, RedactStructuredResponse.class);
+		return post("/v1/redact_structured", request, RedactStructuredResponse.class);
 	}
 }

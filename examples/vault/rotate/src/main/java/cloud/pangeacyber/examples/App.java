@@ -19,7 +19,7 @@ public class App
             System.exit(1);
         }
 
-        VaultClient client = new VaultClient(cfg);
+        VaultClient client = new VaultClient.Builder(cfg).build();
         String secretV1 = "mysecret";
         String secretV2 = "mynewsecret";
         SecretStoreResponse storeResponse = null;

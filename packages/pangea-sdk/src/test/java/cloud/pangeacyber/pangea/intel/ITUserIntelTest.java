@@ -26,8 +26,8 @@ public class ITUserIntelTest {
 
 	@Before
 	public void setUp() throws ConfigException {
-		client = new UserIntelClient(Config.fromIntegrationEnvironment(environment));
-		client.setCustomUserAgent("test");
+		client = new UserIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
+
 	}
 
 	@Test

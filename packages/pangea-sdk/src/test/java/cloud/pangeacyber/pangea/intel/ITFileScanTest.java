@@ -28,8 +28,8 @@ public class ITFileScanTest {
 
 	@Before
 	public void setUp() throws ConfigException {
-		client = new FileScanClient(Config.fromIntegrationEnvironment(environment));
-		client.setCustomUserAgent("test");
+		client = new FileScanClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
+
 	}
 
 	public File eicar() throws IOException {
@@ -61,8 +61,8 @@ public class ITFileScanTest {
 		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
-		client = new FileScanClient(cfg);
-		client.setCustomUserAgent("test");
+		client = new FileScanClient.Builder(cfg).build();
+
 
 		File file = eicar();
 		FileScanResponse response = client.scan(
@@ -76,8 +76,8 @@ public class ITFileScanTest {
 		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
-		client = new FileScanClient(cfg);
-		client.setCustomUserAgent("test");
+		client = new FileScanClient.Builder(cfg).build();
+
 
 		FileScanResponse response;
 		File file = eicar();

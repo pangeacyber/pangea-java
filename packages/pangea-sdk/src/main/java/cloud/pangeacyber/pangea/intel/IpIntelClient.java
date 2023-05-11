@@ -499,7 +499,6 @@ public class IpIntelClient extends Client {
 	/**
 	 * Reputation
 	 * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
-	 * @pangea.@operationId ip_intel_post_v1_reputation
 	 * @param ip The IP to be looked up
 	 * @return IpReputationResponse
 	 * @throws PangeaException
@@ -517,6 +516,7 @@ public class IpIntelClient extends Client {
 	/**
 	 * Reputation - provider
 	 * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
+	 * @pangea.@operationId ip_intel_post_v1_reputation
 	 * @param ip The IP to be looked up
 	 * @param provider Use reputation data from this provider
 	 * @return IpReputationResponse

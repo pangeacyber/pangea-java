@@ -177,6 +177,7 @@ public class IpIntelClient extends Client {
 	/**
 	 * Geolocate - provider
 	 * @pangea.description Retrieve information about the location of an IP address
+	 * @pangea.operationId ip_intel_post_v1_geolocate
 	 * @param ip The IP to be looked up
 	 * @param provider Use reputation data from this provider
 	 * @return IPGeolocateResponse
@@ -266,6 +267,7 @@ public class IpIntelClient extends Client {
 	/**
 	 * Domain - ip, provider
 	 * @pangea.description Retrieve the domain name associated with an IP address
+	 * @operationId ip_intel_post_v1_domain
 	 * @param ip The IP to be looked up
 	 * @return IpDomainResponse
 	 * @throws PangeaException
@@ -349,6 +351,7 @@ public class IpIntelClient extends Client {
 	/**
 	 * VPN - ip, provider
 	 * @pangea.description Determine if an IP address is provided by a VPN service
+	 * @pangea.operationId ip_intel_post_v1_vpn
 	 * @param ip The IP to be looked up
 	 * @return IpVPNResponse
 	 * @throws PangeaException
@@ -431,6 +434,7 @@ public class IpIntelClient extends Client {
 	/**
 	 * Proxy - provider
 	 * @pangea.description Determine if an IP address is provided by a proxy service
+	 * @pangea.operationId ip_intel_post_v1_proxy
 	 * @param ip The IP to be looked up
 	 * @param provider Use reputation data from this provider
 	 * @return IpProxyResponse
@@ -495,6 +499,7 @@ public class IpIntelClient extends Client {
 	/**
 	 * Reputation
 	 * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
+	 * @pangea.@operationId ip_intel_post_v1_reputation
 	 * @param ip The IP to be looked up
 	 * @return IpReputationResponse
 	 * @throws PangeaException

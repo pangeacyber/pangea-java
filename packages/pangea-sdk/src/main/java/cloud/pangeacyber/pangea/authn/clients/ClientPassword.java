@@ -28,8 +28,6 @@ final class ClientPasswordChangeResquest {
 
 public class ClientPassword extends BaseClient {
 
-
-
 	public ClientPassword(AuthNClient.Builder builder) {
 		super(builder);
 	}

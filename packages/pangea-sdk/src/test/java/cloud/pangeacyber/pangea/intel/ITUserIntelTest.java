@@ -27,7 +27,6 @@ public class ITUserIntelTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new UserIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
-
 	}
 
 	@Test

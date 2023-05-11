@@ -7,6 +7,7 @@ import cloud.pangeacyber.pangea.authn.clients.Flow;
 import cloud.pangeacyber.pangea.authn.clients.User;
 
 public class AuthNClient extends BaseClient {
+
 	private User user;
 	private Flow flow;
 	private Client client;
@@ -19,6 +20,7 @@ public class AuthNClient extends BaseClient {
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
+
 		public Builder(Config config) {
 			super(config, "authn");
 		}

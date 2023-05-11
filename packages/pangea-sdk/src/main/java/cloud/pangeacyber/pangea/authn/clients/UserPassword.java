@@ -22,6 +22,7 @@ final class UserPasswordResetRequest {
 }
 
 public class UserPassword extends BaseClient {
+
 	public UserPassword(AuthNClient.Builder builder) {
 		super(builder);
 	}

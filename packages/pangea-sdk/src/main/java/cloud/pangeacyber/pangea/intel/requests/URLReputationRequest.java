@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.intel.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class URLReputationRequest extends IntelCommonRequest {
 
 	@JsonProperty("url")

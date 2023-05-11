@@ -6,7 +6,7 @@ public class FileScanRequest extends IntelCommonRequest {
 		super(builder);
 	}
 
-	public static class Builder extends  IntelCommonRequest.CommonBuilder<Builder> {
+	public static class Builder extends IntelCommonRequest.CommonBuilder<Builder> {
 
 		public Builder() {}
 

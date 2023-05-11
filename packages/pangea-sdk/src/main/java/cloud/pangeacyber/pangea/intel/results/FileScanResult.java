@@ -1,8 +1,7 @@
 package cloud.pangeacyber.pangea.intel.results;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import cloud.pangeacyber.pangea.intel.models.FileScanData;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class FileScanResult extends IntelCommonResult {
 

@@ -34,7 +34,6 @@ public class ITIPIntelTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new IPIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
-
 	}
 
 	@Test

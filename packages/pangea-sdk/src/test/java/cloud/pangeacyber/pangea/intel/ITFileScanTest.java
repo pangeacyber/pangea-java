@@ -13,7 +13,6 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.intel.models.FileScanData;
 import cloud.pangeacyber.pangea.intel.requests.FileScanRequest;
 import cloud.pangeacyber.pangea.intel.responses.FileScanResponse;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,7 +28,6 @@ public class ITFileScanTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new FileScanClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
-
 	}
 
 	public File eicar() throws IOException {
@@ -44,10 +42,7 @@ public class ITFileScanTest {
 	@Test
 	public void testFileScan_Scan() throws PangeaException, PangeaException, PangeaAPIException, IOException {
 		File file = eicar();
-		FileScanResponse response = client.scan(
-			new FileScanRequest.Builder().provider("reversinglabs").build(),
-			file
-		);
+		FileScanResponse response = client.scan(new FileScanRequest.Builder().provider("reversinglabs").build(), file);
 		assertTrue(response.isOk());
 
 		FileScanData data = response.getResult().getData();
@@ -63,12 +58,8 @@ public class ITFileScanTest {
 		cfg.setQueuedRetryEnabled(false);
 		client = new FileScanClient.Builder(cfg).build();
 
-
 		File file = eicar();
-		FileScanResponse response = client.scan(
-			new FileScanRequest.Builder().provider("reversinglabs").build(),
-			file
-		);
+		FileScanResponse response = client.scan(new FileScanRequest.Builder().provider("reversinglabs").build(), file);
 	}
 
 	@Test
@@ -77,7 +68,6 @@ public class ITFileScanTest {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
 		client = new FileScanClient.Builder(cfg).build();
-
 
 		FileScanResponse response;
 		File file = eicar();

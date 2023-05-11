@@ -21,6 +21,7 @@ final class UserInviteDeleteRequest {
 }
 
 public class UserInvite extends BaseClient {
+
 	public UserInvite(AuthNClient.Builder builder) {
 		super(builder);
 	}

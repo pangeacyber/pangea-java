@@ -8,11 +8,13 @@ import cloud.pangeacyber.pangea.intel.requests.URLReputationRequest;
 import cloud.pangeacyber.pangea.intel.responses.URLReputationResponse;
 
 public class URLIntelClient extends BaseClient {
+
 	public URLIntelClient(Builder builder) {
 		super(builder);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
+
 		public Builder(Config config) {
 			super(config, "url-intel");
 		}

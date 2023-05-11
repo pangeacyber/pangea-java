@@ -47,7 +47,6 @@ final class FlowVerifySocialRequest {
 
 public class FlowVerify extends BaseClient {
 
-
 	private FlowVerifyMFA mfa;
 
 	public FlowVerify(AuthNClient.Builder builder) {

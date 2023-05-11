@@ -23,7 +23,6 @@ final class FlowCompleteRequest {
 
 public class Flow extends BaseClient {
 
-
 	private FlowEnroll enroll;
 	private FlowSignup signup;
 	private FlowVerify verify;

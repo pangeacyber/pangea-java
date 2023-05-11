@@ -27,8 +27,6 @@ final class FlowEnrollMFAStartRequest {
 
 public class FlowEnrollMFA extends BaseClient {
 
-
-
 	public FlowEnrollMFA(AuthNClient.Builder builder) {
 		super(builder);
 	}

@@ -170,11 +170,13 @@ final class DeleteRequest {
 }
 
 public class VaultClient extends BaseClient {
+
 	public VaultClient(Builder builder) {
 		super(builder);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
+
 		public Builder(Config config) {
 			super(config, "vault");
 		}

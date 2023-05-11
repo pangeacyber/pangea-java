@@ -14,6 +14,7 @@ public class DomainIntelClient extends BaseClient {
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
+
 		public Builder(Config config) {
 			super(config, "domain-intel");
 		}

@@ -63,6 +63,7 @@ final class UserMFAVerifyRequest {
 }
 
 public class UserMFA extends BaseClient {
+
 	public UserMFA(AuthNClient.Builder builder) {
 		super(builder);
 	}

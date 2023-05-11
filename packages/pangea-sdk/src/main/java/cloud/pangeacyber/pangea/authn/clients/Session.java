@@ -48,8 +48,6 @@ final class SessionLogoutRequest {
 
 public class Session extends BaseClient {
 
-
-
 	public Session(AuthNClient.Builder builder) {
 		super(builder);
 	}

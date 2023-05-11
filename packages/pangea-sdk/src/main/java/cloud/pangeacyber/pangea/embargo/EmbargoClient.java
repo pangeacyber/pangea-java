@@ -29,11 +29,13 @@ final class IpCheckRequest {
 }
 
 public class EmbargoClient extends BaseClient {
+
 	public EmbargoClient(Builder builder) {
 		super(builder);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
+
 		public Builder(Config config) {
 			super(config, "embargo");
 		}

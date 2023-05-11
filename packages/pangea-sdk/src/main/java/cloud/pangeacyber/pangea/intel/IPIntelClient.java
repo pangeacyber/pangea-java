@@ -8,11 +8,13 @@ import cloud.pangeacyber.pangea.intel.requests.*;
 import cloud.pangeacyber.pangea.intel.responses.*;
 
 public class IPIntelClient extends BaseClient {
+
 	public IPIntelClient(Builder builder) {
 		super(builder);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
+
 		public Builder(Config config) {
 			super(config, "ip-intel");
 		}

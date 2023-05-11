@@ -26,7 +26,6 @@ public class ITURLIntelTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new URLIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
-
 	}
 
 	@Test

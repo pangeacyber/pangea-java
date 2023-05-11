@@ -52,8 +52,6 @@ final class ClientSessionLogoutRequest {
 
 public class ClientSession extends BaseClient {
 
-
-
 	public ClientSession(AuthNClient.Builder builder) {
 		super(builder);
 	}

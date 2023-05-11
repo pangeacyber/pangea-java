@@ -16,6 +16,5 @@ public class ClientTest {
 	@Before
 	public void setUp() {
 		client = new TestClient();
-
 	}
 }

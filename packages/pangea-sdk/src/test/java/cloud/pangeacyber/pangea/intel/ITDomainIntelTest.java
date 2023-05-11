@@ -26,7 +26,6 @@ public class ITDomainIntelTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new DomainIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
-
 	}
 
 	@Test

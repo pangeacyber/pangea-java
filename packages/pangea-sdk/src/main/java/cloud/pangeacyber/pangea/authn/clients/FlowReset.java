@@ -9,8 +9,6 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
 public class FlowReset extends BaseClient {
 
-
-
 	public FlowReset(AuthNClient.Builder builder) {
 		super(builder);
 	}

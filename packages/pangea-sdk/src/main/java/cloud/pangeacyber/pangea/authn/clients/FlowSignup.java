@@ -50,8 +50,6 @@ final class FlowSignupSocialRequest {
 
 public class FlowSignup extends BaseClient {
 
-
-
 	public FlowSignup(AuthNClient.Builder builder) {
 		super(builder);
 	}

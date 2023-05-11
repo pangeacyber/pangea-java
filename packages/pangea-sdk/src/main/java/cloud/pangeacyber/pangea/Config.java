@@ -124,36 +124,28 @@ public final class Config {
 			throw new ConfigException("Need to set up PANGEA_DOMAIN environment variable");
 		}
 
-		Config config = new Config.ConfigBuilder(token, domain)
-							.setCustomUserAgent("test")
-							.build();
+		Config config = new Config.ConfigBuilder(token, domain).setCustomUserAgent("test").build();
 		return config;
 	}
 
 	public static Config fromIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getTestToken(environment);
 		String domain = getTestDomain(environment);
-		Config config = new Config.ConfigBuilder(token, domain)
-						.setCustomUserAgent("test")
-						.build();
+		Config config = new Config.ConfigBuilder(token, domain).setCustomUserAgent("test").build();
 		return config;
 	}
 
 	public static Config fromVaultIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getVaultSignatureTestToken(environment);
 		String domain = getTestDomain(environment);
-		Config config = new Config.ConfigBuilder(token, domain)
-						.setCustomUserAgent("test")
-						.build();
+		Config config = new Config.ConfigBuilder(token, domain).setCustomUserAgent("test").build();
 		return config;
 	}
 
 	public static Config fromCustomSchemaIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getCustomSchemaTestToken(environment);
 		String domain = getTestDomain(environment);
-		Config config = new Config.ConfigBuilder(token, domain)
-						.setCustomUserAgent("test")
-						.build();
+		Config config = new Config.ConfigBuilder(token, domain).setCustomUserAgent("test").build();
 		return config;
 	}
 
@@ -194,6 +186,7 @@ public final class Config {
 	}
 
 	public static class ConfigBuilder {
+
 		String token;
 		String domain;
 		boolean insecure = false;

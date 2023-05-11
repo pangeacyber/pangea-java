@@ -53,7 +53,6 @@ final class UserVerifyRequest {
 
 public class User extends BaseClient {
 
-
 	private UserProfile profile;
 	private UserInvite invite;
 	private UserMFA mfa;

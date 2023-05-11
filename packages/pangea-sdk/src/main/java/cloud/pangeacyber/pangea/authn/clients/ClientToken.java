@@ -20,8 +20,6 @@ final class TokenCheckResquest {
 
 public class ClientToken extends BaseClient {
 
-
-
 	public ClientToken(AuthNClient.Builder builder) {
 		super(builder);
 	}

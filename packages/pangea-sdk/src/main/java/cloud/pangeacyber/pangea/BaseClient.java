@@ -9,8 +9,10 @@ import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Map;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.util.logging.SimpleFormatter;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -39,12 +41,37 @@ public class BaseClient {
 	protected BaseClient(Builder<?> builder) {
 		this.serviceName = builder.serviceName;
 		this.config = builder.config;
-		this.logger = builder.logger;
+		if (builder.logger != null) {
+			this.logger = builder.logger;
+		} else {
+			this.logger = buildDefaultLogger();
+		}
 		this.httpClient = buildClient();
 		this.setUserAgent(config.getCustomUserAgent());
 	}
 
-	public static class Builder<B extends Builder<B>>{
+	private Logger buildDefaultLogger() {
+		Logger logger = Logger.getLogger("pangea");
+		logger.setLevel(Level.FINE);
+		try {
+			FileHandler fileHandler = new FileHandler("./pangea_sdk_logs.json");
+			// fileHandler.setFormatter(new SimpleFormatter());
+			logger.addHandler(fileHandler);
+		} catch (Exception e) {
+			logger.severe(
+				String.format(
+					"Failed to set Logger FileHandler in service %s. Exception: %s",
+					serviceName,
+					e.toString()
+				)
+			);
+		}
+
+		return logger;
+	}
+
+	public static class Builder<B extends Builder<B>> {
+
 		Config config;
 		String serviceName;
 		Logger logger;
@@ -54,7 +81,7 @@ public class BaseClient {
 		public Builder(Config config, String serviceName) {
 			this.config = config;
 			this.serviceName = serviceName;
-			this.logger = Logger.getLogger("pangea");
+			this.logger = null;
 			this.customHeaders = null;
 		}
 
@@ -165,11 +192,19 @@ public class BaseClient {
 
 	private CloseableHttpResponse doGet(String path) throws PangeaException {
 		try {
+			this.logger.fine(String.format("{'service': %s, 'action': 'get', 'path': %s}", serviceName, path));
 			HttpGet httpGet = new HttpGet(config.getServiceUrl(serviceName, path));
 			fillHeaders(httpGet);
 			return httpClient.execute(httpGet);
 		} catch (Exception e) {
-			System.out.println(e);
+			this.logger.severe(
+					String.format(
+						"{'service': %s, 'action': 'get', 'path': %s, 'message': 'failed to send request', 'exception': %s}",
+						serviceName,
+						path,
+						e.toString()
+					)
+				);
 			throw new PangeaException("Failed to send get request", e);
 		}
 	}
@@ -196,6 +231,10 @@ public class BaseClient {
 			throw new PangeaException("Failed to write request", e);
 		}
 
+		this.logger.fine(
+				String.format("{'service': %s, 'action': 'post', 'url': %s, 'data': %s}", serviceName, path, body)
+			);
+
 		CloseableHttpResponse httpResponse;
 
 		try {
@@ -208,6 +247,14 @@ public class BaseClient {
 
 			httpResponse = httpClient.execute(httpRequest);
 		} catch (Exception e) {
+			this.logger.severe(
+					String.format(
+						"{'service': %s, 'action': 'post', 'path': %s, 'message': 'failed to send request', 'exception': %s}",
+						serviceName,
+						path,
+						e.toString()
+					)
+				);
 			throw new PangeaException("Failed to send post request", e);
 		}
 
@@ -249,12 +296,24 @@ public class BaseClient {
 		int retryCounter = 1;
 		Duration start = Duration.ofMillis(System.currentTimeMillis());
 		long delay;
-		ResponseHeader header = parseHeader(readBody(response));
+		String body = readBody(response);
+
+		this.logger.info(
+				String.format(
+					"{'service': %s, 'action': 'handle queued', 'step': 'start', 'response': %s}",
+					serviceName,
+					body
+				)
+			);
+		ResponseHeader header = parseHeader(body);
 		String requestId = header.getRequestId();
 		String path = pollResultPath(requestId);
 
 		while (response.getStatusLine().getStatusCode() == 202 && !reachedTimeout(start)) {
 			delay = getDelay(retryCounter, start);
+			this.logger.fine(
+					String.format("{'service': %s, 'action': 'handle queued', 'step': '%d'}", serviceName, retryCounter)
+				);
 
 			try {
 				Thread.sleep(Duration.ofSeconds(delay));
@@ -263,6 +322,9 @@ public class BaseClient {
 				retryCounter++;
 			} catch (InterruptedException e) {}
 		}
+
+		this.logger.fine(String.format("{'service': %s, 'action': 'handle queued', 'step': 'exit'}", serviceName));
+
 		return response;
 	}
 
@@ -292,6 +354,10 @@ public class BaseClient {
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
 		String body = readBody(httpResponse);
+		this.logger.fine(
+				String.format("{'service': %s, 'action': 'check response', 'response': %s}", serviceName, body)
+			);
+
 		ResponseHeader header = parseHeader(body);
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -301,6 +367,14 @@ public class BaseClient {
 			try {
 				resultResponse = mapper.readValue(body, responseClass);
 			} catch (Exception e) {
+				this.logger.severe(
+						String.format(
+							"{'service': %s, 'action': 'check response', 'message': 'failed to parse result', 'response': %s, 'exception': %s}",
+							serviceName,
+							body,
+							e.toString()
+						)
+					);
 				throw new ParseResultFailed("Failed to parse response result", e, header, body);
 			}
 			resultResponse.setHttpResponse(httpResponse);
@@ -314,6 +388,14 @@ public class BaseClient {
 		try {
 			response = mapper.readValue(body, ResponseError.class);
 		} catch (Exception e) {
+			this.logger.severe(
+					String.format(
+						"{'service': %s, 'action': 'check response', 'message': 'failed to parse response error', 'response': %s, 'exception': %s}",
+						serviceName,
+						body,
+						e.toString()
+					)
+				);
 			throw new ParseResultFailed("Failed to parse response errors", e, header, body);
 		}
 
@@ -361,4 +443,11 @@ public class BaseClient {
 		}
 	}
 
+	public Logger getLogger() {
+		return logger;
+	}
+
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
 }

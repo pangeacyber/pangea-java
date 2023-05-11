@@ -28,6 +28,7 @@ final class UserProfileGetRequest {
 }
 
 public class UserProfile extends BaseClient {
+
 	public UserProfile(AuthNClient.Builder builder) {
 		super(builder);
 	}

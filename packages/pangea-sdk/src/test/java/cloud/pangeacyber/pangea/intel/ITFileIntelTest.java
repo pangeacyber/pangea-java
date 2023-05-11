@@ -27,7 +27,6 @@ public class ITFileIntelTest {
 	@Before
 	public void setUp() throws ConfigException {
 		client = new FileIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
-
 	}
 
 	@Test

@@ -6,7 +6,6 @@ import cloud.pangeacyber.pangea.authn.AuthNClient;
 
 public class FlowEnroll extends BaseClient {
 
-
 	private FlowEnrollMFA mfa;
 
 	public FlowEnroll(AuthNClient.Builder builder) {

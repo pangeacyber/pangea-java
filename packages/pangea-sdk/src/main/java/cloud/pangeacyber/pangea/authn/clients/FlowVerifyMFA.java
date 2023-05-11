@@ -27,8 +27,6 @@ final class FlowVerifyMFAStartRequest {
 
 public class FlowVerifyMFA extends BaseClient {
 
-
-
 	public FlowVerifyMFA(AuthNClient.Builder builder) {
 		super(builder);
 	}

@@ -179,7 +179,6 @@ public class AuditClient extends Client {
 	 * @param event event to log
 	 * @param signMode "Unsigned" or "Local"
 	 * @param verbose true to more verbose response
-	 * @param pkInfo additional information about public key. Will be ignored if signMode is UNSIGNED
 	 * @return LogResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException

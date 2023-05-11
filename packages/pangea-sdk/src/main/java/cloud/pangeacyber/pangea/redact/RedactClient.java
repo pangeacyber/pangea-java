@@ -56,6 +56,7 @@ public class RedactClient extends Client {
 	 *			.setRules(new String[] { "PHONE_NUMBER" })
 	 *			.build()
 	 *	);
+	 * }
 	 */
 	public RedactStructuredResponse redactStructured(RedactStructuredRequest request)
 		throws PangeaException, PangeaAPIException {

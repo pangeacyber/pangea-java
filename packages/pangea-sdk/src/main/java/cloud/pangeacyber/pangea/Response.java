@@ -3,7 +3,7 @@ package cloud.pangeacyber.pangea;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.net.http.HttpResponse;
+import org.apache.http.client.methods.CloseableHttpResponse;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response<Result> extends ResponseHeader {
@@ -12,7 +12,7 @@ public class Response<Result> extends ResponseHeader {
 	Result result;
 
 	@JsonIgnore
-	HttpResponse<?> httpResponse;
+	CloseableHttpResponse httpResponse;
 
 	public Response() {}
 
@@ -20,15 +20,11 @@ public class Response<Result> extends ResponseHeader {
 		return result;
 	}
 
-	public void setResult(Result result) {
-		this.result = result;
-	}
-
-	public HttpResponse<?> getHttpResponse() {
+	public CloseableHttpResponse getHttpResponse() {
 		return httpResponse;
 	}
 
-	public void setHttpResponse(HttpResponse<?> httpResponse) {
+	protected void setHttpResponse(CloseableHttpResponse httpResponse) {
 		this.httpResponse = httpResponse;
 	}
 }

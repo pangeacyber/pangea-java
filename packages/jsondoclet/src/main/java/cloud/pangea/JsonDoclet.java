@@ -75,6 +75,8 @@ public class JsonDoclet implements Doclet {
                             props.put("description", processedComment.get("text"));
                         } else if (processedComment.get("tag").equals("@pangea.code")) {
                             props.put("example", processedComment.get("text"));
+                        } else if (processedComment.get("tag").equals("@pangea.operationId")) {
+                            props.put("operationId", processedComment.get("text"));
                         }
                         break;
                     default:

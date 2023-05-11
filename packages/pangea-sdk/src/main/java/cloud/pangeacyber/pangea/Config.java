@@ -24,6 +24,12 @@ public final class Config {
 	// Extra custom user-agent to send on requests
 	String customUserAgent;
 
+	// Enable queued request retry support
+	boolean queuedRetryEnabled;
+
+	// Timeout used to poll results after 202 (in secs)
+	long pollResultTimeout;
+
 	protected Config(ConfigBuilder builder) {
 		this.domain = builder.domain;
 		this.token = builder.token;
@@ -31,6 +37,8 @@ public final class Config {
 		this.enviroment = builder.enviroment;
 		this.connectionTimeout = builder.connectionTimeout;
 		this.customUserAgent = builder.customUserAgent;
+		this.pollResultTimeout = builder.pollResultTimeout;
+		this.queuedRetryEnabled = builder.queuedRetryEnabled;
 	}
 
 	public String getToken() {
@@ -79,6 +87,14 @@ public final class Config {
 
 	public void setCustomUserAgent(String customUserAgent) {
 		this.customUserAgent = customUserAgent;
+	}
+
+	public boolean isQueuedRetryEnabled() {
+		return queuedRetryEnabled;
+	}
+
+	public long getPollResultTimeout() {
+		return pollResultTimeout;
 	}
 
 	URI getServiceUrl(String serviceName, String path) {
@@ -177,6 +193,8 @@ public final class Config {
 		Duration connectionTimeout;
 		String enviroment;
 		String customUserAgent;
+		boolean queuedRetryEnabled;
+		long pollResultTimeout;
 
 		public ConfigBuilder(String token, String domain) {
 			this.token = token;
@@ -185,6 +203,18 @@ public final class Config {
 			this.enviroment = "production";
 			this.connectionTimeout = Duration.ofSeconds(20);
 			this.customUserAgent = "";
+			this.queuedRetryEnabled = true;
+			this.pollResultTimeout = 120;
+		}
+
+		public ConfigBuilder setQueuedRetryEnabled(boolean queuedRetryEnabled) {
+			this.queuedRetryEnabled = queuedRetryEnabled;
+			return this;
+		}
+
+		public ConfigBuilder setPollResultTimeout(long pollResultTimeout) {
+			this.pollResultTimeout = pollResultTimeout;
+			return this;
 		}
 
 		public ConfigBuilder setInsecure(boolean insecure) {
@@ -210,5 +240,13 @@ public final class Config {
 		public Config build() {
 			return new Config(this);
 		}
+	}
+
+	public void setQueuedRetryEnabled(boolean queuedRetryEnabled) {
+		this.queuedRetryEnabled = queuedRetryEnabled;
+	}
+
+	public void setPollResultTimeout(long pollResultTimeout) {
+		this.pollResultTimeout = pollResultTimeout;
 	}
 }

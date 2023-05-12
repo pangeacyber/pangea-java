@@ -23,14 +23,14 @@ public class ITAuthNTest {
 	TestEnvironment environment = TestEnvironment.LIVE;
 	private static Random random = new Random();
 	private static final String randomValue = Integer.toString(random.nextInt(10000000));
-	private static final String emailTest = String.format("andres.tournour+test%s@pangea.cloud", randomValue);
-	private static final String emailDelete = String.format("andres.tournour+delete%s@pangea.cloud", randomValue);
+	private static final String emailTest = String.format("user.email+test%s@pangea.cloud", randomValue);
+	private static final String emailDelete = String.format("user.email+delete%s@pangea.cloud", randomValue);
 	private static final String emailInviteDelete = String.format(
-		"andres.tournour+invite_del%s@pangea.cloud",
+		"user.email+invite_del%s@pangea.cloud",
 		randomValue
 	);
 	private static final String emailInviteKeep = String.format(
-		"andres.tournour+invite_keep%s@pangea.cloud",
+		"user.email+invite_keep%s@pangea.cloud",
 		randomValue
 	);
 	private static final String passwordOld = "My1s+Password";

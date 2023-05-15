@@ -20,6 +20,7 @@ public class UserIntelClient extends Client {
 	/**
 	 * Look up breached users
 	 * @pangea.description Find out if an email address, username, phone number, or IP address was exposed in a security breach.
+	 * @pangea.operationId user_intel_post_v1_user_breached
 	 * @param request to send to user/breached endpoint
 	 * @return UserBreachedResponse
 	 * @throws PangeaException
@@ -32,6 +33,7 @@ public class UserIntelClient extends Client {
 	 *		.setVerbose(true)
 	 *		.build()
 	 *	);
+	 * }
 	 */
 	public UserBreachedResponse breached(UserBreachedRequest request) throws PangeaException, PangeaAPIException {
 		return doPost("/v1/user/breached", request, UserBreachedResponse.class);
@@ -40,6 +42,7 @@ public class UserIntelClient extends Client {
 	/**
 	 * Look up breached passwords
 	 * @pangea.description Find out if a password has been exposed in security breaches by providing a 5 character prefix of the password hash.
+	 * @pangea.operationId user_intel_post_v1_password_breached
 	 * @param request to send to password/breached endpoint
 	 * @return UserPasswordBreachedResponse
 	 * @throws PangeaException
@@ -51,6 +54,7 @@ public class UserIntelClient extends Client {
 	 *		.setProvider("spycloud")
 	 *		.build()
 	 *	);
+	 * }
 	 */
 	public UserPasswordBreachedResponse breached(UserPasswordBreachedRequest request)
 		throws PangeaException, PangeaAPIException {

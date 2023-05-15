@@ -188,6 +188,7 @@ public class UrlIntelClient extends Client {
 	/**
 	 * Reputation check - provider
 	 * @pangea.description Retrieve a reputation score for a URL from a provider, including an optional detailed report.
+	 * @pangea.operationId url_intel_post_v1_reputation
 	 * @param url The URL to be looked up
 	 * @param provider Use reputation data from this provider
 	 * @return URLReputationResponse

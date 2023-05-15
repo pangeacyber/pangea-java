@@ -116,49 +116,6 @@ final class JWTVerifyRequest {
 	}
 }
 
-final class EncryptRequest {
-
-	@JsonProperty("id")
-	String id;
-
-	@JsonProperty("plain_text")
-	String plainText;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("version")
-	Integer version;
-
-	public EncryptRequest(String id, String plainText, Integer version) {
-		this.id = id;
-		this.plainText = plainText;
-		this.version = version;
-	}
-}
-
-final class DecryptRequest {
-
-	@JsonProperty("id")
-	String id;
-
-	@JsonProperty("cipher_text")
-	String cipherText;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("version")
-	Integer version = null;
-
-	public DecryptRequest(String id, String cipherText, Integer version) {
-		this.id = id;
-		this.cipherText = cipherText;
-		this.version = version;
-	}
-
-	public DecryptRequest(String id, String cipherText) {
-		this.id = id;
-		this.cipherText = cipherText;
-	}
-}
-
 final class DeleteRequest {
 
 	@JsonProperty("id")
@@ -179,7 +136,8 @@ public class VaultClient extends Client {
 
 	/**
 	 * State change
-	 * @pangea.description change an item version state
+	 * @pangea.description Change the state of a specific version of a secret or key.
+	 * @pangea.operationId _vault_post_v1_state_change
 	 * @param id - item id to change
 	 * @param version - item version to change
 	 * @param state - state to set to item version
@@ -198,7 +156,8 @@ public class VaultClient extends Client {
 
 	/**
 	 * Delete
-	 * @pangea.description Delete an item
+	 * @pangea.description Delete a secret or key.
+	 * @pangea.operationId _vault_post_v1_delete
 	 * @param id - item id to delete
 	 * @return DeleteResponse
 	 * @throws PangeaException
@@ -213,8 +172,9 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Get
-	 * @pangea.description Get an item of any type
+	 * Retrieve
+	 * @pangea.description Retrieve a secret or key, and any associated information.
+	 * @pangea.operationId _vault_post_v1_get
 	 * @param request - request to /get endpoint
 	 * @return GetResponse
 	 * @throws PangeaException
@@ -230,7 +190,8 @@ public class VaultClient extends Client {
 
 	/**
 	 * List
-	 * @pangea.description Retrieve a list of items
+	 * @pangea.description Retrieve a list of secrets, keys and folders, and their associated information.
+	 * @pangea.operationId _vault_post_v1_list
 	 * @param request - request parameters to send to list endpoint
 	 * @return ListResponse
 	 * @throws PangeaException
@@ -246,7 +207,8 @@ public class VaultClient extends Client {
 
 	/**
 	 * Update
-	 * @pangea.description Update the metadata of an item
+	 * @pangea.description Update information associated with a secret or key.
+	 * @pangea.operationId _vault_post_v1_update
 	 * @param request - request parameters to send to update endpoint
 	 * @return UpdateResponse
 	 * @throws PangeaException
@@ -262,7 +224,8 @@ public class VaultClient extends Client {
 
 	/**
 	 * Store a secret
-	 * @pangea.description Store a secret in vault service
+	 * @pangea.description Store a secret in vault service.
+	 * @pangea.operationId _vault_post_v1_secret_store 1
 	 * @param request - request parameters to send to /secret/store endpoint
 	 * @return SecretStoreResponse
 	 * @throws PangeaException
@@ -278,7 +241,8 @@ public class VaultClient extends Client {
 
 	/**
 	 * Store a Pangea Token
-	 * @pangea.description Store a pangea token in vault service
+	 * @pangea.description Store a pangea token in vault service.
+	 * @pangea.operationId _vault_post_v1_secret_store 2
 	 * @param request - request parameters to send to /secret/store endpoint
 	 * @return SecretStoreResponse
 	 * @throws PangeaException
@@ -295,7 +259,8 @@ public class VaultClient extends Client {
 
 	/**
 	 * Rotate a secret
-	 * @pangea.description Rotate a secret in vault service
+	 * @pangea.description Rotate a secret in vault service.
+	 * @pangea.operationId _vault_post_v1_secret_rotate 1
 	 * @param request - secret rotate request
 	 * @return SecretRotateResponse
 	 * @throws PangeaException
@@ -311,7 +276,8 @@ public class VaultClient extends Client {
 
 	/**
 	 * Rotate a Pangea Token
-	 * @pangea.description Rotate a Pangea Token in vault service
+	 * @pangea.description Rotate a Pangea Token in vault service.
+	 * @pangea.operationId _vault_post_v1_secret_rotate 2
 	 * @param request - pangea token store request
 	 * @return SecretRotateResponse
 	 * @throws PangeaException
@@ -327,8 +293,9 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Generate a symmetric key
-	 * @pangea.description Generate a symmetric key in vault service
+	 * Symmetric generate
+	 * @pangea.description Generate a symmetric key.
+	 * @pangea.operationId _vault_post_v1_key_generate 1
 	 * @param request - request parameters to send to /key/generate endpoint
 	 * @return SymmetricGenerateResponse
 	 * @throws PangeaException
@@ -344,8 +311,9 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Generate an asymmetric key
-	 * @pangea.description Generate an asymmetric key in vault service
+	 * Asymmetric generate
+	 * @pangea.description Generate an asymmetric key.
+	 * @pangea.operationId _vault_post_v1_key_generate 2
 	 * @param request - request parameters to send to /key/generate endpoint
 	 * @return AsymmetricGenerateResponse
 	 * @throws PangeaException
@@ -361,8 +329,9 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Store an asymmetric key
-	 * @pangea.description Store an asymmetric key in vault service
+	 * Asymmetric store
+	 * @pangea.description Import an asymmetric key.
+	 * @pangea.operationId _vault_post_v1_key_store 1
 	 * @param request - request parameters to send to /key/store endpoint
 	 * @return AsymmetricStoreResponse
 	 * @throws PangeaException
@@ -378,8 +347,9 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Store a symmetric key
-	 * @pangea.description Store a symmetric key in vault service
+	 * Symmetric store
+	 * @pangea.description Import a symmetric key.
+	 * @pangea.operationId _vault_post_v1_key_store 2
 	 * @param request - request parameters to send to /key/store endpoint
 	 * @return SymmetricStoreResponse
 	 * @throws PangeaException
@@ -395,8 +365,9 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Rotate a key
-	 * @pangea.description Rotate a key
+	 * Key rotate
+	 * @pangea.description Manually rotate a symmetric or asymmetric key.
+	 * @pangea.operationId _vault_post_v1_key_rotate
 	 * @param request - request parameters to send to /key/rotate endpoint
 	 * @return KeyRotateResponse
 	 * @throws PangeaException
@@ -413,6 +384,7 @@ public class VaultClient extends Client {
 	/**
 	 * Encrypt
 	 * @pangea.description Encrypt a message
+	 * @deprecated use encrypt(EncryptRequest request) instead.
 	 * @param id - key id to encrypt message
 	 * @param plainText - message to encrypt
 	 * @return EncryptResponse
@@ -424,12 +396,17 @@ public class VaultClient extends Client {
 	 * }
 	 */
 	public EncryptResponse encrypt(String id, String plainText) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/key/encrypt", new EncryptRequest(id, plainText, null), EncryptResponse.class);
+		return doPost(
+			"/v1/key/encrypt",
+			new EncryptRequest.EncryptRequestBuilder(id, plainText).build(),
+			EncryptResponse.class
+		);
 	}
 
 	/**
 	 * Encrypt
 	 * @pangea.description Encrypt a message
+	 * @deprecated use encrypt(EncryptRequest request) instead.
 	 * @param id - key id to encrypt message
 	 * @param plainText - message to encrypt
 	 * @param version - key version to encrypt message
@@ -443,12 +420,34 @@ public class VaultClient extends Client {
 	 */
 	public EncryptResponse encrypt(String id, String plainText, int version)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/key/encrypt", new EncryptRequest(id, plainText, version), EncryptResponse.class);
+		return doPost(
+			"/v1/key/encrypt",
+			new EncryptRequest.EncryptRequestBuilder(id, plainText).setVersion(version).build(),
+			EncryptResponse.class
+		);
+	}
+
+	/**
+	 * Encrypt
+	 * @pangea.description Encrypt a message using a key.
+	 * @pangea.operationId _vault_post_v1_key_encrypt
+	 * @param request - request to be send to /key/encrypt
+	 * @return EncryptResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * // TODO:
+	 * }
+	 */
+	public EncryptResponse encrypt(EncryptRequest request) throws PangeaException, PangeaAPIException {
+		return doPost("/v1/key/encrypt", request, EncryptResponse.class);
 	}
 
 	/**
 	 * Decrypt
 	 * @pangea.description Decrypt a message
+	 * @deprecated use decrypt(DecryptRequest request) instead.
 	 * @param id - key id to encrypt message
 	 * @param cipherText - message to decrypt
 	 * @return DecryptResponse
@@ -460,12 +459,17 @@ public class VaultClient extends Client {
 	 * }
 	 */
 	public DecryptResponse decrypt(String id, String cipherText) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/key/decrypt", new DecryptRequest(id, cipherText), DecryptResponse.class);
+		return doPost(
+			"/v1/key/decrypt",
+			new DecryptRequest.DecryptRequestBuilder(id, cipherText).build(),
+			DecryptResponse.class
+		);
 	}
 
 	/**
 	 * Decrypt
 	 * @pangea.description Decrypt a message
+	 * @deprecated use decrypt(DecryptRequest request) instead.
 	 * @param id - key id to encrypt message
 	 * @param cipherText - message to decrypt
 	 * @param version - key version to use on decryption
@@ -479,12 +483,34 @@ public class VaultClient extends Client {
 	 */
 	public DecryptResponse decrypt(String id, String cipherText, Integer version)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/key/decrypt", new DecryptRequest(id, cipherText, version), DecryptResponse.class);
+		return doPost(
+			"/v1/key/decrypt",
+			new DecryptRequest.DecryptRequestBuilder(id, cipherText).setVersion(version).build(),
+			DecryptResponse.class
+		);
+	}
+
+	/**
+	 * Decrypt
+	 * @pangea.description Decrypt a message using a key.
+	 * @pangea.operationId _vault_post_v1_key_decrypt
+	 * @param request - request to be send to /key/decrypt
+	 * @return DecryptResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * // TODO:
+	 * }
+	 */
+	public DecryptResponse decrypt(DecryptRequest request) throws PangeaException, PangeaAPIException {
+		return doPost("/v1/key/decrypt", request, DecryptResponse.class);
 	}
 
 	/**
 	 * Sign
-	 * @pangea.description sign a message
+	 * @pangea.description Sign a message using a key.
+	 * @pangea.operationId _vault_post_v1_key_sign
 	 * @param id - key id to sign message
 	 * @param message - message to sign
 	 * @return SignResponse
@@ -518,8 +544,9 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Sign with JWT
-	 * @pangea.description sign a payload with a JWT
+	 * JWT Sign
+	 * @pangea.description Sign a JSON Web Token (JWT) using a key.
+	 * @pangea.operationId _vault_post_v1_key_sign_jwt
 	 * @param id - key id to sign payload
 	 * @param payload - message to sign
 	 * @return JWTSignResponse
@@ -536,7 +563,8 @@ public class VaultClient extends Client {
 
 	/**
 	 * Verify
-	 * @pangea.description Verify a message/signature pair
+	 * @pangea.description Verify a signature using a key.
+	 * @pangea.operationId _vault_post_v1_key_verify
 	 * @param id - key id to verify message/signature
 	 * @param message - message to verify
 	 * @param signature - signature to verify
@@ -555,7 +583,7 @@ public class VaultClient extends Client {
 
 	/**
 	 * Verify
-	 * @pangea.description Verify a message/signature pair
+	 * @pangea.description Verify a signature using a key.
 	 * @param id - key id to verify message/signature
 	 * @param message - message to verify
 	 * @param signature - signature to verify
@@ -574,8 +602,9 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Verify a JWT signature
-	 * @pangea.description Verify a JWS
+	 * JWT Verify
+	 * @pangea.description Verify the signature of a JSON Web Token (JWT).
+	 * @pangea.operationId _vault_post_v1_key_verify_jwt
 	 * @param jws - signature to verify
 	 * @return JWTVerifyResponse
 	 * @throws PangeaException
@@ -590,8 +619,9 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Get JWK
-	 * @pangea.description Get a JWK
+	 * JWT Retrieve
+	 * @pangea.description Retrieve a key in JWK format.
+	 * @pangea.operationId _vault_post_v1_get_jwk
 	 * @param id - item id to get
 	 * @return GetResponse
 	 * @throws PangeaException
@@ -606,8 +636,8 @@ public class VaultClient extends Client {
 	}
 
 	/**
-	 * Get JWK
-	 * @pangea.description Get a JWK
+	 * JWT Retrieve
+	 * @pangea.description Retrieve a key in JWK format.
 	 * @param id - item id to get
 	 * @param version - item version/versions to get
 	 * @return GetResponse

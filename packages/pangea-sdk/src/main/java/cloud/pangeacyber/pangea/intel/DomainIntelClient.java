@@ -171,6 +171,7 @@ public class DomainIntelClient extends Client {
 	/**
 	 * Reputation check
 	 * @pangea.description Retrieve domain reputation from a default provider.
+	 * @pangea.operationId domain_intel_post_v1_reputation
 	 * @param domain domain address to be looked up
 	 * @return DomainReputationResponse
 	 * @throws PangeaException

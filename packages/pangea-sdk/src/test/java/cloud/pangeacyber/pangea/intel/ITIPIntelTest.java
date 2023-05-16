@@ -219,6 +219,15 @@ public class ITIPIntelTest {
 	}
 
 	@Test
+	public void testIpReputation_CymruProvider() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		IPReputationResponse response = client.reputation("93.231.182.110", "cymru", true, true);
+		assertTrue(response.isOk());
+		assertNotNull(response.getResult().getData());
+		assertNotNull(response.getResult().getParameters());
+	}
+
+	@Test
 	public void testIpGeolocate_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		IPGeolocateResponse response = client.geolocate("93.231.182.110");

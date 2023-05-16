@@ -11,7 +11,12 @@ public class PangeaAPIException extends Exception {
 	public String toString() {
 		String ret = "";
 		ret += "Summary: " + this.response.getSummary() + "\n";
-		if (this.response.getResult() != null && this.response.getResult().getErrors().length > 0) {
+		ret += "request_id: " + this.response.getRequestId() + "\n";
+		if (
+			this.response.getResult() != null &&
+			this.response.getResult().getErrors() != null &&
+			this.response.getResult().getErrors().length > 0
+		) {
 			ret += "Errors: \n";
 			for (ErrorField errorField : this.response.getResult().getErrors()) {
 				ret += "\t " + errorField.getDetail() + "\n";

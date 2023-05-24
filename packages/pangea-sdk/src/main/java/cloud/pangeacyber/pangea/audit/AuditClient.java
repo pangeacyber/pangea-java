@@ -184,6 +184,7 @@ public class AuditClient extends Client {
 		}
 
 		this.pkInfo.put("key", this.signer.getPublicKey());
+		this.pkInfo.put("algorithm", this.signer.getAlgorithm());
 
 		try {
 			return mapper.writeValueAsString(this.pkInfo);

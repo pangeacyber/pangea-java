@@ -96,7 +96,7 @@ public final class Config {
 	URI getServiceUrl(String serviceName, String path) {
 		StringBuilder b = new StringBuilder();
 		if (domain.startsWith("http://") || domain.startsWith("https://")) {
-			// fqdn domain
+			// url domain
 			b.append(domain);
 		} else {
 			b.append(insecure ? "http://" : "https://");

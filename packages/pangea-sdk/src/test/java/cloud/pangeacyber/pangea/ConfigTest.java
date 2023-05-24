@@ -93,11 +93,11 @@ public class ConfigTest {
 	}
 
 	@Test
-	public void testFQDN() throws ConfigException {
-		String fqdnDomain = "https://myfqdndomain.net";
-		Config config = new Config.ConfigBuilder(token, fqdnDomain).build();
+	public void testURL() throws ConfigException {
+		String urlDomain = "https://myurldomain.net";
+		Config config = new Config.ConfigBuilder(token, urlDomain).build();
 		String url = config.getServiceUrl(serviceName, path).toString();
-		String urlExpected = new StringBuilder().append(fqdnDomain).append(path).toString();
+		String urlExpected = new StringBuilder().append(urlDomain).append(path).toString();
 		assertEquals(urlExpected, url);
 	}
 }

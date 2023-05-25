@@ -212,7 +212,7 @@ public abstract class Client {
 			delay = getDelay(retryCounter, start);
 
 			try {
-				Thread.sleep(Duration.ofSeconds(delay));
+				Thread.sleep(delay * 1000); // Duration.ofSeconds() on Java 19
 				EntityUtils.consumeQuietly(response.getEntity()); //response need to be consumed
 				response = internalGet(path);
 				retryCounter++;

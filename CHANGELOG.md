@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [1.9.0] - 2023-05-25
+
+# Added
+
+- New algorithm support in Vault Service
+- Algorithm field support in Audit Service
+- Cymru IP Intel provider examples
+- Support full url as domain in config for local use
+
+
 ## [1.8.0] - 2023-05-05
 
 ### Added
@@ -120,7 +131,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redact client
 
 
-[unreleased]: https://github.com/pangeacyber/pangea-java/compare/v1.8.0...main
+[unreleased]: https://github.com/pangeacyber/pangea-java/compare/v1.9.0...main
+[1.9.0]: https://github.com/pangeacyber/pangea-java/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/pangeacyber/pangea-java/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/pangeacyber/pangea-java/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/pangeacyber/pangea-java/compare/v1.5.0...v1.6.0

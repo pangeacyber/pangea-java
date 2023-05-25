@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.intel;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -17,7 +18,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.binary.Hex;
 
-final class FileLookupRequest {
+final class FileLookupRequest extends BaseRequest {
 
 	@JsonProperty("hash")
 	String Hash;
@@ -46,7 +47,7 @@ final class FileLookupRequest {
 	}
 }
 
-final class FileReputationRequest {
+final class FileReputationRequest extends BaseRequest {
 
 	@JsonProperty("hash")
 	String Hash;

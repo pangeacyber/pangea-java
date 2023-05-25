@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.vault;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class JWKGetRequest {
+final class JWKGetRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -26,7 +27,7 @@ final class JWKGetRequest {
 	}
 }
 
-final class StateChangeRequest {
+final class StateChangeRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -44,7 +45,7 @@ final class StateChangeRequest {
 	}
 }
 
-final class SignRequest {
+final class SignRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -63,7 +64,7 @@ final class SignRequest {
 	}
 }
 
-final class JWTSignRequest {
+final class JWTSignRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -77,7 +78,7 @@ final class JWTSignRequest {
 	}
 }
 
-final class VerifyRequest {
+final class VerifyRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -106,7 +107,7 @@ final class VerifyRequest {
 	}
 }
 
-final class JWTVerifyRequest {
+final class JWTVerifyRequest extends BaseRequest {
 
 	@JsonProperty("jws")
 	String jws;
@@ -116,7 +117,7 @@ final class JWTVerifyRequest {
 	}
 }
 
-final class DeleteRequest {
+final class DeleteRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;

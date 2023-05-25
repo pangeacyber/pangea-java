@@ -1,10 +1,11 @@
 package cloud.pangeacyber.pangea.redact.requests;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RedactTextRequest {
+public class RedactTextRequest extends BaseRequest {
 
 	@JsonProperty("text")
 	String text;

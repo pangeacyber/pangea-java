@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
@@ -12,7 +13,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class UserDeleteByEmailRequest {
+final class UserDeleteByEmailRequest extends BaseRequest {
 
 	@JsonProperty("email")
 	String email;
@@ -22,7 +23,7 @@ final class UserDeleteByEmailRequest {
 	}
 }
 
-final class UserDeleteByIDRequest {
+final class UserDeleteByIDRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -32,7 +33,7 @@ final class UserDeleteByIDRequest {
 	}
 }
 
-final class UserVerifyRequest {
+final class UserVerifyRequest extends BaseRequest {
 
 	@JsonProperty("id_provider")
 	IDProvider idProvider;

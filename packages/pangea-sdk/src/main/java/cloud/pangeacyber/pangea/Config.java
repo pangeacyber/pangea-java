@@ -12,6 +12,9 @@ public final class Config {
 	// Base domain for API requests.
 	String domain;
 
+	// Project config id need for multi-config projects
+	String configID;
+
 	// Set to true to use plain http
 	boolean insecure;
 
@@ -91,6 +94,14 @@ public final class Config {
 
 	public void setCustomUserAgent(String customUserAgent) {
 		this.customUserAgent = customUserAgent;
+	}
+
+	public String getConfigID() {
+		return configID;
+	}
+
+	public void setConfigID(String configID) {
+		this.configID = configID;
 	}
 
 	URI getServiceUrl(String serviceName, String path) {
@@ -176,6 +187,7 @@ public final class Config {
 		Duration connectionTimeout;
 		String enviroment;
 		String customUserAgent;
+		String configID;
 
 		public ConfigBuilder(String token, String domain) {
 			this.token = token;
@@ -203,6 +215,11 @@ public final class Config {
 
 		public ConfigBuilder setCustomUserAgent(String customUserAgent) {
 			this.customUserAgent = customUserAgent;
+			return this;
+		}
+
+		public ConfigBuilder setConfigID(String configID) {
+			this.configID = configID;
 			return this;
 		}
 

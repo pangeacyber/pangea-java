@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.vault.models.ItemOrder;
 import cloud.pangeacyber.pangea.vault.models.ItemOrderBy;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-public class ListRequest {
+public class ListRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("filter")

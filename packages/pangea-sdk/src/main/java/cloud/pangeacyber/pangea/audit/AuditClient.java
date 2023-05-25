@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.audit;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.audit.arweave.Arweave;
@@ -23,7 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-final class ResultsRequest {
+final class ResultsRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -43,7 +44,7 @@ final class ResultsRequest {
 	}
 }
 
-final class RootRequest {
+final class RootRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("tree_size")
@@ -54,7 +55,7 @@ final class RootRequest {
 	}
 }
 
-final class LogRequest {
+final class LogRequest extends BaseRequest {
 
 	@JsonProperty("event")
 	Event event;

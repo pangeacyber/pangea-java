@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class UserLoginPasswordRequest {
+final class UserLoginPasswordRequest extends BaseRequest {
 
 	@JsonProperty("email")
 	String email;
@@ -30,7 +31,7 @@ final class UserLoginPasswordRequest {
 	}
 }
 
-final class UserLoginSocialRequest {
+final class UserLoginSocialRequest extends BaseRequest {
 
 	@JsonProperty("provider")
 	IDProvider provider;

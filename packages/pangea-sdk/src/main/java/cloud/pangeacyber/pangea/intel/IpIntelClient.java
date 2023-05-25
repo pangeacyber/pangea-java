@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.intel;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -14,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class IpCommonRequest {
+final class IpCommonRequest extends BaseRequest {
 
 	@JsonProperty("ip")
 	String Ip;

@@ -1,12 +1,13 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.vault.models.Metadata;
 import cloud.pangeacyber.pangea.vault.models.Tags;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CommonGenerateRequest {
+public class CommonGenerateRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("name")

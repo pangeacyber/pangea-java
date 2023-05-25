@@ -69,13 +69,18 @@ public abstract class Client {
 		return;
 	}
 
-	public <Req, ResponseType extends Response<?>> ResponseType doPost(
+	public <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType doPost(
 		String path,
 		Req request,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
 		ObjectMapper mapper = new ObjectMapper();
 		String body;
+
+		if (this.config.getConfigID() != null && request.getConfigID() == null) {
+			request.setConfigID(this.config.getConfigID());
+		}
+
 		try {
 			body = mapper.writeValueAsString(request);
 		} catch (JsonProcessingException e) {

@@ -111,14 +111,17 @@ public final class Config {
 
 	URI getServiceUrl(String serviceName, String path) {
 		StringBuilder b = new StringBuilder();
-		b.append(insecure ? "http://" : "https://");
-
-		if (enviroment != "local") {
-			b.append(serviceName);
-			b.append('.');
+		if (domain.startsWith("http://") || domain.startsWith("https://")) {
+			// url domain
+			b.append(domain);
+		} else {
+			b.append(insecure ? "http://" : "https://");
+			if (enviroment != "local") {
+				b.append(serviceName);
+				b.append('.');
+			}
+			b.append(domain);
 		}
-
-		b.append(domain);
 		b.append(path);
 		return URI.create(b.toString());
 	}

@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.audit;
 
 import cloud.pangeacyber.pangea.exceptions.SignerException;
+import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
@@ -83,5 +84,9 @@ public class LogSigner {
 		} catch (Exception e) {
 			throw new SignerException("Failed to get encoded public key", e);
 		}
+	}
+
+	public String getAlgorithm() {
+		return AsymmetricAlgorithm.ED25519.toString();
 	}
 }

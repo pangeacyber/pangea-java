@@ -42,7 +42,7 @@ public class App
 
         FileScanClient client = new FileScanClient(cfg);
         FileScanResponse response = null;
-		AcceptedRequestException exception = null;
+	    AcceptedRequestException exception = null;
 		try {
             System.out.println("File Scan request...");
             // Here we create a file that will give us a malicious result as example

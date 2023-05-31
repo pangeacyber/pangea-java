@@ -25,14 +25,8 @@ public class ITAuthNTest {
 	private static final String randomValue = Integer.toString(random.nextInt(10000000));
 	private static final String emailTest = String.format("user.email+test%s@pangea.cloud", randomValue);
 	private static final String emailDelete = String.format("user.email+delete%s@pangea.cloud", randomValue);
-	private static final String emailInviteDelete = String.format(
-		"user.email+invite_del%s@pangea.cloud",
-		randomValue
-	);
-	private static final String emailInviteKeep = String.format(
-		"user.email+invite_keep%s@pangea.cloud",
-		randomValue
-	);
+	private static final String emailInviteDelete = String.format("user.email+invite_del%s@pangea.cloud", randomValue);
+	private static final String emailInviteKeep = String.format("user.email+invite_keep%s@pangea.cloud", randomValue);
 	private static final String passwordOld = "My1s+Password";
 	private static final String passwordNew = "My1s+Password_new";
 	private static final Profile profileOld = new Profile();
@@ -42,7 +36,7 @@ public class ITAuthNTest {
 	@Before
 	public void setUp() throws ConfigException {
 		this.cfg = Config.fromIntegrationEnvironment(environment);
-		client = new AuthNClient(cfg);
+		client = new AuthNClient.Builder(cfg).build();
 
 		profileOld.put("name", "User name");
 		profileOld.put("country", "Argentina");

@@ -2,20 +2,19 @@ package cloud.pangeacyber.pangea;
 
 import org.junit.Before;
 
-class TestClient extends Client {
+class TestClient extends BaseClient {
 
 	public TestClient() {
-		super(new Config.ConfigBuilder("token", "domain.com").build(), "test");
+		super(new BaseClient.Builder<>(new Config.ConfigBuilder("token", "domain.com").build(), "test"));
 	}
 }
 
 public class ClientTest {
 
-	Client client;
+	BaseClient client;
 
 	@Before
 	public void setUp() {
 		client = new TestClient();
-		client.setCustomUserAgent("test");
 	}
 }

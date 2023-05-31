@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.FlowSignupPasswordResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -47,25 +48,23 @@ final class FlowSignupSocialRequest {
 	}
 }
 
-public class FlowSignup extends Client {
+public class FlowSignup extends BaseClient {
 
-	public static final String serviceName = "authn";
-
-	public FlowSignup(Config config) {
-		super(config, serviceName);
+	public FlowSignup(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: doc
 	public FlowSignupPasswordResponse password(String flow_id, String password, String firstName, String lastName)
 		throws PangeaException, PangeaAPIException {
 		FlowSignupPasswordRequest request = new FlowSignupPasswordRequest(flow_id, password, firstName, lastName);
-		return doPost("/v1/flow/signup/password", request, FlowSignupPasswordResponse.class);
+		return post("/v1/flow/signup/password", request, FlowSignupPasswordResponse.class);
 	}
 
 	// TODO: doc
 	public FlowSignupPasswordResponse social(String flow_id, String cbState, String cbCode)
 		throws PangeaException, PangeaAPIException {
 		FlowSignupSocialRequest request = new FlowSignupSocialRequest(flow_id, cbState, cbCode);
-		return doPost("/v1/flow/signup/social", request, FlowSignupPasswordResponse.class);
+		return post("/v1/flow/signup/social", request, FlowSignupPasswordResponse.class);
 	}
 }

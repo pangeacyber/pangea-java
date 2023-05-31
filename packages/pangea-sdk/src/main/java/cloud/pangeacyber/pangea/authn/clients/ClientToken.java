@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.ClientTokenCheckResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -17,18 +18,16 @@ final class TokenCheckResquest {
 	}
 }
 
-public class ClientToken extends Client {
+public class ClientToken extends BaseClient {
 
-	public static final String serviceName = "authn";
-
-	public ClientToken(Config config) {
-		super(config, serviceName);
+	public ClientToken(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: Doc
 	public ClientTokenCheckResponse check(String token) throws PangeaException, PangeaAPIException {
 		TokenCheckResquest request = new TokenCheckResquest(token);
-		ClientTokenCheckResponse resp = doPost("/v1/client/token/check", request, ClientTokenCheckResponse.class);
+		ClientTokenCheckResponse resp = post("/v1/client/token/check", request, ClientTokenCheckResponse.class);
 		return resp;
 	}
 }

@@ -34,7 +34,7 @@ public class App
         }
 
         // Create audit client
-        AuditClient client = new AuditClient(cfg);
+        AuditClient client = new AuditClient.Builder(cfg).build();
 
         // Set up search params
         SearchInput input = new SearchInput("message:");

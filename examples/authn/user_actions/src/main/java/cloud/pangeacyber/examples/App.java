@@ -37,7 +37,7 @@ public class App
 		profileInitial.put("country", "Argentina");
 		profileUpdate.put("age", "18");
 
-        AuthNClient client = new AuthNClient(cfg);
+        AuthNClient client = new AuthNClient.Builder(cfg).build();
 
 		try {
 			// Create User 1

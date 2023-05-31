@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.models.MFAProvider;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyMFACompleteRequest;
 import cloud.pangeacyber.pangea.authn.responses.FlowVerifyMFACompleteResponse;
@@ -24,24 +25,22 @@ final class FlowVerifyMFAStartRequest {
 	}
 }
 
-public class FlowVerifyMFA extends Client {
+public class FlowVerifyMFA extends BaseClient {
 
-	public static final String serviceName = "authn";
-
-	public FlowVerifyMFA(Config config) {
-		super(config, serviceName);
+	public FlowVerifyMFA(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: Doc
 	public FlowVerifyMFACompleteResponse complete(FlowVerifyMFACompleteRequest request)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/flow/verify/mfa/complete", request, FlowVerifyMFACompleteResponse.class);
+		return post("/v1/flow/verify/mfa/complete", request, FlowVerifyMFACompleteResponse.class);
 	}
 
 	// TODO: Doc
 	public FlowVerifyMFAStartResponse start(String flowID, MFAProvider mfaProvider)
 		throws PangeaException, PangeaAPIException {
 		FlowVerifyMFAStartRequest request = new FlowVerifyMFAStartRequest(flowID, mfaProvider);
-		return doPost("/v1/flow/verify/mfa/start", request, FlowVerifyMFAStartResponse.class);
+		return post("/v1/flow/verify/mfa/start", request, FlowVerifyMFAStartResponse.class);
 	}
 }

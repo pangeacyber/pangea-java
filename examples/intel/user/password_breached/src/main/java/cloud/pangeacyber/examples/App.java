@@ -2,6 +2,7 @@ package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.UserIntelClient;
 import cloud.pangeacyber.pangea.intel.models.*;
+import cloud.pangeacyber.pangea.intel.responses.UserPasswordBreachedResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 
@@ -17,7 +18,7 @@ public class App
             System.exit(1);
         }
 
-        UserIntelClient client = new UserIntelClient(cfg);
+        UserIntelClient client = new UserIntelClient.Builder(cfg).build();
         UserPasswordBreachedResponse response = null;
         try {
             response = client.breached(

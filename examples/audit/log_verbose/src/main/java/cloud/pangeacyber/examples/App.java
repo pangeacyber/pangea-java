@@ -19,7 +19,7 @@ public class App
             System.exit(1);
         }
 
-        AuditClient client = new AuditClient(cfg);
+        AuditClient client = new AuditClient.Builder(cfg).build();
         Event event = new Event("This is a message to log");
         event.setAction("Login");
         event.setActor("Terminal");

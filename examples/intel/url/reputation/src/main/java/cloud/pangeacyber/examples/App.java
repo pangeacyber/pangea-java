@@ -17,7 +17,7 @@ public class App
             System.exit(1);
         }
 
-        UrlIntelClient client = new UrlIntelClient(cfg);
+        UrlIntelClient client = new UrlIntelClient.Builder(cfg).build();
         URLReputationResponse response = null;
         try {
             response = client.reputation("http://113.235.101.11:54384", "crowdstrike", true, true);

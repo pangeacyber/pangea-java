@@ -17,7 +17,7 @@ public class App
             System.exit(1);
         }
 
-        DomainIntelClient client = new DomainIntelClient(cfg);
+        DomainIntelClient client = new DomainIntelClient.Builder(cfg).build();
         DomainReputationResponse response = null;
         try {
             response = client.reputation("737updatesboeing.com", "domaintools", true, true);

@@ -1,6 +1,6 @@
 package cloud.pangeacyber.pangea.audit.utils;
 
-import cloud.pangeacyber.pangea.audit.EventVerification;
+import cloud.pangeacyber.pangea.audit.models.EventVerification;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;

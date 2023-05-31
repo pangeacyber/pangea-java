@@ -18,7 +18,7 @@ public class App
             System.exit(1);
         }
 
-        EmbargoClient client = new EmbargoClient(cfg);
+        EmbargoClient client = new EmbargoClient.Builder(cfg).build();
         String ip = "213.24.238.26";
         IpCheckResponse response = null;
         try {

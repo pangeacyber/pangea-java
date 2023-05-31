@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyEmailRequest;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyPasswordRequest;
 import cloud.pangeacyber.pangea.authn.responses.FlowVerifyCaptchaResponse;
@@ -44,36 +45,35 @@ final class FlowVerifySocialRequest {
 	}
 }
 
-public class FlowVerify extends Client {
+public class FlowVerify extends BaseClient {
 
-	public static final String serviceName = "authn";
 	private FlowVerifyMFA mfa;
 
-	public FlowVerify(Config config) {
-		super(config, serviceName);
-		mfa = new FlowVerifyMFA(config);
+	public FlowVerify(AuthNClient.Builder builder) {
+		super(builder);
+		mfa = new FlowVerifyMFA(builder);
 	}
 
 	// TODO: doc
 	public FlowVerifyCaptchaResponse captcha(String flowId, String code) throws PangeaException, PangeaAPIException {
 		FlowVerifyCaptchaRequest request = new FlowVerifyCaptchaRequest(flowId, code);
-		return doPost("/v1/flow/verify/captcha", request, FlowVerifyCaptchaResponse.class);
+		return post("/v1/flow/verify/captcha", request, FlowVerifyCaptchaResponse.class);
 	}
 
 	// TODO: doc
 	public FlowVerifyEmailResponse email(FlowVerifyEmailRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/flow/verify/email", request, FlowVerifyEmailResponse.class);
+		return post("/v1/flow/verify/email", request, FlowVerifyEmailResponse.class);
 	}
 
 	// TODO: doc
 	public FlowVerifyPasswordResponse password(FlowVerifyPasswordRequest request)
 		throws PangeaException, PangeaAPIException {
-		return doPost("/v1/flow/verify/password", request, FlowVerifyPasswordResponse.class);
+		return post("/v1/flow/verify/password", request, FlowVerifyPasswordResponse.class);
 	}
 
 	// TODO: doc
 	public FlowVerifySocialResponse social(FlowVerifySocialRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/flow/verify/social", request, FlowVerifySocialResponse.class);
+		return post("/v1/flow/verify/social", request, FlowVerifySocialResponse.class);
 	}
 
 	public FlowVerifyMFA mfa() {

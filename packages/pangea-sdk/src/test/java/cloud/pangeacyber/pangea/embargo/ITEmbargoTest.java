@@ -5,6 +5,10 @@ import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.TestEnvironment;
+import cloud.pangeacyber.pangea.embargo.models.EmbargoSanction;
+import cloud.pangeacyber.pangea.embargo.models.EmbargoSanctions;
+import cloud.pangeacyber.pangea.embargo.responses.IpCheckResponse;
+import cloud.pangeacyber.pangea.embargo.responses.IsoCheckResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -20,8 +24,7 @@ public class ITEmbargoTest {
 
 	@Before
 	public void setUp() throws ConfigException {
-		client = new EmbargoClient(Config.fromIntegrationEnvironment(environment));
-		client.setCustomUserAgent("test");
+		client = new EmbargoClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
 
 	@Test
@@ -69,7 +72,7 @@ public class ITEmbargoTest {
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
-		EmbargoClient fakeClient = new EmbargoClient(cfg);
+		EmbargoClient fakeClient = new EmbargoClient.Builder(cfg).build();
 		IpCheckResponse response = fakeClient.ipCheck("1.1.1.1");
 	}
 }

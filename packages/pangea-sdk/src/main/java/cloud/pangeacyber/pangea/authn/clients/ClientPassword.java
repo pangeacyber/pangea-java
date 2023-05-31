@@ -1,7 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.ClientPasswordChangeResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -25,19 +26,17 @@ final class ClientPasswordChangeResquest {
 	}
 }
 
-public class ClientPassword extends Client {
+public class ClientPassword extends BaseClient {
 
-	public static final String serviceName = "authn";
-
-	public ClientPassword(Config config) {
-		super(config, serviceName);
+	public ClientPassword(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: Doc
 	public ClientPasswordChangeResponse change(String token, String oldPassword, String newPassword)
 		throws PangeaException, PangeaAPIException {
 		ClientPasswordChangeResquest request = new ClientPasswordChangeResquest(token, oldPassword, newPassword);
-		ClientPasswordChangeResponse resp = doPost(
+		ClientPasswordChangeResponse resp = post(
 			"/v1/client/password/change",
 			request,
 			ClientPasswordChangeResponse.class

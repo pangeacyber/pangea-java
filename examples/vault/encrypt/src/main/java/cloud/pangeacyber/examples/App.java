@@ -20,7 +20,7 @@ public class App
             System.exit(1);
         }
 
-        VaultClient client = new VaultClient(cfg);
+        VaultClient client = new VaultClient.Builder(cfg).build();
         String name = "my key's name";
 
         try {

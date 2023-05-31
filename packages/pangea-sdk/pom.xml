@@ -345,6 +345,11 @@
               <placement>a</placement>
               <head>Example:</head>
             </tag>
+            <tag>
+              <name>pangea.operationId</name>
+              <placement>a</placement>
+              <head>Operation ID:</head>
+            </tag>
           </tags>
         </configuration>
       </plugin>

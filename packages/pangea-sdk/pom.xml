@@ -333,7 +333,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.4.1</version>
         <configuration>
-          <doclint>all,-missing</doclint>
+          <doclint>all,-missing,-syntax</doclint>
           <tags>
             <tag>
               <name>pangea.description</name>
@@ -347,7 +347,7 @@
             </tag>
             <tag>
               <name>pangea.operationId</name>
-              <placement>a</placement>
+              <placement>X</placement>
               <head>Operation ID:</head>
             </tag>
           </tags>

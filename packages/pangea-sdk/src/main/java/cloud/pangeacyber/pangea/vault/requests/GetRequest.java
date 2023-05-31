@@ -22,21 +22,21 @@ public class GetRequest {
 	@JsonProperty("version_state")
 	ItemVersionState versionState = null;
 
-	protected GetRequest(GetRequestBuilder builder) {
+	protected GetRequest(Builder builder) {
 		this.id = builder.id;
 		this.version = builder.version;
 		this.verbose = builder.verbose;
 		this.versionState = builder.versionState;
 	}
 
-	public static class GetRequestBuilder {
+	public static class Builder {
 
 		String id;
 		String version = null;
 		Boolean verbose = null;
 		ItemVersionState versionState = null;
 
-		public GetRequestBuilder(String id) {
+		public Builder(String id) {
 			this.id = id;
 		}
 
@@ -44,17 +44,17 @@ public class GetRequest {
 			return new GetRequest(this);
 		}
 
-		public GetRequestBuilder setVersion(String version) {
+		public Builder version(String version) {
 			this.version = version;
 			return this;
 		}
 
-		public GetRequestBuilder setVerbose(Boolean verbose) {
+		public Builder verbose(Boolean verbose) {
 			this.verbose = verbose;
 			return this;
 		}
 
-		public GetRequestBuilder setVersionState(ItemVersionState versionState) {
+		public Builder versionState(ItemVersionState versionState) {
 			this.versionState = versionState;
 			return this;
 		}

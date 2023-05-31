@@ -36,7 +36,7 @@ public class CommonStoreRequest {
 	@JsonProperty("expiration")
 	String expiration = null;
 
-	protected CommonStoreRequest(CommonStoreRequestBuilder<?> builder) {
+	protected CommonStoreRequest(CommonBuilder<?> builder) {
 		this.name = builder.name;
 		this.folder = builder.folder;
 		this.metadata = builder.metadata;
@@ -70,7 +70,7 @@ public class CommonStoreRequest {
 		return expiration;
 	}
 
-	public static class CommonStoreRequestBuilder<B extends CommonStoreRequestBuilder<B>> {
+	public static class CommonBuilder<B extends CommonBuilder<B>> {
 
 		String name = null;
 		String folder = null;
@@ -81,7 +81,7 @@ public class CommonStoreRequest {
 		String rotationState = null;
 		String expiration = null;
 
-		public CommonStoreRequestBuilder(String name) {
+		public CommonBuilder(String name) {
 			this.name = name;
 		}
 
@@ -94,37 +94,37 @@ public class CommonStoreRequest {
 			return (B) this;
 		}
 
-		public B setName(String name) {
+		public B name(String name) {
 			this.name = name;
 			return self();
 		}
 
-		public B setFolder(String folder) {
+		public B folder(String folder) {
 			this.folder = folder;
 			return self();
 		}
 
-		public B setMetadata(Metadata metadata) {
+		public B metadata(Metadata metadata) {
 			this.metadata = metadata;
 			return self();
 		}
 
-		public B setTags(Tags tags) {
+		public B tags(Tags tags) {
 			this.tags = tags;
 			return self();
 		}
 
-		public B setAutoRotate(Boolean autoRotate) {
+		public B autoRotate(Boolean autoRotate) {
 			this.autoRotate = autoRotate;
 			return self();
 		}
 
-		public B setRotationFrequency(String rotationFrequency) {
+		public B rotationFrequency(String rotationFrequency) {
 			this.rotationFrequency = rotationFrequency;
 			return self();
 		}
 
-		public B setExpiration(String expiration) {
+		public B expiration(String expiration) {
 			this.expiration = expiration;
 			return self();
 		}

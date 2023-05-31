@@ -29,7 +29,7 @@ public class RedactStructuredRequest {
 	@JsonProperty("return_result")
 	Boolean returnResult = null;
 
-	protected RedactStructuredRequest(RedactStructuredRequestBuilder builder) {
+	protected RedactStructuredRequest(Builder builder) {
 		this.data = builder.data;
 		this.jsonp = builder.jsonp;
 		this.format = builder.format;
@@ -62,7 +62,7 @@ public class RedactStructuredRequest {
 		return returnResult;
 	}
 
-	public static class RedactStructuredRequestBuilder {
+	public static class Builder {
 
 		Object data;
 		String[] jsonp = null;
@@ -71,7 +71,7 @@ public class RedactStructuredRequest {
 		String[] rules = null;
 		Boolean returnResult = null;
 
-		public RedactStructuredRequestBuilder(Object data) {
+		public Builder(Object data) {
 			this.data = data;
 		}
 
@@ -79,27 +79,27 @@ public class RedactStructuredRequest {
 			return new RedactStructuredRequest(this);
 		}
 
-		public RedactStructuredRequestBuilder setJsonp(String[] jsonp) {
+		public Builder setJsonp(String[] jsonp) {
 			this.jsonp = jsonp;
 			return this;
 		}
 
-		public RedactStructuredRequestBuilder setFormat(String format) {
+		public Builder setFormat(String format) {
 			this.format = format;
 			return this;
 		}
 
-		public RedactStructuredRequestBuilder setDebug(Boolean debug) {
+		public Builder setDebug(Boolean debug) {
 			this.debug = debug;
 			return this;
 		}
 
-		public RedactStructuredRequestBuilder setRules(String[] rules) {
+		public Builder setRules(String[] rules) {
 			this.rules = rules;
 			return this;
 		}
 
-		public RedactStructuredRequestBuilder setReturnResult(Boolean returnResult) {
+		public Builder setReturnResult(Boolean returnResult) {
 			this.returnResult = returnResult;
 			return this;
 		}

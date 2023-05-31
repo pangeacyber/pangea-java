@@ -7,7 +7,7 @@ public class SecretRotateRequest extends CommonRotateRequest {
 	@JsonProperty("secret")
 	String secret = null;
 
-	protected SecretRotateRequest(SecretRotateRequestBuilder builder) {
+	protected SecretRotateRequest(Builder builder) {
 		super(builder);
 		this.secret = builder.secret;
 	}
@@ -16,7 +16,7 @@ public class SecretRotateRequest extends CommonRotateRequest {
 		return secret;
 	}
 
-	public static class SecretRotateRequestBuilder extends CommonRotateRequestBuilder<SecretRotateRequestBuilder> {
+	public static class Builder extends CommonBuilder<Builder> {
 
 		String secret = null;
 
@@ -24,12 +24,12 @@ public class SecretRotateRequest extends CommonRotateRequest {
 			return new SecretRotateRequest(this);
 		}
 
-		public SecretRotateRequestBuilder(String id, String secret) {
+		public Builder(String id, String secret) {
 			super(id);
 			this.secret = secret;
 		}
 
-		public SecretRotateRequestBuilder setSecret(String secret) {
+		public Builder secret(String secret) {
 			this.secret = secret;
 			return this;
 		}

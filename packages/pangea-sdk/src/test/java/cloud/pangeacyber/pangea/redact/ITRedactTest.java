@@ -35,7 +35,7 @@ public class ITRedactTest {
 	@Test
 	public void testRedactRequest_1() throws PangeaException, PangeaAPIException {
 		RedactTextResponse response = client.redactText(
-			new RedactTextRequest.RedactTextRequestBuilder("Jenny Jenny... 415-867-5309").build()
+			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").build()
 		);
 		assertTrue(response.isOk());
 
@@ -48,7 +48,7 @@ public class ITRedactTest {
 	@Test
 	public void testRedactRequest_2() throws PangeaException, PangeaAPIException {
 		RedactTextResponse response = client.redactText(
-			new RedactTextRequest.RedactTextRequestBuilder("Jenny Jenny... 415-867-5309").setDebug(true).build()
+			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").setDebug(true).build()
 		);
 		assertTrue(response.isOk());
 
@@ -60,7 +60,7 @@ public class ITRedactTest {
 	@Test
 	public void testRedactRequest_3() throws PangeaException, PangeaAPIException {
 		RedactTextResponse response = client.redactText(
-			new RedactTextRequest.RedactTextRequestBuilder("Jenny Jenny... 415-867-5309").setDebug(false).build()
+			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").setDebug(false).build()
 		);
 		assertTrue(response.isOk());
 
@@ -75,9 +75,7 @@ public class ITRedactTest {
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
 
-		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.RedactStructuredRequestBuilder(data).build()
-		);
+		RedactStructuredResponse response = client.redactStructured(new RedactStructuredRequest.Builder(data).build());
 		assertTrue(response.isOk());
 
 		RedactStructuredResult result = response.getResult();
@@ -98,7 +96,7 @@ public class ITRedactTest {
 		data.put("Phone", "This is its number: 415-867-5309");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.RedactStructuredRequestBuilder(data).setFormat("json").build()
+			new RedactStructuredRequest.Builder(data).setFormat("json").build()
 		);
 		assertTrue(response.isOk());
 
@@ -119,7 +117,7 @@ public class ITRedactTest {
 		data.put("Phone", "This is its number: 415-867-5309");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.RedactStructuredRequestBuilder(data).setDebug(true).build()
+			new RedactStructuredRequest.Builder(data).setDebug(true).build()
 		);
 		assertTrue(response.isOk());
 
@@ -140,7 +138,7 @@ public class ITRedactTest {
 		data.put("Phone", "This is its number: 415-867-5309");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.RedactStructuredRequestBuilder(data).setDebug(false).build()
+			new RedactStructuredRequest.Builder(data).setDebug(false).build()
 		);
 		assertTrue(response.isOk());
 
@@ -161,7 +159,7 @@ public class ITRedactTest {
 		data.put("Phone", "This is its number: 415-867-5309");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.RedactStructuredRequestBuilder(data).setFormat("json").setDebug(true).build()
+			new RedactStructuredRequest.Builder(data).setFormat("json").setDebug(true).build()
 		);
 		assertTrue(response.isOk());
 
@@ -182,10 +180,7 @@ public class ITRedactTest {
 		data.put("Phone", "This is its number: 415-867-5309");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.RedactStructuredRequestBuilder(data)
-				.setDebug(true)
-				.setJsonp(new String[] { "Phone" })
-				.build()
+			new RedactStructuredRequest.Builder(data).setDebug(true).setJsonp(new String[] { "Phone" }).build()
 		);
 		assertTrue(response.isOk());
 
@@ -206,9 +201,7 @@ public class ITRedactTest {
 		data.put("Phone", "This is its number: 415-867-5309");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.RedactStructuredRequestBuilder(data)
-				.setRules(new String[] { "PHONE_NUMBER" })
-				.build()
+			new RedactStructuredRequest.Builder(data).setRules(new String[] { "PHONE_NUMBER" }).build()
 		);
 		assertTrue(response.isOk());
 
@@ -229,7 +222,7 @@ public class ITRedactTest {
 		data.put("Phone", "This is its number: 415-867-5309");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.RedactStructuredRequestBuilder(data)
+			new RedactStructuredRequest.Builder(data)
 				.setDebug(true)
 				.setJsonp(new String[] { "Phone", "Name" })
 				.setRules(new String[] { "PHONE_NUMBER" })
@@ -253,7 +246,7 @@ public class ITRedactTest {
 		cfg.setToken("notarealtoken");
 		RedactClient fakeClient = new RedactClient.Builder(cfg).build();
 		RedactTextResponse response = fakeClient.redactText(
-			new RedactTextRequest.RedactTextRequestBuilder("My name is Jenny Jenny").build()
+			new RedactTextRequest.Builder("My name is Jenny Jenny").build()
 		);
 	}
 
@@ -266,7 +259,7 @@ public class ITRedactTest {
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
 		RedactStructuredResponse response = fakeClient.redactStructured(
-			new RedactStructuredRequest.RedactStructuredRequestBuilder(data).build()
+			new RedactStructuredRequest.Builder(data).build()
 		);
 	}
 }

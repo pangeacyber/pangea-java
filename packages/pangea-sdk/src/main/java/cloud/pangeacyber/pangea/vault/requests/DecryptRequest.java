@@ -20,21 +20,21 @@ public class DecryptRequest {
 	@JsonProperty("additional_data")
 	String additionalData;
 
-	protected DecryptRequest(DecryptRequestBuilder builder) {
+	protected DecryptRequest(Builder builder) {
 		this.id = builder.id;
 		this.cipherText = builder.cipherText;
 		this.version = builder.version;
 		this.additionalData = builder.additionalData;
 	}
 
-	public static class DecryptRequestBuilder {
+	public static class Builder {
 
 		String id;
 		String cipherText;
 		Integer version;
 		String additionalData;
 
-		public DecryptRequestBuilder(String id, String cipherText) {
+		public Builder(String id, String cipherText) {
 			this.id = id;
 			this.cipherText = cipherText;
 		}
@@ -43,12 +43,12 @@ public class DecryptRequest {
 			return new DecryptRequest(this);
 		}
 
-		public DecryptRequestBuilder setVersion(Integer version) {
+		public Builder version(Integer version) {
 			this.version = version;
 			return this;
 		}
 
-		public DecryptRequestBuilder setAdditionalData(String additionalData) {
+		public Builder additionalData(String additionalData) {
 			this.additionalData = additionalData;
 			return this;
 		}

@@ -53,40 +53,40 @@ public class ITVaultTest {
 		String dataB64 = Utils.stringToStringB64(message);
 
 		// Encrypt 1
-		EncryptResponse encryptResponse1 = client.encrypt(id, dataB64);
+		EncryptResponse encryptResponse1 = client.encrypt(new EncryptRequest.Builder(id, dataB64).build());
 		assertEquals(id, encryptResponse1.getResult().getId());
 		assertEquals(Integer.valueOf(1), encryptResponse1.getResult().getVersion());
 		assertNotNull(encryptResponse1.getResult().getCipherText());
 
 		// Rotate
 		KeyRotateResponse rotateResponse = client.keyRotate(
-			new KeyRotateRequest.KeyRotateRequestBuilder(id, ItemVersionState.SUSPENDED).build()
+			new KeyRotateRequest.Builder(id, ItemVersionState.SUSPENDED).build()
 		);
 		assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
 		assertEquals(id, rotateResponse.getResult().getId());
 
 		// Encrypt 2
-		EncryptResponse encryptResponse2 = client.encrypt(
-			new EncryptRequest.EncryptRequestBuilder(id, dataB64).setVersion(2).build()
-		);
+		EncryptResponse encryptResponse2 = client.encrypt(new EncryptRequest.Builder(id, dataB64).version(2).build());
 		assertEquals(id, encryptResponse1.getResult().getId());
 		assertEquals(Integer.valueOf(2), encryptResponse2.getResult().getVersion());
 		assertNotNull(encryptResponse2.getResult().getCipherText());
 
 		// Decrypt 1
-		DecryptResponse decryptResponse1 = client.decrypt(id, encryptResponse1.getResult().getCipherText(), 1);
+		DecryptResponse decryptResponse1 = client.decrypt(
+			new DecryptRequest.Builder(id, encryptResponse1.getResult().getCipherText()).version(1).build()
+		);
 		assertEquals(dataB64, decryptResponse1.getResult().getPlainText());
 
 		// Decrypt 2
 		DecryptResponse decryptResponse2 = client.decrypt(
-			new DecryptRequest.DecryptRequestBuilder(id, encryptResponse2.getResult().getCipherText())
-				.setVersion(2)
-				.build()
+			new DecryptRequest.Builder(id, encryptResponse2.getResult().getCipherText()).version(2).build()
 		);
 		assertEquals(dataB64, decryptResponse2.getResult().getPlainText());
 
 		// Decrypt default
-		DecryptResponse decryptResponseDefault = client.decrypt(id, encryptResponse2.getResult().getCipherText());
+		DecryptResponse decryptResponseDefault = client.decrypt(
+			new DecryptRequest.Builder(id, encryptResponse2.getResult().getCipherText()).build()
+		);
 		assertEquals(dataB64, decryptResponseDefault.getResult().getPlainText());
 
 		// Add faliures cases. Wrong ID, wrong version, etc
@@ -97,9 +97,7 @@ public class ITVaultTest {
 
 		// Decrypt after revoke
 		DecryptResponse decryptResponseAfterSuspend = client.decrypt(
-			id,
-			encryptResponse1.getResult().getCipherText(),
-			1
+			new DecryptRequest.Builder(id, encryptResponse1.getResult().getCipherText()).version(1).build()
 		);
 		assertEquals(dataB64, decryptResponseAfterSuspend.getResult().getPlainText());
 	}
@@ -115,7 +113,7 @@ public class ITVaultTest {
 
 		// Rotate
 		KeyRotateResponse rotateResponse = client.keyRotate(
-			new KeyRotateRequest.KeyRotateRequestBuilder(id, ItemVersionState.SUSPENDED).build()
+			new KeyRotateRequest.Builder(id, ItemVersionState.SUSPENDED).build()
 		);
 		assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
 		assertNotNull(rotateResponse.getResult().getEncodedPublicKey());
@@ -167,7 +165,7 @@ public class ITVaultTest {
 
 		// Rotate
 		KeyRotateResponse rotateResponse = client.keyRotate(
-			new KeyRotateRequest.KeyRotateRequestBuilder(id, ItemVersionState.SUSPENDED).build()
+			new KeyRotateRequest.Builder(id, ItemVersionState.SUSPENDED).build()
 		);
 		assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
 
@@ -215,7 +213,7 @@ public class ITVaultTest {
 
 		// Rotate
 		KeyRotateResponse rotateResponse = client.keyRotate(
-			new KeyRotateRequest.KeyRotateRequestBuilder(id, ItemVersionState.SUSPENDED).build()
+			new KeyRotateRequest.Builder(id, ItemVersionState.SUSPENDED).build()
 		);
 		assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
 
@@ -244,7 +242,7 @@ public class ITVaultTest {
 	public void testAESEncryptingLifeCycle() throws PangeaException, PangeaAPIException {
 		String name = getName();
 		try {
-			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
+			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.Builder(
 				SymmetricAlgorithm.AES,
 				KeyPurpose.ENCRYPTION,
 				name
@@ -265,7 +263,7 @@ public class ITVaultTest {
 	public void testEd25519SigningLifeCycle() throws PangeaException, PangeaAPIException {
 		String name = getName();
 		try {
-			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder(
+			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.Builder(
 				AsymmetricAlgorithm.ED25519,
 				KeyPurpose.SIGNING,
 				name
@@ -290,11 +288,7 @@ public class ITVaultTest {
 		AsymmetricAlgorithm algorithm = AsymmetricAlgorithm.ES256;
 		String name = getName();
 		try {
-			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder(
-				algorithm,
-				purpose,
-				name
-			)
+			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.Builder(algorithm, purpose, name)
 				.build();
 
 			// Generate
@@ -315,11 +309,7 @@ public class ITVaultTest {
 		SymmetricAlgorithm algorithm = SymmetricAlgorithm.HS256;
 		String name = getName();
 		try {
-			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
-				algorithm,
-				purpose,
-				name
-			)
+			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.Builder(algorithm, purpose, name)
 				.build();
 
 			// Generate
@@ -340,15 +330,14 @@ public class ITVaultTest {
 		SecretStoreResponse storeResponse = null;
 		String name = getName();
 		try {
-			storeResponse =
-				client.secretStore(new SecretStoreRequest.SecretStoreRequestBuilder(secretV1, name).build());
+			storeResponse = client.secretStore(new SecretStoreRequest.Builder(secretV1, name).build());
 			assertEquals(secretV1, storeResponse.getResult().getSecret());
 			assertEquals(Integer.valueOf(1), storeResponse.getResult().getVersion());
 			assertNotNull(storeResponse.getResult().getId());
 
 			SecretRotateResponse rotateResponse = client.secretRotate(
-				new SecretRotateRequest.SecretRotateRequestBuilder(storeResponse.getResult().getId(), secretV2)
-					.setRotationState(ItemVersionState.SUSPENDED)
+				new SecretRotateRequest.Builder(storeResponse.getResult().getId(), secretV2)
+					.rotationState(ItemVersionState.SUSPENDED)
 					.build()
 			);
 
@@ -356,9 +345,7 @@ public class ITVaultTest {
 			assertEquals(Integer.valueOf(2), rotateResponse.getResult().getVersion());
 			assertEquals(storeResponse.getResult().getId(), rotateResponse.getResult().getId());
 
-			GetResponse getResponse = client.get(
-				new GetRequest.GetRequestBuilder(storeResponse.getResult().getId()).build()
-			);
+			GetResponse getResponse = client.get(new GetRequest.Builder(storeResponse.getResult().getId()).build());
 			assertEquals(secretV2, getResponse.getResult().getCurrentVersion().getSecret());
 
 			StateChangeResponse stateChangeResponse = client.stateChange(
@@ -373,9 +360,7 @@ public class ITVaultTest {
 			assertTrue(false);
 		}
 
-		GetResponse getReponse2 = client.get(
-			new GetRequest.GetRequestBuilder(storeResponse.getResult().getId()).build()
-		);
+		GetResponse getReponse2 = client.get(new GetRequest.Builder(storeResponse.getResult().getId()).build());
 		assertNotNull(getReponse2.getResult().getCurrentVersion().getSecret());
 	}
 }

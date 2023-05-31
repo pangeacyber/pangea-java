@@ -16,7 +16,7 @@ public class AsymmetricGenerateRequest extends CommonGenerateRequest {
 	@JsonProperty("purpose")
 	KeyPurpose purpose = null;
 
-	protected AsymmetricGenerateRequest(AsymmetricGenerateRequestBuilder builder) {
+	protected AsymmetricGenerateRequest(Builder builder) {
 		super(builder);
 		this.type = builder.type;
 		this.algorithm = builder.algorithm;
@@ -31,14 +31,13 @@ public class AsymmetricGenerateRequest extends CommonGenerateRequest {
 		return purpose;
 	}
 
-	public static class AsymmetricGenerateRequestBuilder
-		extends CommonGenerateRequestBuilder<AsymmetricGenerateRequestBuilder> {
+	public static class Builder extends CommonBuilder<Builder> {
 
 		ItemType type;
 		AsymmetricAlgorithm algorithm = null;
 		KeyPurpose purpose = null;
 
-		public AsymmetricGenerateRequestBuilder(AsymmetricAlgorithm algorithm, KeyPurpose purpose, String name) {
+		public Builder(AsymmetricAlgorithm algorithm, KeyPurpose purpose, String name) {
 			super(name);
 			this.type = ItemType.ASYMMETRIC_KEY;
 			this.algorithm = algorithm;
@@ -49,12 +48,12 @@ public class AsymmetricGenerateRequest extends CommonGenerateRequest {
 			return new AsymmetricGenerateRequest(this);
 		}
 
-		public AsymmetricGenerateRequestBuilder setAlgorithm(AsymmetricAlgorithm algorithm) {
+		public Builder algorithm(AsymmetricAlgorithm algorithm) {
 			this.algorithm = algorithm;
 			return this;
 		}
 
-		public AsymmetricGenerateRequestBuilder setPurpose(KeyPurpose purpose) {
+		public Builder purpose(KeyPurpose purpose) {
 			this.purpose = purpose;
 			return this;
 		}

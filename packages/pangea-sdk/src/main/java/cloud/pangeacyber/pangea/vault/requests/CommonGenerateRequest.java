@@ -36,7 +36,7 @@ public class CommonGenerateRequest {
 	@JsonProperty("expiration")
 	String expiration = null;
 
-	protected CommonGenerateRequest(CommonGenerateRequestBuilder<?> builder) {
+	protected CommonGenerateRequest(CommonBuilder<?> builder) {
 		this.name = builder.name;
 		this.folder = builder.folder;
 		this.metadata = builder.metadata;
@@ -69,7 +69,7 @@ public class CommonGenerateRequest {
 		return expiration;
 	}
 
-	public static class CommonGenerateRequestBuilder<B extends CommonGenerateRequestBuilder<B>> {
+	public static class CommonBuilder<B extends CommonBuilder<B>> {
 
 		String name = null;
 		String folder = null;
@@ -80,7 +80,7 @@ public class CommonGenerateRequest {
 		String rotationState = null;
 		String expiration = null;
 
-		public CommonGenerateRequestBuilder(String name) {
+		public CommonBuilder(String name) {
 			this.name = name;
 		}
 
@@ -93,42 +93,42 @@ public class CommonGenerateRequest {
 			return (B) this;
 		}
 
-		public B setName(String name) {
+		public B name(String name) {
 			this.name = name;
 			return self();
 		}
 
-		public B setFolder(String folder) {
+		public B folder(String folder) {
 			this.folder = folder;
 			return self();
 		}
 
-		public B setMetadata(Metadata metadata) {
+		public B metadata(Metadata metadata) {
 			this.metadata = metadata;
 			return self();
 		}
 
-		public B setTags(Tags tags) {
+		public B tags(Tags tags) {
 			this.tags = tags;
 			return self();
 		}
 
-		public B setAutoRotate(Boolean autoRotate) {
+		public B autoRotate(Boolean autoRotate) {
 			this.autoRotate = autoRotate;
 			return self();
 		}
 
-		public B setRotationFrequency(String rotationFrequency) {
+		public B rotationFrequency(String rotationFrequency) {
 			this.rotationFrequency = rotationFrequency;
 			return self();
 		}
 
-		public B setRotationState(String rotationState) {
+		public B rotationState(String rotationState) {
 			this.rotationState = rotationState;
 			return self();
 		}
 
-		public B setExpiration(String expiration) {
+		public B expiration(String expiration) {
 			this.expiration = expiration;
 			return self();
 		}

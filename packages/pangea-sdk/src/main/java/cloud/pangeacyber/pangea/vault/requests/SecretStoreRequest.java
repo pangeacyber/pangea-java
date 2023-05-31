@@ -10,7 +10,7 @@ public class SecretStoreRequest extends CommonStoreRequest {
 	@JsonProperty("type")
 	String type;
 
-	protected SecretStoreRequest(SecretStoreRequestBuilder builder) {
+	protected SecretStoreRequest(Builder builder) {
 		super(builder);
 		this.secret = builder.secret;
 		this.type = "secret";
@@ -20,11 +20,11 @@ public class SecretStoreRequest extends CommonStoreRequest {
 		return secret;
 	}
 
-	public static class SecretStoreRequestBuilder extends CommonStoreRequestBuilder<SecretStoreRequestBuilder> {
+	public static class Builder extends CommonBuilder<Builder> {
 
 		String secret = null;
 
-		public SecretStoreRequestBuilder(String secret, String name) {
+		public Builder(String secret, String name) {
 			super(name);
 			this.secret = secret;
 		}

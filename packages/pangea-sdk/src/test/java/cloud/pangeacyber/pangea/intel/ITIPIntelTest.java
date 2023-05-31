@@ -148,7 +148,9 @@ public class ITIPIntelTest {
 	@Test
 	public void testIpReputation_CymruProvider() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
-		IPReputationResponse response = client.reputation("93.231.182.110", "cymru", true, true);
+		IPReputationResponse response = client.reputation(
+			new IPReputationRequest.Builder("93.231.182.110").provider("cymru").raw(true).verbose(true).build()
+		);
 		assertTrue(response.isOk());
 		assertNotNull(response.getResult().getData());
 		assertNotNull(response.getResult().getParameters());

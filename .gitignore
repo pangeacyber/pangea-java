@@ -3,3 +3,4 @@ target/
 .env
 
 *.exe
+pangea_sdk_logs.json

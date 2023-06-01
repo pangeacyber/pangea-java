@@ -89,7 +89,7 @@ public class ITFileScanTest {
 		}
 
 		// Sleep 60 seconds until result is (should) be ready
-		Thread.sleep(60 * 1000);
+		Thread.sleep(120 * 1000);
 
 		// Poll result, this could raise another AcceptedRequestException if result is not ready
 		response = client.pollResult(exception.getRequestId(), FileScanResponse.class);

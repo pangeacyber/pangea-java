@@ -337,7 +337,7 @@ public class BaseClient {
 				);
 
 			try {
-				Thread.sleep(Duration.ofSeconds(delay));
+				Thread.sleep(delay*1000);	//sleep(Duration) is supported on v19. We use v18.
 				EntityUtils.consumeQuietly(response.getEntity()); //response need to be consumed
 				response = doGet(path);
 				retryCounter++;

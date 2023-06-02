@@ -29,10 +29,11 @@ final class IpCheckRequest extends BaseRequest {
 
 public class EmbargoClient extends Client {
 
-	public static String serviceName = "embargo";
+	public static final String serviceName = "embargo";
+	private static final boolean supportMultiConfig = false;
 
 	public EmbargoClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	/**

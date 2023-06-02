@@ -129,10 +129,11 @@ final class DeleteRequest extends BaseRequest {
 
 public class VaultClient extends Client {
 
-	public static String serviceName = "vault";
+	public static final String serviceName = "vault";
+	private static final boolean supportMultiConfig = false;
 
 	public VaultClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	/**

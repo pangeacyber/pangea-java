@@ -23,12 +23,13 @@ final class UserinfoRequest extends BaseRequest {
 public class ClientEndpoint extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 	private ClientSession session;
 	private ClientPassword password;
 	private ClientToken token;
 
 	public ClientEndpoint(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 		session = new ClientSession(config);
 		password = new ClientPassword(config);
 		token = new ClientToken(config);

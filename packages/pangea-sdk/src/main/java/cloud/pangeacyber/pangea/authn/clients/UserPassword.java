@@ -25,9 +25,10 @@ final class UserPasswordResetRequest extends BaseRequest {
 public class UserPassword extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 
 	public UserPassword(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	// TODO: Doc

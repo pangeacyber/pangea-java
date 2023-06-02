@@ -87,19 +87,20 @@ final class LogRequest extends BaseRequest {
 
 public class AuditClient extends Client {
 
-	public static String serviceName = "audit";
+	public static final String serviceName = "audit";
 	LogSigner signer;
 	Map<Integer, PublishedRoot> publishedRoots;
 	boolean allowServerRoots = true; // In case of Arweave failure, ask the server for the roots
 	String prevUnpublishedRoot = null;
 	Map<String, Object> pkInfo = null;
 	String tenantID = null;
+	private static final boolean supportMultiConfig = true;
 
 	/**
 	 * @deprecated use AuditClientBuilder instead.
 	 */
 	public AuditClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 		this.signer = null;
 		this.pkInfo = null;
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
@@ -109,7 +110,7 @@ public class AuditClient extends Client {
 	 * @deprecated use AuditClientBuilder instead.
 	 */
 	public AuditClient(Config config, String privateKeyFilename, Map<String, Object> pkInfo) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 		this.signer = new LogSigner(privateKeyFilename);
 		this.pkInfo = pkInfo;
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
@@ -119,13 +120,13 @@ public class AuditClient extends Client {
 	 * @deprecated use AuditClientBuilder instead.
 	 */
 	public AuditClient(Config config, String privateKeyFilename) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 		this.signer = new LogSigner(privateKeyFilename);
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
 	}
 
 	protected AuditClient(AuditClientBuilder builder) {
-		super(builder.config, serviceName);
+		super(builder.config, serviceName, supportMultiConfig);
 		if (builder.privateKeyFilename != null) {
 			this.signer = new LogSigner(builder.privateKeyFilename);
 		} else {

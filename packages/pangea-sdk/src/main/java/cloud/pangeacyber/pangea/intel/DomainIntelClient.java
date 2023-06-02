@@ -63,10 +63,11 @@ final class DomainReputationRequest extends BaseRequest {
 
 public class DomainIntelClient extends Client {
 
-	public static String serviceName = "domain-intel";
+	public static final String serviceName = "domain-intel";
+	private static final boolean supportMultiConfig = false;
 
 	public DomainIntelClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	private DomainLookupResponse lookupPost(String domain, String provider, Boolean verbose, Boolean raw)

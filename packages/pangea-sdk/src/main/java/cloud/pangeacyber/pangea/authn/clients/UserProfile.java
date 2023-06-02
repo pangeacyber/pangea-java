@@ -31,9 +31,10 @@ final class UserProfileGetRequest extends BaseRequest {
 public class UserProfile extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 
 	public UserProfile(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	// TODO: Doc

@@ -54,13 +54,14 @@ final class UserVerifyRequest extends BaseRequest {
 public class User extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 	private UserProfile profile;
 	private UserInvite invite;
 	private UserMFA mfa;
 	private UserLogin login;
 
 	public User(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 		profile = new UserProfile(config);
 		invite = new UserInvite(config);
 		mfa = new UserMFA(config);

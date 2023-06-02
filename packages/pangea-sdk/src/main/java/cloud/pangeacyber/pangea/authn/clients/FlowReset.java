@@ -10,9 +10,10 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 public class FlowReset extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 
 	public FlowReset(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	public FlowResetPasswordResponse password(FlowResetPasswordRequest request)

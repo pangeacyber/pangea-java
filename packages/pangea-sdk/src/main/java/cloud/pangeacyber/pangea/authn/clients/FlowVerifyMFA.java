@@ -28,9 +28,10 @@ final class FlowVerifyMFAStartRequest extends BaseRequest {
 public class FlowVerifyMFA extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 
 	public FlowVerifyMFA(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	// TODO: Doc

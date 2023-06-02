@@ -65,9 +65,10 @@ final class UserMFAVerifyRequest extends BaseRequest {
 public class UserMFA extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 
 	public UserMFA(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	// TODO: Doc

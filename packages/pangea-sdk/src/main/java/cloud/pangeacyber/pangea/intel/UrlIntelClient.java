@@ -63,10 +63,11 @@ final class URLReputationRequest extends BaseRequest {
 
 public class UrlIntelClient extends Client {
 
-	public static String serviceName = "url-intel";
+	public static final String serviceName = "url-intel";
+	private static final boolean supportMultiConfig = false;
 
 	public UrlIntelClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	private UrlLookupResponse lookupPost(String url, String provider, Boolean verbose, Boolean raw)

@@ -23,9 +23,10 @@ final class UserInviteDeleteRequest extends BaseRequest {
 public class UserInvite extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 
 	public UserInvite(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	// TODO: Doc

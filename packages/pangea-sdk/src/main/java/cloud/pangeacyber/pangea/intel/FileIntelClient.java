@@ -78,10 +78,11 @@ final class FileReputationRequest extends BaseRequest {
 
 public class FileIntelClient extends Client {
 
-	public static String serviceName = "file-intel";
+	public static final String serviceName = "file-intel";
+	private static final boolean supportMultiConfig = false;
 
 	public FileIntelClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	private FileLookupResponse lookupPost(String hash, String hashType, String provider, Boolean verbose, Boolean raw)

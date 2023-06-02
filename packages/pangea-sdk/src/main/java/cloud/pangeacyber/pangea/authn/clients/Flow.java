@@ -24,13 +24,14 @@ final class FlowCompleteRequest extends BaseRequest {
 public class Flow extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 	private FlowEnroll enroll;
 	private FlowSignup signup;
 	private FlowVerify verify;
 	private FlowReset reset;
 
 	public Flow(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 		enroll = new FlowEnroll(config);
 		signup = new FlowSignup(config);
 		verify = new FlowVerify(config);

@@ -48,10 +48,11 @@ final class FlowVerifySocialRequest extends BaseRequest {
 public class FlowVerify extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 	private FlowVerifyMFA mfa;
 
 	public FlowVerify(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 		mfa = new FlowVerifyMFA(config);
 	}
 

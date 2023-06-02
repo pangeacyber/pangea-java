@@ -24,12 +24,14 @@ public abstract class Client {
 	String serviceName;
 	Map<String, String> customHeaders = null;
 	String userAgent = "pangea-java/default";
+	private boolean supportMultiConfig = false;
 
-	protected Client(Config config, String serviceName) {
+	protected Client(Config config, String serviceName, boolean supportMultiConfig) {
 		this.serviceName = serviceName;
 		this.config = config;
 		this.httpClient = buildClient();
 		this.setCustomUserAgent(config.getCustomUserAgent());
+		this.supportMultiConfig = supportMultiConfig;
 	}
 
 	protected CloseableHttpClient buildClient() {
@@ -77,7 +79,7 @@ public abstract class Client {
 		ObjectMapper mapper = new ObjectMapper();
 		String body;
 
-		if (this.config.getConfigID() != null && request.getConfigID() == null) {
+		if (this.supportMultiConfig == true && this.config.getConfigID() != null && request.getConfigID() == null) {
 			request.setConfigID(this.config.getConfigID());
 		}
 

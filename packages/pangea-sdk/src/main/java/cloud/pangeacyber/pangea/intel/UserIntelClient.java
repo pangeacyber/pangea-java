@@ -4,10 +4,12 @@ import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.intel.models.PasswordStatus;
 import cloud.pangeacyber.pangea.intel.models.UserBreachedRequest;
 import cloud.pangeacyber.pangea.intel.models.UserBreachedResponse;
 import cloud.pangeacyber.pangea.intel.models.UserPasswordBreachedRequest;
 import cloud.pangeacyber.pangea.intel.models.UserPasswordBreachedResponse;
+import java.util.Map;
 
 public class UserIntelClient extends Client {
 
@@ -59,5 +61,26 @@ public class UserIntelClient extends Client {
 	public UserPasswordBreachedResponse breached(UserPasswordBreachedRequest request)
 		throws PangeaException, PangeaAPIException {
 		return doPost("/v1/password/breached", request, UserPasswordBreachedResponse.class);
+	}
+
+	public static PasswordStatus isPasswordBreached(UserPasswordBreachedResponse response, String hash)
+		throws PangeaException {
+		Map<String, Object> rawData = response.getResult().getRawData();
+		if (rawData == null) {
+			throw new PangeaException("Need raw data to check if hash is breached. Send request with raw=true", null);
+		}
+
+		Object hashData = rawData.get(hash);
+		if (hashData != null) {
+			// If hash is present in raw data, it's because it was breached
+			return PasswordStatus.BREACHED;
+		} else if (rawData.size() >= 1000) {
+			// If it's not present, should check if I have all breached hash
+			// Server will return a maximum of 1000 hash, so if breached count is greater than that,
+			// I can't conclude is password is or is not breached
+			return PasswordStatus.INCONCLUSIVE;
+		} else {
+			return PasswordStatus.UNBREACHED;
+		}
 	}
 }

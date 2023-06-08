@@ -73,7 +73,17 @@
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.11</version>
+      <version>1.13</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.14.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpmime</artifactId>
+      <version>4.5.14</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -89,7 +99,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.5.8</version>
+      <version>4.5.13</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
@@ -343,7 +353,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.4.1</version>
         <configuration>
-          <doclint>all,-missing</doclint>
+          <doclint>all,-missing,-syntax</doclint>
           <tags>
             <tag>
               <name>pangea.description</name>
@@ -354,6 +364,11 @@
               <name>pangea.code</name>
               <placement>a</placement>
               <head>Example:</head>
+            </tag>
+            <tag>
+              <name>pangea.operationId</name>
+              <placement>X</placement>
+              <head>Operation ID:</head>
             </tag>
           </tags>
         </configuration>

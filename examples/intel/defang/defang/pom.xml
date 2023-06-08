@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>cloud.pangeacyber.examples</groupId>
-  <artifactId>ip_reputation</artifactId>
+  <artifactId>defang_defang</artifactId>
   <version>1.0.0</version>
 
-  <name>ip_reputation</name>
+  <name>defang_defang</name>
   <url>http://pangea.cloud</url>
 
   <properties>
@@ -36,7 +36,7 @@
     <dependency>
       <groupId>cloud.pangea</groupId>
       <artifactId>pangea-sdk</artifactId>
-      <version>1.9.1</version>
+      <version>1.7.0</version>
     </dependency>
 
     <dependency>

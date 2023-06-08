@@ -16,8 +16,4 @@ public class SecretRotateResult extends CommonRotateResult {
 	public String getSecret() {
 		return secret;
 	}
-
-	public void setSecret(String secret) {
-		this.secret = secret;
-	}
 }

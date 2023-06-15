@@ -156,7 +156,7 @@ public final class Config {
 	private static String loadEnvVar(String envVarName) throws ConfigException {
 		String value = System.getenv(envVarName);
 		if (value == null || value.isEmpty()) {
-			throw new ConfigException("Need to set up " + envVarName + " environment variable");
+			throw new ConfigException(envVarName + " environment variable need to be set");
 		}
 		return value;
 	}

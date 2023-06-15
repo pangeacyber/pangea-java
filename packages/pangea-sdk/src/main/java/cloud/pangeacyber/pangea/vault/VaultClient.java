@@ -510,9 +510,8 @@ public class VaultClient extends Client {
 			"/v1/key/decrypt",
 			new DecryptRequest.DecryptRequestBuilder(id, cipherText).build(),
 			DecryptResponse.class
-			);
-		}
-
+		);
+	}
 
 	/**
 	 * Decrypt
@@ -607,8 +606,8 @@ public class VaultClient extends Client {
 	 * @pangea.code
 	 * {@code
 	 *	String payload = """
-     *      {'message': 'message to sign', 'data': 'Some extra data'}
-     *       """;
+	 *      {'message': 'message to sign', 'data': 'Some extra data'}
+	 *       """;
 	 *	JWTSignResponse signResponse1 = client.jwtSign("keyid", payload);
 	 * }
 	 */

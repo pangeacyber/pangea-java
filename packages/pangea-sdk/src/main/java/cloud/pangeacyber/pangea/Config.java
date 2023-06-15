@@ -46,6 +46,7 @@ public final class Config {
 		this.enviroment = builder.enviroment;
 		this.connectionTimeout = builder.connectionTimeout;
 		this.customUserAgent = builder.customUserAgent;
+		this.configID = builder.configID;
 	}
 
 	public String getToken() {
@@ -152,31 +153,43 @@ public final class Config {
 		return config;
 	}
 
-	public static String getTestToken(TestEnvironment environment) throws ConfigException {
-		String tokenEnvVarName = "PANGEA_INTEGRATION_TOKEN_" + environment.toString();
-		String token = System.getenv(tokenEnvVarName);
-		if (token == null || token.isEmpty()) {
-			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
+	private static String loadEnvVar(String envVarName) throws ConfigException {
+		String value = System.getenv(envVarName);
+		if (value == null || value.isEmpty()) {
+			throw new ConfigException("Need to set up " + envVarName + " environment variable");
 		}
-		return token;
+		return value;
+	}
+
+	public static String getTestToken(TestEnvironment environment) throws ConfigException {
+		String envVarName = "PANGEA_INTEGRATION_TOKEN_" + environment.toString();
+		return loadEnvVar(envVarName);
 	}
 
 	public static String getVaultSignatureTestToken(TestEnvironment environment) throws ConfigException {
-		String tokenEnvVarName = "PANGEA_INTEGRATION_VAULT_TOKEN_" + environment.toString();
-		String token = System.getenv(tokenEnvVarName);
-		if (token == null || token.isEmpty()) {
-			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
-		}
-		return token;
+		String envVarName = "PANGEA_INTEGRATION_VAULT_TOKEN_" + environment.toString();
+		return loadEnvVar(envVarName);
+	}
+
+	public static String getMultiConfigTestToken(TestEnvironment environment) throws ConfigException {
+		String envVarName = "PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_" + environment.toString();
+		return loadEnvVar(envVarName);
+	}
+
+	public static String getConfigID(TestEnvironment environment, String service, int configNumber)
+		throws ConfigException {
+		String envVarName = String.format(
+			"PANGEA_%s_CONFIG_ID_%d_%s",
+			service.toUpperCase(),
+			configNumber,
+			environment.toString()
+		);
+		return loadEnvVar(envVarName);
 	}
 
 	public static String getTestDomain(TestEnvironment environment) throws ConfigException {
-		String domainEnvVarName = "PANGEA_INTEGRATION_DOMAIN_" + environment.toString();
-		String domain = System.getenv(domainEnvVarName);
-		if (domain == null || domain.isEmpty()) {
-			throw new ConfigException("Need to set up " + domainEnvVarName + " environment variable");
-		}
-		return domain;
+		String envVarName = "PANGEA_INTEGRATION_DOMAIN_" + environment.toString();
+		return loadEnvVar(envVarName);
 	}
 
 	public static class ConfigBuilder {

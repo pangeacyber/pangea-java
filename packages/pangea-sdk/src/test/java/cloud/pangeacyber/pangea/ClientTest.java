@@ -5,7 +5,7 @@ import org.junit.Before;
 class TestClient extends Client {
 
 	public TestClient() {
-		super(new Config.ConfigBuilder("token", "domain.com").build(), "test");
+		super(new Config.ConfigBuilder("token", "domain.com").build(), "test", false);
 	}
 }
 

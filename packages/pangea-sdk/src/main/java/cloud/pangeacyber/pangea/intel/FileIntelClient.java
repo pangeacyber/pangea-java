@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.intel;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -17,7 +18,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.binary.Hex;
 
-final class FileLookupRequest {
+final class FileLookupRequest extends BaseRequest {
 
 	@JsonProperty("hash")
 	String Hash;
@@ -46,7 +47,7 @@ final class FileLookupRequest {
 	}
 }
 
-final class FileReputationRequest {
+final class FileReputationRequest extends BaseRequest {
 
 	@JsonProperty("hash")
 	String Hash;
@@ -77,10 +78,11 @@ final class FileReputationRequest {
 
 public class FileIntelClient extends Client {
 
-	public static String serviceName = "file-intel";
+	public static final String serviceName = "file-intel";
+	private static final boolean supportMultiConfig = false;
 
 	public FileIntelClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	private FileLookupResponse lookupPost(String hash, String hashType, String provider, Boolean verbose, Boolean raw)

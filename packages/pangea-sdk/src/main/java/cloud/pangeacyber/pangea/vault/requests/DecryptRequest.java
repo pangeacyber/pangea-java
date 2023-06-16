@@ -1,10 +1,11 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DecryptRequest {
+public class DecryptRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;

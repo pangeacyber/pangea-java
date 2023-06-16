@@ -9,12 +9,13 @@ import cloud.pangeacyber.pangea.authn.clients.User;
 public class AuthNClient extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 	private User user;
 	private Flow flow;
 	private ClientEndpoint client;
 
 	public AuthNClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 		user = new User(config);
 		flow = new Flow(config);
 		client = new ClientEndpoint(config);

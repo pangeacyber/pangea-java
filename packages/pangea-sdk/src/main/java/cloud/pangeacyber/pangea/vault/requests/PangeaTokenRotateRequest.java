@@ -3,6 +3,7 @@ package cloud.pangeacyber.pangea.vault.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PangeaTokenRotateRequest extends CommonRotateRequest {
+
 	@JsonProperty("rotation_grace_period")
 	String rotationGracePeriod = null;
 
@@ -15,7 +16,8 @@ public class PangeaTokenRotateRequest extends CommonRotateRequest {
 		return rotationGracePeriod;
 	}
 
-	public static class PangeaTokenRotateRequestBuilder extends CommonRotateRequestBuilder<PangeaTokenRotateRequestBuilder> {
+	public static class PangeaTokenRotateRequestBuilder
+		extends CommonRotateRequestBuilder<PangeaTokenRotateRequestBuilder> {
 
 		String rotationGracePeriod = null;
 

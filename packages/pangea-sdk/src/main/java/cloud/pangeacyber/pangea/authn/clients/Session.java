@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.requests.*;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class SessionInvalidateRequest {
+final class SessionInvalidateRequest extends BaseRequest {
 
 	@JsonProperty("session_id")
 	String sessionID;
@@ -20,7 +21,7 @@ final class SessionInvalidateRequest {
 	}
 }
 
-final class SessionRefreshRequest {
+final class SessionRefreshRequest extends BaseRequest {
 
 	@JsonProperty("refresh_token")
 	String refreshToken;
@@ -35,7 +36,7 @@ final class SessionRefreshRequest {
 	}
 }
 
-final class SessionLogoutRequest {
+final class SessionLogoutRequest extends BaseRequest {
 
 	@JsonProperty("user_id")
 	String userID;
@@ -48,9 +49,10 @@ final class SessionLogoutRequest {
 public class Session extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 
 	public Session(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	// TODO: Doc

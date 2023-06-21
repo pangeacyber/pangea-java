@@ -1,21 +1,25 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.audit.AuditClient;
-import cloud.pangeacyber.pangea.audit.ResultsResponse;
 import cloud.pangeacyber.pangea.audit.SearchEvent;
-import cloud.pangeacyber.pangea.audit.SearchResponse;
-import cloud.pangeacyber.pangea.audit.SearchInput;
+import cloud.pangeacyber.pangea.audit.models.Event;
+import cloud.pangeacyber.pangea.audit.models.SearchConfig;
+import cloud.pangeacyber.pangea.audit.requests.ResultRequest;
+import cloud.pangeacyber.pangea.audit.requests.SearchRequest;
+import cloud.pangeacyber.pangea.audit.responses.ResultsResponse;
+import cloud.pangeacyber.pangea.audit.responses.SearchResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 
 public class App
 {
     private static void printSearchEvent(SearchEvent e){
+        Event event = (Event) e.getEventEnvelope().getEvent();
         System.out.println(e.getEventEnvelope().getReceivedAt() + "\t| "
         + e.getSignatureVerification() + "\t| "
         + e.getConsistencyVerification() + "\t| "
         + e.getMembershipVerification() + "\t| "
-        +  e.getEventEnvelope().getEvent().getMessage());
+        + event.getMessage());
     }
 
     private static void printSearchEventHeader(){
@@ -37,13 +41,14 @@ public class App
         AuditClient client = new AuditClient.Builder(cfg).build();
 
         // Set up search params
-        SearchInput input = new SearchInput("message:");
-        input.setLimit(10);
+        SearchRequest searchRequest = new SearchRequest.Builder("message:")
+                                        .limit(10)
+                                        .build();
         SearchResponse searchResponse = null;
 
         // Perform search
         try {
-            searchResponse = client.search(input);
+            searchResponse = client.search(searchRequest, Event.class, new SearchConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);
@@ -60,8 +65,12 @@ public class App
         // Perform search pagination. Page 1
         int resultsLimit = 3;
         ResultsResponse resultsResponse = null;
+        ResultRequest resultRequest = new ResultRequest.Builder(searchResponse.getResult().getId())
+                                        .limit(resultsLimit)
+                                        .offset(0)
+                                        .build();
         try {
-            resultsResponse = client.results(searchResponse.getResult().getId(), resultsLimit, 0);
+            resultsResponse = client.results(resultRequest, Event.class, new SearchConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);
@@ -76,8 +85,12 @@ public class App
         }
 
         // Perform search pagination. Page 2
+        resultRequest = new ResultRequest.Builder(searchResponse.getResult().getId())
+                                        .limit(resultsLimit)
+                                        .offset(resultsLimit)
+                                        .build();
         try {
-            resultsResponse = client.results(searchResponse.getResult().getId(), resultsLimit, resultsLimit);
+            resultsResponse = client.results(resultRequest, Event.class, new SearchConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);

@@ -521,8 +521,8 @@ public class VaultClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 *	String payload = """
-     *      {'message': 'message to sign', 'data': 'Some extra data'}
-     *       """;
+	 *      {'message': 'message to sign', 'data': 'Some extra data'}
+	 *       """;
 	 *	JWTSignResponse signResponse1 = client.jwtSign("keyid", payload);
 	 * }
 	 */

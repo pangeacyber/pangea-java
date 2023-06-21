@@ -1,7 +1,5 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.BaseClient;
-import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.UserInviteListRequest;
 import cloud.pangeacyber.pangea.authn.responses.UserInviteDeleteResponse;
@@ -20,7 +18,7 @@ final class UserInviteDeleteRequest {
 	}
 }
 
-public class UserInvite extends BaseClient {
+public class UserInvite extends AuthNBaseClient {
 
 	public UserInvite(AuthNClient.Builder builder) {
 		super(builder);

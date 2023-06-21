@@ -9,14 +9,16 @@ import cloud.pangeacyber.pangea.intel.responses.DomainReputationResponse;
 
 public class DomainIntelClient extends BaseClient {
 
+	public static String serviceName = "domain-intel";
+
 	public DomainIntelClient(Builder builder) {
-		super(builder);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
 
 		public Builder(Config config) {
-			super(config, "domain-intel");
+			super(config);
 		}
 
 		public DomainIntelClient build() {

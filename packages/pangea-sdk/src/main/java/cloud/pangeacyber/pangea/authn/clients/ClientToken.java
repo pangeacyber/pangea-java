@@ -1,7 +1,5 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.BaseClient;
-import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.ClientTokenCheckResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -18,7 +16,7 @@ final class TokenCheckResquest {
 	}
 }
 
-public class ClientToken extends BaseClient {
+public class ClientToken extends AuthNBaseClient {
 
 	public ClientToken(AuthNClient.Builder builder) {
 		super(builder);

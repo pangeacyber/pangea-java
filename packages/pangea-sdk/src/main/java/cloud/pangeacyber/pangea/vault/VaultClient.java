@@ -128,14 +128,16 @@ final class DeleteRequest {
 
 public class VaultClient extends BaseClient {
 
+	public static String serviceName = "vault";
+
 	public VaultClient(Builder builder) {
-		super(builder);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
 
 		public Builder(Config config) {
-			super(config, "vault");
+			super(config);
 		}
 
 		public VaultClient build() {

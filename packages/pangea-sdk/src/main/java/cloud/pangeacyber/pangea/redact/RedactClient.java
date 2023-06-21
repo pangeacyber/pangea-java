@@ -11,14 +11,16 @@ import cloud.pangeacyber.pangea.redact.responses.RedactTextResponse;
 
 public class RedactClient extends BaseClient {
 
+	public static String serviceName = "redact";
+
 	public RedactClient(Builder builder) {
-		super(builder);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
 
 		public Builder(Config config) {
-			super(config, "redact");
+			super(config);
 		}
 
 		public RedactClient build() {

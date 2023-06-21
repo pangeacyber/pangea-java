@@ -1,7 +1,5 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.BaseClient;
-import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.ClientJWKSResponse;
 import cloud.pangeacyber.pangea.authn.responses.ClientUserinfoResponse;
@@ -20,7 +18,7 @@ final class UserinfoResquest {
 	}
 }
 
-public class Client extends BaseClient {
+public class Client extends AuthNBaseClient {
 
 	private ClientSession session;
 	private ClientPassword password;

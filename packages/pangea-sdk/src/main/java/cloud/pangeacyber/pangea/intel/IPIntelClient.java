@@ -9,14 +9,16 @@ import cloud.pangeacyber.pangea.intel.responses.*;
 
 public class IPIntelClient extends BaseClient {
 
+	public static String serviceName = "ip-intel";
+
 	public IPIntelClient(Builder builder) {
-		super(builder);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
 
 		public Builder(Config config) {
-			super(config, "ip-intel");
+			super(config);
 		}
 
 		public IPIntelClient build() {

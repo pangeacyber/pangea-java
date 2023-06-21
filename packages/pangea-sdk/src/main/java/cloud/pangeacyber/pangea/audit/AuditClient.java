@@ -65,7 +65,8 @@ final class LogRequest {
 
 public class AuditClient extends BaseClient {
 
-	public static String serviceName = "audit";
+	public static final String serviceName = "audit";
+
 	LogSigner signer;
 	Map<Integer, PublishedRoot> publishedRoots;
 	boolean allowServerRoots = true; // In case of Arweave failure, ask the server for the roots
@@ -74,7 +75,7 @@ public class AuditClient extends BaseClient {
 	String tenantID = null;
 
 	public AuditClient(Builder builder) {
-		super(builder);
+		super(builder, serviceName);
 		if (builder.privateKeyFilename != null) {
 			this.signer = new LogSigner(builder.privateKeyFilename);
 		} else {
@@ -93,7 +94,7 @@ public class AuditClient extends BaseClient {
 		Map<String, Object> pkInfo = null;
 
 		public Builder(Config config) {
-			super(config, "audit");
+			super(config);
 		}
 
 		public AuditClient build() {

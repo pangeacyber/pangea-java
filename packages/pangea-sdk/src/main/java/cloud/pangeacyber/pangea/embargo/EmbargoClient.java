@@ -30,14 +30,16 @@ final class IpCheckRequest {
 
 public class EmbargoClient extends BaseClient {
 
+	public static String serviceName = "embargo";
+
 	public EmbargoClient(Builder builder) {
-		super(builder);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
 
 		public Builder(Config config) {
-			super(config, "embargo");
+			super(config);
 		}
 
 		public EmbargoClient build() {

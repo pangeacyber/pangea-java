@@ -16,14 +16,16 @@ import org.apache.commons.codec.binary.Hex;
 
 public class FileIntelClient extends BaseClient {
 
+	public static String serviceName = "file-intel";
+
 	public FileIntelClient(Builder builder) {
-		super(builder);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
 
 		public Builder(Config config) {
-			super(config, "file-intel");
+			super(config);
 		}
 
 		public FileIntelClient build() {

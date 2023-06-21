@@ -7,8 +7,8 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.embargo.models.EmbargoSanction;
 import cloud.pangeacyber.pangea.embargo.models.EmbargoSanctions;
-import cloud.pangeacyber.pangea.embargo.responses.IpCheckResponse;
-import cloud.pangeacyber.pangea.embargo.responses.IsoCheckResponse;
+import cloud.pangeacyber.pangea.embargo.responses.IPCheckResponse;
+import cloud.pangeacyber.pangea.embargo.responses.ISOCheckResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -28,8 +28,8 @@ public class ITEmbargoTest {
 	}
 
 	@Test
-	public void testIsoCheckSanctionedCountry() throws PangeaException, PangeaException, PangeaAPIException {
-		IsoCheckResponse response = client.isoCheck("CU");
+	public void testISOCheckSanctionedCountry() throws PangeaException, PangeaException, PangeaAPIException {
+		ISOCheckResponse response = client.isoCheck("CU");
 		assertTrue(response.isOk());
 
 		EmbargoSanctions result = response.getResult();
@@ -40,8 +40,8 @@ public class ITEmbargoTest {
 	}
 
 	@Test
-	public void testIsoCheckNoSanctionedCountry() throws PangeaException, PangeaAPIException {
-		IsoCheckResponse response = client.isoCheck("AR");
+	public void testISOCheckNoSanctionedCountry() throws PangeaException, PangeaAPIException {
+		ISOCheckResponse response = client.isoCheck("AR");
 		assertTrue(response.isOk());
 
 		EmbargoSanctions result = response.getResult();
@@ -49,8 +49,8 @@ public class ITEmbargoTest {
 	}
 
 	@Test
-	public void testIpCheckSanctionedCountry() throws PangeaException, PangeaAPIException {
-		IpCheckResponse response = client.ipCheck("213.24.238.26");
+	public void testIPCheckSanctionedCountry() throws PangeaException, PangeaAPIException {
+		IPCheckResponse response = client.ipCheck("213.24.238.26");
 		assertTrue(response.isOk());
 
 		EmbargoSanctions result = response.getResult();
@@ -65,7 +65,7 @@ public class ITEmbargoTest {
 
 	@Test(expected = ValidationException.class)
 	public void testEmptyIP() throws PangeaException, PangeaAPIException {
-		IpCheckResponse response = client.ipCheck("");
+		IPCheckResponse response = client.ipCheck("");
 	}
 
 	@Test(expected = UnauthorizedException.class)
@@ -73,6 +73,6 @@ public class ITEmbargoTest {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setToken("notarealtoken");
 		EmbargoClient fakeClient = new EmbargoClient.Builder(cfg).build();
-		IpCheckResponse response = fakeClient.ipCheck("1.1.1.1");
+		IPCheckResponse response = fakeClient.ipCheck("1.1.1.1");
 	}
 }

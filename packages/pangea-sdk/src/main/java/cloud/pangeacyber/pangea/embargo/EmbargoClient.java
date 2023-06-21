@@ -2,8 +2,8 @@ package cloud.pangeacyber.pangea.embargo;
 
 import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.embargo.responses.IpCheckResponse;
-import cloud.pangeacyber.pangea.embargo.responses.IsoCheckResponse;
+import cloud.pangeacyber.pangea.embargo.responses.IPCheckResponse;
+import cloud.pangeacyber.pangea.embargo.responses.ISOCheckResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -60,9 +60,9 @@ public class EmbargoClient extends BaseClient {
 	 * IsoCheckResponse response = client.isoCheck("CU");
 	 * }
 	 */
-	public IsoCheckResponse isoCheck(String isoCode) throws PangeaException, PangeaAPIException {
+	public ISOCheckResponse isoCheck(String isoCode) throws PangeaException, PangeaAPIException {
 		IsoCheckRequest request = new IsoCheckRequest(isoCode);
-		IsoCheckResponse resp = post("/v1/iso/check", request, IsoCheckResponse.class);
+		ISOCheckResponse resp = post("/v1/iso/check", request, ISOCheckResponse.class);
 		return resp;
 	}
 
@@ -79,9 +79,9 @@ public class EmbargoClient extends BaseClient {
 	 * IpCheckResponse response = client.ipCheck("213.24.238.26");
 	 * }
 	 */
-	public IpCheckResponse ipCheck(String ip) throws PangeaException, PangeaAPIException {
+	public IPCheckResponse ipCheck(String ip) throws PangeaException, PangeaAPIException {
 		IpCheckRequest request = new IpCheckRequest(ip);
-		IpCheckResponse resp = post("/v1/ip/check", request, IpCheckResponse.class);
+		IPCheckResponse resp = post("/v1/ip/check", request, IPCheckResponse.class);
 		return resp;
 	}
 }

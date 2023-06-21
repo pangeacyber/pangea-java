@@ -1,7 +1,8 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.DomainIntelClient;
-import cloud.pangeacyber.pangea.intel.models.DomainReputationResponse;
+import cloud.pangeacyber.pangea.intel.requests.DomainReputationRequest;
+import cloud.pangeacyber.pangea.intel.responses.DomainReputationResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 
@@ -20,7 +21,13 @@ public class App
         DomainIntelClient client = new DomainIntelClient.Builder(cfg).build();
         DomainReputationResponse response = null;
         try {
-            response = client.reputation("737updatesboeing.com", "domaintools", true, true);
+            response = client.reputation(
+                new DomainReputationRequest.Builder("737updatesboeing.com")
+                    .provider("domaintools")
+                    .verbose(true)
+                    .raw(true)
+                    .build()
+            );
         } catch (Exception e){
             System.out.println("Fail to perfom request: " + e);
             System.exit(1);

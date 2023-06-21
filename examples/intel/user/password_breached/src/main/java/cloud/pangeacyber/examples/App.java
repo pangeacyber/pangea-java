@@ -2,6 +2,7 @@ package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.UserIntelClient;
 import cloud.pangeacyber.pangea.intel.models.*;
+import cloud.pangeacyber.pangea.intel.requests.UserPasswordBreachedRequest;
 import cloud.pangeacyber.pangea.intel.responses.UserPasswordBreachedResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -32,9 +33,9 @@ public class App
         try {
           response = client.breached(
             // should setup right hash_type here, sha256 or sha1
-            new UserPasswordBreachedRequest.UserPasswordBreachedRequestBuilder(HashType.SHA256, hashPrefix)
-            .setVerbose(true)
-            .setRaw(true)
+            new UserPasswordBreachedRequest.Builder(HashType.SHA256, hashPrefix)
+            .verbose(true)
+            .raw(true)
             .build()
             );
         } catch (Exception e){

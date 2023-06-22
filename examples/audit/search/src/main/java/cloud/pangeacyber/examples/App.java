@@ -41,7 +41,7 @@ public class App
         AuditClient client = new AuditClient.Builder(cfg).build();
 
         // Set up search params
-        SearchRequest searchRequest = new SearchRequest.Builder("message:")
+        SearchRequest searchRequest = new SearchRequest.Builder("message:\"\"")
                                         .limit(10)
                                         .build();
         SearchResponse searchResponse = null;

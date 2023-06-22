@@ -35,6 +35,6 @@ public class App
 
         System.out.println("Request success");
         System.out.println("User breached?: " + response.getResult().getData().getFoundInBreach());
-        System.out.println("Breached raw data: " + response.getResult().getRawData());
+        System.out.println("Breached counts: " + response.getResult().getData().getBreachCount());
     }
 }

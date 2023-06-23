@@ -59,6 +59,7 @@ public class User extends Client {
 	private UserInvite invite;
 	private UserMFA mfa;
 	private UserLogin login;
+	private UserPassword password;
 
 	public User(Config config) {
 		super(config, serviceName, supportMultiConfig);
@@ -66,6 +67,7 @@ public class User extends Client {
 		invite = new UserInvite(config);
 		mfa = new UserMFA(config);
 		login = new UserLogin(config);
+		password = new UserPassword(config);
 	}
 
 	// TODO: Doc
@@ -118,5 +120,9 @@ public class User extends Client {
 
 	public UserLogin login() {
 		return login;
+	}
+
+	public UserPassword password() {
+		return password;
 	}
 }

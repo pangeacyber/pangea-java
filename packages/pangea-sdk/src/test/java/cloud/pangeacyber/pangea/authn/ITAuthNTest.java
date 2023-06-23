@@ -78,6 +78,12 @@ public class ITAuthNTest {
 			assertNotNull(loginResp.getResult().getActiveToken());
 			assertNotNull(loginResp.getResult().getRefreshToken());
 
+			ClientTokenCheckResponse checkResp = client
+				.client()
+				.token()
+				.check(loginResp.getResult().getActiveToken().getToken());
+			assertTrue(checkResp.isOk());
+
 			// Update password
 			ClientPasswordChangeResponse passUpdateResp = client
 				.client()
@@ -136,6 +142,98 @@ public class ITAuthNTest {
 			assertEquals(emailTest, userUpdateResp.getResult().getEmail());
 			assertEquals(false, userUpdateResp.getResult().getDisabled());
 			assertEquals(false, userUpdateResp.getResult().getRequireMFA());
+
+			// Client session refresh
+			ClientSessionRefreshResponse refreshResp = client
+				.client()
+				.session()
+				.refresh(
+					loginResp.getResult().getRefreshToken().getToken(),
+					loginResp.getResult().getActiveToken().getToken()
+				);
+			assertTrue(refreshResp.isOk());
+			assertNotNull(refreshResp.getResult().getActiveToken());
+			assertNotNull(refreshResp.getResult().getRefreshToken());
+
+			// User password reset
+			UserPasswordResetResponse resetResp = client.user().password().reset(userID, passwordNew);
+			assertTrue(resetResp.isOk());
+
+			// Client session logout
+			ClientSessionLogoutResponse logoutResp = client
+				.client()
+				.session()
+				.logout(refreshResp.getResult().getActiveToken().getToken());
+			assertTrue(logoutResp.isOk());
+		} catch (PangeaAPIException e) {
+			System.out.println(e.toString());
+			assertTrue(false);
+		}
+	}
+
+	@Test
+	public void testClientSessionList_n_Invalidate() throws PangeaException, PangeaAPIException {
+		try {
+			// User login
+			UserLoginResponse loginResp = client.user().login().Password(emailTest, passwordNew);
+			assertTrue(loginResp.isOk());
+			assertNotNull(loginResp.getResult().getActiveToken());
+			assertNotNull(loginResp.getResult().getRefreshToken());
+			String token = loginResp.getResult().getActiveToken().getToken();
+
+			ClientSessionListResponse listResp = client
+				.client()
+				.session()
+				.list(new ClientSessionListRequest.Builder(token).build());
+			assertTrue(listResp.isOk());
+			assertTrue(listResp.getResult().getSessions().length > 0);
+
+			for (SessionItem session : listResp.getResult().getSessions()) {
+				try {
+					ClientSessionInvalidateResponse invalidateResp = client
+						.client()
+						.session()
+						.invalidate(token, session.getId());
+					assertTrue(invalidateResp.isOk());
+				} catch (PangeaAPIException e) {
+					System.out.println(
+						String.format("Failed to invalidate session_id[%s] token[%s]", session.getId(), token)
+					);
+					System.out.println(e.toString());
+				}
+			}
+		} catch (PangeaAPIException e) {
+			System.out.println(e.toString());
+			assertTrue(false);
+		}
+	}
+
+	@Test
+	public void testSessionList_n_Invalidate() throws PangeaException, PangeaAPIException {
+		try {
+			// User login
+			UserLoginResponse loginResp = client.user().login().Password(emailTest, passwordNew);
+			assertTrue(loginResp.isOk());
+			assertNotNull(loginResp.getResult().getActiveToken());
+			assertNotNull(loginResp.getResult().getRefreshToken());
+			String token = loginResp.getResult().getActiveToken().getToken();
+
+			// Session list
+			SessionListResponse listResp = client.session().list(new SessionListRequest.Builder().build());
+			assertTrue(listResp.isOk());
+			assertTrue(listResp.getResult().getSessions().length > 0);
+
+			for (SessionItem session : listResp.getResult().getSessions()) {
+				try {
+					SessionInvalidateResponse invalidateResp = client.session().invalidate(session.getId());
+					assertTrue(invalidateResp.isOk());
+				} catch (PangeaAPIException e) {
+					System.out.println(
+						String.format("Failed to invalidate session_id[%s] token[%s]", session.getId(), token)
+					);
+					System.out.println(e.toString());
+				}
+			}
 		} catch (PangeaAPIException e) {
 			System.out.println(e.toString());
 			assertTrue(false);

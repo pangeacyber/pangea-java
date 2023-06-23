@@ -23,7 +23,7 @@ public class ITAuditTest {
 
 	Config cfgGeneral;
 	AuditClient clientGeneral, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	TestEnvironment environment = TestEnvironment.LIVE;
 
 	private static final String ACTOR = "java-sdk";
 	private static final String MSG_NO_SIGNED = "test-message";

@@ -37,6 +37,6 @@ This is a list of tools or useful stuff that you will found out in this reposito
 |----- **redact**: Redact service examples [Click here](/examples/redact)  
 |----- **vault**: Vault service examples [Click here](/examples/vault)  
 |----- **README.md**: Example's instructions to install and run [Click here](/examples/README.md)  
-|- **packages**: Here you will found out all python packages (1 available now) [Click here](/packages)  
+|- **packages**: Here you will found out all Java packages (1 available now) [Click here](/packages)  
 |----- **pangea-sdk**: Pangea Java SDK folder. Also available through Maven Central [Click here](/packages/pangea-sdk)  
 |--------- **README.md**: Pangea Java SDK install and usage instructions [Click here](/packages/pangea-sdk/README.md)  

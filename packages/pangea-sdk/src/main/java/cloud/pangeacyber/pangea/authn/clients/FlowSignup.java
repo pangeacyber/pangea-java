@@ -1,7 +1,5 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.BaseClient;
-import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.FlowSignupPasswordResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -48,7 +46,7 @@ final class FlowSignupSocialRequest {
 	}
 }
 
-public class FlowSignup extends BaseClient {
+public class FlowSignup extends AuthNBaseClient {
 
 	public FlowSignup(AuthNClient.Builder builder) {
 		super(builder);

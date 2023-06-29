@@ -52,7 +52,7 @@ public class Event implements IEvent {
 		this.message = message;
 	}
 
-	private Event(EventBuilder builder) {
+	private Event(Builder builder) {
 		this.actor = builder.actor;
 		this.action = builder.action;
 		this.message = builder.message;
@@ -65,7 +65,7 @@ public class Event implements IEvent {
 		this.tenantID = builder.tenantID;
 	}
 
-	public static class EventBuilder {
+	public static class Builder {
 
 		private String actor;
 		private String action;
@@ -78,51 +78,51 @@ public class Event implements IEvent {
 		private String timestamp;
 		private String tenantID;
 
-		public EventBuilder(String message) {
+		public Builder(String message) {
 			this.message = message;
 		}
 
-		public EventBuilder actor(String actor) {
+		public Builder actor(String actor) {
 			this.actor = actor;
 			return this;
 		}
 
-		public EventBuilder action(String action) {
+		public Builder action(String action) {
 			this.action = action;
 			return this;
 		}
 
-		public EventBuilder newField(String newField) {
+		public Builder newField(String newField) {
 			this.newField = newField;
 			return this;
 		}
 
-		public EventBuilder old(String old) {
+		public Builder old(String old) {
 			this.old = old;
 			return this;
 		}
 
-		public EventBuilder source(String source) {
+		public Builder source(String source) {
 			this.source = source;
 			return this;
 		}
 
-		public EventBuilder status(String status) {
+		public Builder status(String status) {
 			this.status = status;
 			return this;
 		}
 
-		public EventBuilder target(String target) {
+		public Builder target(String target) {
 			this.target = target;
 			return this;
 		}
 
-		public EventBuilder timestamp(String timestamp) {
+		public Builder timestamp(String timestamp) {
 			this.timestamp = timestamp;
 			return this;
 		}
 
-		public EventBuilder tenantID(String tenantID) {
+		public Builder tenantID(String tenantID) {
 			this.tenantID = tenantID;
 			return this;
 		}

@@ -7,6 +7,6 @@ import cloud.pangeacyber.pangea.Response;
 public class NotFound extends PangeaAPIException {
 
 	public NotFound(String url, Response<PangeaErrors> response) {
-		super("Resource not found: " + url, response);
+		super("Resource was not found: " + url, response);
 	}
 }

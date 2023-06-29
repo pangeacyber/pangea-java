@@ -33,19 +33,19 @@ import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFact
 import org.apache.logging.log4j.core.config.builder.api.LayoutComponentBuilder;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
-public class BaseClient {
+public abstract class BaseClient {
 
 	Config config;
 	protected Logger logger;
 	CloseableHttpClient httpClient;
 	HttpRequest.Builder httpRequestBuilder;
-	public final String serviceName;
+	String serviceName;
 	Map<String, String> customHeaders = null;
 	String userAgent = "pangea-java/default";
 
-	protected BaseClient(Builder<?> builder) {
-		this.serviceName = builder.serviceName;
+	protected BaseClient(Builder<?> builder, String serviceName) {
 		this.config = builder.config;
+		this.serviceName = serviceName;
 		if (builder.logger != null) {
 			this.logger = builder.logger;
 		} else {
@@ -88,15 +88,10 @@ public class BaseClient {
 		Map<String, String> customHeaders;
 		String customUserAgent;
 
-		public Builder(Config config, String serviceName) {
+		public Builder(Config config) {
 			this.config = config;
-			this.serviceName = serviceName;
 			this.logger = null;
 			this.customHeaders = null;
-		}
-
-		public BaseClient build() {
-			return new BaseClient(this);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -197,7 +192,7 @@ public class BaseClient {
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
 		CloseableHttpResponse httpResponse = doGet(path);
-		return checkResponse(httpResponse, responseClass);
+		return checkResponse(httpResponse, responseClass, path);
 	}
 
 	private CloseableHttpResponse doGet(String path) throws PangeaException {
@@ -245,7 +240,7 @@ public class BaseClient {
 
 		this.logger.debug(
 				String.format(
-					"{\"service\": \"%s\", \"action\": \"post\", \"url\": \"%s\", \"data\": %s},",
+					"{\"service\": \"%s\", \"action\": \"post\", \"path\": \"%s\", \"data\": %s},",
 					serviceName,
 					path,
 					body
@@ -279,7 +274,7 @@ public class BaseClient {
 			httpResponse = this.handleQueued(httpResponse);
 		}
 
-		return checkResponse(httpResponse, responseClass);
+		return checkResponse(httpResponse, responseClass, path);
 	}
 
 	private long getDelay(int retryCounter, Duration start) {
@@ -337,7 +332,7 @@ public class BaseClient {
 				);
 
 			try {
-				Thread.sleep(delay*1000);	//sleep(Duration) is supported on v19. We use v18.
+				Thread.sleep(delay * 1000); //sleep(Duration) is supported on v19. We use v18.
 				EntityUtils.consumeQuietly(response.getEntity()); //response need to be consumed
 				response = doGet(path);
 				retryCounter++;
@@ -374,7 +369,8 @@ public class BaseClient {
 
 	private <ResponseType extends Response<?>> ResponseType checkResponse(
 		CloseableHttpResponse httpResponse,
-		Class<ResponseType> responseClass
+		Class<ResponseType> responseClass,
+		String path
 	) throws PangeaException, PangeaAPIException {
 		String body = readBody(httpResponse);
 		this.logger.debug(
@@ -435,16 +431,18 @@ public class BaseClient {
 		} else if (status.equals(ResponseStatus.NO_CREDIT.toString())) {
 			throw new NoCreditException(summary, response);
 		} else if (status.equals(ResponseStatus.UNAUTHORIZED.toString())) {
-			throw new UnauthorizedException(this.serviceName, response);
+			throw new UnauthorizedException(serviceName, response);
 		} else if (status.equals(ResponseStatus.SERVICE_NOT_ENABLED.toString())) {
-			throw new ServiceNotEnabledException(this.serviceName, response);
+			throw new ServiceNotEnabledException(serviceName, response);
 		} else if (status.equals(ResponseStatus.PROVIDER_ERR.toString())) {
 			throw new ProviderErrorException(summary, response);
 		} else if (
 			status.equals(ResponseStatus.MISSING_CONFIG_ID_SCOPE.toString()) ||
 			status.equals(ResponseStatus.MISSING_CONFIG_ID.toString())
 		) {
-			throw new MissingConfigID(this.serviceName, response);
+			throw new MissingConfigID(serviceName, response);
+		} else if (status.equals(ResponseStatus.NOT_FOUND.toString())) {
+			throw new NotFound(config.getServiceUrl(serviceName, path).toString(), response);
 		} else if (status.equals(ResponseStatus.SERVICE_NOT_AVAILABLE.toString())) {
 			throw new ServiceNotAvailableException(summary, response);
 		} else if (status.equals(ResponseStatus.IP_NOT_FOUND.toString())) {

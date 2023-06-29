@@ -1,7 +1,5 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.BaseClient;
-import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.*;
 import cloud.pangeacyber.pangea.authn.responses.*;
@@ -46,7 +44,7 @@ final class SessionLogoutRequest {
 	}
 }
 
-public class Session extends BaseClient {
+public class Session extends AuthNBaseClient {
 
 	public Session(AuthNClient.Builder builder) {
 		super(builder);

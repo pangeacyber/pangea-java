@@ -1,15 +1,11 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.BaseClient;
-import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.models.MFAProvider;
 import cloud.pangeacyber.pangea.authn.requests.UserMFAStartRequest;
 import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 final class UserMFADeleteRequest {
@@ -62,7 +58,7 @@ final class UserMFAVerifyRequest {
 	}
 }
 
-public class UserMFA extends BaseClient {
+public class UserMFA extends AuthNBaseClient {
 
 	public UserMFA(AuthNClient.Builder builder) {
 		super(builder);

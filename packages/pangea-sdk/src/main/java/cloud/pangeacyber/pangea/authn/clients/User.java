@@ -1,7 +1,5 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.BaseClient;
-import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
 import cloud.pangeacyber.pangea.authn.requests.UserCreateRequest;
@@ -51,7 +49,7 @@ final class UserVerifyRequest {
 	}
 }
 
-public class User extends BaseClient {
+public class User extends AuthNBaseClient {
 
 	private UserProfile profile;
 	private UserInvite invite;

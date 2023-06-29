@@ -37,7 +37,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpReputationMalicious_1() throws PangeaException, PangeaAPIException {
+	public void testIPReputationMalicious_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		IPReputationResponse response = client.reputation(new IPReputationRequest.Builder("93.231.182.110").build());
 		assertTrue(response.isOk());
@@ -49,7 +49,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpReputationMalicious_2() throws PangeaException, PangeaAPIException {
+	public void testIPReputationMalicious_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
 		IPReputationResponse response = client.reputation(
 			new IPReputationRequest.Builder("93.231.182.110").provider("crowdstrike").build()
@@ -63,7 +63,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpReputationMalicious_3() throws PangeaException, PangeaAPIException {
+	public void testIPReputationMalicious_3() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, no raw;
 		IPReputationResponse response = client.reputation(
 			new IPReputationRequest.Builder("93.231.182.110").verbose(false).raw(false).build()
@@ -77,7 +77,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpReputationMalicious_4() throws PangeaException, PangeaAPIException {
+	public void testIPReputationMalicious_4() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, no raw;
 		IPReputationResponse response = client.reputation(
 			new IPReputationRequest.Builder("93.231.182.110").verbose(true).raw(false).build()
@@ -91,7 +91,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpReputationMalicious_5() throws PangeaException, PangeaAPIException {
+	public void testIPReputationMalicious_5() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, raw;
 		IPReputationResponse response = client.reputation(
 			new IPReputationRequest.Builder("93.231.182.110").verbose(false).raw(true).build()
@@ -105,7 +105,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpReputationMalicious_6() throws PangeaException, PangeaAPIException {
+	public void testIPReputationMalicious_6() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, raw;
 		IPReputationResponse response = client.reputation(
 			new IPReputationRequest.Builder("93.231.182.110").verbose(true).raw(true).build()
@@ -119,7 +119,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpReputationMalicious_7() throws PangeaException, PangeaAPIException {
+	public void testIPReputationMalicious_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
 		IPReputationResponse response = client.reputation(
 			new IPReputationRequest.Builder("93.231.182.110").provider("crowdstrike").verbose(false).raw(false).build()
@@ -133,7 +133,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpReputationMalicious_8() throws PangeaException, PangeaAPIException {
+	public void testIPReputationMalicious_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
 		IPReputationResponse response = client.reputation(
 			new IPReputationRequest.Builder("93.231.182.110").provider("crowdstrike").verbose(true).raw(true).build()
@@ -146,7 +146,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpReputation_CymruProvider() throws PangeaException, PangeaAPIException {
+	public void testIPReputation_CymruProvider() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
 		IPReputationResponse response = client.reputation(
 			new IPReputationRequest.Builder("93.231.182.110").provider("cymru").raw(true).verbose(true).build()
@@ -157,7 +157,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpGeolocate_1() throws PangeaException, PangeaAPIException {
+	public void testIPGeolocate_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		IPGeolocateResponse response = client.geolocate(new IPGeolocateRequest.Builder("93.231.182.110").build());
 		assertTrue(response.isOk());
@@ -169,7 +169,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpGeolocate_2() throws PangeaException, PangeaAPIException {
+	public void testIPGeolocate_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
 		IPGeolocateResponse response = client.geolocate(
 			new IPGeolocateRequest.Builder("93.231.182.110").provider("digitalelement").build()
@@ -183,7 +183,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpGeolocate_3() throws PangeaException, PangeaAPIException {
+	public void testIPGeolocate_3() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, no raw;
 		IPGeolocateResponse response = client.geolocate(
 			new IPGeolocateRequest.Builder("93.231.182.110").verbose(false).raw(false).build()
@@ -197,7 +197,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpGeolocate_4() throws PangeaException, PangeaAPIException {
+	public void testIPGeolocate_4() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, no raw;
 		IPGeolocateResponse response = client.geolocate(
 			new IPGeolocateRequest.Builder("93.231.182.110").verbose(true).raw(false).build()
@@ -211,7 +211,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpGeolocate_5() throws PangeaException, PangeaAPIException {
+	public void testIPGeolocate_5() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, raw;
 		IPGeolocateResponse response = client.geolocate(
 			new IPGeolocateRequest.Builder("93.231.182.110").verbose(false).raw(true).build()
@@ -225,7 +225,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpGeolocate_6() throws PangeaException, PangeaAPIException {
+	public void testIPGeolocate_6() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, raw;
 		IPGeolocateResponse response = client.geolocate(
 			new IPGeolocateRequest.Builder("93.231.182.110").verbose(true).raw(true).build()
@@ -239,7 +239,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpGeolocate_7() throws PangeaException, PangeaAPIException {
+	public void testIPGeolocate_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
 		IPGeolocateResponse response = client.geolocate(
 			new IPGeolocateRequest.Builder("93.231.182.110")
@@ -257,7 +257,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpGeolocate_8() throws PangeaException, PangeaAPIException {
+	public void testIPGeolocate_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
 		IPGeolocateResponse response = client.geolocate(
 			new IPGeolocateRequest.Builder("93.231.182.110").provider("digitalelement").verbose(true).raw(true).build()
@@ -271,7 +271,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpDomain_1() throws PangeaException, PangeaAPIException {
+	public void testIPDomain_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		IPDomainResponse response = client.getDomain(new IPDomainRequest.Builder("24.235.114.61").build());
 		assertTrue(response.isOk());
@@ -284,7 +284,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpDomain_2() throws PangeaException, PangeaAPIException {
+	public void testIPDomain_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
 		IPDomainResponse response = client.getDomain(
 			new IPDomainRequest.Builder("24.235.114.61").provider("digitalelement").build()
@@ -299,7 +299,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpDomain_3() throws PangeaException, PangeaAPIException {
+	public void testIPDomain_3() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, no raw;
 		IPDomainResponse response = client.getDomain(
 			new IPDomainRequest.Builder("24.235.114.61").verbose(false).raw(false).build()
@@ -314,7 +314,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpDomain_4() throws PangeaException, PangeaAPIException {
+	public void testIPDomain_4() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, no raw;
 		IPDomainResponse response = client.getDomain(
 			new IPDomainRequest.Builder("24.235.114.61").verbose(true).raw(false).build()
@@ -329,7 +329,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpDomain_5() throws PangeaException, PangeaAPIException {
+	public void testIPDomain_5() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, raw;
 		IPDomainResponse response = client.getDomain(
 			new IPDomainRequest.Builder("24.235.114.61").provider("digitalelement").verbose(false).raw(true).build()
@@ -344,7 +344,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpDomain_6() throws PangeaException, PangeaAPIException {
+	public void testIPDomain_6() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, raw;
 		IPDomainResponse response = client.getDomain(
 			new IPDomainRequest.Builder("24.235.114.61").verbose(true).raw(true).build()
@@ -359,7 +359,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpDomain_7() throws PangeaException, PangeaAPIException {
+	public void testIPDomain_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
 		IPDomainResponse response = client.getDomain(
 			new IPDomainRequest.Builder("24.235.114.61").provider("digitalelement").verbose(false).raw(false).build()
@@ -374,7 +374,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpDomain_8() throws PangeaException, PangeaAPIException {
+	public void testIPDomain_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
 		IPDomainResponse response = client.getDomain(
 			new IPDomainRequest.Builder("24.235.114.61").provider("digitalelement").verbose(true).raw(true).build()
@@ -389,7 +389,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpVPN_1() throws PangeaException, PangeaAPIException {
+	public void testIPVPN_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		IPVPNResponse response = client.isVPN(new IPVPNRequest.Builder("2.56.189.74").build());
 		assertTrue(response.isOk());
@@ -401,7 +401,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpVPN_2() throws PangeaException, PangeaAPIException {
+	public void testIPVPN_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
 		IPVPNResponse response = client.isVPN(
 			new IPVPNRequest.Builder("2.56.189.74").provider("digitalelement").build()
@@ -415,7 +415,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpVPN_3() throws PangeaException, PangeaAPIException {
+	public void testIPVPN_3() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, no raw;
 		IPVPNResponse response = client.isVPN(
 			new IPVPNRequest.Builder("2.56.189.74").verbose(false).raw(false).build()
@@ -429,7 +429,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpVPN_4() throws PangeaException, PangeaAPIException {
+	public void testIPVPN_4() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, no raw;
 		IPVPNResponse response = client.isVPN(new IPVPNRequest.Builder("2.56.189.74").verbose(true).raw(false).build());
 		assertTrue(response.isOk());
@@ -441,7 +441,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpVPN_5() throws PangeaException, PangeaAPIException {
+	public void testIPVPN_5() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, raw;
 		IPVPNResponse response = client.isVPN(new IPVPNRequest.Builder("2.56.189.74").verbose(false).raw(true).build());
 		assertTrue(response.isOk());
@@ -453,7 +453,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpVPN_6() throws PangeaException, PangeaAPIException {
+	public void testIPVPN_6() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, raw;
 		IPVPNResponse response = client.isVPN(new IPVPNRequest.Builder("2.56.189.74").verbose(true).raw(true).build());
 		assertTrue(response.isOk());
@@ -465,7 +465,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpVPN_7() throws PangeaException, PangeaAPIException {
+	public void testIPVPN_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
 		IPVPNResponse response = client.isVPN(
 			new IPVPNRequest.Builder("2.56.189.74").provider("digitalelement").verbose(false).raw(false).build()
@@ -479,7 +479,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpVPN_8() throws PangeaException, PangeaAPIException {
+	public void testIPVPN_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
 		IPVPNResponse response = client.isVPN(
 			new IPVPNRequest.Builder("2.56.189.74").provider("digitalelement").verbose(true).raw(true).build()
@@ -494,7 +494,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpProxy_1() throws PangeaException, PangeaAPIException {
+	public void testIPProxy_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		IPProxyResponse response = client.isProxy(new IPProxyRequest.Builder("34.201.32.172").build());
 
@@ -507,7 +507,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpProxy_2() throws PangeaException, PangeaAPIException {
+	public void testIPProxy_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
 		IPProxyResponse response = client.isProxy(
 			new IPProxyRequest.Builder("34.201.32.172").provider("digitalelement").build()
@@ -522,7 +522,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpProxy_3() throws PangeaException, PangeaAPIException {
+	public void testIPProxy_3() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, no raw;
 		IPProxyResponse response = client.isProxy(
 			new IPProxyRequest.Builder("34.201.32.172").verbose(false).raw(false).build()
@@ -537,7 +537,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpProxy_4() throws PangeaException, PangeaAPIException {
+	public void testIPProxy_4() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, no raw;
 		IPProxyResponse response = client.isProxy(
 			new IPProxyRequest.Builder("34.201.32.172").verbose(true).raw(false).build()
@@ -552,7 +552,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpProxy_5() throws PangeaException, PangeaAPIException {
+	public void testIPProxy_5() throws PangeaException, PangeaAPIException {
 		// Default provider, no verbose, raw;
 		IPProxyResponse response = client.isProxy(
 			new IPProxyRequest.Builder("34.201.32.172").verbose(false).raw(true).build()
@@ -567,7 +567,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpProxy_6() throws PangeaException, PangeaAPIException {
+	public void testIPProxy_6() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose, raw;
 		IPProxyResponse response = client.isProxy(
 			new IPProxyRequest.Builder("34.201.32.172").verbose(true).raw(true).build()
@@ -582,7 +582,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpProxy_7() throws PangeaException, PangeaAPIException {
+	public void testIPProxy_7() throws PangeaException, PangeaAPIException {
 		// Provider, no verbose, no raw
 		IPProxyResponse response = client.isProxy(
 			new IPProxyRequest.Builder("34.201.32.172").provider("digitalelement").verbose(false).raw(false).build()
@@ -597,7 +597,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIpProxy_8() throws PangeaException, PangeaAPIException {
+	public void testIPProxy_8() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
 		IPProxyResponse response = client.isProxy(
 			new IPProxyRequest.Builder("34.201.32.172").provider("digitalelement").verbose(true).raw(true).build()

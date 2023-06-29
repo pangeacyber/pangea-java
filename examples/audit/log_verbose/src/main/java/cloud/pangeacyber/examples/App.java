@@ -1,11 +1,12 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.audit.AuditClient;
-import cloud.pangeacyber.pangea.audit.Event;
-import cloud.pangeacyber.pangea.audit.LogResponse;
+import cloud.pangeacyber.pangea.audit.models.Event;
+import cloud.pangeacyber.pangea.audit.models.LogConfig;
+import cloud.pangeacyber.pangea.audit.responses.LogResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.audit.SignMode;
+
 
 public class App
 {
@@ -25,7 +26,14 @@ public class App
         event.setActor("Terminal");
         LogResponse response = null;
         try {
-            response = client.log(event, SignMode.UNSIGNED, true, true);
+            response = client.log(
+                event,
+                Event.class,
+                new LogConfig.Builder()
+                    .verbose(true)
+                    .build()
+            );
+
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);
@@ -33,6 +41,7 @@ public class App
 
         System.out.println("Log success");
         System.out.println("Hash: " + response.getResult().getHash());
-        System.out.println("Message: " + response.getResult().getEventEnvelope().getEvent().getMessage());
+        Event eventResult = (Event)response.getResult().getEventEnvelope().getEvent();
+        System.out.println("Message: " + eventResult.getMessage());
     }
 }

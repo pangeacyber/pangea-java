@@ -1,6 +1,5 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.UserPasswordResetResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -21,7 +20,7 @@ final class UserPasswordResetRequest {
 	}
 }
 
-public class UserPassword extends BaseClient {
+public class UserPassword extends AuthNBaseClient {
 
 	public UserPassword(AuthNClient.Builder builder) {
 		super(builder);

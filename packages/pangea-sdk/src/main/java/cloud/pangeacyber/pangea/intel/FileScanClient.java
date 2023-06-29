@@ -10,14 +10,16 @@ import java.io.File;
 
 public class FileScanClient extends BaseClient {
 
+	public static String serviceName = "file-scan";
+
 	public FileScanClient(Builder builder) {
-		super(builder);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
 
 		public Builder(Config config) {
-			super(config, "file-scan");
+			super(config);
 		}
 
 		public FileScanClient build() {

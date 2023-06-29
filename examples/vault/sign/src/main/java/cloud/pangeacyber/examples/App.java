@@ -6,6 +6,10 @@ import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.models.*;
 import cloud.pangeacyber.pangea.Utils;
 import cloud.pangeacyber.pangea.vault.responses.*;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import cloud.pangeacyber.pangea.Config;
 
 public class App
@@ -21,10 +25,12 @@ public class App
         }
 
         VaultClient client = new VaultClient.Builder(cfg).build();
-        String name = "my key's name";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+		String time = dtf.format(LocalDateTime.now());
+        String name = "my key's name " + time;
 
         try {
-			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder(
+			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.Builder(
 				AsymmetricAlgorithm.ED25519,
 				KeyPurpose.SIGNING,
 				name

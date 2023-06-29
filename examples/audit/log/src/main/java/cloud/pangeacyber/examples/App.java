@@ -1,8 +1,9 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.audit.AuditClient;
-import cloud.pangeacyber.pangea.audit.Event;
-import cloud.pangeacyber.pangea.audit.LogResponse;
+import cloud.pangeacyber.pangea.audit.models.Event;
+import cloud.pangeacyber.pangea.audit.models.LogConfig;
+import cloud.pangeacyber.pangea.audit.responses.LogResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 
@@ -19,12 +20,13 @@ public class App
         }
 
         AuditClient client = new AuditClient.Builder(cfg).build();
-        Event event = new Event("Hello, World!");
-        event.setAction("Login");
-        event.setActor("Terminal");
+        Event event = new Event.Builder("Hello, World!")
+                        .action("Login")
+                        .actor("Terminal")
+                        .build();
         LogResponse response = null;
         try {
-            response = client.log(event);
+            response = client.log(event, Event.class, new LogConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);

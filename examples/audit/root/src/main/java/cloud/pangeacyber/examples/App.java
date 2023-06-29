@@ -1,7 +1,7 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.audit.AuditClient;
-import cloud.pangeacyber.pangea.audit.RootResponse;
+import cloud.pangeacyber.pangea.audit.responses.RootResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 

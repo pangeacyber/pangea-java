@@ -1,12 +1,12 @@
 package cloud.pangeacyber.pangea.authn;
 
-import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.clients.AuthNBaseClient;
 import cloud.pangeacyber.pangea.authn.clients.Client;
 import cloud.pangeacyber.pangea.authn.clients.Flow;
 import cloud.pangeacyber.pangea.authn.clients.User;
 
-public class AuthNClient extends BaseClient {
+public class AuthNClient extends AuthNBaseClient {
 
 	private User user;
 	private Flow flow;
@@ -19,10 +19,10 @@ public class AuthNClient extends BaseClient {
 		client = new Client(builder);
 	}
 
-	public static class Builder extends BaseClient.Builder<Builder> {
+	public static class Builder extends AuthNBaseClient.Builder<Builder> {
 
 		public Builder(Config config) {
-			super(config, "authn");
+			super(config);
 		}
 
 		public AuthNClient build() {

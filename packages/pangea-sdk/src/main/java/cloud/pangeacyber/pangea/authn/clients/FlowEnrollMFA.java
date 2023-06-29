@@ -1,7 +1,5 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.BaseClient;
-import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.models.MFAProvider;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyMFACompleteRequest;
@@ -25,7 +23,7 @@ final class FlowEnrollMFAStartRequest {
 	}
 }
 
-public class FlowEnrollMFA extends BaseClient {
+public class FlowEnrollMFA extends AuthNBaseClient {
 
 	public FlowEnrollMFA(AuthNClient.Builder builder) {
 		super(builder);

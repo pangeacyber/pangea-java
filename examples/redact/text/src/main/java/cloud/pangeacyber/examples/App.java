@@ -1,7 +1,8 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.redact.RedactClient;
-import cloud.pangeacyber.pangea.redact.RedactTextResponse;
+import cloud.pangeacyber.pangea.redact.requests.RedactTextRequest;
+import cloud.pangeacyber.pangea.redact.responses.RedactTextResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 
@@ -21,7 +22,7 @@ public class App
         String text = "Hello, my phone number is 123-456-7890";
         RedactTextResponse response = null;
         try {
-            response = client.redactText(text);
+            response = client.redactText(new RedactTextRequest.Builder(text).build());
         } catch (Exception e){
             System.out.println("Fail to perfom redact: " + e);
             System.exit(1);

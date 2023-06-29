@@ -1,8 +1,8 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.embargo.EmbargoClient;
-import cloud.pangeacyber.pangea.embargo.IsoCheckResponse;
-import cloud.pangeacyber.pangea.embargo.EmbargoSanction;
+import cloud.pangeacyber.pangea.embargo.models.EmbargoSanction;
+import cloud.pangeacyber.pangea.embargo.responses.ISOCheckResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 
@@ -20,7 +20,7 @@ public class App
 
         EmbargoClient client = new EmbargoClient.Builder(cfg).build();
         String code = "CU";
-        IsoCheckResponse response = null;
+        ISOCheckResponse response = null;
         try {
             response = client.isoCheck(code);
         } catch (Exception e){

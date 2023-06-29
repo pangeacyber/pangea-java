@@ -6,6 +6,10 @@ import cloud.pangeacyber.pangea.Utils;
 import cloud.pangeacyber.pangea.vault.models.*;
 import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.responses.*;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import cloud.pangeacyber.pangea.Config;
 
 public class App
@@ -20,12 +24,15 @@ public class App
             System.exit(1);
         }
 
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+		String time = dtf.format(LocalDateTime.now());
+
         VaultClient client = new VaultClient.Builder(cfg).build();
-        String name = "my key's name";
+        String name = "my key's name " + time;
 
         try {
             System.out.println("Create key...");
-			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
+			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.Builder(
 				SymmetricAlgorithm.AES128_CFB,
 				KeyPurpose.ENCRYPTION,
 				name
@@ -40,12 +47,12 @@ public class App
             String dataB64 = Utils.stringToStringB64(message);
 
             // Encrypt
-            EncryptResponse encryptResponse = client.encrypt(id, dataB64);
+            EncryptResponse encryptResponse = client.encrypt(new EncryptRequest.Builder(id, dataB64).build());
             System.out.println("Cipher text: " + encryptResponse.getResult().getCipherText());
 
             System.out.println("Decrypt...");
             // Decrypt
-            DecryptResponse decryptResponse1 = client.decrypt(id, encryptResponse.getResult().getCipherText(), 1);
+            DecryptResponse decryptResponse1 = client.decrypt(new DecryptRequest.Builder(id, encryptResponse.getResult().getCipherText()).version(1).build());
             System.out.println(decryptResponse1.getResult().getPlainText());
             System.out.println(dataB64);
 

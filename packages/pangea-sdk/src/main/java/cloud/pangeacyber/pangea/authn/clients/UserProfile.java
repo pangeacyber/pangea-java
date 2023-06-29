@@ -1,6 +1,5 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.UserProfileUpdateRequest;
 import cloud.pangeacyber.pangea.authn.responses.UserProfileGetResponse;
@@ -27,7 +26,7 @@ final class UserProfileGetRequest {
 	}
 }
 
-public class UserProfile extends BaseClient {
+public class UserProfile extends AuthNBaseClient {
 
 	public UserProfile(AuthNClient.Builder builder) {
 		super(builder);

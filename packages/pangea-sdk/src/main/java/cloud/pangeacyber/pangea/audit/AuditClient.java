@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.audit;
 
 import cloud.pangeacyber.pangea.BaseClient;
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.audit.arweave.*;
 import cloud.pangeacyber.pangea.audit.models.*;
@@ -22,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-final class RootRequest {
+final class RootRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("tree_size")
@@ -33,7 +34,7 @@ final class RootRequest {
 	}
 }
 
-final class LogRequest {
+final class LogRequest extends BaseRequest {
 
 	@JsonProperty("event")
 	IEvent event;
@@ -73,9 +74,10 @@ public class AuditClient extends BaseClient {
 	String prevUnpublishedRoot = null;
 	Map<String, Object> pkInfo = null;
 	String tenantID = null;
+	private static final boolean supportMultiConfig = true;
 
 	public AuditClient(Builder builder) {
-		super(builder, serviceName);
+		super(builder, serviceName, supportMultiConfig);
 		if (builder.privateKeyFilename != null) {
 			this.signer = new LogSigner(builder.privateKeyFilename);
 		} else {

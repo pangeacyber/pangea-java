@@ -9,10 +9,11 @@ import cloud.pangeacyber.pangea.intel.responses.DomainReputationResponse;
 
 public class DomainIntelClient extends BaseClient {
 
-	public static String serviceName = "domain-intel";
+	public static final String serviceName = "domain-intel";
+	private static final boolean supportMultiConfig = false;
 
 	public DomainIntelClient(Builder builder) {
-		super(builder, serviceName);
+		super(builder, serviceName, supportMultiConfig);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

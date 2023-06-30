@@ -11,10 +11,11 @@ import cloud.pangeacyber.pangea.redact.responses.RedactTextResponse;
 
 public class RedactClient extends BaseClient {
 
-	public static String serviceName = "redact";
+	public static final String serviceName = "redact";
+	private static final boolean supportMultiConfig = false;
 
 	public RedactClient(Builder builder) {
-		super(builder, serviceName);
+		super(builder, serviceName, supportMultiConfig);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

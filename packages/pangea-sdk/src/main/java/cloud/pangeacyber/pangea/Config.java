@@ -12,6 +12,9 @@ public final class Config {
 	// Base domain for API requests.
 	String domain;
 
+	// Project config id need for multi-config projects
+	String configID;
+
 	// Set to true to use plain http
 	boolean insecure;
 
@@ -39,6 +42,7 @@ public final class Config {
 		this.customUserAgent = builder.customUserAgent;
 		this.pollResultTimeout = builder.pollResultTimeout;
 		this.queuedRetryEnabled = builder.queuedRetryEnabled;
+		this.configID = builder.configID;
 	}
 
 	public String getToken() {
@@ -97,6 +101,14 @@ public final class Config {
 		return pollResultTimeout;
 	}
 
+	public String getConfigID() {
+		return configID;
+	}
+
+	public void setConfigID(String configID) {
+		this.configID = configID;
+	}
+
 	URI getServiceUrl(String serviceName, String path) {
 		StringBuilder b = new StringBuilder();
 		if (domain.startsWith("http://") || domain.startsWith("https://")) {
@@ -152,22 +164,38 @@ public final class Config {
 		return config;
 	}
 
-	public static String getTestToken(TestEnvironment environment) throws ConfigException {
-		String tokenEnvVarName = "PANGEA_INTEGRATION_TOKEN_" + environment.toString();
-		String token = System.getenv(tokenEnvVarName);
-		if (token == null || token.isEmpty()) {
-			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
+	private static String loadEnvVar(String envVarName) throws ConfigException {
+		String value = System.getenv(envVarName);
+		if (value == null || value.isEmpty()) {
+			throw new ConfigException(envVarName + " environment variable need to be set");
 		}
-		return token;
+		return value;
+	}
+
+	public static String getTestToken(TestEnvironment environment) throws ConfigException {
+		String envVarName = "PANGEA_INTEGRATION_TOKEN_" + environment.toString();
+		return loadEnvVar(envVarName);
 	}
 
 	public static String getVaultSignatureTestToken(TestEnvironment environment) throws ConfigException {
-		String tokenEnvVarName = "PANGEA_INTEGRATION_VAULT_TOKEN_" + environment.toString();
-		String token = System.getenv(tokenEnvVarName);
-		if (token == null || token.isEmpty()) {
-			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
-		}
-		return token;
+		String envVarName = "PANGEA_INTEGRATION_VAULT_TOKEN_" + environment.toString();
+		return loadEnvVar(envVarName);
+	}
+
+	public static String getMultiConfigTestToken(TestEnvironment environment) throws ConfigException {
+		String envVarName = "PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_" + environment.toString();
+		return loadEnvVar(envVarName);
+	}
+
+	public static String getConfigID(TestEnvironment environment, String service, int configNumber)
+		throws ConfigException {
+		String envVarName = String.format(
+			"PANGEA_%s_CONFIG_ID_%d_%s",
+			service.toUpperCase(),
+			configNumber,
+			environment.toString()
+		);
+		return loadEnvVar(envVarName);
 	}
 
 	public static String getCustomSchemaTestToken(TestEnvironment environment) throws ConfigException {
@@ -180,12 +208,8 @@ public final class Config {
 	}
 
 	public static String getTestDomain(TestEnvironment environment) throws ConfigException {
-		String domainEnvVarName = "PANGEA_INTEGRATION_DOMAIN_" + environment.toString();
-		String domain = System.getenv(domainEnvVarName);
-		if (domain == null || domain.isEmpty()) {
-			throw new ConfigException("Need to set up " + domainEnvVarName + " environment variable");
-		}
-		return domain;
+		String envVarName = "PANGEA_INTEGRATION_DOMAIN_" + environment.toString();
+		return loadEnvVar(envVarName);
 	}
 
 	public static class ConfigBuilder {
@@ -198,6 +222,7 @@ public final class Config {
 		String customUserAgent;
 		boolean queuedRetryEnabled;
 		long pollResultTimeout;
+		String configID;
 
 		public ConfigBuilder(String token, String domain) {
 			this.token = token;
@@ -237,6 +262,11 @@ public final class Config {
 
 		public ConfigBuilder setCustomUserAgent(String customUserAgent) {
 			this.customUserAgent = customUserAgent;
+			return this;
+		}
+
+		public ConfigBuilder setConfigID(String configID) {
+			this.configID = configID;
 			return this;
 		}
 

@@ -22,4 +22,4 @@ The Pangea repository for all things Java
 ## Pangea Java SDK
 
 [Java SDK](https://github.com/pangeacyber/pangea-java/tree/main/packages/pangea-sdk)
-
+[Java SDK examples](https://github.com/pangeacyber/pangea-java/tree/main/examples)

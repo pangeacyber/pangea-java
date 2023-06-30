@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyEmailRequest;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyPasswordRequest;
@@ -11,7 +12,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class FlowVerifyCaptchaRequest {
+final class FlowVerifyCaptchaRequest extends BaseRequest {
 
 	@JsonProperty("flow_id")
 	String flowID;
@@ -25,7 +26,7 @@ final class FlowVerifyCaptchaRequest {
 	}
 }
 
-final class FlowVerifySocialRequest {
+final class FlowVerifySocialRequest extends BaseRequest {
 
 	@JsonProperty("flow_id")
 	String flowID;

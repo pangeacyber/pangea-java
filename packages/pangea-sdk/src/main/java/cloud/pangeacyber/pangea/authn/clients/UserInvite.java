@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.UserInviteListRequest;
 import cloud.pangeacyber.pangea.authn.responses.UserInviteDeleteResponse;
@@ -8,7 +9,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class UserInviteDeleteRequest {
+final class UserInviteDeleteRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;

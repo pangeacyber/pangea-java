@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.*;
 import cloud.pangeacyber.pangea.authn.responses.*;
@@ -9,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class ClientSessionInvalidateRequest {
+final class ClientSessionInvalidateRequest extends BaseRequest {
 
 	@JsonProperty("token")
 	String token;
@@ -23,7 +24,7 @@ final class ClientSessionInvalidateRequest {
 	}
 }
 
-final class ClientSessionRefreshRequest {
+final class ClientSessionRefreshRequest extends BaseRequest {
 
 	@JsonProperty("refresh_token")
 	String refreshToken;
@@ -38,7 +39,7 @@ final class ClientSessionRefreshRequest {
 	}
 }
 
-final class ClientSessionLogoutRequest {
+final class ClientSessionLogoutRequest extends BaseRequest {
 
 	@JsonProperty("token")
 	String token;

@@ -10,9 +10,10 @@ import cloud.pangeacyber.pangea.intel.responses.*;
 public class IPIntelClient extends BaseClient {
 
 	public static String serviceName = "ip-intel";
+	private static final boolean supportMultiConfig = false;
 
 	public IPIntelClient(Builder builder) {
-		super(builder, serviceName);
+		super(builder, serviceName, supportMultiConfig);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

@@ -42,8 +42,9 @@ public abstract class BaseClient {
 	String serviceName;
 	Map<String, String> customHeaders = null;
 	String userAgent = "pangea-java/default";
+	private boolean supportMultiConfig = false;
 
-	protected BaseClient(Builder<?> builder, String serviceName) {
+	protected BaseClient(Builder<?> builder, String serviceName, boolean supportMultiConfig) {
 		this.config = builder.config;
 		this.serviceName = serviceName;
 		if (builder.logger != null) {
@@ -53,6 +54,7 @@ public abstract class BaseClient {
 		}
 		this.httpClient = buildClient();
 		this.setUserAgent(config.getCustomUserAgent());
+		this.supportMultiConfig = supportMultiConfig;
 	}
 
 	private Logger buildDefaultLogger() {
@@ -169,7 +171,7 @@ public abstract class BaseClient {
 		return;
 	}
 
-	protected <Req, ResponseType extends Response<?>> ResponseType post(
+	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
 		String path,
 		Req request,
 		Class<ResponseType> responseClass
@@ -177,7 +179,7 @@ public abstract class BaseClient {
 		return doPost(path, request, null, responseClass);
 	}
 
-	protected <Req, ResponseType extends Response<?>> ResponseType post(
+	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
 		String path,
 		Req request,
 		File file,
@@ -224,7 +226,7 @@ public abstract class BaseClient {
 		return get(path, true, responseClass);
 	}
 
-	private <Req, ResponseType extends Response<?>> ResponseType doPost(
+	private <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType doPost(
 		String path,
 		Req request,
 		File file,
@@ -232,6 +234,11 @@ public abstract class BaseClient {
 	) throws PangeaException, PangeaAPIException {
 		ObjectMapper mapper = new ObjectMapper();
 		String body;
+
+		if (this.supportMultiConfig == true && this.config.getConfigID() != null && request.getConfigID() == null) {
+			request.setConfigID(this.config.getConfigID());
+		}
+
 		try {
 			body = mapper.writeValueAsString(request);
 		} catch (JsonProcessingException e) {

@@ -1,12 +1,13 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.FlowSignupPasswordResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class FlowSignupPasswordRequest {
+final class FlowSignupPasswordRequest extends BaseRequest {
 
 	@JsonProperty("flow_id")
 	String flow_id;
@@ -28,7 +29,7 @@ final class FlowSignupPasswordRequest {
 	}
 }
 
-final class FlowSignupSocialRequest {
+final class FlowSignupSocialRequest extends BaseRequest {
 
 	@JsonProperty("flow_id")
 	String flow_id;

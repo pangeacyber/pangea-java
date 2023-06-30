@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.models.FlowType;
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -8,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FlowStartRequest {
+public class FlowStartRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("cb_uri")

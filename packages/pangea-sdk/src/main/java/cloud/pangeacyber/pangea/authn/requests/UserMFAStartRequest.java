@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.models.MFAProvider;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserMFAStartRequest {
+public class UserMFAStartRequest extends BaseRequest {
 
 	@JsonProperty("user_id")
 	String userID;

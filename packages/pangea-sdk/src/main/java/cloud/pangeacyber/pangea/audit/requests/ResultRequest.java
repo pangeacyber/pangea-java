@@ -1,10 +1,11 @@
 package cloud.pangeacyber.pangea.audit.requests;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ResultRequest {
+public class ResultRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	private String id;

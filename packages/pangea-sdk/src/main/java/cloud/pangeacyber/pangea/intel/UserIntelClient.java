@@ -11,10 +11,11 @@ import java.util.Map;
 
 public class UserIntelClient extends BaseClient {
 
-	public static String serviceName = "user-intel";
+	public static final String serviceName = "user-intel";
+	private static final boolean supportMultiConfig = false;
 
 	public UserIntelClient(Builder builder) {
-		super(builder, serviceName);
+		super(builder, serviceName, supportMultiConfig);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

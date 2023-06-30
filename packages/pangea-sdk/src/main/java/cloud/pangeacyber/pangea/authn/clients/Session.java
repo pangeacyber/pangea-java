@@ -6,8 +6,6 @@ import cloud.pangeacyber.pangea.authn.requests.*;
 import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 final class SessionInvalidateRequest extends BaseRequest {
@@ -17,21 +15,6 @@ final class SessionInvalidateRequest extends BaseRequest {
 
 	public SessionInvalidateRequest(String sessionID) {
 		this.sessionID = sessionID;
-	}
-}
-
-final class SessionRefreshRequest extends BaseRequest {
-
-	@JsonProperty("refresh_token")
-	String refreshToken;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("user_token")
-	String userToken;
-
-	public SessionRefreshRequest(String refreshToken, String userToken) {
-		this.refreshToken = refreshToken;
-		this.userToken = userToken;
 	}
 }
 

@@ -56,6 +56,7 @@ public class User extends AuthNBaseClient {
 	private UserInvite invite;
 	private UserMFA mfa;
 	private UserLogin login;
+	private UserPassword password;
 
 	public User(AuthNClient.Builder builder) {
 		super(builder);
@@ -63,6 +64,7 @@ public class User extends AuthNBaseClient {
 		invite = new UserInvite(builder);
 		mfa = new UserMFA(builder);
 		login = new UserLogin(builder);
+		password = new UserPassword(builder);
 	}
 
 	// TODO: Doc
@@ -115,5 +117,9 @@ public class User extends AuthNBaseClient {
 
 	public UserLogin login() {
 		return login;
+	}
+
+	public UserPassword password() {
+		return password;
 	}
 }

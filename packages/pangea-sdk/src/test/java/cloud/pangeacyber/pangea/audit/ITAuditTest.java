@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.TestEnvironment;
-import cloud.pangeacyber.pangea.audit.AuditClient;
 import cloud.pangeacyber.pangea.audit.models.*;
 import cloud.pangeacyber.pangea.audit.requests.*;
 import cloud.pangeacyber.pangea.audit.responses.*;
@@ -22,7 +21,7 @@ public class ITAuditTest {
 
 	Config cfgGeneral;
 	AuditClient clientGeneral, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient, customSchemaClient, localSignCustomSchemaClient;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	TestEnvironment environment = TestEnvironment.LIVE;
 	CustomEvent customEvent;
 
 	private static final String ACTOR = "java-sdk";
@@ -33,7 +32,6 @@ public class ITAuditTest {
 	private static final String STATUS_SIGNED = "signed";
 	private static final String MSG_CUSTOM_SCHEMA_NO_SIGNED = "java-sdk-custom-schema-no-signed";
 	private static final String MSG_CUSTOM_SCHEMA_SIGNED_LOCAL = "java-sdk-custom-schema-sign-local";
-	private static final String MSG_CUSTOM_SCHEMA_SIGNED_VAULT = "java-sdk-custom-schema-sign-vault";
 	private static final String LONG_FIELD =
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia, orci eget commodo commodo non.";
 

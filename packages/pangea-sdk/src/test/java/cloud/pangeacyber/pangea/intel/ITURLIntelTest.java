@@ -182,7 +182,7 @@ public class ITURLIntelTest {
 	@Test(expected = UnauthorizedException.class)
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg.setToken("notarealtoken");
+		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		URLIntelClient fakeClient = new URLIntelClient.Builder(cfg).build();
 		URLReputationResponse response = fakeClient.reputation(
 			new URLReputationRequest.Builder("http://113.235.101.11:54384")

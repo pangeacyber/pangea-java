@@ -71,7 +71,7 @@ public class ITEmbargoTest {
 	@Test(expected = UnauthorizedException.class)
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg.setToken("notarealtoken");
+		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		EmbargoClient fakeClient = new EmbargoClient.Builder(cfg).build();
 		IPCheckResponse response = fakeClient.ipCheck("1.1.1.1");
 	}

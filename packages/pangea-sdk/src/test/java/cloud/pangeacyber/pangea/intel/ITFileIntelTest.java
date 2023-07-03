@@ -259,7 +259,7 @@ public class ITFileIntelTest {
 	@Test(expected = UnauthorizedException.class)
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg.setToken("notarealtoken");
+		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		FileIntelClient fakeClient = new FileIntelClient.Builder(cfg).build();
 		FileReputationResponse response = fakeClient.reputation(
 			new FileHashReputationRequest.Builder(

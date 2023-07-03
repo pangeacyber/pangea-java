@@ -26,17 +26,11 @@ public class ConfigTest {
 		assertNotNull(config.getConnectionTimeout());
 		assertNotNull(config.getEnviroment());
 		assertNotNull(config.isInsecure());
-
-		config.setDomain(domain);
-		config.setToken(token);
-		config.setConnectionTimeout(Duration.ofSeconds(30));
-		config.setEnviroment("prod");
-		config.setInsecure(false);
 	}
 
 	@Test
 	public void testInsecureTrueEnvironmentLocal() throws ConfigException {
-		Config config = new Config.ConfigBuilder(token, domain).setInsecure(true).setEnviroment("local").build();
+		Config config = new Config.Builder(token, domain).insecure(true).enviroment("local").build();
 		String url = config.getServiceUrl(serviceName, path).toString();
 		String urlExpected = new StringBuilder().append("http://").append(domain).append(path).toString();
 		assertEquals(urlExpected, url);
@@ -44,7 +38,7 @@ public class ConfigTest {
 
 	@Test
 	public void testInsecureFalseEnvironmentLocal() throws ConfigException {
-		Config config = new Config.ConfigBuilder(token, domain).setInsecure(false).setEnviroment("local").build();
+		Config config = new Config.Builder(token, domain).insecure(false).enviroment("local").build();
 		String url = config.getServiceUrl(serviceName, path).toString();
 		String urlExpected = new StringBuilder().append("https://").append(domain).append(path).toString();
 		assertEquals(urlExpected, url);
@@ -52,7 +46,7 @@ public class ConfigTest {
 
 	@Test
 	public void testInsecureTrueEnvironmentProduction() throws ConfigException {
-		Config config = new Config.ConfigBuilder(token, domain).setInsecure(true).setEnviroment("production").build();
+		Config config = new Config.Builder(token, domain).insecure(true).enviroment("production").build();
 		String url = config.getServiceUrl(serviceName, path).toString();
 		String urlExpected = new StringBuilder()
 			.append("http://")
@@ -66,7 +60,7 @@ public class ConfigTest {
 
 	@Test
 	public void testInsecureFalseEnvironmentProduction() throws ConfigException {
-		Config config = new Config.ConfigBuilder(token, domain).setInsecure(false).setEnviroment("production").build();
+		Config config = new Config.Builder(token, domain).insecure(false).enviroment("production").build();
 		String url = config.getServiceUrl(serviceName, path).toString();
 		String urlExpected = new StringBuilder()
 			.append("https://")
@@ -80,7 +74,7 @@ public class ConfigTest {
 
 	@Test
 	public void testInsecureDefaultEnvironmentDefault() throws ConfigException {
-		Config config = new Config.ConfigBuilder(token, domain).build();
+		Config config = new Config.Builder(token, domain).build();
 		String url = config.getServiceUrl(serviceName, path).toString();
 		String urlExpected = new StringBuilder()
 			.append("https://")
@@ -95,7 +89,7 @@ public class ConfigTest {
 	@Test
 	public void testURL() throws ConfigException {
 		String urlDomain = "https://myurldomain.net";
-		Config config = new Config.ConfigBuilder(token, urlDomain).build();
+		Config config = new Config.Builder(token, urlDomain).build();
 		String url = config.getServiceUrl(serviceName, path).toString();
 		String urlExpected = new StringBuilder().append(urlDomain).append(path).toString();
 		assertEquals(urlExpected, url);

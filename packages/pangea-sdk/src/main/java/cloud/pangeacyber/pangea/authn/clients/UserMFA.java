@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.models.MFAProvider;
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class UserMFADeleteRequest {
+final class UserMFADeleteRequest extends BaseRequest {
 
 	@JsonProperty("user_id")
 	String userID;
@@ -25,7 +26,7 @@ final class UserMFADeleteRequest {
 	}
 }
 
-final class UserMFAEnrollRequest {
+final class UserMFAEnrollRequest extends BaseRequest {
 
 	@JsonProperty("user_id")
 	String userID;
@@ -43,7 +44,7 @@ final class UserMFAEnrollRequest {
 	}
 }
 
-final class UserMFAVerifyRequest {
+final class UserMFAVerifyRequest extends BaseRequest {
 
 	@JsonProperty("user_id")
 	String userID;
@@ -64,9 +65,10 @@ final class UserMFAVerifyRequest {
 public class UserMFA extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 
 	public UserMFA(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	// TODO: Doc

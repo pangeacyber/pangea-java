@@ -1,10 +1,11 @@
 package cloud.pangeacyber.pangea.audit;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SearchInput {
+public class SearchInput extends BaseRequest {
 
 	@JsonProperty("query")
 	String query;

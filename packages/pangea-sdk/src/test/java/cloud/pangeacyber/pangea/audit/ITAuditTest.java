@@ -21,8 +21,8 @@ import org.junit.Test;
 
 public class ITAuditTest {
 
-	Config cfg;
-	AuditClient client, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient;
+	Config cfgGeneral;
+	AuditClient clientGeneral, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient;
 	TestEnvironment environment = TestEnvironment.LIVE;
 
 	private static final String ACTOR = "java-sdk";
@@ -35,24 +35,24 @@ public class ITAuditTest {
 	@Before
 	public void setUp() throws ConfigException {
 		Config vaultCfg = Config.fromVaultIntegrationEnvironment(environment);
-		this.cfg = Config.fromIntegrationEnvironment(environment);
+		this.cfgGeneral = Config.fromIntegrationEnvironment(environment);
 		Map<String, Object> pkInfo = new LinkedHashMap<String, Object>();
 		pkInfo.put("ExtraInfo", "LocalKey");
 
-		client = new AuditClientBuilder(cfg).build();
+		clientGeneral = new AuditClientBuilder(cfgGeneral).build();
 		vaultSignClient = new AuditClientBuilder(vaultCfg).build();
 
 		localSignClient =
-			new AuditClientBuilder(cfg)
+			new AuditClientBuilder(cfgGeneral)
 				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
 				.build();
 		signNtenandIDClient =
-			new AuditClientBuilder(cfg)
+			new AuditClientBuilder(cfgGeneral)
 				.withTenantID("mytenantid")
 				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
 				.build();
 		localSignInfoClient =
-			new AuditClientBuilder(cfg)
+			new AuditClientBuilder(cfgGeneral)
 				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
 				.withPkInfo(pkInfo)
 				.build();
@@ -64,7 +64,7 @@ public class ITAuditTest {
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
-		LogResponse response = client.log(event);
+		LogResponse response = clientGeneral.log(event);
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -83,7 +83,7 @@ public class ITAuditTest {
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
-		LogResponse response = client.log(event, SignMode.UNSIGNED, false, false);
+		LogResponse response = clientGeneral.log(event, SignMode.UNSIGNED, false, false);
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -102,7 +102,7 @@ public class ITAuditTest {
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
-		LogResponse response = client.log(event, SignMode.UNSIGNED, true, false);
+		LogResponse response = clientGeneral.log(event, SignMode.UNSIGNED, true, false);
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -143,7 +143,7 @@ public class ITAuditTest {
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
-		LogResponse response = client.log(event, SignMode.UNSIGNED, true, true);
+		LogResponse response = clientGeneral.log(event, SignMode.UNSIGNED, true, true);
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -158,7 +158,7 @@ public class ITAuditTest {
 		event = new Event(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
-		response = client.log(event, SignMode.UNSIGNED, true, true);
+		response = clientGeneral.log(event, SignMode.UNSIGNED, true, true);
 		assertTrue(response.isOk());
 
 		result = response.getResult();
@@ -281,7 +281,7 @@ public class ITAuditTest {
 		input.setMaxResults(maxResults);
 		input.setOrder("asc");
 
-		SearchResponse response = client.search(input);
+		SearchResponse response = clientGeneral.search(input);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= maxResults);
 
@@ -300,7 +300,7 @@ public class ITAuditTest {
 		input.setMaxResults(limit);
 		input.setOrder("desc");
 
-		SearchResponse response = client.search(input, false, false);
+		SearchResponse response = clientGeneral.search(input, false, false);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= limit);
 
@@ -318,7 +318,7 @@ public class ITAuditTest {
 		input.setMaxResults(limit);
 		input.setOrder("asc");
 
-		SearchResponse response = client.search(input, true, true);
+		SearchResponse response = clientGeneral.search(input, true, true);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= limit);
 
@@ -335,7 +335,7 @@ public class ITAuditTest {
 		input.setMaxResults(limit);
 		input.setOrder("asc");
 
-		SearchResponse response = client.search(input, true, true);
+		SearchResponse response = clientGeneral.search(input, true, true);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= limit);
 
@@ -351,13 +351,13 @@ public class ITAuditTest {
 		input.setMaxResults(searchLimit);
 		input.setOrder("asc");
 
-		SearchResponse searchResponse = client.search(input, true, true);
+		SearchResponse searchResponse = clientGeneral.search(input, true, true);
 		assertTrue(searchResponse.isOk());
 		assertTrue(searchResponse.getResult().getCount() <= searchLimit);
 		assertTrue(searchResponse.getResult().getCount() > 0);
 
 		int resultsLimit = 3;
-		ResultsResponse resultsResponse = client.results(searchResponse.getResult().getId(), resultsLimit, 0);
+		ResultsResponse resultsResponse = clientGeneral.results(searchResponse.getResult().getId(), resultsLimit, 0);
 		assertEquals(resultsResponse.getResult().getCount(), resultsLimit);
 		for (SearchEvent event : resultsResponse.getResult().getEvents()) {
 			assertEquals(EventVerification.NOT_VERIFIED, event.getConsistencyVerification());
@@ -371,13 +371,13 @@ public class ITAuditTest {
 		input.setMaxResults(searchLimit);
 		input.setOrder("asc");
 
-		SearchResponse searchResponse = client.search(input, true, true);
+		SearchResponse searchResponse = clientGeneral.search(input, true, true);
 		assertTrue(searchResponse.isOk());
 		assertTrue(searchResponse.getResult().getCount() <= searchLimit);
 		assertTrue(searchResponse.getResult().getCount() > 0);
 
 		int resultsLimit = 3;
-		ResultsResponse resultsResponse = client.results(
+		ResultsResponse resultsResponse = clientGeneral.results(
 			searchResponse.getResult().getId(),
 			resultsLimit,
 			0,
@@ -398,14 +398,14 @@ public class ITAuditTest {
 		input.setMaxResults(searchLimit);
 		input.setOrder("asc");
 
-		SearchResponse searchResponse = client.search(input, true, true);
+		SearchResponse searchResponse = clientGeneral.search(input, true, true);
 		assertTrue(searchResponse.isOk());
 		assertTrue(searchResponse.getResult().getCount() <= searchLimit);
 		assertTrue(searchResponse.getResult().getCount() > 0);
 
 		int resultsLimit = 3;
 		// Skip verifications
-		ResultsResponse resultsResponse = client.results(
+		ResultsResponse resultsResponse = clientGeneral.results(
 			searchResponse.getResult().getId(),
 			resultsLimit,
 			0,
@@ -422,7 +422,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testRoot() throws PangeaException, PangeaAPIException {
-		RootResponse response = client.getRoot();
+		RootResponse response = clientGeneral.getRoot();
 		assertTrue(response.isOk());
 
 		RootResult result = response.getResult();
@@ -436,7 +436,7 @@ public class ITAuditTest {
 	@Test
 	public void testRootWithSize() throws PangeaException, PangeaAPIException {
 		int treeSize = 2;
-		RootResponse response = client.getRoot(treeSize);
+		RootResponse response = clientGeneral.getRoot(treeSize);
 		assertTrue(response.isOk());
 
 		RootResult result = response.getResult();
@@ -451,7 +451,7 @@ public class ITAuditTest {
 	@Test(expected = PangeaAPIException.class)
 	public void testRootTreeNotFound() throws PangeaException, PangeaAPIException {
 		int treeSize = 1000000;
-		RootResponse response = client.getRoot(treeSize);
+		RootResponse response = clientGeneral.getRoot(treeSize);
 	}
 
 	@Test(expected = UnauthorizedException.class)
@@ -484,7 +484,7 @@ public class ITAuditTest {
 		int searchLimit = 100;
 		input.setMaxResults(searchLimit);
 		input.setOrder("notavalidorder");
-		SearchResponse searchResponse = client.search(input, true, true);
+		SearchResponse searchResponse = clientGeneral.search(input, true, true);
 	}
 
 	@Test(expected = UnauthorizedException.class)
@@ -502,6 +502,76 @@ public class ITAuditTest {
 	@Test(expected = SignerException.class)
 	public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException {
 		Event event = new Event(MSG_NO_SIGNED);
-		LogResponse response = client.log(event, SignMode.LOCAL, true, true);
+		LogResponse response = clientGeneral.log(event, SignMode.LOCAL, true, true);
+	}
+
+	@Test
+	public void testMultiConfig1Log() throws PangeaException, PangeaAPIException, ConfigException {
+		Event event = new Event(MSG_NO_SIGNED);
+		event.setActor(ACTOR);
+		event.setStatus(STATUS_NO_SIGNED);
+
+		Config cfg = new Config.ConfigBuilder(
+			Config.getMultiConfigTestToken(environment),
+			Config.getTestDomain(environment)
+		)
+			.setConfigID(Config.getConfigID(environment, "audit", 1))
+			.build();
+		AuditClient client = new AuditClientBuilder(cfg).build();
+
+		LogResponse response = client.log(event);
+		assertTrue(response.isOk());
+
+		LogResult result = response.getResult();
+		assertNull(result.getEventEnvelope());
+		assertNotNull(result.getHash());
+		assertNull(result.getConsistencyProof());
+		assertNull(result.getMembershipProof());
+		assertEquals(result.getConsistencyVerification(), EventVerification.NOT_VERIFIED);
+		assertEquals(result.getMembershipVerification(), EventVerification.NOT_VERIFIED);
+		assertEquals(result.getSignatureVerification(), EventVerification.NOT_VERIFIED);
+	}
+
+	@Test
+	public void testMultiConfig2Log() throws PangeaException, PangeaAPIException, ConfigException {
+		Event event = new Event(MSG_NO_SIGNED);
+		event.setActor(ACTOR);
+		event.setStatus(STATUS_NO_SIGNED);
+
+		Config cfg = new Config.ConfigBuilder(
+			Config.getMultiConfigTestToken(environment),
+			Config.getTestDomain(environment)
+		)
+			.setConfigID(Config.getConfigID(environment, "audit", 2))
+			.build();
+		AuditClient client = new AuditClientBuilder(cfg).build();
+
+		LogResponse response = client.log(event);
+		assertTrue(response.isOk());
+
+		LogResult result = response.getResult();
+		assertNull(result.getEventEnvelope());
+		assertNotNull(result.getHash());
+		assertNull(result.getConsistencyProof());
+		assertNull(result.getMembershipProof());
+		assertEquals(result.getConsistencyVerification(), EventVerification.NOT_VERIFIED);
+		assertEquals(result.getMembershipVerification(), EventVerification.NOT_VERIFIED);
+		assertEquals(result.getSignatureVerification(), EventVerification.NOT_VERIFIED);
+	}
+
+	@Test(expected = PangeaAPIException.class)
+	public void testMultiConfigWithoutConfigID() throws PangeaException, PangeaAPIException, ConfigException {
+		Event event = new Event(MSG_NO_SIGNED);
+		event.setActor(ACTOR);
+		event.setStatus(STATUS_NO_SIGNED);
+
+		Config cfg = new Config.ConfigBuilder(
+			Config.getMultiConfigTestToken(environment),
+			Config.getTestDomain(environment)
+		)
+			.build();
+		AuditClient client = new AuditClientBuilder(cfg).build();
+
+		LogResponse response = client.log(event);
 	}
 }

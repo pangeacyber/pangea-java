@@ -32,12 +32,14 @@ public abstract class Client {
 	String serviceName;
 	Map<String, String> customHeaders = null;
 	String userAgent = "pangea-java/default";
+	private boolean supportMultiConfig = false;
 
-	protected Client(Config config, String serviceName) {
+	protected Client(Config config, String serviceName, boolean supportMultiConfig) {
 		this.serviceName = serviceName;
 		this.config = config;
 		this.httpClient = buildClient();
 		this.setCustomUserAgent(config.getCustomUserAgent());
+		this.supportMultiConfig = supportMultiConfig;
 	}
 
 	protected CloseableHttpClient buildClient() {
@@ -92,7 +94,7 @@ public abstract class Client {
 		return;
 	}
 
-	public <Req, ResponseType extends Response<?>> ResponseType doPost(
+	public <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType doPost(
 		String path,
 		Req request,
 		Class<ResponseType> responseClass
@@ -100,7 +102,7 @@ public abstract class Client {
 		return internalDoPost(path, request, null, responseClass);
 	}
 
-	public <Req, ResponseType extends Response<?>> ResponseType doPost(
+	public <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType doPost(
 		String path,
 		Req request,
 		File file,
@@ -137,7 +139,7 @@ public abstract class Client {
 		return doGet(path, true, responseClass);
 	}
 
-	private <Req, ResponseType extends Response<?>> ResponseType internalDoPost(
+	private <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType internalDoPost(
 		String path,
 		Req request,
 		File file,
@@ -145,6 +147,11 @@ public abstract class Client {
 	) throws PangeaException, PangeaAPIException {
 		ObjectMapper mapper = new ObjectMapper();
 		String body;
+
+		if (this.supportMultiConfig == true && this.config.getConfigID() != null && request.getConfigID() == null) {
+			request.setConfigID(this.config.getConfigID());
+		}
+
 		try {
 			body = mapper.writeValueAsString(request);
 		} catch (JsonProcessingException e) {

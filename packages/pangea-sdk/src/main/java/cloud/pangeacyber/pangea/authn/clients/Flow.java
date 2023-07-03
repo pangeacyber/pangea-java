@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.authn.requests.FlowStartRequest;
@@ -10,7 +11,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class FlowCompleteRequest {
+final class FlowCompleteRequest extends BaseRequest {
 
 	@JsonProperty("flow_id")
 	String flowID;
@@ -23,13 +24,14 @@ final class FlowCompleteRequest {
 public class Flow extends Client {
 
 	public static final String serviceName = "authn";
+	private static final boolean supportMultiConfig = false;
 	private FlowEnroll enroll;
 	private FlowSignup signup;
 	private FlowVerify verify;
 	private FlowReset reset;
 
 	public Flow(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 		enroll = new FlowEnroll(config);
 		signup = new FlowSignup(config);
 		verify = new FlowVerify(config);

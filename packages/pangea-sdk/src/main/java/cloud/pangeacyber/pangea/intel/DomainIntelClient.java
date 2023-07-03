@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.intel;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class DomainLookupRequest {
+final class DomainLookupRequest extends BaseRequest {
 
 	@JsonProperty("domain")
 	String Domain;
@@ -35,7 +36,7 @@ final class DomainLookupRequest {
 	}
 }
 
-final class DomainReputationRequest {
+final class DomainReputationRequest extends BaseRequest {
 
 	@JsonProperty("domain")
 	String Domain;
@@ -62,10 +63,11 @@ final class DomainReputationRequest {
 
 public class DomainIntelClient extends Client {
 
-	public static String serviceName = "domain-intel";
+	public static final String serviceName = "domain-intel";
+	private static final boolean supportMultiConfig = false;
 
 	public DomainIntelClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	private DomainLookupResponse lookupPost(String domain, String provider, Boolean verbose, Boolean raw)

@@ -9,10 +9,11 @@ import cloud.pangeacyber.pangea.redact.requests.RedactTextRequest;
 
 public class RedactClient extends Client {
 
-	public static String serviceName = "redact";
+	public static final String serviceName = "redact";
+	private static final boolean supportMultiConfig = false;
 
 	public RedactClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	private RedactTextResponse redactPost(RedactTextRequest request) throws PangeaException, PangeaAPIException {

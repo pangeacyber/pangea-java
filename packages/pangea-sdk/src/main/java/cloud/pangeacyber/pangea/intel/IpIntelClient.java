@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.intel;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -14,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class IpCommonRequest {
+final class IpCommonRequest extends BaseRequest {
 
 	@JsonProperty("ip")
 	String Ip;
@@ -41,10 +42,11 @@ final class IpCommonRequest {
 
 public class IpIntelClient extends Client {
 
-	public static String serviceName = "ip-intel";
+	public static final String serviceName = "ip-intel";
+	private static final boolean supportMultiConfig = false;
 
 	public IpIntelClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	private IpLookupResponse lookupPost(String ip, String provider, Boolean verbose, Boolean raw)

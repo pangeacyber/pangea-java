@@ -1,10 +1,11 @@
 package cloud.pangeacyber.pangea.intel.models;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class IntelCommonRequest {
+public class IntelCommonRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("provider")

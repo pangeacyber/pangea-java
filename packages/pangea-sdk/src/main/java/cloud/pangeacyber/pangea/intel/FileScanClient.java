@@ -11,9 +11,10 @@ import java.io.File;
 public class FileScanClient extends Client {
 
 	public static String serviceName = "file-scan";
+	private static final boolean supportMultiConfig = false;
 
 	public FileScanClient(Config config) {
-		super(config, serviceName);
+		super(config, serviceName, supportMultiConfig);
 	}
 
 	public FileScanResponse scan(FileScanRequest request, File file) throws PangeaException, PangeaAPIException {

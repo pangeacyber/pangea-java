@@ -30,7 +30,6 @@ public class App
         try {
             response = client.log(
                 event,
-                Event.class,
                 new LogConfig.Builder()
                     .signLocal(true)
                     .verbose(true)

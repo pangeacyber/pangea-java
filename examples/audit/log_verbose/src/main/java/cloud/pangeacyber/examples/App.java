@@ -28,7 +28,6 @@ public class App
         try {
             response = client.log(
                 event,
-                Event.class,
                 new LogConfig.Builder()
                     .verbose(true)
                     .build()

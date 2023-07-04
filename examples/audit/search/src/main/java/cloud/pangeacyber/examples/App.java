@@ -48,7 +48,7 @@ public class App
 
         // Perform search
         try {
-            searchResponse = client.search(searchRequest, Event.class, new SearchConfig.Builder().build());
+            searchResponse = client.search(searchRequest, new SearchConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);
@@ -70,7 +70,7 @@ public class App
                                         .offset(0)
                                         .build();
         try {
-            resultsResponse = client.results(resultRequest, Event.class, new SearchConfig.Builder().build());
+            resultsResponse = client.results(resultRequest, new SearchConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);
@@ -90,7 +90,7 @@ public class App
                                         .offset(resultsLimit)
                                         .build();
         try {
-            resultsResponse = client.results(resultRequest, Event.class, new SearchConfig.Builder().build());
+            resultsResponse = client.results(resultRequest, new SearchConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);

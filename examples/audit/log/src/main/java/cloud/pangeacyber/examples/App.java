@@ -26,7 +26,7 @@ public class App
                         .build();
         LogResponse response = null;
         try {
-            response = client.log(event, Event.class, new LogConfig.Builder().build());
+            response = client.log(event, new LogConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);

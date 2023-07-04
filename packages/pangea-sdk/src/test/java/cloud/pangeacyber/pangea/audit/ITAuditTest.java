@@ -80,7 +80,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLog() throws PangeaException, PangeaAPIException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
@@ -117,7 +117,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogNoVerbose() throws PangeaException, PangeaAPIException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
@@ -158,7 +158,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogVerbose() throws PangeaAPIException, PangeaException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
@@ -173,7 +173,7 @@ public class ITAuditTest {
 			LogResult result = response.getResult();
 			assertNotNull(result.getEventEnvelope());
 			assertNotNull(result.getHash());
-			Event eventResult = (Event) result.getEventEnvelope().getEvent();
+			StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 			assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
 			assertNull(result.getConsistencyProof());
 			assertNotNull(result.getMembershipProof());
@@ -216,7 +216,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogTenantID() throws PangeaAPIException, PangeaException, ConfigException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
@@ -229,7 +229,7 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
 		assertNull(result.getConsistencyProof());
 		assertNotNull(result.getMembershipProof());
@@ -241,7 +241,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogVerify() throws PangeaAPIException, PangeaException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
@@ -255,14 +255,14 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
 		assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
 		assertEquals(EventVerification.SUCCESS, result.getMembershipVerification());
 		assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
 
 		// Second log
-		event = new Event(MSG_NO_SIGNED);
+		event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 		response =
@@ -273,7 +273,7 @@ public class ITAuditTest {
 		result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		eventResult = (Event) result.getEventEnvelope().getEvent();
+		eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
 		assertEquals(EventVerification.SUCCESS, result.getConsistencyVerification());
 		assertEquals(EventVerification.SUCCESS, result.getMembershipVerification());
@@ -327,7 +327,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogLocalSignature() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event(MSG_SIGNED_LOCAL);
+		StandardEvent event = new StandardEvent(MSG_SIGNED_LOCAL);
 		event.setActor(ACTOR);
 		event.setAction("Action");
 		event.setSource("Source");
@@ -346,7 +346,7 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
 			"""
@@ -387,7 +387,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogLocalSignatureWithPublicKeyInfo() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event(MSG_SIGNED_LOCAL);
+		StandardEvent event = new StandardEvent(MSG_SIGNED_LOCAL);
 		event.setActor(ACTOR);
 		event.setAction("Action");
 		event.setSource("Source");
@@ -406,7 +406,7 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
 			"""
@@ -418,7 +418,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogVaultSignature() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event(MSG_SIGNED_VAULT);
+		StandardEvent event = new StandardEvent(MSG_SIGNED_VAULT);
 		event.setActor(ACTOR);
 		event.setAction("Action");
 		event.setSource("Source");
@@ -437,7 +437,7 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_VAULT, eventResult.getMessage());
 		assertNotNull(result.getEventEnvelope().getPublicKey());
 		assertNotNull(result.getEventEnvelope().getSignature());
@@ -446,7 +446,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogLocalSignatureAndTenantID() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event(MSG_SIGNED_LOCAL);
+		StandardEvent event = new StandardEvent(MSG_SIGNED_LOCAL);
 		event.setActor(ACTOR);
 		event.setAction("Action");
 		event.setSource("Source");
@@ -465,7 +465,7 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
 			"""
@@ -870,7 +870,7 @@ public class ITAuditTest {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
-		Event event = new Event("Test msg");
+		StandardEvent event = new StandardEvent("Test msg");
 		LogResponse response = fakeClient.log(
 			event,
 			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
@@ -904,7 +904,7 @@ public class ITAuditTest {
 
 	@Test(expected = SignerException.class)
 	public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		LogResponse response = clientGeneral.log(
 			event,
 			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
@@ -913,7 +913,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testMultiConfig1Log() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
+		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
 		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
 			.configID(Config.getConfigID(environment, "audit", 1))
@@ -938,7 +938,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testMultiConfig2Log() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
+		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
 		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
 			.configID(Config.getConfigID(environment, "audit", 2))
@@ -963,7 +963,7 @@ public class ITAuditTest {
 
 	@Test(expected = PangeaAPIException.class)
 	public void testMultiConfigWithoutConfigID() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
+		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
 		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
 			.build();

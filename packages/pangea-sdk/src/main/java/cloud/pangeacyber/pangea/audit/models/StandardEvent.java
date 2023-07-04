@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Event implements IEvent {
+public class StandardEvent implements IEvent {
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("actor")
@@ -46,13 +46,13 @@ public class Event implements IEvent {
 	@JsonProperty("tenant_id")
 	private String tenantID;
 
-	public Event() {}
+	public StandardEvent() {}
 
-	public Event(String message) {
+	public StandardEvent(String message) {
 		this.message = message;
 	}
 
-	private Event(Builder builder) {
+	private StandardEvent(Builder builder) {
 		this.actor = builder.actor;
 		this.action = builder.action;
 		this.message = builder.message;
@@ -127,8 +127,8 @@ public class Event implements IEvent {
 			return this;
 		}
 
-		public Event build() {
-			return new Event(this);
+		public StandardEvent build() {
+			return new StandardEvent(this);
 		}
 	}
 

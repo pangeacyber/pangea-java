@@ -96,7 +96,7 @@ public class AuditClient extends BaseClient {
 		String tenantID = null;
 		Config config;
 		Map<String, Object> pkInfo = null;
-		Class<?> customSchemaClass = Event.class;
+		Class<?> customSchemaClass = StandardEvent.class;
 
 		public Builder(Config config) {
 			super(config);

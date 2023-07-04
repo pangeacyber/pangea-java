@@ -1,7 +1,7 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.audit.AuditClient;
-import cloud.pangeacyber.pangea.audit.models.Event;
+import cloud.pangeacyber.pangea.audit.models.StandardEvent;
 import cloud.pangeacyber.pangea.audit.models.LogConfig;
 import cloud.pangeacyber.pangea.audit.responses.LogResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
@@ -20,7 +20,7 @@ public class App
         }
 
         AuditClient client = new AuditClient.Builder(cfg).build();
-        Event event = new Event.Builder("Hello, World!")
+        StandardEvent event = new StandardEvent.Builder("Hello, World!")
                         .action("Login")
                         .actor("Terminal")
                         .build();

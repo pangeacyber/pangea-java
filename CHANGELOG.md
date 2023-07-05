@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # Changed
 
-- Audit.Log(), .Search() and .Results() method's signature
+- Audit service allow to setup CustomSchema class on builder
+- Audit.Log(), .Search() and .Results() method's signature changed to support CustomSchema and be scalable
 - Reorganize service folders on /requests, /results, /responses and /models
 - Rename IpIntelClient to IPIntelClient
 - Rename UrlIntelClient to URLIntelClient

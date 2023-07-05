@@ -45,7 +45,7 @@ public class ITAuditTest {
 
 		clientGeneral = new AuditClient.Builder(cfgGeneral).build();
 		vaultSignClient = new AuditClient.Builder(vaultCfg).build();
-		customSchemaClient = new AuditClient.Builder(customSchemaCfg).build();
+		customSchemaClient = new AuditClient.Builder(customSchemaCfg).withCustomSchema(CustomEvent.class).build();
 
 		localSignClient =
 			new AuditClient.Builder(cfgGeneral)
@@ -54,6 +54,7 @@ public class ITAuditTest {
 
 		localSignCustomSchemaClient =
 			new AuditClient.Builder(customSchemaCfg)
+				.withCustomSchema(CustomEvent.class)
 				.withPrivateKey("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey")
 				.build();
 
@@ -79,15 +80,11 @@ public class ITAuditTest {
 
 	@Test
 	public void testLog() throws PangeaException, PangeaAPIException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
-		LogResponse response = clientGeneral.log(
-			event,
-			Event.class,
-			new LogConfig.Builder().verbose(false).verify(false).build()
-		);
+		LogResponse response = clientGeneral.log(event, new LogConfig.Builder().verbose(false).verify(false).build());
 		assertTrue(response.isOk());
 
 		LogResult result = response.getResult();
@@ -104,7 +101,6 @@ public class ITAuditTest {
 	public void testLog_customSchema() throws PangeaException, PangeaAPIException {
 		LogResponse response = customSchemaClient.log(
 			customEvent,
-			CustomEvent.class,
 			new LogConfig.Builder().verbose(false).verify(false).build()
 		);
 		assertTrue(response.isOk());
@@ -121,13 +117,12 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogNoVerbose() throws PangeaException, PangeaAPIException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
 		LogResponse response = clientGeneral.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
 		);
 		assertTrue(response.isOk());
@@ -146,7 +141,6 @@ public class ITAuditTest {
 	public void testLogNoVerbose_customSchema() throws PangeaException, PangeaAPIException {
 		LogResponse response = customSchemaClient.log(
 			customEvent,
-			CustomEvent.class,
 			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
 		);
 
@@ -164,14 +158,13 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogVerbose() throws PangeaAPIException, PangeaException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
 		try {
 			LogResponse response = clientGeneral.log(
 				event,
-				Event.class,
 				new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
 			);
 
@@ -180,7 +173,7 @@ public class ITAuditTest {
 			LogResult result = response.getResult();
 			assertNotNull(result.getEventEnvelope());
 			assertNotNull(result.getHash());
-			Event eventResult = (Event) result.getEventEnvelope().getEvent();
+			StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 			assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
 			assertNull(result.getConsistencyProof());
 			assertNotNull(result.getMembershipProof());
@@ -197,7 +190,6 @@ public class ITAuditTest {
 		try {
 			LogResponse response = customSchemaClient.log(
 				customEvent,
-				CustomEvent.class,
 				new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
 			);
 
@@ -224,13 +216,12 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogTenantID() throws PangeaAPIException, PangeaException, ConfigException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
 		LogResponse response = signNtenandIDClient.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
 		);
 		assertTrue(response.isOk());
@@ -238,7 +229,7 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
 		assertNull(result.getConsistencyProof());
 		assertNotNull(result.getMembershipProof());
@@ -250,13 +241,12 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogVerify() throws PangeaAPIException, PangeaException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 
 		LogResponse response = clientGeneral.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
 		);
 
@@ -265,29 +255,25 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
 		assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
 		assertEquals(EventVerification.SUCCESS, result.getMembershipVerification());
 		assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
 
 		// Second log
-		event = new Event(MSG_NO_SIGNED);
+		event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
 		response =
-			clientGeneral.log(
-				event,
-				Event.class,
-				new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
-			);
+			clientGeneral.log(event, new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build());
 
 		assertTrue(response.isOk());
 
 		result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		eventResult = (Event) result.getEventEnvelope().getEvent();
+		eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
 		assertEquals(EventVerification.SUCCESS, result.getConsistencyVerification());
 		assertEquals(EventVerification.SUCCESS, result.getMembershipVerification());
@@ -298,7 +284,6 @@ public class ITAuditTest {
 	public void testLogVerify_customSchema() throws PangeaAPIException, PangeaException {
 		LogResponse response = customSchemaClient.log(
 			customEvent,
-			CustomEvent.class,
 			new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
 		);
 
@@ -321,7 +306,6 @@ public class ITAuditTest {
 		response =
 			customSchemaClient.log(
 				customEvent,
-				CustomEvent.class,
 				new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
 			);
 
@@ -343,7 +327,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogLocalSignature() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event(MSG_SIGNED_LOCAL);
+		StandardEvent event = new StandardEvent(MSG_SIGNED_LOCAL);
 		event.setActor(ACTOR);
 		event.setAction("Action");
 		event.setSource("Source");
@@ -354,7 +338,6 @@ public class ITAuditTest {
 
 		LogResponse response = localSignClient.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
 		);
 
@@ -363,7 +346,7 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
 			"""
@@ -384,7 +367,6 @@ public class ITAuditTest {
 
 		LogResponse response = localSignCustomSchemaClient.log(
 			event,
-			CustomEvent.class,
 			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
 		);
 
@@ -405,7 +387,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogLocalSignatureWithPublicKeyInfo() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event(MSG_SIGNED_LOCAL);
+		StandardEvent event = new StandardEvent(MSG_SIGNED_LOCAL);
 		event.setActor(ACTOR);
 		event.setAction("Action");
 		event.setSource("Source");
@@ -416,7 +398,6 @@ public class ITAuditTest {
 
 		LogResponse response = localSignInfoClient.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
 		);
 
@@ -425,7 +406,7 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
 			"""
@@ -437,7 +418,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogVaultSignature() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event(MSG_SIGNED_VAULT);
+		StandardEvent event = new StandardEvent(MSG_SIGNED_VAULT);
 		event.setActor(ACTOR);
 		event.setAction("Action");
 		event.setSource("Source");
@@ -448,7 +429,6 @@ public class ITAuditTest {
 
 		LogResponse response = vaultSignClient.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
 		);
 
@@ -457,7 +437,7 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_VAULT, eventResult.getMessage());
 		assertNotNull(result.getEventEnvelope().getPublicKey());
 		assertNotNull(result.getEventEnvelope().getSignature());
@@ -466,7 +446,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testLogLocalSignatureAndTenantID() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event(MSG_SIGNED_LOCAL);
+		StandardEvent event = new StandardEvent(MSG_SIGNED_LOCAL);
 		event.setActor(ACTOR);
 		event.setAction("Action");
 		event.setSource("Source");
@@ -477,7 +457,6 @@ public class ITAuditTest {
 
 		LogResponse response = signNtenandIDClient.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
 		);
 
@@ -486,7 +465,7 @@ public class ITAuditTest {
 		LogResult result = response.getResult();
 		assertNotNull(result.getEventEnvelope());
 		assertNotNull(result.getHash());
-		Event eventResult = (Event) result.getEventEnvelope().getEvent();
+		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
 			"""
@@ -509,7 +488,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().build();
 
-		SearchResponse response = clientGeneral.search(request, Event.class, config);
+		SearchResponse response = clientGeneral.search(request, config);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= maxResults);
 
@@ -533,7 +512,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().build();
 
-		SearchResponse response = customSchemaClient.search(request, CustomEvent.class, config);
+		SearchResponse response = customSchemaClient.search(request, config);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= maxResults);
 
@@ -555,7 +534,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().build();
 
-		SearchResponse response = clientGeneral.search(request, Event.class, config);
+		SearchResponse response = clientGeneral.search(request, config);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= maxResults);
 
@@ -576,7 +555,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().build();
 
-		SearchResponse response = customSchemaClient.search(request, CustomEvent.class, config);
+		SearchResponse response = customSchemaClient.search(request, config);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= maxResults);
 
@@ -594,7 +573,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().verifyConsistency(true).build();
 
-		SearchResponse response = clientGeneral.search(request, Event.class, config);
+		SearchResponse response = clientGeneral.search(request, config);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= maxResults);
 
@@ -611,7 +590,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().verifyConsistency(true).build();
 
-		SearchResponse response = customSchemaClient.search(request, CustomEvent.class, config);
+		SearchResponse response = customSchemaClient.search(request, config);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= maxResults);
 
@@ -631,7 +610,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().build();
 
-		SearchResponse response = clientGeneral.search(request, Event.class, config);
+		SearchResponse response = clientGeneral.search(request, config);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= maxResults);
 
@@ -650,7 +629,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().build();
 
-		SearchResponse response = customSchemaClient.search(request, CustomEvent.class, config);
+		SearchResponse response = customSchemaClient.search(request, config);
 		assertTrue(response.isOk());
 		assertTrue(response.getResult().getCount() <= maxResults);
 
@@ -670,7 +649,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().build();
 
-		SearchResponse searchResponse = clientGeneral.search(request, Event.class, config);
+		SearchResponse searchResponse = clientGeneral.search(request, config);
 		assertTrue(searchResponse.isOk());
 		assertTrue(searchResponse.getResult().getCount() <= searchMaxResults);
 		assertTrue(searchResponse.getResult().getCount() > 0);
@@ -680,7 +659,7 @@ public class ITAuditTest {
 			.limit(resultsLimit)
 			.offset(0)
 			.build();
-		ResultsResponse resultsResponse = clientGeneral.results(resultRequest, Event.class, config);
+		ResultsResponse resultsResponse = clientGeneral.results(resultRequest, config);
 		assertEquals(resultsResponse.getResult().getCount(), resultsLimit);
 		for (SearchEvent event : resultsResponse.getResult().getEvents()) {
 			assertEquals(EventVerification.NOT_VERIFIED, event.getConsistencyVerification());
@@ -697,7 +676,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().verifyConsistency(true).build();
 
-		SearchResponse searchResponse = clientGeneral.search(request, Event.class, config);
+		SearchResponse searchResponse = clientGeneral.search(request, config);
 		assertTrue(searchResponse.isOk());
 		assertTrue(searchResponse.getResult().getCount() <= searchMaxResults);
 		assertTrue(searchResponse.getResult().getCount() > 0);
@@ -709,7 +688,7 @@ public class ITAuditTest {
 			.offset(0)
 			.build();
 
-		ResultsResponse resultsResponse = clientGeneral.results(resultRequest, Event.class, config);
+		ResultsResponse resultsResponse = clientGeneral.results(resultRequest, config);
 
 		assertEquals(resultsResponse.getResult().getCount(), resultsLimit);
 		for (SearchEvent event : resultsResponse.getResult().getEvents()) {
@@ -728,7 +707,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().verifyConsistency(true).verifyEvents(true).build();
 
-		SearchResponse searchResponse = clientGeneral.search(request, Event.class, config);
+		SearchResponse searchResponse = clientGeneral.search(request, config);
 		assertTrue(searchResponse.isOk());
 		assertTrue(searchResponse.getResult().getCount() <= searchMaxResults);
 		assertTrue(searchResponse.getResult().getCount() > 0);
@@ -741,7 +720,7 @@ public class ITAuditTest {
 			.build();
 
 		config = new SearchConfig.Builder().verifyConsistency(false).build();
-		ResultsResponse resultsResponse = clientGeneral.results(resultRequest, Event.class, config);
+		ResultsResponse resultsResponse = clientGeneral.results(resultRequest, config);
 
 		assertEquals(resultsResponse.getResult().getCount(), resultsLimit);
 		for (SearchEvent event : resultsResponse.getResult().getEvents()) {
@@ -762,7 +741,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().build();
 
-		SearchResponse searchResponse = customSchemaClient.search(request, CustomEvent.class, config);
+		SearchResponse searchResponse = customSchemaClient.search(request, config);
 		assertTrue(searchResponse.isOk());
 		assertTrue(searchResponse.getResult().getCount() <= searchMaxResults);
 		assertTrue(searchResponse.getResult().getCount() > 0);
@@ -772,7 +751,7 @@ public class ITAuditTest {
 			.limit(resultsLimit)
 			.offset(0)
 			.build();
-		ResultsResponse resultsResponse = customSchemaClient.results(resultRequest, CustomEvent.class, config);
+		ResultsResponse resultsResponse = customSchemaClient.results(resultRequest, config);
 		assertEquals(resultsResponse.getResult().getCount(), resultsLimit);
 		for (SearchEvent event : resultsResponse.getResult().getEvents()) {
 			assertEquals(EventVerification.NOT_VERIFIED, event.getConsistencyVerification());
@@ -789,7 +768,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().verifyConsistency(true).build();
 
-		SearchResponse searchResponse = customSchemaClient.search(request, CustomEvent.class, config);
+		SearchResponse searchResponse = customSchemaClient.search(request, config);
 		assertTrue(searchResponse.isOk());
 		assertTrue(searchResponse.getResult().getCount() <= searchMaxResults);
 		assertTrue(searchResponse.getResult().getCount() > 0);
@@ -801,7 +780,7 @@ public class ITAuditTest {
 			.offset(0)
 			.build();
 
-		ResultsResponse resultsResponse = customSchemaClient.results(resultRequest, CustomEvent.class, config);
+		ResultsResponse resultsResponse = customSchemaClient.results(resultRequest, config);
 
 		assertEquals(resultsResponse.getResult().getCount(), resultsLimit);
 		for (SearchEvent event : resultsResponse.getResult().getEvents()) {
@@ -820,7 +799,7 @@ public class ITAuditTest {
 
 		SearchConfig config = new SearchConfig.Builder().verifyConsistency(true).verifyEvents(true).build();
 
-		SearchResponse searchResponse = customSchemaClient.search(request, CustomEvent.class, config);
+		SearchResponse searchResponse = customSchemaClient.search(request, config);
 		assertTrue(searchResponse.isOk());
 		assertTrue(searchResponse.getResult().getCount() <= searchMaxResults);
 		assertTrue(searchResponse.getResult().getCount() > 0);
@@ -833,7 +812,7 @@ public class ITAuditTest {
 			.build();
 
 		config = new SearchConfig.Builder().verifyConsistency(false).build();
-		ResultsResponse resultsResponse = customSchemaClient.results(resultRequest, CustomEvent.class, config);
+		ResultsResponse resultsResponse = customSchemaClient.results(resultRequest, config);
 
 		assertEquals(resultsResponse.getResult().getCount(), resultsLimit);
 		for (SearchEvent event : resultsResponse.getResult().getEvents()) {
@@ -891,10 +870,9 @@ public class ITAuditTest {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
-		Event event = new Event("Test msg");
+		StandardEvent event = new StandardEvent("Test msg");
 		LogResponse response = fakeClient.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
 		);
 	}
@@ -910,7 +888,7 @@ public class ITAuditTest {
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").order("notavalidorder").build();
 
 		SearchConfig config = new SearchConfig.Builder().build();
-		SearchResponse searchResponse = clientGeneral.search(request, Event.class, config);
+		SearchResponse searchResponse = clientGeneral.search(request, config);
 	}
 
 	@Test(expected = UnauthorizedException.class)
@@ -921,22 +899,21 @@ public class ITAuditTest {
 
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").build();
 		SearchConfig config = new SearchConfig.Builder().build();
-		SearchResponse searchResponse = fakeClient.search(request, Event.class, config);
+		SearchResponse searchResponse = fakeClient.search(request, config);
 	}
 
 	@Test(expected = SignerException.class)
 	public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event(MSG_NO_SIGNED);
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		LogResponse response = clientGeneral.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
 		);
 	}
 
 	@Test
 	public void testMultiConfig1Log() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
+		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
 		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
 			.configID(Config.getConfigID(environment, "audit", 1))
@@ -945,7 +922,6 @@ public class ITAuditTest {
 
 		LogResponse response = client.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
 		);
 		assertTrue(response.isOk());
@@ -962,7 +938,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testMultiConfig2Log() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
+		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
 		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
 			.configID(Config.getConfigID(environment, "audit", 2))
@@ -971,7 +947,6 @@ public class ITAuditTest {
 
 		LogResponse response = client.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
 		);
 		assertTrue(response.isOk());
@@ -988,7 +963,7 @@ public class ITAuditTest {
 
 	@Test(expected = PangeaAPIException.class)
 	public void testMultiConfigWithoutConfigID() throws PangeaException, PangeaAPIException, ConfigException {
-		Event event = new Event.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
+		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
 		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
 			.build();
@@ -996,7 +971,6 @@ public class ITAuditTest {
 
 		LogResponse response = client.log(
 			event,
-			Event.class,
 			new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
 		);
 	}

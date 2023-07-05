@@ -1,7 +1,7 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.audit.AuditClient;
-import cloud.pangeacyber.pangea.audit.models.Event;
+import cloud.pangeacyber.pangea.audit.models.StandardEvent;
 import cloud.pangeacyber.pangea.audit.models.LogConfig;
 import cloud.pangeacyber.pangea.audit.responses.LogResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
@@ -21,14 +21,13 @@ public class App
         }
 
         AuditClient client = new AuditClient.Builder(cfg).build();
-        Event event = new Event("This is a message to log");
+        StandardEvent event = new StandardEvent("This is a message to log");
         event.setAction("Login");
         event.setActor("Terminal");
         LogResponse response = null;
         try {
             response = client.log(
                 event,
-                Event.class,
                 new LogConfig.Builder()
                     .verbose(true)
                     .build()
@@ -41,7 +40,7 @@ public class App
 
         System.out.println("Log success");
         System.out.println("Hash: " + response.getResult().getHash());
-        Event eventResult = (Event)response.getResult().getEventEnvelope().getEvent();
+        StandardEvent eventResult = (StandardEvent)response.getResult().getEventEnvelope().getEvent();
         System.out.println("Message: " + eventResult.getMessage());
     }
 }

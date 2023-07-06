@@ -22,7 +22,7 @@ public class RedactTextRequest extends BaseRequest {
 	@JsonProperty("return_result")
 	Boolean returnResult = null;
 
-	protected RedactTextRequest(RedactTextRequestBuilder builder) {
+	protected RedactTextRequest(Builder builder) {
 		this.text = builder.text;
 		this.debug = builder.debug;
 		this.rules = builder.rules;
@@ -45,14 +45,14 @@ public class RedactTextRequest extends BaseRequest {
 		return returnResult;
 	}
 
-	public static class RedactTextRequestBuilder {
+	public static class Builder {
 
 		String text;
 		Boolean debug = null;
 		String[] rules = null;
 		Boolean returnResult = null;
 
-		public RedactTextRequestBuilder(String text) {
+		public Builder(String text) {
 			this.text = text;
 		}
 
@@ -60,17 +60,17 @@ public class RedactTextRequest extends BaseRequest {
 			return new RedactTextRequest(this);
 		}
 
-		public RedactTextRequestBuilder setDebug(Boolean debug) {
+		public Builder setDebug(Boolean debug) {
 			this.debug = debug;
 			return this;
 		}
 
-		public RedactTextRequestBuilder setRules(String[] rules) {
+		public Builder setRules(String[] rules) {
 			this.rules = rules;
 			return this;
 		}
 
-		public RedactTextRequestBuilder setReturnResult(Boolean returnResult) {
+		public Builder setReturnResult(Boolean returnResult) {
 			this.returnResult = returnResult;
 			return this;
 		}

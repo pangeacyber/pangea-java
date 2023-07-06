@@ -1,8 +1,9 @@
 package cloud.pangeacyber.examples;
 
-import cloud.pangeacyber.pangea.intel.UrlIntelClient;
-import cloud.pangeacyber.pangea.intel.models.URLReputationResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
+import cloud.pangeacyber.pangea.intel.URLIntelClient;
+import cloud.pangeacyber.pangea.intel.requests.URLReputationRequest;
+import cloud.pangeacyber.pangea.intel.responses.URLReputationResponse;
 import cloud.pangeacyber.pangea.Config;
 
 public class App
@@ -11,16 +12,22 @@ public class App
     {
         Config cfg = null;
         try {
-            cfg = Config.fromEnvironment(UrlIntelClient.serviceName);
+            cfg = Config.fromEnvironment(URLIntelClient.serviceName);
         } catch (ConfigException e){
             System.out.println(e);
             System.exit(1);
         }
 
-        UrlIntelClient client = new UrlIntelClient(cfg);
+        URLIntelClient client = new URLIntelClient.Builder(cfg).build();
         URLReputationResponse response = null;
         try {
-            response = client.reputation("http://113.235.101.11:54384", "crowdstrike", true, true);
+            response = client.reputation(
+                new URLReputationRequest.Builder("http://113.235.101.11:54384")
+                    .provider("crowdstrike")
+                    .verbose(true)
+                    .raw(true)
+                    .build()
+            );
         } catch (Exception e){
             System.out.println("Fail to perfom request: " + e);
             System.exit(1);

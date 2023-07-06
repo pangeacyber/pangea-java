@@ -1,5 +1,5 @@
 .DS_Store
 target/
 .env
-file.exe
 pangea_sdk_logs.json
+*.exe

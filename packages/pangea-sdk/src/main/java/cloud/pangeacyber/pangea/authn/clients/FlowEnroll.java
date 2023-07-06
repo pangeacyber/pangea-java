@@ -1,17 +1,14 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
-import cloud.pangeacyber.pangea.Client;
-import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 
-public class FlowEnroll extends Client {
+public class FlowEnroll extends AuthNBaseClient {
 
-	public static final String serviceName = "authn";
-	private static final boolean supportMultiConfig = false;
 	private FlowEnrollMFA mfa;
 
-	public FlowEnroll(Config config) {
-		super(config, serviceName, supportMultiConfig);
-		mfa = new FlowEnrollMFA(config);
+	public FlowEnroll(AuthNClient.Builder builder) {
+		super(builder);
+		mfa = new FlowEnrollMFA(builder);
 	}
 
 	public FlowEnrollMFA mfa() {

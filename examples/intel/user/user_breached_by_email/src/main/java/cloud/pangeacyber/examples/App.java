@@ -1,7 +1,8 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.UserIntelClient;
-import cloud.pangeacyber.pangea.intel.models.*;
+import cloud.pangeacyber.pangea.intel.requests.UserBreachedRequest;
+import cloud.pangeacyber.pangea.intel.responses.UserBreachedResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 
@@ -17,14 +18,14 @@ public class App
             System.exit(1);
         }
 
-        UserIntelClient client = new UserIntelClient(cfg);
+        UserIntelClient client = new UserIntelClient.Builder(cfg).build();
         UserBreachedResponse response = null;
         try {
             response = client.breached(
-                new UserBreachedRequest.UserBreachedRequestBuilder()
-                .setEmail("test@example.com")
-                .setVerbose(true)
-                .setRaw(true)
+                new UserBreachedRequest.Builder()
+                .email("test@example.com")
+                .verbose(true)
+                .raw(true)
                 .build()
             );
         } catch (Exception e){
@@ -34,6 +35,6 @@ public class App
 
         System.out.println("Request success");
         System.out.println("User breached?: " + response.getResult().getData().getFoundInBreach());
-        System.out.println("Breached raw data: " + response.getResult().getRawData());
+        System.out.println("Breached counts: " + response.getResult().getData().getBreachCount());
     }
 }

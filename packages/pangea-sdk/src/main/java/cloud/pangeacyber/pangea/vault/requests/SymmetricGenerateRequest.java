@@ -16,7 +16,7 @@ public class SymmetricGenerateRequest extends CommonGenerateRequest {
 	@JsonProperty("purpose")
 	KeyPurpose purpose = null;
 
-	public SymmetricGenerateRequest(SymmetricGenerateRequestBuilder builder) {
+	public SymmetricGenerateRequest(Builder builder) {
 		super(builder);
 		this.type = builder.type;
 		this.algorithm = builder.algorithm;
@@ -31,14 +31,13 @@ public class SymmetricGenerateRequest extends CommonGenerateRequest {
 		return purpose;
 	}
 
-	public static class SymmetricGenerateRequestBuilder
-		extends CommonGenerateRequestBuilder<SymmetricGenerateRequestBuilder> {
+	public static class Builder extends CommonBuilder<Builder> {
 
 		ItemType type;
 		SymmetricAlgorithm algorithm = null;
 		KeyPurpose purpose = null;
 
-		public SymmetricGenerateRequestBuilder(SymmetricAlgorithm algorithm, KeyPurpose purpose, String name) {
+		public Builder(SymmetricAlgorithm algorithm, KeyPurpose purpose, String name) {
 			super(name);
 			this.type = ItemType.SYMMETRIC_KEY;
 			this.algorithm = algorithm;
@@ -49,12 +48,12 @@ public class SymmetricGenerateRequest extends CommonGenerateRequest {
 			return new SymmetricGenerateRequest(this);
 		}
 
-		public SymmetricGenerateRequestBuilder setAlgorithm(SymmetricAlgorithm algorithm) {
+		public Builder algorithm(SymmetricAlgorithm algorithm) {
 			this.algorithm = algorithm;
 			return this;
 		}
 
-		public SymmetricGenerateRequestBuilder setPurpose(KeyPurpose purpose) {
+		public Builder purpose(KeyPurpose purpose) {
 			this.purpose = purpose;
 			return this;
 		}

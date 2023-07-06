@@ -1,8 +1,7 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
 import cloud.pangeacyber.pangea.BaseRequest;
-import cloud.pangeacyber.pangea.Client;
-import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.UserPasswordResetResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -22,19 +21,16 @@ final class UserPasswordResetRequest extends BaseRequest {
 	}
 }
 
-public class UserPassword extends Client {
+public class UserPassword extends AuthNBaseClient {
 
-	public static final String serviceName = "authn";
-	private static final boolean supportMultiConfig = false;
-
-	public UserPassword(Config config) {
-		super(config, serviceName, supportMultiConfig);
+	public UserPassword(AuthNClient.Builder builder) {
+		super(builder);
 	}
 
 	// TODO: Doc
 	public UserPasswordResetResponse reset(String userID, String newPassword)
 		throws PangeaException, PangeaAPIException {
 		UserPasswordResetRequest request = new UserPasswordResetRequest(userID, newPassword);
-		return doPost("/v1/user/password/reset", request, UserPasswordResetResponse.class);
+		return post("/v1/user/password/reset", request, UserPasswordResetResponse.class);
 	}
 }

@@ -1,27 +1,36 @@
 package cloud.pangeacyber.pangea.authn;
 
-import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.authn.clients.ClientEndpoint;
+import cloud.pangeacyber.pangea.authn.clients.AuthNBaseClient;
+import cloud.pangeacyber.pangea.authn.clients.Client;
 import cloud.pangeacyber.pangea.authn.clients.Flow;
 import cloud.pangeacyber.pangea.authn.clients.Session;
 import cloud.pangeacyber.pangea.authn.clients.User;
 
-public class AuthNClient extends Client {
+public class AuthNClient extends AuthNBaseClient {
 
-	public static final String serviceName = "authn";
-	private static final boolean supportMultiConfig = false;
 	private User user;
 	private Flow flow;
-	private ClientEndpoint client;
+	private Client client;
 	private Session session;
 
-	public AuthNClient(Config config) {
-		super(config, serviceName, supportMultiConfig);
-		user = new User(config);
-		flow = new Flow(config);
-		client = new ClientEndpoint(config);
-		session = new Session(config);
+	public AuthNClient(Builder builder) {
+		super(builder);
+		user = new User(builder);
+		flow = new Flow(builder);
+		client = new Client(builder);
+		session = new Session(builder);
+	}
+
+	public static class Builder extends AuthNBaseClient.Builder<Builder> {
+
+		public Builder(Config config) {
+			super(config);
+		}
+
+		public AuthNClient build() {
+			return new AuthNClient(this);
+		}
 	}
 
 	public User user() {
@@ -32,7 +41,7 @@ public class AuthNClient extends Client {
 		return flow;
 	}
 
-	public ClientEndpoint client() {
+	public Client client() {
 		return client;
 	}
 

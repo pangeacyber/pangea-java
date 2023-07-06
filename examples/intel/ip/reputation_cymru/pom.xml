@@ -6,7 +6,7 @@
 
   <groupId>cloud.pangeacyber.examples</groupId>
   <artifactId>ip_reputation</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
 
   <name>ip_reputation</name>
   <url>http://pangea.cloud</url>
@@ -36,7 +36,7 @@
     <dependency>
       <groupId>cloud.pangea</groupId>
       <artifactId>pangea-sdk</artifactId>
-      <version>1.9.1</version>
+      <version>2.0.0</version>
     </dependency>
 
     <dependency>

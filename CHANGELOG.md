@@ -5,14 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2023-07-06
+
+# Changed
+
+- Audit service allow to setup CustomSchema class on builder
+- Audit.Log(), .Search() and .Results() method's signature changed to support CustomSchema and be scalable
+- Reorganize service folders on /requests, /results, /responses and /models
+- Rename IpIntelClient to IPIntelClient
+- Rename UrlIntelClient to URLIntelClient
+- Rename all builders from <ClassName>Builder to just Builder
+
+# Deleted
+
+- All deprecated methods of Intel services
+
+
 ## [1.10.0] - 2023-06-26
 
 # Added
+
 - Multiconfig support
 - Instructions to setup token and domain in examples
 
 
 ## [1.9.1] - 2023-06-09
+
 # Added
 
 - Defang examples
@@ -153,7 +171,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redact client
 
 
-[unreleased]: https://github.com/pangeacyber/pangea-java/compare/v1.10.0...main
+[unreleased]: https://github.com/pangeacyber/pangea-java/compare/v2.0.0...main
+[2.0.0]: https://github.com/pangeacyber/pangea-java/compare/v1.10.0...v2.0.0
 [1.10.0]: https://github.com/pangeacyber/pangea-java/compare/v1.9.1...v1.10.0
 [1.9.1]: https://github.com/pangeacyber/pangea-java/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/pangeacyber/pangea-java/compare/v1.8.0...v1.9.0

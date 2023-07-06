@@ -1,10 +1,8 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
 import cloud.pangeacyber.pangea.BaseRequest;
-import cloud.pangeacyber.pangea.Client;
-import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.FlowStartRequest;
-import cloud.pangeacyber.pangea.authn.requests.FlowVerifyMFACompleteRequest;
 import cloud.pangeacyber.pangea.authn.responses.FlowCompleteResponse;
 import cloud.pangeacyber.pangea.authn.responses.FlowStartResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -21,21 +19,19 @@ final class FlowCompleteRequest extends BaseRequest {
 	}
 }
 
-public class Flow extends Client {
+public class Flow extends AuthNBaseClient {
 
-	public static final String serviceName = "authn";
-	private static final boolean supportMultiConfig = false;
 	private FlowEnroll enroll;
 	private FlowSignup signup;
 	private FlowVerify verify;
 	private FlowReset reset;
 
-	public Flow(Config config) {
-		super(config, serviceName, supportMultiConfig);
-		enroll = new FlowEnroll(config);
-		signup = new FlowSignup(config);
-		verify = new FlowVerify(config);
-		reset = new FlowReset(config);
+	public Flow(AuthNClient.Builder builder) {
+		super(builder);
+		enroll = new FlowEnroll(builder);
+		signup = new FlowSignup(builder);
+		verify = new FlowVerify(builder);
+		reset = new FlowReset(builder);
 	}
 
 	public FlowEnroll getEnroll() {
@@ -57,12 +53,12 @@ public class Flow extends Client {
 	// TODO: Doc
 	public FlowCompleteResponse complete(String flowID) throws PangeaException, PangeaAPIException {
 		FlowCompleteRequest request = new FlowCompleteRequest(flowID);
-		return doPost("/v1/flow/complete", request, FlowCompleteResponse.class);
+		return post("/v1/flow/complete", request, FlowCompleteResponse.class);
 	}
 
 	// TODO: Doc
 	public FlowStartResponse start(FlowStartRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/flow/start", request, FlowStartResponse.class);
+		return post("/v1/flow/start", request, FlowStartResponse.class);
 	}
 
 	public FlowEnroll enroll() {

@@ -16,8 +16,7 @@ public class PangeaTokenRotateRequest extends CommonRotateRequest {
 		return rotationGracePeriod;
 	}
 
-	public static class PangeaTokenRotateRequestBuilder
-		extends CommonRotateRequestBuilder<PangeaTokenRotateRequestBuilder> {
+	public static class PangeaTokenRotateRequestBuilder extends CommonBuilder<PangeaTokenRotateRequestBuilder> {
 
 		String rotationGracePeriod = null;
 

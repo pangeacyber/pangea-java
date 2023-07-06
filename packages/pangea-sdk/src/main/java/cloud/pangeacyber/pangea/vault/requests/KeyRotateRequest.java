@@ -19,7 +19,7 @@ public class KeyRotateRequest extends CommonRotateRequest {
 	@JsonProperty("key")
 	String encodedSymmetricKey = null;
 
-	protected KeyRotateRequest(KeyRotateRequestBuilder builder) {
+	protected KeyRotateRequest(Builder builder) {
 		super(builder);
 		this.encodedPrivateKey = builder.encodedPrivateKey;
 		this.encodedPublicKey = builder.encodedPublicKey;
@@ -38,13 +38,13 @@ public class KeyRotateRequest extends CommonRotateRequest {
 		return encodedSymmetricKey;
 	}
 
-	public static class KeyRotateRequestBuilder extends CommonRotateRequestBuilder<KeyRotateRequestBuilder> {
+	public static class Builder extends CommonBuilder<Builder> {
 
 		String encodedPublicKey = null;
 		String encodedPrivateKey = null;
 		String encodedSymmetricKey = null;
 
-		public KeyRotateRequestBuilder(String id, ItemVersionState rotationState) {
+		public Builder(String id, ItemVersionState rotationState) {
 			super(id);
 			this.rotationState = rotationState;
 		}
@@ -53,17 +53,17 @@ public class KeyRotateRequest extends CommonRotateRequest {
 			return new KeyRotateRequest(this);
 		}
 
-		public KeyRotateRequestBuilder setEncodedPublicKey(String encodedPublicKey) {
+		public Builder encodedPublicKey(String encodedPublicKey) {
 			this.encodedPublicKey = encodedPublicKey;
 			return this;
 		}
 
-		public KeyRotateRequestBuilder setEncodedPrivateKey(String encodedPrivateKey) {
+		public Builder encodedPrivateKey(String encodedPrivateKey) {
 			this.encodedPrivateKey = encodedPrivateKey;
 			return this;
 		}
 
-		public KeyRotateRequestBuilder setEncodedSymmetricKey(String encodedSymmetricKey) {
+		public Builder encodedSymmetricKey(String encodedSymmetricKey) {
 			this.encodedSymmetricKey = encodedSymmetricKey;
 			return this;
 		}

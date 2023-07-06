@@ -1,8 +1,10 @@
 package cloud.pangeacyber.pangea.embargo;
 
+import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.BaseRequest;
-import cloud.pangeacyber.pangea.Client;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.embargo.responses.IPCheckResponse;
+import cloud.pangeacyber.pangea.embargo.responses.ISOCheckResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,13 +29,24 @@ final class IpCheckRequest extends BaseRequest {
 	}
 }
 
-public class EmbargoClient extends Client {
+public class EmbargoClient extends BaseClient {
 
 	public static final String serviceName = "embargo";
 	private static final boolean supportMultiConfig = false;
 
-	public EmbargoClient(Config config) {
-		super(config, serviceName, supportMultiConfig);
+	public EmbargoClient(Builder builder) {
+		super(builder, serviceName, supportMultiConfig);
+	}
+
+	public static class Builder extends BaseClient.Builder<Builder> {
+
+		public Builder(Config config) {
+			super(config);
+		}
+
+		public EmbargoClient build() {
+			return new EmbargoClient(this);
+		}
 	}
 
 	/**
@@ -49,9 +62,9 @@ public class EmbargoClient extends Client {
 	 * IsoCheckResponse response = client.isoCheck("CU");
 	 * }
 	 */
-	public IsoCheckResponse isoCheck(String isoCode) throws PangeaException, PangeaAPIException {
+	public ISOCheckResponse isoCheck(String isoCode) throws PangeaException, PangeaAPIException {
 		IsoCheckRequest request = new IsoCheckRequest(isoCode);
-		IsoCheckResponse resp = doPost("/v1/iso/check", request, IsoCheckResponse.class);
+		ISOCheckResponse resp = post("/v1/iso/check", request, ISOCheckResponse.class);
 		return resp;
 	}
 
@@ -68,9 +81,9 @@ public class EmbargoClient extends Client {
 	 * IpCheckResponse response = client.ipCheck("213.24.238.26");
 	 * }
 	 */
-	public IpCheckResponse ipCheck(String ip) throws PangeaException, PangeaAPIException {
+	public IPCheckResponse ipCheck(String ip) throws PangeaException, PangeaAPIException {
 		IpCheckRequest request = new IpCheckRequest(ip);
-		IpCheckResponse resp = doPost("/v1/ip/check", request, IpCheckResponse.class);
+		IPCheckResponse resp = post("/v1/ip/check", request, IPCheckResponse.class);
 		return resp;
 	}
 }

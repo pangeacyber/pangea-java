@@ -18,7 +18,7 @@ public class CommonRotateRequest extends BaseRequest {
 	@JsonProperty("rotation_frequency")
 	String rotationFrequency;
 
-	protected CommonRotateRequest(CommonRotateRequestBuilder<?> builder) {
+	protected CommonRotateRequest(CommonBuilder<?> builder) {
 		this.id = builder.id;
 		this.rotationState = builder.rotationState;
 		this.rotationFrequency = builder.rotationFrequency;
@@ -36,13 +36,13 @@ public class CommonRotateRequest extends BaseRequest {
 		return rotationState;
 	}
 
-	public static class CommonRotateRequestBuilder<B extends CommonRotateRequestBuilder<B>> {
+	public static class CommonBuilder<B extends CommonBuilder<B>> {
 
 		String id;
 		ItemVersionState rotationState = null;
 		String rotationFrequency = null;
 
-		public CommonRotateRequestBuilder(String id) {
+		public CommonBuilder(String id) {
 			this.id = id;
 		}
 
@@ -55,12 +55,12 @@ public class CommonRotateRequest extends BaseRequest {
 			return new CommonRotateRequest(this);
 		}
 
-		public B setRotationState(ItemVersionState rotationState) {
+		public B rotationState(ItemVersionState rotationState) {
 			this.rotationState = rotationState;
 			return self();
 		}
 
-		public B setRotationFrequency(String rotationFrequency) {
+		public B rotationFrequency(String rotationFrequency) {
 			this.rotationFrequency = rotationFrequency;
 			return self();
 		}

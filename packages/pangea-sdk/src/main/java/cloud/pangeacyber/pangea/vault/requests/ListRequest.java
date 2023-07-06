@@ -30,7 +30,7 @@ public class ListRequest extends BaseRequest {
 	@JsonProperty("order_by")
 	ItemOrderBy orderBy = null;
 
-	protected ListRequest(ListRequestBuilder builder) {
+	protected ListRequest(Builder builder) {
 		this.filter = builder.filter;
 		this.last = builder.last;
 		this.size = builder.size;
@@ -58,7 +58,7 @@ public class ListRequest extends BaseRequest {
 		return orderBy;
 	}
 
-	public static class ListRequestBuilder {
+	public static class Builder {
 
 		Map<String, String> filter = null;
 		String last = null;
@@ -66,33 +66,33 @@ public class ListRequest extends BaseRequest {
 		ItemOrder order = null;
 		ItemOrderBy orderBy = null;
 
-		public ListRequestBuilder() {}
+		public Builder() {}
 
 		public ListRequest build() {
 			return new ListRequest(this);
 		}
 
-		public ListRequestBuilder setFilter(Map<String, String> filter) {
+		public Builder filter(Map<String, String> filter) {
 			this.filter = filter;
 			return this;
 		}
 
-		public ListRequestBuilder setLast(String last) {
+		public Builder last(String last) {
 			this.last = last;
 			return this;
 		}
 
-		public ListRequestBuilder setSize(Integer size) {
+		public Builder size(Integer size) {
 			this.size = size;
 			return this;
 		}
 
-		public ListRequestBuilder setOrder(ItemOrder order) {
+		public Builder order(ItemOrder order) {
 			this.order = order;
 			return this;
 		}
 
-		public ListRequestBuilder setOrderBy(ItemOrderBy orderBy) {
+		public Builder orderBy(ItemOrderBy orderBy) {
 			this.orderBy = orderBy;
 			return this;
 		}

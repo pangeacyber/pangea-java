@@ -1,8 +1,7 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
 import cloud.pangeacyber.pangea.BaseRequest;
-import cloud.pangeacyber.pangea.Client;
-import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
 import cloud.pangeacyber.pangea.authn.requests.UserCreateRequest;
 import cloud.pangeacyber.pangea.authn.requests.UserInviteRequest;
@@ -51,59 +50,57 @@ final class UserVerifyRequest extends BaseRequest {
 	}
 }
 
-public class User extends Client {
+public class User extends AuthNBaseClient {
 
-	public static final String serviceName = "authn";
-	private static final boolean supportMultiConfig = false;
 	private UserProfile profile;
 	private UserInvite invite;
 	private UserMFA mfa;
 	private UserLogin login;
 	private UserPassword password;
 
-	public User(Config config) {
-		super(config, serviceName, supportMultiConfig);
-		profile = new UserProfile(config);
-		invite = new UserInvite(config);
-		mfa = new UserMFA(config);
-		login = new UserLogin(config);
-		password = new UserPassword(config);
+	public User(AuthNClient.Builder builder) {
+		super(builder);
+		profile = new UserProfile(builder);
+		invite = new UserInvite(builder);
+		mfa = new UserMFA(builder);
+		login = new UserLogin(builder);
+		password = new UserPassword(builder);
 	}
 
 	// TODO: Doc
 	public UserCreateResponse create(UserCreateRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/create", request, UserCreateResponse.class);
+		return post("/v1/user/create", request, UserCreateResponse.class);
 	}
 
 	// TODO: Doc
 	public UserDeleteResponse deleteByEmail(String email) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/delete", new UserDeleteByEmailRequest(email), UserDeleteResponse.class);
+		return post("/v1/user/delete", new UserDeleteByEmailRequest(email), UserDeleteResponse.class);
 	}
 
 	public UserDeleteResponse deleteByID(String id) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/delete", new UserDeleteByIDRequest(id), UserDeleteResponse.class);
+		return post("/v1/user/delete", new UserDeleteByIDRequest(id), UserDeleteResponse.class);
 	}
 
 	// TODO: Doc
 	public UserUpdateResponse update(UserUpdateRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/update", request, UserUpdateResponse.class);
+		return post("/v1/user/update", request, UserUpdateResponse.class);
 	}
 
 	// TODO: Doc
 	public UserInviteResponse invite(UserInviteRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/invite", request, UserInviteResponse.class);
+		return post("/v1/user/invite", request, UserInviteResponse.class);
 	}
 
 	// TODO: Doc
 	public UserListResponse list(UserListRequest request) throws PangeaException, PangeaAPIException {
-		return doPost("/v1/user/list", request, UserListResponse.class);
+		return post("/v1/user/list", request, UserListResponse.class);
 	}
 
 	// TODO: Doc
 	public UserVerifyResponse verify(IDProvider idProvider, String email, String authenticator)
 		throws PangeaException, PangeaAPIException {
 		UserVerifyRequest request = new UserVerifyRequest(idProvider, email, authenticator);
-		return doPost("/v1/user/verify", request, UserVerifyResponse.class);
+		return post("/v1/user/verify", request, UserVerifyResponse.class);
 	}
 
 	public UserProfile profile() {

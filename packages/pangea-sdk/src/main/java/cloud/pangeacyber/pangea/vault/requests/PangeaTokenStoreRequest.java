@@ -16,7 +16,7 @@ public class PangeaTokenStoreRequest extends CommonStoreRequest {
 	@JsonProperty("rotation_grace_period")
 	String rotationGracePeriod = null;
 
-	protected PangeaTokenStoreRequest(PangeaTokenStoreRequestBuilder builder) {
+	protected PangeaTokenStoreRequest(Builder builder) {
 		super(builder);
 		this.token = builder.token;
 		this.rotationGracePeriod = builder.rotationGracePeriod;
@@ -27,13 +27,12 @@ public class PangeaTokenStoreRequest extends CommonStoreRequest {
 		return token;
 	}
 
-	public static class PangeaTokenStoreRequestBuilder
-		extends CommonStoreRequestBuilder<PangeaTokenStoreRequestBuilder> {
+	public static class Builder extends CommonBuilder<Builder> {
 
 		String token = null;
 		String rotationGracePeriod = null;
 
-		public PangeaTokenStoreRequestBuilder(String token, String name) {
+		public Builder(String token, String name) {
 			super(name);
 			this.token = token;
 		}
@@ -42,7 +41,7 @@ public class PangeaTokenStoreRequest extends CommonStoreRequest {
 			return new PangeaTokenStoreRequest(this);
 		}
 
-		public PangeaTokenStoreRequestBuilder setRotationGracePeriod(String rotationGracePeriod) {
+		public Builder rotationGracePeriod(String rotationGracePeriod) {
 			this.rotationGracePeriod = rotationGracePeriod;
 			return this;
 		}

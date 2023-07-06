@@ -44,7 +44,7 @@ public class UpdateRequest extends BaseRequest {
 	@JsonProperty("expiration")
 	String expiration = null;
 
-	public UpdateRequest(UpdateRequestBuilder builder) {
+	public UpdateRequest(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
 		this.folder = builder.folder;
@@ -84,7 +84,7 @@ public class UpdateRequest extends BaseRequest {
 		return expiration;
 	}
 
-	public static class UpdateRequestBuilder {
+	public static class Builder {
 
 		String id;
 		String name = null;
@@ -97,7 +97,7 @@ public class UpdateRequest extends BaseRequest {
 		String expiration = null;
 		String rotationGracePeriod = null;
 
-		public UpdateRequestBuilder(String id) {
+		public Builder(String id) {
 			this.id = id;
 		}
 
@@ -105,47 +105,47 @@ public class UpdateRequest extends BaseRequest {
 			return new UpdateRequest(this);
 		}
 
-		public UpdateRequestBuilder setName(String name) {
+		public Builder name(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public UpdateRequestBuilder setFolder(String folder) {
+		public Builder folder(String folder) {
 			this.folder = folder;
 			return this;
 		}
 
-		public UpdateRequestBuilder setMetadata(Metadata metadata) {
+		public Builder metadata(Metadata metadata) {
 			this.metadata = metadata;
 			return this;
 		}
 
-		public UpdateRequestBuilder setTags(Tags tags) {
+		public Builder tags(Tags tags) {
 			this.tags = tags;
 			return this;
 		}
 
-		public UpdateRequestBuilder setAutoRotate(Boolean autoRotate) {
+		public Builder autoRotate(Boolean autoRotate) {
 			this.autoRotate = autoRotate;
 			return this;
 		}
 
-		public UpdateRequestBuilder setRotationFrequency(String rotationFrequency) {
+		public Builder rotationFrequency(String rotationFrequency) {
 			this.rotationFrequency = rotationFrequency;
 			return this;
 		}
 
-		public UpdateRequestBuilder setRotationState(String rotationState) {
+		public Builder rotationState(String rotationState) {
 			this.rotationState = rotationState;
 			return this;
 		}
 
-		public UpdateRequestBuilder setExpiration(String expiration) {
+		public Builder expiration(String expiration) {
 			this.expiration = expiration;
 			return this;
 		}
 
-		public UpdateRequestBuilder setRotationGracePeriod(String rotationGracePeriod) {
+		public Builder rotationGracePeriod(String rotationGracePeriod) {
 			this.rotationGracePeriod = rotationGracePeriod;
 			return this;
 		}

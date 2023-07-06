@@ -5,8 +5,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>cloud.pangeacyber.examples</groupId>
-  <artifactId>ip_check</artifactId>
-  <version>1.0.0</version>
+  <artifactId>sign</artifactId>
+  <version>2.0.0</version>
 
   <name>vault_sign</name>
   <url>http://pangea.cloud</url>
@@ -36,7 +36,7 @@
     <dependency>
       <groupId>cloud.pangea</groupId>
       <artifactId>pangea-sdk</artifactId>
-      <version>1.9.1</version>
+      <version>2.0.0</version>
     </dependency>
 
     <dependency>

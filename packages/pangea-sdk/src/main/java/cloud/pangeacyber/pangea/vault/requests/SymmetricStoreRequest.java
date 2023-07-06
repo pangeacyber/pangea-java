@@ -22,7 +22,7 @@ public class SymmetricStoreRequest extends CommonStoreRequest {
 	@JsonProperty("purpose")
 	KeyPurpose purpose = null;
 
-	public SymmetricStoreRequest(SymmetricStoreRequestBuilder builder) {
+	public SymmetricStoreRequest(Builder builder) {
 		super(builder);
 		this.type = builder.type;
 		this.algorithm = builder.algorithm;
@@ -30,19 +30,14 @@ public class SymmetricStoreRequest extends CommonStoreRequest {
 		this.purpose = builder.purpose;
 	}
 
-	public static class SymmetricStoreRequestBuilder extends CommonStoreRequestBuilder<SymmetricStoreRequestBuilder> {
+	public static class Builder extends CommonBuilder<Builder> {
 
 		ItemType type;
 		SymmetricAlgorithm algorithm = null;
 		String encodedSymmetricKey;
 		KeyPurpose purpose = null;
 
-		public SymmetricStoreRequestBuilder(
-			String encodedSymmetricKey,
-			SymmetricAlgorithm algorithm,
-			KeyPurpose purpose,
-			String name
-		) {
+		public Builder(String encodedSymmetricKey, SymmetricAlgorithm algorithm, KeyPurpose purpose, String name) {
 			super(name);
 			this.type = ItemType.SYMMETRIC_KEY;
 			this.algorithm = algorithm;
@@ -54,7 +49,7 @@ public class SymmetricStoreRequest extends CommonStoreRequest {
 			return new SymmetricStoreRequest(this);
 		}
 
-		public SymmetricStoreRequestBuilder setPurpose(KeyPurpose purpose) {
+		public Builder purpose(KeyPurpose purpose) {
 			this.purpose = purpose;
 			return this;
 		}

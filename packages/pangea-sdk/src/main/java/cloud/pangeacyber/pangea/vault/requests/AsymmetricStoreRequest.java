@@ -25,7 +25,7 @@ public class AsymmetricStoreRequest extends CommonStoreRequest {
 	@JsonProperty("private_key")
 	String encodedPrivateKey = null;
 
-	protected AsymmetricStoreRequest(AsymmetricStoreRequestBuilder builder) {
+	protected AsymmetricStoreRequest(Builder builder) {
 		super(builder);
 		this.type = builder.type;
 		this.algorithm = builder.algorithm;
@@ -50,7 +50,7 @@ public class AsymmetricStoreRequest extends CommonStoreRequest {
 		return encodedPrivateKey;
 	}
 
-	public static class AsymmetricStoreRequestBuilder extends CommonStoreRequestBuilder<AsymmetricStoreRequestBuilder> {
+	public static class Builder extends CommonBuilder<Builder> {
 
 		ItemType type;
 		AsymmetricAlgorithm algorithm = null;
@@ -58,7 +58,7 @@ public class AsymmetricStoreRequest extends CommonStoreRequest {
 		String encodedPublicKey;
 		String encodedPrivateKey = null;
 
-		public AsymmetricStoreRequestBuilder(
+		public Builder(
 			String encodedPrivateKey,
 			String encodedPublicKey,
 			AsymmetricAlgorithm algorithm,
@@ -77,7 +77,7 @@ public class AsymmetricStoreRequest extends CommonStoreRequest {
 			return new AsymmetricStoreRequest(this);
 		}
 
-		public AsymmetricStoreRequestBuilder setPurpose(KeyPurpose purpose) {
+		public Builder purpose(KeyPurpose purpose) {
 			this.purpose = purpose;
 			return this;
 		}

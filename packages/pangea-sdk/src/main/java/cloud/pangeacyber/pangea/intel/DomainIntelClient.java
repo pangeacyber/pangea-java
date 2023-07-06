@@ -30,16 +30,10 @@ public class DomainIntelClient extends BaseClient {
 	/**
 	 * Reputation check - domain, provider, verbose, raw
 	 * @pangea.description Retrieve domain reputation for a particular provider
-	 * @param domain domain address to be looked up
-	 * @param provider provider to get reputation from
-	 * @param verbose select a more verbose response
-	 * @param raw if true response include provider raw response. This should vary from one provider to another one.
+	 * @param request
 	 * @return DomainReputationResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
-	 * @pangea.code
-	 * {@code
-	 * // FIXME:
 	 */
 	public DomainReputationResponse reputation(DomainReputationRequest request)
 		throws PangeaException, PangeaAPIException {

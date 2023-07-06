@@ -215,13 +215,10 @@ public class AuditClient extends BaseClient {
 	 * Log an entry - event, sign, verbose
 	 * @pangea.description Log an event to Audit Secure Log. Can select sign event or not and verbosity of the response.
 	 * @param event event to log
+	 * @param config
 	 * @return LogResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
-	 * @pangea.code
-	 * {@code
-		// FIXME:
-	 * }
 	 */
 	public LogResponse log(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
 		if (config == null) {
@@ -360,19 +357,12 @@ public class AuditClient extends BaseClient {
 	/**
 	 * Search
 	 * @pangea.description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
-	 * @pangea.operationId audit_post_v1_search
-	 * @param input query filters to perform search
+	 * @pangea.operationId _audit_post_v1_search
+	 * @param request
+	 * @param config
 	 * @return SearchResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
-	 * @pangea.code
-	 * {@code
-	 * SearchInput input = new SearchInput("message:Integration test msg");
-	 *
-	 * input.setMaxResults(10);
-	 *
-	 * SearchResponse response = client.search(input);
-	 * }
 	 */
 	public SearchResponse search(SearchRequest request, SearchConfig config)
 		throws PangeaException, PangeaAPIException {
@@ -391,10 +381,9 @@ public class AuditClient extends BaseClient {
 	/**
 	 * Results of a search
 	 * @pangea.description Fetch paginated results of a previously executed search. By default: `verifyEvents` is true and `verifyConsistency` is false.
-	 * @pangea.operationId audit_post_v1_results
-	 * @param id A search results identifier returned by the search call.
-	 * @param limit Number of audit records to include in a single set of results.
-	 * @param offset Offset from the start of the result set to start returning results from.
+	 * @pangea.operationId _audit_post_v1_results
+	 * @param request
+	 * @param config
 	 * @return ResultsResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException

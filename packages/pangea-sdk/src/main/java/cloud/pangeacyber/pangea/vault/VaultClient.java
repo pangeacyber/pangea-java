@@ -239,7 +239,7 @@ public class VaultClient extends BaseClient {
 	 *	);
 	 * }
 	 */
-	public UpdateResponse update(ListRequest request) throws PangeaException, PangeaAPIException {
+	public UpdateResponse update(UpdateRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/update", request, UpdateResponse.class);
 	}
 
@@ -623,5 +623,24 @@ public class VaultClient extends BaseClient {
 	 */
 	public JWKGetResponse jwkGet(String id, String version) throws PangeaException, PangeaAPIException {
 		return post("/v1/get/jwk", new JWKGetRequest(id, version), JWKGetResponse.class);
+	}
+
+	/**
+	 * Create
+	 * @pangea.description Creates a folder.
+	 * @pangea.operationId vault_post_v1_folder_create
+	 * @param request - request parameters to send to /folder/create endpoint
+	 * @return FolderCreateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 *		FolderCreateResponse createParentResp = client.folderCreate(
+	 *			new FolderCreateRequest.Builder("folder_name", "parent/folder/name").build()
+	 *		);
+	 * }
+	 */
+	public FolderCreateResponse folderCreate(FolderCreateRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/folder/create", request, FolderCreateResponse.class);
 	}
 }

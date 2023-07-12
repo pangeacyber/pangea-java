@@ -19,6 +19,8 @@ import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.responses.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
@@ -362,5 +364,54 @@ public class ITVaultTest {
 
 		GetResponse getReponse2 = client.get(new GetRequest.Builder(storeResponse.getResult().getId()).build());
 		assertNotNull(getReponse2.getResult().getCurrentVersion().getSecret());
+	}
+
+	@Test
+	public void testFolders() throws PangeaException, PangeaAPIException {
+		final String FOLDER_PARENT = String.format("test_parent_folder_%s", this.time);
+		final String FOLDER_NAME = "test_folder_name";
+		final String FOLDER_NAME_NEW = "test_folder_name_new";
+
+		try {
+			// Create parent
+			FolderCreateResponse createParentResp = client.folderCreate(
+				new FolderCreateRequest.Builder(FOLDER_PARENT, "/").build()
+			);
+			String parentID = createParentResp.getResult().getId();
+			assertNotNull(parentID);
+
+			// Create folder
+			FolderCreateResponse createFolderResp = client.folderCreate(
+				new FolderCreateRequest.Builder(FOLDER_NAME, FOLDER_PARENT).build()
+			);
+			String folderID = createFolderResp.getResult().getId();
+			assertNotNull(folderID);
+
+			// Update name
+			UpdateResponse updateResp = client.update(
+				new UpdateRequest.Builder(folderID).name(FOLDER_NAME_NEW).build()
+			);
+			assertEquals(folderID, updateResp.getResult().getId());
+
+			// List
+			Map<String, String> filter = new LinkedHashMap<String, String>(1);
+			filter.put("folder", FOLDER_PARENT);
+
+			ListResponse listResp = client.list(new ListRequest.Builder().filter(filter).build());
+			assertEquals(1, listResp.getResult().getCount());
+			assertEquals(folderID, listResp.getResult().getItems().get(0).getId());
+			assertEquals(FOLDER_NAME_NEW, listResp.getResult().getItems().get(0).getName());
+
+			// Delete folder
+			DeleteResponse deleteFolderResp = client.delete(folderID);
+			assertEquals(folderID, deleteFolderResp.getResult().getId());
+
+			// Delete folder
+			DeleteResponse deleteParentResp = client.delete(parentID);
+			assertEquals(parentID, deleteParentResp.getResult().getId());
+		} catch (PangeaAPIException e) {
+			System.out.println(e.toString());
+			assertTrue(false);
+		}
 	}
 }

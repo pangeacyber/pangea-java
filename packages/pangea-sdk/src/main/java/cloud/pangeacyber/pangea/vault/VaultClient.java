@@ -239,7 +239,7 @@ public class VaultClient extends BaseClient {
 	 *	);
 	 * }
 	 */
-	public UpdateResponse update(ListRequest request) throws PangeaException, PangeaAPIException {
+	public UpdateResponse update(UpdateRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/update", request, UpdateResponse.class);
 	}
 
@@ -623,5 +623,10 @@ public class VaultClient extends BaseClient {
 	 */
 	public JWKGetResponse jwkGet(String id, String version) throws PangeaException, PangeaAPIException {
 		return post("/v1/get/jwk", new JWKGetRequest(id, version), JWKGetResponse.class);
+	}
+
+	// FIXME: add docs
+	public FolderCreateResponse folderCreate(FolderCreateRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/folder/create", request, FolderCreateResponse.class);
 	}
 }

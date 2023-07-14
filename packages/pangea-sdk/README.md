@@ -33,7 +33,7 @@ To add Pangea Java SDK to your project, you need to add to your project `pom.xml
     <dependency>
       <groupId>cloud.pangea</groupId>
       <artifactId>pangea-sdk</artifactId>
-      <version>1.9.1</version>
+      <version>2.0.0</version>
     </dependency>
   ...
   </dependencies>

@@ -4,6 +4,7 @@ import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyEmailRequest;
 import cloud.pangeacyber.pangea.authn.requests.FlowVerifyPasswordRequest;
+import cloud.pangeacyber.pangea.authn.requests.FlowVerifySocialRequest;
 import cloud.pangeacyber.pangea.authn.responses.FlowVerifyCaptchaResponse;
 import cloud.pangeacyber.pangea.authn.responses.FlowVerifyEmailResponse;
 import cloud.pangeacyber.pangea.authn.responses.FlowVerifyPasswordResponse;
@@ -23,24 +24,6 @@ final class FlowVerifyCaptchaRequest extends BaseRequest {
 	public FlowVerifyCaptchaRequest(String flowID, String code) {
 		this.flowID = flowID;
 		this.code = code;
-	}
-}
-
-final class FlowVerifySocialRequest extends BaseRequest {
-
-	@JsonProperty("flow_id")
-	String flowID;
-
-	@JsonProperty("cb_state")
-	String cbState;
-
-	@JsonProperty("cb_code")
-	String cbCode;
-
-	public FlowVerifySocialRequest(String flowID, String cbState, String cbCode) {
-		this.flowID = flowID;
-		this.cbState = cbState;
-		this.cbCode = cbCode;
 	}
 }
 

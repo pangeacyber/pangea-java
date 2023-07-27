@@ -1,17 +1,18 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.ClientTokenCheckResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class TokenCheckResquest {
+final class TokenCheckRequest extends BaseRequest {
 
 	@JsonProperty("token")
 	String token;
 
-	public TokenCheckResquest(String token) {
+	public TokenCheckRequest(String token) {
 		this.token = token;
 	}
 }
@@ -24,7 +25,7 @@ public class ClientToken extends AuthNBaseClient {
 
 	// TODO: Doc
 	public ClientTokenCheckResponse check(String token) throws PangeaException, PangeaAPIException {
-		TokenCheckResquest request = new TokenCheckResquest(token);
+		TokenCheckRequest request = new TokenCheckRequest(token);
 		ClientTokenCheckResponse resp = post("/v1/client/token/check", request, ClientTokenCheckResponse.class);
 		return resp;
 	}

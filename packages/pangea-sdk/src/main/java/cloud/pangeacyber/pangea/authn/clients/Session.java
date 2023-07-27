@@ -1,15 +1,14 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.*;
 import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class SessionInvalidateRequest {
+final class SessionInvalidateRequest extends BaseRequest {
 
 	@JsonProperty("session_id")
 	String sessionID;
@@ -19,22 +18,7 @@ final class SessionInvalidateRequest {
 	}
 }
 
-final class SessionRefreshRequest {
-
-	@JsonProperty("refresh_token")
-	String refreshToken;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("user_token")
-	String userToken;
-
-	public SessionRefreshRequest(String refreshToken, String userToken) {
-		this.refreshToken = refreshToken;
-		this.userToken = userToken;
-	}
-}
-
-final class SessionLogoutRequest {
+final class SessionLogoutRequest extends BaseRequest {
 
 	@JsonProperty("user_id")
 	String userID;

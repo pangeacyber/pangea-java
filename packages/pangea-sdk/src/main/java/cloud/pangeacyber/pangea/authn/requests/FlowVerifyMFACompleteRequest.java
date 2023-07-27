@@ -1,12 +1,13 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FlowVerifyMFACompleteRequest {
+public class FlowVerifyMFACompleteRequest extends BaseRequest {
 
 	@JsonProperty("flow_id")
 	String flowID;

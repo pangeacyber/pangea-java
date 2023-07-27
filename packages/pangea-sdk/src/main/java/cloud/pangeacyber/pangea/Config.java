@@ -12,6 +12,9 @@ public final class Config {
 	// Base domain for API requests.
 	String domain;
 
+	// Project config id need for multi-config projects
+	String configID;
+
 	// Set to true to use plain http
 	boolean insecure;
 
@@ -30,63 +33,40 @@ public final class Config {
 	// Timeout used to poll results after 202 (in secs)
 	long pollResultTimeout;
 
-	protected Config(ConfigBuilder builder) {
+	protected Config(Builder builder) {
 		this.domain = builder.domain;
 		this.token = builder.token;
-		this.insecure = builder.insecure;
 		this.enviroment = builder.enviroment;
+		this.insecure = builder.insecure;
 		this.connectionTimeout = builder.connectionTimeout;
 		this.customUserAgent = builder.customUserAgent;
-		this.pollResultTimeout = builder.pollResultTimeout;
 		this.queuedRetryEnabled = builder.queuedRetryEnabled;
+		this.pollResultTimeout = builder.pollResultTimeout;
+		this.configID = builder.configID;
 	}
 
 	public String getToken() {
 		return token;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
-	}
-
 	public String getDomain() {
 		return domain;
-	}
-
-	public void setDomain(String domain) {
-		this.domain = domain;
 	}
 
 	public String getEnviroment() {
 		return enviroment;
 	}
 
-	public void setEnviroment(String enviroment) {
-		this.enviroment = enviroment;
-	}
-
 	public boolean isInsecure() {
 		return insecure;
-	}
-
-	public void setInsecure(boolean insecure) {
-		this.insecure = insecure;
 	}
 
 	public Duration getConnectionTimeout() {
 		return connectionTimeout;
 	}
 
-	public void setConnectionTimeout(Duration connectionTimeout) {
-		this.connectionTimeout = connectionTimeout;
-	}
-
 	public String getCustomUserAgent() {
 		return customUserAgent;
-	}
-
-	public void setCustomUserAgent(String customUserAgent) {
-		this.customUserAgent = customUserAgent;
 	}
 
 	public boolean isQueuedRetryEnabled() {
@@ -95,6 +75,10 @@ public final class Config {
 
 	public long getPollResultTimeout() {
 		return pollResultTimeout;
+	}
+
+	public String getConfigID() {
+		return configID;
 	}
 
 	URI getServiceUrl(String serviceName, String path) {
@@ -127,47 +111,63 @@ public final class Config {
 			throw new ConfigException("Need to set up PANGEA_DOMAIN environment variable");
 		}
 
-		Config config = new Config.ConfigBuilder(token, domain).setCustomUserAgent("test").build();
+		Config config = new Config.Builder(token, domain).customUserAgent("test").build();
 		return config;
 	}
 
 	public static Config fromIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getTestToken(environment);
 		String domain = getTestDomain(environment);
-		Config config = new Config.ConfigBuilder(token, domain).setCustomUserAgent("test").build();
+		Config config = new Config.Builder(token, domain).customUserAgent("test").build();
 		return config;
 	}
 
 	public static Config fromVaultIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getVaultSignatureTestToken(environment);
 		String domain = getTestDomain(environment);
-		Config config = new Config.ConfigBuilder(token, domain).setCustomUserAgent("test").build();
+		Config config = new Config.Builder(token, domain).customUserAgent("test").build();
 		return config;
 	}
 
 	public static Config fromCustomSchemaIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getCustomSchemaTestToken(environment);
 		String domain = getTestDomain(environment);
-		Config config = new Config.ConfigBuilder(token, domain).setCustomUserAgent("test").build();
+		Config config = new Config.Builder(token, domain).customUserAgent("test").build();
 		return config;
 	}
 
-	public static String getTestToken(TestEnvironment environment) throws ConfigException {
-		String tokenEnvVarName = "PANGEA_INTEGRATION_TOKEN_" + environment.toString();
-		String token = System.getenv(tokenEnvVarName);
-		if (token == null || token.isEmpty()) {
-			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
+	private static String loadEnvVar(String envVarName) throws ConfigException {
+		String value = System.getenv(envVarName);
+		if (value == null || value.isEmpty()) {
+			throw new ConfigException(envVarName + " environment variable need to be set");
 		}
-		return token;
+		return value;
+	}
+
+	public static String getTestToken(TestEnvironment environment) throws ConfigException {
+		String envVarName = "PANGEA_INTEGRATION_TOKEN_" + environment.toString();
+		return loadEnvVar(envVarName);
 	}
 
 	public static String getVaultSignatureTestToken(TestEnvironment environment) throws ConfigException {
-		String tokenEnvVarName = "PANGEA_INTEGRATION_VAULT_TOKEN_" + environment.toString();
-		String token = System.getenv(tokenEnvVarName);
-		if (token == null || token.isEmpty()) {
-			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
-		}
-		return token;
+		String envVarName = "PANGEA_INTEGRATION_VAULT_TOKEN_" + environment.toString();
+		return loadEnvVar(envVarName);
+	}
+
+	public static String getMultiConfigTestToken(TestEnvironment environment) throws ConfigException {
+		String envVarName = "PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_" + environment.toString();
+		return loadEnvVar(envVarName);
+	}
+
+	public static String getConfigID(TestEnvironment environment, String service, int configNumber)
+		throws ConfigException {
+		String envVarName = String.format(
+			"PANGEA_%s_CONFIG_ID_%d_%s",
+			service.toUpperCase(),
+			configNumber,
+			environment.toString()
+		);
+		return loadEnvVar(envVarName);
 	}
 
 	public static String getCustomSchemaTestToken(TestEnvironment environment) throws ConfigException {
@@ -180,15 +180,11 @@ public final class Config {
 	}
 
 	public static String getTestDomain(TestEnvironment environment) throws ConfigException {
-		String domainEnvVarName = "PANGEA_INTEGRATION_DOMAIN_" + environment.toString();
-		String domain = System.getenv(domainEnvVarName);
-		if (domain == null || domain.isEmpty()) {
-			throw new ConfigException("Need to set up " + domainEnvVarName + " environment variable");
-		}
-		return domain;
+		String envVarName = "PANGEA_INTEGRATION_DOMAIN_" + environment.toString();
+		return loadEnvVar(envVarName);
 	}
 
-	public static class ConfigBuilder {
+	public static class Builder {
 
 		String token;
 		String domain;
@@ -198,8 +194,9 @@ public final class Config {
 		String customUserAgent;
 		boolean queuedRetryEnabled;
 		long pollResultTimeout;
+		String configID;
 
-		public ConfigBuilder(String token, String domain) {
+		public Builder(String token, String domain) {
 			this.token = token;
 			this.domain = domain;
 			this.insecure = false;
@@ -210,46 +207,43 @@ public final class Config {
 			this.pollResultTimeout = 120;
 		}
 
-		public ConfigBuilder setQueuedRetryEnabled(boolean queuedRetryEnabled) {
+		public Builder queuedRetryEnabled(boolean queuedRetryEnabled) {
 			this.queuedRetryEnabled = queuedRetryEnabled;
 			return this;
 		}
 
-		public ConfigBuilder setPollResultTimeout(long pollResultTimeout) {
+		public Builder pollResultTimeout(long pollResultTimeout) {
 			this.pollResultTimeout = pollResultTimeout;
 			return this;
 		}
 
-		public ConfigBuilder setInsecure(boolean insecure) {
+		public Builder insecure(boolean insecure) {
 			this.insecure = insecure;
 			return this;
 		}
 
-		public ConfigBuilder setConnectionTimeout(Duration connectionTimeout) {
+		public Builder connectionTimeout(Duration connectionTimeout) {
 			this.connectionTimeout = connectionTimeout;
 			return this;
 		}
 
-		public ConfigBuilder setEnviroment(String enviroment) {
+		public Builder enviroment(String enviroment) {
 			this.enviroment = enviroment;
 			return this;
 		}
 
-		public ConfigBuilder setCustomUserAgent(String customUserAgent) {
+		public Builder customUserAgent(String customUserAgent) {
 			this.customUserAgent = customUserAgent;
+			return this;
+		}
+
+		public Builder configID(String configID) {
+			this.configID = configID;
 			return this;
 		}
 
 		public Config build() {
 			return new Config(this);
 		}
-	}
-
-	public void setQueuedRetryEnabled(boolean queuedRetryEnabled) {
-		this.queuedRetryEnabled = queuedRetryEnabled;
-	}
-
-	public void setPollResultTimeout(long pollResultTimeout) {
-		this.pollResultTimeout = pollResultTimeout;
 	}
 }

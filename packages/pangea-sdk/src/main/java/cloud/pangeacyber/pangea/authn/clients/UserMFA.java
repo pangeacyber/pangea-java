@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.models.MFAProvider;
 import cloud.pangeacyber.pangea.authn.requests.UserMFAStartRequest;
@@ -8,7 +9,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class UserMFADeleteRequest {
+final class UserMFADeleteRequest extends BaseRequest {
 
 	@JsonProperty("user_id")
 	String userID;
@@ -22,7 +23,7 @@ final class UserMFADeleteRequest {
 	}
 }
 
-final class UserMFAEnrollRequest {
+final class UserMFAEnrollRequest extends BaseRequest {
 
 	@JsonProperty("user_id")
 	String userID;
@@ -40,7 +41,7 @@ final class UserMFAEnrollRequest {
 	}
 }
 
-final class UserMFAVerifyRequest {
+final class UserMFAVerifyRequest extends BaseRequest {
 
 	@JsonProperty("user_id")
 	String userID;

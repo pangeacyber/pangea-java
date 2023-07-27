@@ -638,7 +638,7 @@ public class ITIPIntelTest {
 	@Test(expected = UnauthorizedException.class)
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg.setToken("notarealtoken");
+		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		IPIntelClient fakeClient = new IPIntelClient.Builder(cfg).build();
 		IPReputationResponse response = fakeClient.reputation(
 			new IPReputationRequest.Builder("93.231.182.110").provider("crowdstrike").verbose(false).raw(false).build()

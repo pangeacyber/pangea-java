@@ -42,8 +42,9 @@ public abstract class BaseClient {
 	String serviceName;
 	Map<String, String> customHeaders = null;
 	String userAgent = "pangea-java/default";
+	private boolean supportMultiConfig = false;
 
-	protected BaseClient(Builder<?> builder, String serviceName) {
+	protected BaseClient(Builder<?> builder, String serviceName, boolean supportMultiConfig) {
 		this.config = builder.config;
 		this.serviceName = serviceName;
 		if (builder.logger != null) {
@@ -53,6 +54,7 @@ public abstract class BaseClient {
 		}
 		this.httpClient = buildClient();
 		this.setUserAgent(config.getCustomUserAgent());
+		this.supportMultiConfig = supportMultiConfig;
 	}
 
 	private Logger buildDefaultLogger() {
@@ -169,7 +171,7 @@ public abstract class BaseClient {
 		return;
 	}
 
-	protected <Req, ResponseType extends Response<?>> ResponseType post(
+	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
 		String path,
 		Req request,
 		Class<ResponseType> responseClass
@@ -177,7 +179,7 @@ public abstract class BaseClient {
 		return doPost(path, request, null, responseClass);
 	}
 
-	protected <Req, ResponseType extends Response<?>> ResponseType post(
+	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
 		String path,
 		Req request,
 		File file,
@@ -224,7 +226,7 @@ public abstract class BaseClient {
 		return get(path, true, responseClass);
 	}
 
-	private <Req, ResponseType extends Response<?>> ResponseType doPost(
+	private <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType doPost(
 		String path,
 		Req request,
 		File file,
@@ -232,6 +234,11 @@ public abstract class BaseClient {
 	) throws PangeaException, PangeaAPIException {
 		ObjectMapper mapper = new ObjectMapper();
 		String body;
+
+		if (this.supportMultiConfig == true && this.config.getConfigID() != null && request.getConfigID() == null) {
+			request.setConfigID(this.config.getConfigID());
+		}
+
 		try {
 			body = mapper.writeValueAsString(request);
 		} catch (JsonProcessingException e) {
@@ -424,30 +431,29 @@ public abstract class BaseClient {
 
 		response.setHttpResponse(httpResponse);
 
-		if (status.equals(ResponseStatus.VALIDATION_ERR.toString())) {
+		if (ResponseStatus.VALIDATION_ERR.equals(status)) {
 			throw new ValidationException(summary, response);
-		} else if (status.equals(ResponseStatus.TOO_MANY_REQUESTS.toString())) {
+		} else if (ResponseStatus.TOO_MANY_REQUESTS.equals(status)) {
 			throw new RateLimitException(summary, response);
-		} else if (status.equals(ResponseStatus.NO_CREDIT.toString())) {
+		} else if (ResponseStatus.NO_CREDIT.equals(status)) {
 			throw new NoCreditException(summary, response);
-		} else if (status.equals(ResponseStatus.UNAUTHORIZED.toString())) {
+		} else if (ResponseStatus.UNAUTHORIZED.equals(status)) {
 			throw new UnauthorizedException(serviceName, response);
-		} else if (status.equals(ResponseStatus.SERVICE_NOT_ENABLED.toString())) {
+		} else if (ResponseStatus.SERVICE_NOT_ENABLED.equals(status)) {
 			throw new ServiceNotEnabledException(serviceName, response);
-		} else if (status.equals(ResponseStatus.PROVIDER_ERR.toString())) {
+		} else if (ResponseStatus.PROVIDER_ERR.equals(status)) {
 			throw new ProviderErrorException(summary, response);
 		} else if (
-			status.equals(ResponseStatus.MISSING_CONFIG_ID_SCOPE.toString()) ||
-			status.equals(ResponseStatus.MISSING_CONFIG_ID.toString())
+			ResponseStatus.MISSING_CONFIG_ID_SCOPE.equals(status) || ResponseStatus.MISSING_CONFIG_ID.equals(status)
 		) {
 			throw new MissingConfigID(serviceName, response);
-		} else if (status.equals(ResponseStatus.NOT_FOUND.toString())) {
+		} else if (ResponseStatus.NOT_FOUND.equals(status)) {
 			throw new NotFound(config.getServiceUrl(serviceName, path).toString(), response);
-		} else if (status.equals(ResponseStatus.SERVICE_NOT_AVAILABLE.toString())) {
+		} else if (ResponseStatus.SERVICE_NOT_AVAILABLE.equals(status)) {
 			throw new ServiceNotAvailableException(summary, response);
-		} else if (status.equals(ResponseStatus.IP_NOT_FOUND.toString())) {
+		} else if (ResponseStatus.IP_NOT_FOUND.equals(status)) {
 			throw new EmbargoIPNotFoundException(summary, response);
-		} else if (status.equals(ResponseStatus.INTERNAL_ERROR.toString())) {
+		} else if (ResponseStatus.INTERNAL_ERROR.equals(status)) {
 			throw new InternalServerError(
 				String.format(
 					"Summary: \"%s\". request_id: \"%s\". request_time: \"%s\". response_time: \"%s\"",
@@ -458,7 +464,7 @@ public abstract class BaseClient {
 				),
 				response
 			);
-		} else if (status.equals(ResponseStatus.ACCEPTED.toString())) {
+		} else if (ResponseStatus.ACCEPTED.equals(status)) {
 			throw new AcceptedRequestException(
 				String.format("Summary: \"%s\". request_id: \"%s\".", response.getSummary(), response.getRequestId()),
 				response

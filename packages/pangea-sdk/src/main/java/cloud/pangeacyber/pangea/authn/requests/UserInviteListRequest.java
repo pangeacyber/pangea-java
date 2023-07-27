@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.models.Filter;
 import cloud.pangeacyber.pangea.authn.models.UserInviteListOrderBy;
 import cloud.pangeacyber.pangea.vault.models.ItemOrder;
@@ -9,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserInviteListRequest {
+public class UserInviteListRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("filter")

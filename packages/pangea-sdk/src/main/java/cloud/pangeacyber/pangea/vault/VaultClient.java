@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.vault;
 
 import cloud.pangeacyber.pangea.BaseClient;
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class JWKGetRequest {
+final class JWKGetRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -26,7 +27,7 @@ final class JWKGetRequest {
 	}
 }
 
-final class StateChangeRequest {
+final class StateChangeRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -44,7 +45,7 @@ final class StateChangeRequest {
 	}
 }
 
-final class SignRequest {
+final class SignRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -63,7 +64,7 @@ final class SignRequest {
 	}
 }
 
-final class JWTSignRequest {
+final class JWTSignRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -77,7 +78,7 @@ final class JWTSignRequest {
 	}
 }
 
-final class VerifyRequest {
+final class VerifyRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -106,7 +107,7 @@ final class VerifyRequest {
 	}
 }
 
-final class JWTVerifyRequest {
+final class JWTVerifyRequest extends BaseRequest {
 
 	@JsonProperty("jws")
 	String jws;
@@ -116,7 +117,7 @@ final class JWTVerifyRequest {
 	}
 }
 
-final class DeleteRequest {
+final class DeleteRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
@@ -128,10 +129,11 @@ final class DeleteRequest {
 
 public class VaultClient extends BaseClient {
 
-	public static String serviceName = "vault";
+	public static final String serviceName = "vault";
+	private static final boolean supportMultiConfig = false;
 
 	public VaultClient(Builder builder) {
-		super(builder, serviceName);
+		super(builder, serviceName, supportMultiConfig);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
@@ -237,7 +239,7 @@ public class VaultClient extends BaseClient {
 	 *	);
 	 * }
 	 */
-	public UpdateResponse update(ListRequest request) throws PangeaException, PangeaAPIException {
+	public UpdateResponse update(UpdateRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/update", request, UpdateResponse.class);
 	}
 
@@ -621,5 +623,24 @@ public class VaultClient extends BaseClient {
 	 */
 	public JWKGetResponse jwkGet(String id, String version) throws PangeaException, PangeaAPIException {
 		return post("/v1/get/jwk", new JWKGetRequest(id, version), JWKGetResponse.class);
+	}
+
+	/**
+	 * Create
+	 * @pangea.description Creates a folder.
+	 * @pangea.operationId vault_post_v1_folder_create
+	 * @param request - request parameters to send to /folder/create endpoint
+	 * @return FolderCreateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 *		FolderCreateResponse createParentResp = client.folderCreate(
+	 *			new FolderCreateRequest.Builder("folder_name", "parent/folder/name").build()
+	 *		);
+	 * }
+	 */
+	public FolderCreateResponse folderCreate(FolderCreateRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/folder/create", request, FolderCreateResponse.class);
 	}
 }

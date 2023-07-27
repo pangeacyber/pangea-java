@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.audit;
 
 import cloud.pangeacyber.pangea.BaseClient;
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.audit.arweave.*;
 import cloud.pangeacyber.pangea.audit.models.*;
@@ -22,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-final class RootRequest {
+final class RootRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("tree_size")
@@ -33,7 +34,7 @@ final class RootRequest {
 	}
 }
 
-final class LogRequest {
+final class LogRequest extends BaseRequest {
 
 	@JsonProperty("event")
 	IEvent event;
@@ -73,9 +74,11 @@ public class AuditClient extends BaseClient {
 	String prevUnpublishedRoot = null;
 	Map<String, Object> pkInfo = null;
 	String tenantID = null;
+	private static final boolean supportMultiConfig = true;
+	Class<?> customSchemaClass = null;
 
 	public AuditClient(Builder builder) {
-		super(builder, serviceName);
+		super(builder, serviceName, supportMultiConfig);
 		if (builder.privateKeyFilename != null) {
 			this.signer = new LogSigner(builder.privateKeyFilename);
 		} else {
@@ -84,6 +87,7 @@ public class AuditClient extends BaseClient {
 		this.tenantID = builder.tenantID;
 		this.pkInfo = builder.pkInfo;
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
+		this.customSchemaClass = builder.customSchemaClass;
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
@@ -92,6 +96,7 @@ public class AuditClient extends BaseClient {
 		String tenantID = null;
 		Config config;
 		Map<String, Object> pkInfo = null;
+		Class<?> customSchemaClass = StandardEvent.class;
 
 		public Builder(Config config) {
 			super(config);
@@ -115,6 +120,11 @@ public class AuditClient extends BaseClient {
 			this.pkInfo = pkInfo;
 			return this;
 		}
+
+		public <EventType extends IEvent> Builder withCustomSchema(Class<EventType> customSchemaClass) {
+			this.customSchemaClass = customSchemaClass;
+			return this;
+		}
 	}
 
 	private LogResponse logPost(IEvent event, Boolean verbose, String signature, String publicKey, boolean verify)
@@ -128,8 +138,7 @@ public class AuditClient extends BaseClient {
 		return post("/v1/log", request, LogResponse.class);
 	}
 
-	private <EventType extends IEvent> LogResponse doLog(IEvent event, Class<EventType> eventType, LogConfig config)
-		throws PangeaException, PangeaAPIException {
+	private LogResponse doLog(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
 		String signature = null;
 		String publicKey = null;
 
@@ -153,7 +162,7 @@ public class AuditClient extends BaseClient {
 		}
 
 		LogResponse response = logPost(event, config.getVerbose(), signature, publicKey, config.getVerify());
-		processLogResponse(response.getResult(), config.getVerify(), eventType);
+		processLogResponse(response.getResult(), config.getVerify());
 		return response;
 	}
 
@@ -176,13 +185,9 @@ public class AuditClient extends BaseClient {
 		}
 	}
 
-	private <EventType extends IEvent> void processLogResponse(
-		LogResult result,
-		boolean verify,
-		Class<EventType> eventType
-	) throws VerificationFailed, PangeaException {
+	private void processLogResponse(LogResult result, boolean verify) throws VerificationFailed, PangeaException {
 		String newUnpublishedRoot = result.getUnpublishedRoot();
-		result.setEventEnvelope(EventEnvelope.fromRaw(result.getRawEnvelope(), eventType));
+		result.setEventEnvelope(EventEnvelope.fromRaw(result.getRawEnvelope(), (Class<IEvent>) this.customSchemaClass));
 		if (verify) {
 			EventEnvelope.verifyHash(result.getRawEnvelope(), result.getHash());
 			result.verifySignature();
@@ -210,22 +215,16 @@ public class AuditClient extends BaseClient {
 	 * Log an entry - event, sign, verbose
 	 * @pangea.description Log an event to Audit Secure Log. Can select sign event or not and verbosity of the response.
 	 * @param event event to log
-	 * @param signMode "Unsigned" or "Local"
-	 * @param verbose true to more verbose response
+	 * @param config
 	 * @return LogResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
-	 * @pangea.code
-	 * {@code
-		// FIXME:
-	 * }
 	 */
-	public <EventType extends IEvent> LogResponse log(IEvent event, Class<EventType> eventType, LogConfig config)
-		throws PangeaException, PangeaAPIException {
+	public LogResponse log(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
 		if (config == null) {
 			config = new LogConfig.Builder().build();
 		}
-		return doLog(event, eventType, config);
+		return doLog(event, config);
 	}
 
 	private RootResponse rootPost(Integer treeSize) throws PangeaException, PangeaAPIException {
@@ -265,17 +264,16 @@ public class AuditClient extends BaseClient {
 		return rootPost(treeSize);
 	}
 
-	private <EventType extends IEvent> void processSearchResult(
-		ResultsOutput result,
-		Class<EventType> eventType,
-		SearchConfig config
-	) throws PangeaException, PangeaAPIException {
+	private void processSearchResult(ResultsOutput result, SearchConfig config)
+		throws PangeaException, PangeaAPIException {
 		if (config == null) {
 			config = new SearchConfig.Builder().build();
 		}
 
 		for (SearchEvent searchEvent : result.getEvents()) {
-			searchEvent.setEventEnvelope(EventEnvelope.fromRaw(searchEvent.getRawEnvelope(), eventType));
+			searchEvent.setEventEnvelope(
+				EventEnvelope.fromRaw(searchEvent.getRawEnvelope(), (Class<IEvent>) this.customSchemaClass)
+			);
 		}
 
 		if (config.getVerifyEvents()) {
@@ -359,56 +357,39 @@ public class AuditClient extends BaseClient {
 	/**
 	 * Search
 	 * @pangea.description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
-	 * @pangea.operationId audit_post_v1_search
-	 * @param input query filters to perform search
+	 * @pangea.operationId _audit_post_v1_search
+	 * @param request
+	 * @param config
 	 * @return SearchResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
-	 * @pangea.code
-	 * {@code
-	 * SearchInput input = new SearchInput("message:Integration test msg");
-	 *
-	 * input.setMaxResults(10);
-	 *
-	 * SearchResponse response = client.search(input);
-	 * }
 	 */
-	public <EventType extends IEvent> SearchResponse search(
-		SearchRequest request,
-		Class<EventType> eventType,
-		SearchConfig config
-	) throws PangeaException, PangeaAPIException {
+	public SearchResponse search(SearchRequest request, SearchConfig config)
+		throws PangeaException, PangeaAPIException {
 		SearchResponse response = post("/v1/search", request, SearchResponse.class);
-		processSearchResult(response.getResult(), eventType, config);
+		processSearchResult(response.getResult(), config);
 		return response;
 	}
 
-	private <EventType extends IEvent> ResultsResponse resultPost(
-		ResultRequest request,
-		Class<EventType> eventType,
-		SearchConfig config
-	) throws PangeaException, PangeaAPIException {
+	private ResultsResponse resultPost(ResultRequest request, SearchConfig config)
+		throws PangeaException, PangeaAPIException {
 		ResultsResponse response = post("/v1/results", request, ResultsResponse.class);
-		processSearchResult(response.getResult(), eventType, config);
+		processSearchResult(response.getResult(), config);
 		return response;
 	}
 
 	/**
 	 * Results of a search
 	 * @pangea.description Fetch paginated results of a previously executed search. By default: `verifyEvents` is true and `verifyConsistency` is false.
-	 * @pangea.operationId audit_post_v1_results
-	 * @param id A search results identifier returned by the search call.
-	 * @param limit Number of audit records to include in a single set of results.
-	 * @param offset Offset from the start of the result set to start returning results from.
+	 * @pangea.operationId _audit_post_v1_results
+	 * @param request
+	 * @param config
 	 * @return ResultsResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 */
-	public <EventType extends IEvent> ResultsResponse results(
-		ResultRequest request,
-		Class<EventType> eventType,
-		SearchConfig config
-	) throws PangeaException, PangeaAPIException {
-		return resultPost(request, eventType, config);
+	public ResultsResponse results(ResultRequest request, SearchConfig config)
+		throws PangeaException, PangeaAPIException {
+		return resultPost(request, config);
 	}
 }

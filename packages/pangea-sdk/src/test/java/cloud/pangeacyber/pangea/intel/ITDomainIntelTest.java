@@ -170,7 +170,7 @@ public class ITDomainIntelTest {
 	@Test(expected = UnauthorizedException.class)
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg.setToken("notarealtoken");
+		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		DomainIntelClient fakeClient = new DomainIntelClient.Builder(cfg).build();
 		DomainReputationResponse response = fakeClient.reputation(
 			new DomainReputationRequest.Builder("737updatesboeing.com").build()

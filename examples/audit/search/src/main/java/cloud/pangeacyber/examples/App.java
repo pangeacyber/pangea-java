@@ -2,7 +2,7 @@ package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.audit.AuditClient;
 import cloud.pangeacyber.pangea.audit.SearchEvent;
-import cloud.pangeacyber.pangea.audit.models.Event;
+import cloud.pangeacyber.pangea.audit.models.StandardEvent;
 import cloud.pangeacyber.pangea.audit.models.SearchConfig;
 import cloud.pangeacyber.pangea.audit.requests.ResultRequest;
 import cloud.pangeacyber.pangea.audit.requests.SearchRequest;
@@ -14,7 +14,7 @@ import cloud.pangeacyber.pangea.Config;
 public class App
 {
     private static void printSearchEvent(SearchEvent e){
-        Event event = (Event) e.getEventEnvelope().getEvent();
+        StandardEvent event = (StandardEvent) e.getEventEnvelope().getEvent();
         System.out.println(e.getEventEnvelope().getReceivedAt() + "\t| "
         + e.getSignatureVerification() + "\t| "
         + e.getConsistencyVerification() + "\t| "
@@ -48,7 +48,7 @@ public class App
 
         // Perform search
         try {
-            searchResponse = client.search(searchRequest, Event.class, new SearchConfig.Builder().build());
+            searchResponse = client.search(searchRequest, new SearchConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);
@@ -70,7 +70,7 @@ public class App
                                         .offset(0)
                                         .build();
         try {
-            resultsResponse = client.results(resultRequest, Event.class, new SearchConfig.Builder().build());
+            resultsResponse = client.results(resultRequest, new SearchConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);
@@ -90,7 +90,7 @@ public class App
                                         .offset(resultsLimit)
                                         .build();
         try {
-            resultsResponse = client.results(resultRequest, Event.class, new SearchConfig.Builder().build());
+            resultsResponse = client.results(resultRequest, new SearchConfig.Builder().build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);

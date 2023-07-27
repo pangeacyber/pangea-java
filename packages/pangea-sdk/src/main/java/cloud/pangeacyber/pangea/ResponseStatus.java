@@ -24,6 +24,10 @@ public enum ResponseStatus {
 		this.text = text;
 	}
 
+	boolean equals(String text) {
+		return this.text.equals(text);
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Enum#toString()
 	 */

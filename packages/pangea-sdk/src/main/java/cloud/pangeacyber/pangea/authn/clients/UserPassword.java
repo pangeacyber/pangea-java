@@ -1,12 +1,13 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.responses.UserPasswordResetResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class UserPasswordResetRequest {
+final class UserPasswordResetRequest extends BaseRequest {
 
 	@JsonProperty("user_id")
 	String userID;

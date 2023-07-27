@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.embargo;
 
 import cloud.pangeacyber.pangea.BaseClient;
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.embargo.responses.IPCheckResponse;
 import cloud.pangeacyber.pangea.embargo.responses.ISOCheckResponse;
@@ -8,7 +9,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class IsoCheckRequest {
+final class IsoCheckRequest extends BaseRequest {
 
 	@JsonProperty("iso_code")
 	String isoCode;
@@ -18,7 +19,7 @@ final class IsoCheckRequest {
 	}
 }
 
-final class IpCheckRequest {
+final class IpCheckRequest extends BaseRequest {
 
 	@JsonProperty("ip")
 	String ip;
@@ -30,10 +31,11 @@ final class IpCheckRequest {
 
 public class EmbargoClient extends BaseClient {
 
-	public static String serviceName = "embargo";
+	public static final String serviceName = "embargo";
+	private static final boolean supportMultiConfig = false;
 
 	public EmbargoClient(Builder builder) {
-		super(builder, serviceName);
+		super(builder, serviceName, supportMultiConfig);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

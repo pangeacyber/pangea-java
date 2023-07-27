@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
 import cloud.pangeacyber.pangea.authn.requests.FlowStartRequest;
 import cloud.pangeacyber.pangea.authn.responses.FlowCompleteResponse;
@@ -8,7 +9,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-final class FlowCompleteRequest {
+final class FlowCompleteRequest extends BaseRequest {
 
 	@JsonProperty("flow_id")
 	String flowID;

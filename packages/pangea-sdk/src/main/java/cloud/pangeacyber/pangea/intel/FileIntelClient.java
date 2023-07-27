@@ -16,10 +16,11 @@ import org.apache.commons.codec.binary.Hex;
 
 public class FileIntelClient extends BaseClient {
 
-	public static String serviceName = "file-intel";
+	public static final String serviceName = "file-intel";
+	private static final boolean supportMultiConfig = false;
 
 	public FileIntelClient(Builder builder) {
-		super(builder, serviceName);
+		super(builder, serviceName, supportMultiConfig);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
@@ -36,17 +37,10 @@ public class FileIntelClient extends BaseClient {
 	/**
 	 * Reputation check - hash, hashType, provider, verbose, raw
 	 * @pangea.description Retrieve file reputation from a provider, using the file's hash.
-	 * @param hash hash of the file
-	 * @param hashType Type of hash, can be "sha256", "sha1" or "md5"
-	 * @param provider provider to get reputation from
-	 * @param verbose select a more verbose response
-	 * @param raw if true response include provider raw response. This should vary from one provider to another one.
+	 * @param request
 	 * @return FileReputationResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
-	 * @pangea.code
-	 * {@code
-		// FIXME:
 	 */
 	public FileReputationResponse reputation(FileHashReputationRequest request)
 		throws PangeaException, PangeaAPIException {

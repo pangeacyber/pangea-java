@@ -1,9 +1,11 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.DomainIntelClient;
-import cloud.pangeacyber.pangea.intel.UrlIntelClient;
-import cloud.pangeacyber.pangea.intel.models.DomainReputationResponse;
-import cloud.pangeacyber.pangea.intel.models.URLReputationResponse;
+import cloud.pangeacyber.pangea.intel.URLIntelClient;
+import cloud.pangeacyber.pangea.intel.requests.DomainReputationRequest;
+import cloud.pangeacyber.pangea.intel.requests.URLReputationRequest;
+import cloud.pangeacyber.pangea.intel.responses.DomainReputationResponse;
+import cloud.pangeacyber.pangea.intel.responses.URLReputationResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 
 import java.net.MalformedURLException;
@@ -19,24 +21,36 @@ public class App
     {
         Config cfg = null;
         try {
-            cfg = Config.fromEnvironment(UrlIntelClient.serviceName);
+            cfg = Config.fromEnvironment(URLIntelClient.serviceName);
         } catch (ConfigException e){
             System.out.println(e);
             System.exit(1);
         }
 
         String url = "http://113.235.101.11:54384";
-        UrlIntelClient clientURL = new UrlIntelClient(cfg);
-        DomainIntelClient clientDomain = new DomainIntelClient(cfg);
+        URLIntelClient clientURL = new URLIntelClient.Builder(cfg).build();
+        DomainIntelClient clientDomain = new DomainIntelClient.Builder(cfg).build();
 
         try {
-            URLReputationResponse responseURL = clientURL.reputation(url, "crowdstrike", true, true);
+            URLReputationResponse responseURL = clientURL.reputation(
+                new URLReputationRequest.Builder(url)
+                    .provider("crowdstrike")
+                    .raw(true)
+                    .verbose(true)
+                    .build()
+            );
 
             if(responseURL.getResult().getData().getVerdict().equalsIgnoreCase("malicious")){
                 System.out.println(String.format("Defanged URL: %s", App.defangURL(url)));
             } else {
                 String domain = App.getDomain(url);
-                DomainReputationResponse responseDomain = clientDomain.reputation(domain, "domaintools", true, true);
+                DomainReputationResponse responseDomain = clientDomain.reputation(
+                    new DomainReputationRequest.Builder(domain)
+                        .provider("domaintools")
+                        .verbose(true)
+                        .raw(true)
+                        .build()
+                );
                 if(responseDomain.getResult().getData().getVerdict().equalsIgnoreCase("malicious")){
                     System.out.println(String.format("Defanged URL: %s", App.defangURL(url)));
                 } else {

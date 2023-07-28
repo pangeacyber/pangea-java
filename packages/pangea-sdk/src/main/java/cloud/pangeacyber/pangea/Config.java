@@ -184,6 +184,14 @@ public final class Config {
 		return loadEnvVar(envVarName);
 	}
 
+	public void setQueuedRetryEnabled(boolean queuedRetryEnabled) {
+		this.queuedRetryEnabled = queuedRetryEnabled;
+	}
+
+	public void setPollResultTimeout(long pollResultTimeout) {
+		this.pollResultTimeout = pollResultTimeout;
+	}
+
 	public static class Builder {
 
 		String token;

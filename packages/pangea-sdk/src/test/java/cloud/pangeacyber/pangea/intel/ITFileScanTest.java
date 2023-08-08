@@ -42,7 +42,7 @@ public class ITFileScanTest {
 	@Test
 	public void testFileScan_Scan() throws PangeaException, PangeaException, PangeaAPIException, IOException {
 		File file = eicar();
-		FileScanResponse response = client.scan(new FileScanRequest.Builder().provider("reversinglabs").build(), file);
+		FileScanResponse response = client.scan(new FileScanRequest.Builder().provider("crowdstrike").build(), file);
 		assertTrue(response.isOk());
 
 		FileScanData data = response.getResult().getData();
@@ -59,7 +59,7 @@ public class ITFileScanTest {
 		client = new FileScanClient.Builder(cfg).build();
 
 		File file = eicar();
-		FileScanResponse response = client.scan(new FileScanRequest.Builder().provider("reversinglabs").build(), file);
+		FileScanResponse response = client.scan(new FileScanRequest.Builder().provider("crowdstrike").build(), file);
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class ITFileScanTest {
 		File file = eicar();
 		AcceptedRequestException exception = null;
 		try {
-			response = client.scan(new FileScanRequest.Builder().provider("reversinglabs").build(), file);
+			response = client.scan(new FileScanRequest.Builder().provider("crowdstrike").build(), file);
 			assertTrue(false);
 		} catch (AcceptedRequestException e) {
 			exception = e;

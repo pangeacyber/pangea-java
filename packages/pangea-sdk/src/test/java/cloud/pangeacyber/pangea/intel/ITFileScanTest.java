@@ -24,7 +24,7 @@ public class ITFileScanTest {
 	final String TESTFILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/testfile.pdf";
 
 	FileScanClient client;
-	TestEnvironment environment = TestEnvironment.STAGING;
+	TestEnvironment environment = TestEnvironment.LIVE;
 
 	@Before
 	public void setUp() throws ConfigException {

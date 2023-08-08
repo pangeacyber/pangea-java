@@ -31,13 +31,37 @@ public class Client extends AuthNBaseClient {
 		token = new ClientToken(builder);
 	}
 
-	// TODO: Doc
+	/**
+	 * Get User (client token)
+	 * @pangea.description Retrieve the logged in user's token and information.
+	 * @pangea.operationId authn_post_v1_client_userinfo
+	 * @param code Login code returned by the login callback
+	 * @return ClientUserinfoResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * ClientUserinfoResponse response = client.client().userinfo("pmc_d6chl6qulpn3it34oerwm3cqwsjd6dxw");
+	 * }
+	 */
 	public ClientUserinfoResponse userinfo(String code) throws PangeaException, PangeaAPIException {
 		UserinfoRequest request = new UserinfoRequest(code);
 		ClientUserinfoResponse resp = post("/v1/client/userinfo", request, ClientUserinfoResponse.class);
 		return resp;
 	}
 
+	/**
+	 * Get JWT verification keys
+	 * @pangea.description Get JWT verification keys.
+	 * @pangea.operationId authn_post_v1_client_jwks
+	 * @return ClientJWKSResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * ClientJWKSResponse response = client.client().jwks();
+	 * }
+	 */
 	public ClientJWKSResponse jwks() throws PangeaException, PangeaAPIException {
 		return post("/v1/client/jwks", new BaseRequest(), ClientJWKSResponse.class);
 	}

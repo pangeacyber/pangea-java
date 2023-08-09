@@ -31,7 +31,24 @@ public class ClientPassword extends AuthNBaseClient {
 		super(builder);
 	}
 
-	// TODO: Doc
+	/**
+	 * Change a user's password
+	 * @pangea.description Change a user's password given the current password.
+	 * @pangea.operationId authn_post_v1_client_password_change
+	 * @param token A user token value
+	 * @param oldPassword
+	 * @param newPassword
+	 * @return ClientPasswordChangeResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * ClientPasswordChangeResponse response = client.client().password().change(
+	 * 	"ptu_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a",
+	 * 	"hunter2",
+	 * 	"My2n+Password");
+	 * }
+	 */
 	public ClientPasswordChangeResponse change(String token, String oldPassword, String newPassword)
 		throws PangeaException, PangeaAPIException {
 		ClientPasswordChangeRequest request = new ClientPasswordChangeRequest(token, oldPassword, newPassword);

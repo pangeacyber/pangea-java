@@ -55,13 +55,17 @@ public class App
 		Thread.sleep(20 * 1000);
 
         System.out.println("File Scan poll result...");
-		// Poll result, this could raise another AcceptedRequestException if result is not ready
-		response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
+        try{
+            // Poll result, this could raise another AcceptedRequestException if result is not ready
+            response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
 
-        System.out.println("File Scan poll result success.");
-        FileScanData data = response.getResult().getData();
-        System.out.println("Reputation success");
-        System.out.println("Reputation verdict: " + data.getVerdict());
-        System.out.println("Reputation raw data: " + response.getResult().getRawData());
+            System.out.println("File Scan poll result success.");
+            FileScanData data = response.getResult().getData();
+            System.out.println("Reputation success");
+            System.out.println("Reputation verdict: " + data.getVerdict());
+            System.out.println("Reputation raw data: " + response.getResult().getRawData());
+		} catch (AcceptedRequestException e) {
+            System.out.println("Poll result failed: " + e.toString());
+		}
     }
 }

@@ -47,7 +47,7 @@ public class FlowEnrollMFA extends AuthNBaseClient {
 	 * {@code
 	 * FlowEnrollMFAStartResponse response = client.flow().enroll().mfa().start(
 	 * 	new FlowEnrollMFAStartRequest().Builder(
-	 * 		"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh", 
+	 * 		"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
 	 * 		MFAProvider.SMS_OTP).setPhone("1-808-555-0173").build());
 	 * }
 	 */

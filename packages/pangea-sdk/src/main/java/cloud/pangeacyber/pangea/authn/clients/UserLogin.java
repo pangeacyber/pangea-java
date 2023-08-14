@@ -62,7 +62,6 @@ public class UserLogin extends AuthNBaseClient {
 	/**
 	 * Login with a password
 	 * @pangea.description Login a user with a password and return the user's token and information.
-	 * @pangea.operationId authn_post_v1_user_login_password
 	 * @param email An email address
 	 * @param password The user's password
 	 * @return UserLoginResponse
@@ -70,7 +69,7 @@ public class UserLogin extends AuthNBaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserLoginResponse response = client.user().login().password(
+	 * UserLoginResponse response = client.user().login().Password(
 	 * 	"joe.user@email.com",
 	 * 	"My1s+Password");
 	 * }
@@ -83,12 +82,24 @@ public class UserLogin extends AuthNBaseClient {
 	/**
 	 * Login with a password - profile
 	 * @pangea.description Login a user with a password and return the user's token and information.
+	 * @pangea.operationId authn_post_v1_user_login_password
 	 * @param email An email address
 	 * @param password The user's password
 	 * @param extraProfile A user profile as a collection of string properties
 	 * @return UserLoginResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * Profile extraProfile = new Profile();
+	 * extraProfile.put("first_name", "Joe");
+	 * extraProfile.put("last_name", "User");
+	 * 
+	 * UserLoginResponse response = client.user().login().Password(
+	 * 	"joe.user@email.com",
+	 * 	"My1s+Password",
+	 * 	extraProfile);
+	 * }
 	 */
 	public UserLoginResponse Password(String email, String password, Profile extraProfile)
 		throws PangeaException, PangeaAPIException {
@@ -99,7 +110,6 @@ public class UserLogin extends AuthNBaseClient {
 	/**
 	 * Login with a social provider
 	 * @pangea.description Login a user by their social ID and return the user's token and information.
-	 * @pangea.operationId authn_post_v1_user_login_social
 	 * @param provider Social identity provider for authenticating a user's identity
 	 * @param email An email address
 	 * @param socialID User's social ID with the provider
@@ -108,7 +118,7 @@ public class UserLogin extends AuthNBaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserLoginResponse response = client.user().login().social(
+	 * UserLoginResponse response = client.user().login().Social(
 	 * 	IDProvider.GOOGLE,
 	 * 	"joe.user@email.com"
 	 * 	"My1s+Password");
@@ -123,6 +133,7 @@ public class UserLogin extends AuthNBaseClient {
 	/**
 	 * Login with a social provider - profile
 	 * @pangea.description Login a user by their social ID and return the user's token and information.
+	 * @pangea.operationId authn_post_v1_user_login_social
 	 * @param provider Social identity provider for authenticating a user's identity
 	 * @param email An email address
 	 * @param socialID User's social ID with the provider
@@ -130,6 +141,18 @@ public class UserLogin extends AuthNBaseClient {
 	 * @return UserLoginResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * Profile extraProfile = new Profile();
+	 * extraProfile.put("first_name", "Joe");
+	 * extraProfile.put("last_name", "User");
+	 * 
+	 * UserLoginResponse response = client.user().login().Social(
+	 * 	IDProvider.GOOGLE,
+	 * 	"joe.user@email.com",
+	 * 	"My1s+Password",
+	 * 	extraProfile);
+	 * }
 	 */
 	public UserLoginResponse Social(IDProvider provider, String email, String socialID, Profile extraProfile)
 		throws PangeaException, PangeaAPIException {

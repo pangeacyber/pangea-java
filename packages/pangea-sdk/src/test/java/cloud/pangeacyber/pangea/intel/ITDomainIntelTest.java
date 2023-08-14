@@ -37,7 +37,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("malicious", data.getVerdict());
+		assertEquals("suspicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -51,7 +51,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("malicious", data.getVerdict());
+		assertEquals("suspicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -65,7 +65,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("malicious", data.getVerdict());
+		assertEquals("suspicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -79,7 +79,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("malicious", data.getVerdict());
+		assertEquals("suspicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -93,7 +93,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("malicious", data.getVerdict());
+		assertEquals("suspicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}
@@ -107,7 +107,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("malicious", data.getVerdict());
+		assertEquals("suspicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}
@@ -125,7 +125,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("malicious", data.getVerdict());
+		assertEquals("suspicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -143,7 +143,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("malicious", data.getVerdict());
+		assertEquals("suspicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}

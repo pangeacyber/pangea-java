@@ -44,4 +44,8 @@ public class ErrorField {
 	public String getPath() {
 		return path;
 	}
+
+	public String toString() {
+		return String.format("%s %s: %s.", this.source, this.code, this.detail);
+	}
 }

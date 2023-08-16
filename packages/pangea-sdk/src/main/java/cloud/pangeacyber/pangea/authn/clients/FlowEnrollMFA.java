@@ -46,7 +46,7 @@ public class FlowEnrollMFA extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * FlowEnrollMFAStartResponse response = client.flow().enroll().mfa().start(
-	 * 	new FlowEnrollMFAStartRequest().Builder(
+	 * 	new FlowEnrollMFAStartRequest.Builder(
 	 * 		"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
 	 * 		MFAProvider.SMS_OTP).setPhone("1-808-555-0173").build());
 	 * }

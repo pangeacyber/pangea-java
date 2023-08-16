@@ -23,7 +23,7 @@ public class FlowReset extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * FlowResetPasswordResponse response = client.flow().reset().password(
-	 * 	new FlowResetPasswordRequest().Builder(
+	 * 	new FlowResetPasswordRequest.Builder(
 	 * 		"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
 	 * 		"My1s+Password").build());
 	 * }

@@ -78,7 +78,7 @@ public class User extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * UserCreateResponse response = client.user().create(
-	 * 	new UserCreateRequest()
+	 * 	new UserCreateRequest
 	 * 		.Builder(
 	 * 			"joe.user@email.com",
 	 * 			"My1s+Password",
@@ -134,7 +134,7 @@ public class User extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * UserUpdateResponse response = client.user().update(
-	 * 	new UserUpdateRequest()
+	 * 	new UserUpdateRequest
 	 * 		.Builder()
 	 * 		.setEmail("joe.user@email.com")
 	 * 		.setRequireMFA(true).build());
@@ -154,12 +154,15 @@ public class User extends AuthNBaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserInviteResponse response = client.user(
-	 * 	new UserInviteRequest().Builder(
+	 * UserInviteRequest request = new UserInviteRequest
+	 * 	.Builder(
 	 * 		"admin@email.com",
 	 * 		"joe.user@email.com",
 	 * 		"/callback",
-	 * 		"pcb_zurr3lkcwdp5keq73htsfpcii5k4zgm7").build()).invite();
+	 * 		"pcb_zurr3lkcwdp5keq73htsfpcii5k4zgm7")
+	 * 	.build();
+	 * 
+	 * UserInviteResponse response = client.user().invite(request);
 	 * }
 	 */
 	public UserInviteResponse invite(UserInviteRequest request) throws PangeaException, PangeaAPIException {
@@ -176,8 +179,10 @@ public class User extends AuthNBaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserListResponse response = client.user(
-	 * 	new UserListRequest().Builder().build()).list();
+	 * UserListRequest request = 
+	 * 	new UserListRequest.Builder().build();
+	 * 
+	 * UserListResponse response = client.user().list(request);
 	 * }
 	 */
 	public UserListResponse list(UserListRequest request) throws PangeaException, PangeaAPIException {

@@ -83,9 +83,10 @@ public class UserProfile extends AuthNBaseClient {
 	 * updatedProfile.put("country", "Argentina");
 	 *
 	 * UserProfileUpdateResponse response = client.user().profile().update(
-	 * 	new UserProfileUpdateRequest()
+	 * 	new UserProfileUpdateRequest
 	 * 		.Builder(updatedProfile)
-	 * 		.setEmail("joe.user@email.com").build());
+	 * 		.setEmail("joe.user@email.com")
+	 * 		.build());
 	 * }
 	 */
 	public UserProfileUpdateResponse update(UserProfileUpdateRequest request)

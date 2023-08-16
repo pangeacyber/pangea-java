@@ -68,7 +68,7 @@ public class FlowVerify extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * FlowVerifyEmailResponse response = client.flow().verify().email(
-	 * 	new FlowVerifyEmailRequest()
+	 * 	new FlowVerifyEmailRequest
 	 * 		.Builder("pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh")
 	 * 		.setCbState("pcb_zurr3lkcwdp5keq73htsfpcii5k4zgm7")
 	 * 		.setCbCode("poc_fwg3ul4db1jpivexru3wyj354u9ej5e2").build());
@@ -89,9 +89,11 @@ public class FlowVerify extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * FlowVerifyPasswordResponse response = client.flow().verify().password(
-	 * 	new FlowVerifyPasswordRequest().Builder(
-	 * 		"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
-	 * 		"My1s+Password").build());
+	 * 	new FlowVerifyPasswordRequest
+	 * 		.Builder(
+	 * 			"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
+	 * 			"My1s+Password")
+	 * 		.build());
 	 * }
 	 */
 	public FlowVerifyPasswordResponse password(FlowVerifyPasswordRequest request)

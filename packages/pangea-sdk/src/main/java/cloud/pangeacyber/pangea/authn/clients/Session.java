@@ -63,7 +63,7 @@ public class Session extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * SessionListResponse response = client.session().list(
-	 * 	new SessionListRequest().Builder().build());
+	 * 	new SessionListRequest.Builder().build());
 	 * }
 	 */
 	public SessionListResponse list(SessionListRequest request) throws PangeaException, PangeaAPIException {

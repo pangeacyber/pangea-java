@@ -27,7 +27,22 @@ public class UserPassword extends AuthNBaseClient {
 		super(builder);
 	}
 
-	// TODO: Doc
+	/**
+	 * User Password Reset
+	 * @pangea.description Manually reset a user's password.
+	 * @pangea.operationId authn_post_v1_user_password_reset
+	 * @param userID The identity of a user or a service
+	 * @param newPassword
+	 * @return UserPasswordResetResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * client.user().password().reset(
+	 * 	"pui_xpkhwpnz2cmegsws737xbsqnmnuwtvm5",
+	 * 	"My2n+Password");
+	 * }
+	 */
 	public UserPasswordResetResponse reset(String userID, String newPassword)
 		throws PangeaException, PangeaAPIException {
 		UserPasswordResetRequest request = new UserPasswordResetRequest(userID, newPassword);

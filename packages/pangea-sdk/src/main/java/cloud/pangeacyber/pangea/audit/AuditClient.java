@@ -228,7 +228,7 @@ public class AuditClient extends BaseClient {
 	 * 	.actor("Terminal")
 	 * 	.build();
 	 * LogConfig config = new LogConfig.Builder().build();
-	 * 
+	 *
 	 * LogResponse response = client.log(event, config);
 	 * }
 	 */
@@ -380,7 +380,7 @@ public class AuditClient extends BaseClient {
 	 * SearchRequest searchRequest = new SearchRequest
 	 * 	.Builder("message:\"\"").limit(10).build();
 	 * SearchConfig searchConfig = new SearchConfig.Builder().build();
-	 * 
+	 *
 	 * SearchResponse response = client.search(searchRequest, searchConfig);
 	 * }
 	 */
@@ -415,7 +415,7 @@ public class AuditClient extends BaseClient {
 	 * 	.offset(0)
 	 * 	.build();
 	 * SearchConfig searchConfig = new SearchConfig.Builder().build();
-	 * 
+	 *
 	 * ResultsResponse response = client.results(request, searchConfig);
 	 * }
 	 */

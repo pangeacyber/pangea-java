@@ -52,7 +52,7 @@ public class FileIntelClient extends BaseClient {
 	 * 	.verbose(false)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * FileReputationResponse response = client.reputation(request);
 	 * }
 	 */

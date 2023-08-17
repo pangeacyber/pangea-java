@@ -43,7 +43,7 @@ public class URLIntelClient extends BaseClient {
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * URLReputationResponse response = client.reputation(request);
 	 * }
 	 */

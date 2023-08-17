@@ -161,7 +161,7 @@ public class User extends AuthNBaseClient {
 	 * 		"/callback",
 	 * 		"pcb_zurr3lkcwdp5keq73htsfpcii5k4zgm7")
 	 * 	.build();
-	 * 
+	 *
 	 * UserInviteResponse response = client.user().invite(request);
 	 * }
 	 */
@@ -179,9 +179,9 @@ public class User extends AuthNBaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserListRequest request = 
+	 * UserListRequest request =
 	 * 	new UserListRequest.Builder().build();
-	 * 
+	 *
 	 * UserListResponse response = client.user().list(request);
 	 * }
 	 */

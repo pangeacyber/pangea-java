@@ -43,7 +43,7 @@ public class IPIntelClient extends BaseClient {
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * IPGeolocateResponse response = client.geolocate(request);
 	 * }
 	 */
@@ -67,7 +67,7 @@ public class IPIntelClient extends BaseClient {
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * IPDomainResponse response = client.getDomain(request);
 	 * }
 	 */
@@ -91,7 +91,7 @@ public class IPIntelClient extends BaseClient {
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * IPVPNResponse response = client.isVPN(request);
 	 * }
 	 */
@@ -115,7 +115,7 @@ public class IPIntelClient extends BaseClient {
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * IPProxyResponse response = client.isProxy(request);
 	 * }
 	 */
@@ -139,7 +139,7 @@ public class IPIntelClient extends BaseClient {
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * IPReputationResponse response = client.reputation(request);
 	 * }
 	 */

@@ -43,7 +43,7 @@ public class DomainIntelClient extends BaseClient {
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * DomainReputationResponse response = client.reputation(request);
 	 * }
 	 */

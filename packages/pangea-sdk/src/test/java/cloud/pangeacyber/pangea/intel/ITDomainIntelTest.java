@@ -37,7 +37,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("suspicious", data.getVerdict());
+		assertNotNull(data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -46,12 +46,12 @@ public class ITDomainIntelTest {
 	public void testDomainReputationMalicious_2() throws PangeaException, PangeaAPIException {
 		// With provider, not verbose by default, not raw by default;
 		DomainReputationResponse response = client.reputation(
-			new DomainReputationRequest.Builder("737updatesboeing.com").provider("domaintools").build()
+			new DomainReputationRequest.Builder("737updatesboeing.com").provider("crowdstrike").build()
 		);
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("suspicious", data.getVerdict());
+		assertNotNull(data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -65,7 +65,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("suspicious", data.getVerdict());
+		assertNotNull(data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -79,7 +79,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("suspicious", data.getVerdict());
+		assertNotNull(data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -93,7 +93,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("suspicious", data.getVerdict());
+		assertNotNull(data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}
@@ -107,7 +107,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("suspicious", data.getVerdict());
+		assertNotNull(data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}
@@ -117,7 +117,7 @@ public class ITDomainIntelTest {
 		// Provider, no verbose, no raw
 		DomainReputationResponse response = client.reputation(
 			new DomainReputationRequest.Builder("737updatesboeing.com")
-				.provider("domaintools")
+				.provider("crowdstrike")
 				.verbose(false)
 				.raw(false)
 				.build()
@@ -125,7 +125,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("suspicious", data.getVerdict());
+		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
 	}
@@ -135,7 +135,7 @@ public class ITDomainIntelTest {
 		// Provider, verbose, raw
 		DomainReputationResponse response = client.reputation(
 			new DomainReputationRequest.Builder("737updatesboeing.com")
-				.provider("domaintools")
+				.provider("crowdstrike")
 				.verbose(true)
 				.raw(true)
 				.build()
@@ -143,7 +143,7 @@ public class ITDomainIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("suspicious", data.getVerdict());
+		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}

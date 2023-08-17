@@ -12,7 +12,10 @@ public class PangeaAPIException extends Exception {
 		String ret = "";
 		ret += "message: " + this.getMessage() + "\n";
 		ret += "summary: " + this.response.getSummary() + "\n";
+		ret += "status: " + this.response.getStatus() + "\n";
 		ret += "request_id: " + this.response.getRequestId() + "\n";
+		ret += "request_time: " + this.response.getRequestTime() + "\n";
+		ret += "response_time: " + this.response.getResponseTime() + "\n";
 		if (
 			this.response.getResult() != null &&
 			this.response.getResult().getErrors() != null &&
@@ -20,7 +23,7 @@ public class PangeaAPIException extends Exception {
 		) {
 			ret += "Errors: \n";
 			for (ErrorField errorField : this.response.getResult().getErrors()) {
-				ret += "\t " + errorField.getDetail() + "\n";
+				ret += String.format("\t%s\n", errorField.toString());
 			}
 		}
 		return ret;

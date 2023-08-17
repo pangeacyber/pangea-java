@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.embargo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
@@ -66,6 +67,16 @@ public class ITEmbargoTest {
 	@Test(expected = ValidationException.class)
 	public void testEmptyIP() throws PangeaException, PangeaAPIException {
 		IPCheckResponse response = client.ipCheck("");
+	}
+
+	public void testPrintError() throws PangeaException, PangeaAPIException {
+		try {
+			IPCheckResponse response = client.ipCheck("");
+			assertTrue(false);
+		} catch (PangeaAPIException e) {
+			assertNotNull(e.toString());
+			System.out.println(e.toString());
+		}
 	}
 
 	@Test(expected = UnauthorizedException.class)

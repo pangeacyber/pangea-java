@@ -94,7 +94,7 @@ public class UserLogin extends AuthNBaseClient {
 	 * Profile extraProfile = new Profile();
 	 * extraProfile.put("first_name", "Joe");
 	 * extraProfile.put("last_name", "User");
-	 * 
+	 *
 	 * UserLoginResponse response = client.user().login().Password(
 	 * 	"joe.user@email.com",
 	 * 	"My1s+Password",
@@ -146,7 +146,7 @@ public class UserLogin extends AuthNBaseClient {
 	 * Profile extraProfile = new Profile();
 	 * extraProfile.put("first_name", "Joe");
 	 * extraProfile.put("last_name", "User");
-	 * 
+	 *
 	 * UserLoginResponse response = client.user().login().Social(
 	 * 	IDProvider.GOOGLE,
 	 * 	"joe.user@email.com",

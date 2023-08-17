@@ -41,9 +41,11 @@ public class FlowVerifyMFA extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * FlowVerifyMFACompleteResponse response = client.flow().verify().mfa().complete(
-	 * 	new FlowVerifyMFACompleteRequest().Builder(
-	 * 		"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
-	 * 		"999999").build());
+	 * 	new FlowVerifyMFACompleteRequest
+	 * 		.Builder(
+	 * 			"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
+	 * 			"999999")
+	 * 		.build());
 	 * }
 	 */
 	public FlowVerifyMFACompleteResponse complete(FlowVerifyMFACompleteRequest request)

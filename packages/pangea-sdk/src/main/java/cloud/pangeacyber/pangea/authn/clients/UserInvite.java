@@ -36,7 +36,7 @@ public class UserInvite extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * UserInviteListResponse response = client.user().invite().list(
-	 * 	new UserInviteListRequest().Builder().build());
+	 * 	new UserInviteListRequest.Builder().build());
 	 * }
 	 */
 	public UserInviteListResponse list(UserInviteListRequest request) throws PangeaException, PangeaAPIException {

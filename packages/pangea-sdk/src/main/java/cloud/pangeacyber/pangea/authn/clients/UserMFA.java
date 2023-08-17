@@ -122,7 +122,7 @@ public class UserMFA extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * UserMFAStartResponse response = client.user().mfa().start(
-	 * 	new UserMFAStartRequest().Builder(
+	 * 	new UserMFAStartRequest.Builder(
 	 * 		"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
 	 * 		MFAProvider.TOTP).build());
 	 * }

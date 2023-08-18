@@ -35,12 +35,26 @@ public class FileIntelClient extends BaseClient {
 	}
 
 	/**
-	 * Reputation check - hash, hashType, provider, verbose, raw
-	 * @pangea.description Retrieve file reputation from a provider, using the file's hash.
+	 * Reputation
+	 * @pangea.description Retrieve a reputation score for a file hash from a provider, including an optional detailed report.
+	 * @pangea.operationId file_intel_post_v1_reputation
 	 * @param request
 	 * @return FileReputationResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * FileHashReputationRequest request = new FileHashReputationRequest
+	 * 	.Builder(
+	 * 		"142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+	 * 		"sha256")
+	 * 	.provider("reversinglabs")
+	 * 	.verbose(false)
+	 * 	.raw(true)
+	 * 	.build();
+	 *
+	 * FileReputationResponse response = client.reputation(request);
+	 * }
 	 */
 	public FileReputationResponse reputation(FileHashReputationRequest request)
 		throws PangeaException, PangeaAPIException {

@@ -23,7 +23,19 @@ public class ClientToken extends AuthNBaseClient {
 		super(builder);
 	}
 
-	// TODO: Doc
+	/**
+	 * Check a token
+	 * @pangea.description Look up a token and return its contents.
+	 * @pangea.operationId authn_post_v1_client_token_check
+	 * @param token A token value
+	 * @return ClientTokenCheckResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * ClientTokenCheckResponse response = client.client().token().check("ptu_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a");
+	 * }
+	 */
 	public ClientTokenCheckResponse check(String token) throws PangeaException, PangeaAPIException {
 		TokenCheckRequest request = new TokenCheckRequest(token);
 		ClientTokenCheckResponse resp = post("/v1/client/token/check", request, ClientTokenCheckResponse.class);

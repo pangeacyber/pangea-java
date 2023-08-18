@@ -53,14 +53,49 @@ public class FlowSignup extends AuthNBaseClient {
 		super(builder);
 	}
 
-	// TODO: doc
+	/**
+	 * Password Sign-up
+	 * @pangea.description Signup a new account using a password.
+	 * @pangea.operationId authn_post_v1_flow_signup_password
+	 * @param flow_id An ID for a login or signup flow
+	 * @param password A password
+	 * @param firstName
+	 * @param lastName
+	 * @return FlowSignupPasswordResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * FlowSignupPasswordResponse response = client.flow().signup().password(
+	 * 	"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
+	 * 	"My1s+Password",
+	 * 	"Joe",
+	 * 	"User");
+	 * }
+	 */
 	public FlowSignupPasswordResponse password(String flow_id, String password, String firstName, String lastName)
 		throws PangeaException, PangeaAPIException {
 		FlowSignupPasswordRequest request = new FlowSignupPasswordRequest(flow_id, password, firstName, lastName);
 		return post("/v1/flow/signup/password", request, FlowSignupPasswordResponse.class);
 	}
 
-	// TODO: doc
+	/**
+	 * Social Sign-up
+	 * @pangea.description Signup a new account using a social provider.
+	 * @pangea.operationId authn_post_v1_flow_signup_social
+	 * @param flow_id An ID for a login or signup flow
+	 * @param cbState State tracking string for login callbacks
+	 * @param cbCode A social oauth callback code
+	 * @return FlowSignupPasswordResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * {@code
+	 * FlowSignupPasswordResponse response = client.flow().signup().social(
+	 * 	"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
+	 * 	"pcb_zurr3lkcwdp5keq73htsfpcii5k4zgm7",
+	 * 	"poc_fwg3ul4db1jpivexru3wyj354u9ej5e2");
+	 * }
+	 */
 	public FlowSignupPasswordResponse social(String flow_id, String cbState, String cbCode)
 		throws PangeaException, PangeaAPIException {
 		FlowSignupSocialRequest request = new FlowSignupSocialRequest(flow_id, cbState, cbCode);

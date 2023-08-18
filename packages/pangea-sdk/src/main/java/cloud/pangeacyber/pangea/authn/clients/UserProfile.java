@@ -33,19 +33,62 @@ public class UserProfile extends AuthNBaseClient {
 		super(builder);
 	}
 
-	// TODO: Doc
+	/**
+	 * Get user - email
+	 * @pangea.description Get user's information by email.
+	 * @pangea.operationId authn_post_v1_user_profile_get 1
+	 * @param email
+	 * @return UserProfileGetResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * UserProfileGetResponse response = client.user().profile().getByEmail("joe.user@email.com");
+	 * }
+	 */
 	public UserProfileGetResponse getByEmail(String email) throws PangeaException, PangeaAPIException {
 		UserProfileGetRequest request = new UserProfileGetRequest(email, null);
 		return post("/v1/user/profile/get", request, UserProfileGetResponse.class);
 	}
 
-	// TODO: Doc
+	/**
+	 * Get user - id
+	 * @pangea.description Get user's information by id.
+	 * @pangea.operationId authn_post_v1_user_profile_get 2
+	 * @param id The identity of a user or a service
+	 * @return UserProfileGetResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * UserProfileGetResponse response = client.user().profile().getByID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5");
+	 * }
+	 */
 	public UserProfileGetResponse getByID(String id) throws PangeaException, PangeaAPIException {
 		UserProfileGetRequest request = new UserProfileGetRequest(null, id);
 		return post("/v1/user/profile/get", request, UserProfileGetResponse.class);
 	}
 
-	// TODO: Doc
+	/**
+	 * Update user
+	 * @pangea.description Update user's information by identity or email.
+	 * @pangea.operationId authn_post_v1_user_profile_update
+	 * @param request
+	 * @return UserProfileUpdateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * Profile updatedProfile = new Profile();
+	 * updatedProfile.put("country", "Argentina");
+	 *
+	 * UserProfileUpdateResponse response = client.user().profile().update(
+	 * 	new UserProfileUpdateRequest
+	 * 		.Builder(updatedProfile)
+	 * 		.setEmail("joe.user@email.com")
+	 * 		.build());
+	 * }
+	 */
 	public UserProfileUpdateResponse update(UserProfileUpdateRequest request)
 		throws PangeaException, PangeaAPIException {
 		return post("/v1/user/profile/update", request, UserProfileUpdateResponse.class);

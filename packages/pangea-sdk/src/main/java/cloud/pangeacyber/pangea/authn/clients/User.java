@@ -67,36 +67,146 @@ public class User extends AuthNBaseClient {
 		password = new UserPassword(builder);
 	}
 
-	// TODO: Doc
+	/**
+	 * Create User
+	 * @pangea.description Create a user.
+	 * @pangea.operationId authn_post_v1_user_create
+	 * @param request
+	 * @return UserCreateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * UserCreateResponse response = client.user().create(
+	 * 	new UserCreateRequest
+	 * 		.Builder(
+	 * 			"joe.user@email.com",
+	 * 			"My1s+Password",
+	 * 			IDProvider.PASSWORD).build());
+	 * }
+	 */
 	public UserCreateResponse create(UserCreateRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/user/create", request, UserCreateResponse.class);
 	}
 
-	// TODO: Doc
+	/**
+	 * Delete User
+	 * @pangea.description Delete a user by email address.
+	 * @pangea.operationId authn_post_v1_user_delete 1
+	 * @param email An email address
+	 * @return UserDeleteResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * client.user().deleteByEmail("example@example.com");
+	 * }
+	 */
 	public UserDeleteResponse deleteByEmail(String email) throws PangeaException, PangeaAPIException {
 		return post("/v1/user/delete", new UserDeleteByEmailRequest(email), UserDeleteResponse.class);
 	}
 
+	/**
+	 * Delete User
+	 * @pangea.description Delete a user by ID.
+	 * @pangea.operationId authn_post_v1_user_delete 2
+	 * @param id
+	 * @return UserDeleteResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * client.user().deleteByID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5");
+	 * }
+	 */
 	public UserDeleteResponse deleteByID(String id) throws PangeaException, PangeaAPIException {
 		return post("/v1/user/delete", new UserDeleteByIDRequest(id), UserDeleteResponse.class);
 	}
 
-	// TODO: Doc
+	/**
+	 * Update user's settings
+	 * @pangea.description Update user's settings.
+	 * @pangea.operationId authn_post_v1_user_update
+	 * @param request
+	 * @return UserUpdateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * UserUpdateResponse response = client.user().update(
+	 * 	new UserUpdateRequest
+	 * 		.Builder()
+	 * 		.setEmail("joe.user@email.com")
+	 * 		.setRequireMFA(true).build());
+	 * }
+	 */
 	public UserUpdateResponse update(UserUpdateRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/user/update", request, UserUpdateResponse.class);
 	}
 
-	// TODO: Doc
+	/**
+	 * Invite User
+	 * @pangea.description Send an invitation to a user.
+	 * @pangea.operationId authn_post_v1_user_invite
+	 * @param request
+	 * @return UserInviteResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * UserInviteRequest request = new UserInviteRequest
+	 * 	.Builder(
+	 * 		"admin@email.com",
+	 * 		"joe.user@email.com",
+	 * 		"/callback",
+	 * 		"pcb_zurr3lkcwdp5keq73htsfpcii5k4zgm7")
+	 * 	.build();
+	 *
+	 * UserInviteResponse response = client.user().invite(request);
+	 * }
+	 */
 	public UserInviteResponse invite(UserInviteRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/user/invite", request, UserInviteResponse.class);
 	}
 
-	// TODO: Doc
+	/**
+	 * List Users
+	 * @pangea.description Look up users by scopes.
+	 * @pangea.operationId authn_post_v1_user_list
+	 * @param request
+	 * @return UserListResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * UserListRequest request =
+	 * 	new UserListRequest.Builder().build();
+	 *
+	 * UserListResponse response = client.user().list(request);
+	 * }
+	 */
 	public UserListResponse list(UserListRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/user/list", request, UserListResponse.class);
 	}
 
-	// TODO: Doc
+	/**
+	 * Verify User
+	 * @pangea.description Verify a user's primary authentication.
+	 * @pangea.operationId authn_post_v1_user_verify
+	 * @param idProvider
+	 * @param email
+	 * @param authenticator
+	 * @return UserVerifyResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * UserVerifyResponse response = client.user().verify(
+	 * 	IDProvider.PASSWORD,
+	 * 	"joe.user@email.com",
+	 * 	"My1s+Password");
+	 * }
+	 */
 	public UserVerifyResponse verify(IDProvider idProvider, String email, String authenticator)
 		throws PangeaException, PangeaAPIException {
 		UserVerifyRequest request = new UserVerifyRequest(idProvider, email, authenticator);

@@ -30,13 +30,45 @@ public class FlowVerifyMFA extends AuthNBaseClient {
 		super(builder);
 	}
 
-	// TODO: Doc
+	/**
+	 * Complete MFA Verification
+	 * @pangea.description Complete MFA verification.
+	 * @pangea.operationId authn_post_v1_flow_verify_mfa_complete
+	 * @param request
+	 * @return FlowVerifyMFACompleteResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * FlowVerifyMFACompleteResponse response = client.flow().verify().mfa().complete(
+	 * 	new FlowVerifyMFACompleteRequest
+	 * 		.Builder(
+	 * 			"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
+	 * 			"999999")
+	 * 		.build());
+	 * }
+	 */
 	public FlowVerifyMFACompleteResponse complete(FlowVerifyMFACompleteRequest request)
 		throws PangeaException, PangeaAPIException {
 		return post("/v1/flow/verify/mfa/complete", request, FlowVerifyMFACompleteResponse.class);
 	}
 
-	// TODO: Doc
+	/**
+	 * Start MFA Verification
+	 * @pangea.description Start the process of MFA verification.
+	 * @pangea.operationId authn_post_v1_flow_verify_mfa_start
+	 * @param flowID
+	 * @param mfaProvider
+	 * @return FlowVerifyMFAStartResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * FlowVerifyMFAStartResponse response = client.flow().verify().mfa().start(
+	 * 	"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
+	 * 	MFAProvider.TOTP);
+	 * }
+	 */
 	public FlowVerifyMFAStartResponse start(String flowID, MFAProvider mfaProvider)
 		throws PangeaException, PangeaAPIException {
 		FlowVerifyMFAStartRequest request = new FlowVerifyMFAStartRequest(flowID, mfaProvider);

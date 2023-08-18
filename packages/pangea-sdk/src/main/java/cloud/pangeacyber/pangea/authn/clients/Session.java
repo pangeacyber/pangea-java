@@ -34,18 +34,55 @@ public class Session extends AuthNBaseClient {
 		super(builder);
 	}
 
-	// TODO: Doc
+	/**
+	 * Invalidate Session
+	 * @pangea.description Invalidate a session by session ID.
+	 * @pangea.operationId authn_post_v1_session_invalidate
+	 * @param sessionID
+	 * @return SessionInvalidateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * client.session().invalidate("pmt_zppkzrjguxyblaia6itbiesejn7jejnr");
+	 * }
+	 */
 	public SessionInvalidateResponse invalidate(String sessionID) throws PangeaException, PangeaAPIException {
 		SessionInvalidateRequest request = new SessionInvalidateRequest(sessionID);
 		return post("/v1/session/invalidate", request, SessionInvalidateResponse.class);
 	}
 
-	// TODO: Doc
+	/**
+	 * List session (service token)
+	 * @pangea.description List sessions.
+	 * @pangea.operationId authn_post_v1_session_list
+	 * @param request
+	 * @return SessionListResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * SessionListResponse response = client.session().list(
+	 * 	new SessionListRequest.Builder().build());
+	 * }
+	 */
 	public SessionListResponse list(SessionListRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/session/list", request, SessionListResponse.class);
 	}
 
-	// TODO: Doc
+	/**
+	 * Log out (service token)
+	 * @pangea.description Invalidate all sessions belonging to a user.
+	 * @pangea.operationId authn_post_v1_session_logout
+	 * @param userID The identity of a user or a service
+	 * @return SessionLogoutResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * client.session().logout("pui_xpkhwpnz2cmegsws737xbsqnmnuwtvm5");
+	 * }
+	 */
 	public SessionLogoutResponse logout(String userID) throws PangeaException, PangeaAPIException {
 		SessionLogoutRequest request = new SessionLogoutRequest(userID);
 		return post("/v1/session/logout", request, SessionLogoutResponse.class);

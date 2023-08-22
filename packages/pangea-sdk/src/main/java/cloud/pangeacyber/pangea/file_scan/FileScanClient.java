@@ -1,11 +1,11 @@
-package cloud.pangeacyber.pangea.intel;
+package cloud.pangeacyber.pangea.file_scan;
 
 import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import cloud.pangeacyber.pangea.intel.requests.FileScanRequest;
-import cloud.pangeacyber.pangea.intel.responses.FileScanResponse;
+import cloud.pangeacyber.pangea.file_scan.requests.FileScanRequest;
+import cloud.pangeacyber.pangea.file_scan.responses.FileScanResponse;
 import java.io.File;
 
 public class FileScanClient extends BaseClient {

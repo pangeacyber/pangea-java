@@ -1,4 +1,4 @@
-package cloud.pangeacyber.pangea.intel;
+package cloud.pangeacyber.pangea.file_scan;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -11,9 +11,9 @@ import cloud.pangeacyber.pangea.exceptions.AcceptedRequestException;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import cloud.pangeacyber.pangea.intel.models.FileScanData;
-import cloud.pangeacyber.pangea.intel.requests.FileScanRequest;
-import cloud.pangeacyber.pangea.intel.responses.FileScanResponse;
+import cloud.pangeacyber.pangea.file_scan.models.FileScanData;
+import cloud.pangeacyber.pangea.file_scan.requests.FileScanRequest;
+import cloud.pangeacyber.pangea.file_scan.responses.FileScanResponse;
 import java.io.File;
 import java.io.IOException;
 import org.junit.Before;

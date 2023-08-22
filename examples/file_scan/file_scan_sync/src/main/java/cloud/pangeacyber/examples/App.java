@@ -1,9 +1,9 @@
 package cloud.pangeacyber.examples;
 
-import cloud.pangeacyber.pangea.intel.FileScanClient;
-import cloud.pangeacyber.pangea.intel.models.FileScanData;
-import cloud.pangeacyber.pangea.intel.requests.FileScanRequest;
-import cloud.pangeacyber.pangea.intel.responses.FileScanResponse;
+import cloud.pangeacyber.pangea.file_scan.FileScanClient;
+import cloud.pangeacyber.pangea.file_scan.models.FileScanData;
+import cloud.pangeacyber.pangea.file_scan.requests.FileScanRequest;
+import cloud.pangeacyber.pangea.file_scan.responses.FileScanResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 
 import java.io.File;

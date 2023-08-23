@@ -45,6 +45,13 @@ public class App
                     .build(),
                 file
             );
+
+            System.out.println("File Scan success on first attempt.");
+            FileScanData data = response.getResult().getData();
+            System.out.println("Reputation success");
+            System.out.println("Reputation verdict: " + data.getVerdict());
+            System.out.println("Reputation raw data: " + response.getResult().getRawData());
+            System.exit(0);
 		} catch (AcceptedRequestException e) {
             System.out.println("AcceptedRequestException as expected");
 			exception = e;

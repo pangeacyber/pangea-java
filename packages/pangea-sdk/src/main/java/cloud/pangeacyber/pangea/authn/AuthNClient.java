@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.authn;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.authn.clients.Agreements;
 import cloud.pangeacyber.pangea.authn.clients.AuthNBaseClient;
 import cloud.pangeacyber.pangea.authn.clients.Client;
 import cloud.pangeacyber.pangea.authn.clients.Flow;
@@ -13,6 +14,7 @@ public class AuthNClient extends AuthNBaseClient {
 	private Flow flow;
 	private Client client;
 	private Session session;
+	private Agreements agreements;
 
 	public AuthNClient(Builder builder) {
 		super(builder);
@@ -20,6 +22,7 @@ public class AuthNClient extends AuthNBaseClient {
 		flow = new Flow(builder);
 		client = new Client(builder);
 		session = new Session(builder);
+		agreements = new Agreements(builder);
 	}
 
 	public static class Builder extends AuthNBaseClient.Builder<Builder> {
@@ -47,5 +50,9 @@ public class AuthNClient extends AuthNBaseClient {
 
 	public Session session() {
 		return session;
+	}
+
+	public Agreements agreements() {
+		return agreements;
 	}
 }

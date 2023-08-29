@@ -11,6 +11,8 @@ import cloud.pangeacyber.pangea.authn.models.*;
 import cloud.pangeacyber.pangea.authn.requests.*;
 import cloud.pangeacyber.pangea.authn.responses.*;
 import cloud.pangeacyber.pangea.exceptions.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Random;
 import org.junit.Before;
@@ -35,11 +37,14 @@ public class ITAuthNTest {
 	private static final Profile profileOld = new Profile();
 	private static final Profile profileNew = new Profile();
 	private static String userID = ""; // Will be set once user is created
+	String time;
 
 	@Before
 	public void setUp() throws ConfigException {
 		this.cfg = Config.fromIntegrationEnvironment(environment);
 		client = new AuthNClient.Builder(cfg).build();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+		time = dtf.format(LocalDateTime.now());
 
 		profileOld.put("name", "User name");
 		profileOld.put("country", "Argentina");
@@ -359,6 +364,77 @@ public class ITAuthNTest {
 					System.out.println(e.toString());
 				}
 			}
+		} catch (PangeaAPIException e) {
+			System.out.println(e.toString());
+			assertTrue(false);
+		}
+	}
+
+	public void agreementsCycle(AgreementType type) throws PangeaAPIException, PangeaException {
+		String name = type + "_" + System.currentTimeMillis();
+		String text = "This is agreement text";
+		boolean active = false;
+
+		// Create agreement
+		AgreementCreateResponse createResponse = client
+			.agreements()
+			.create(new AgreementCreateRequest.Builder(type, name, text).setActive(active).build());
+		assertEquals(type.toString(), createResponse.getResult().getType());
+		assertEquals(name, createResponse.getResult().getName());
+		assertEquals(text, createResponse.getResult().getText());
+		assertEquals(active, createResponse.getResult().isActive());
+		String id = createResponse.getResult().getID();
+		assertNotNull(id);
+
+		// Update agreement
+		String new_name = name + "_v2";
+		String new_text = text + " v2";
+
+		AgreementUpdateResponse updateResponse = client
+			.agreements()
+			.update(
+				new AgreementUpdateRequest.Builder(type, id)
+					.setName(new_name)
+					.setText(new_text)
+					.setActive(active)
+					.build()
+			);
+		assertEquals(new_name, updateResponse.getResult().getName());
+		assertEquals(new_text, updateResponse.getResult().getText());
+		assertEquals(active, updateResponse.getResult().isActive());
+
+		// List
+		AgreementListResponse listResponse = client.agreements().list(new AgreementListRequest.Builder().build());
+		assertTrue(listResponse.getResult().getCount() > 0);
+		assertTrue(listResponse.getResult().getAgreements().length > 0);
+		int count = listResponse.getResult().getCount();
+
+		// Delete
+		AgreementDeleteResponse deleteResponse = client
+			.agreements()
+			.delete(new AgreementDeleteRequest.Builder(type, id).build());
+
+		// List again
+		AgreementListResponse listResponseAfterDelete = client
+			.agreements()
+			.list(new AgreementListRequest.Builder().build());
+		assertEquals(count - 1, (int) listResponseAfterDelete.getResult().getCount());
+	}
+
+	@Test
+	public void test_AgreementsCycleEULA() throws PangeaException, PangeaAPIException {
+		try {
+			agreementsCycle(AgreementType.EULA);
+		} catch (PangeaAPIException e) {
+			System.out.println(e.toString());
+			assertTrue(false);
+		}
+	}
+
+	@Test
+	public void test_AgreementsCyclePrivacyPolicy() throws PangeaException, PangeaAPIException {
+		try {
+			agreementsCycle(AgreementType.PRIVACY_POLICY);
 		} catch (PangeaAPIException e) {
 			System.out.println(e.toString());
 			assertTrue(false);

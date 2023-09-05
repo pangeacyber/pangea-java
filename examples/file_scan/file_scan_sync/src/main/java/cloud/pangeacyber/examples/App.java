@@ -12,21 +12,21 @@ import java.io.IOException;
 
 import cloud.pangeacyber.pangea.Config;
 
-public class App
-{
+public class App {
     final static String TESTFILE_PATH = "./src/main/java/cloud/pangeacyber/examples/testfile.pdf";
 
-    public static void main( String[] args )
-    {
+    public static void main(String[] args) {
         System.out.println("File Scan sync start.");
         Config cfg = null;
         try {
             cfg = Config.fromEnvironment(FileScanClient.serviceName);
-            // To work in sync it's need to set up queuedRetryEnabled to true and set up a proper timeout
-            // If timeout it's so little service won't end up and will return an AcceptedRequestException anyway
+            // To work in sync it's need to set up queuedRetryEnabled to true and set up a
+            // proper timeout
+            // If timeout it's so little service won't end up and will return an
+            // AcceptedRequestException anyway
             cfg.setQueuedRetryEnabled(true);
-            cfg.setPollResultTimeout(120*1000);
-        } catch (ConfigException e){
+            cfg.setPollResultTimeout(120 * 1000);
+        } catch (ConfigException e) {
             System.out.println(e);
             System.exit(1);
         }
@@ -40,13 +40,12 @@ public class App
 
             System.out.println("File Scan request...");
             response = client.scan(
-                new FileScanRequest.Builder().provider("crowdstrike")
-                    .raw(true)
-                    .build(),
-                file
-            );
+                    new FileScanRequest.Builder().provider("crowdstrike")
+                            .raw(true)
+                            .build(),
+                    file);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Fail to perfom request: " + e);
             System.exit(1);
         }

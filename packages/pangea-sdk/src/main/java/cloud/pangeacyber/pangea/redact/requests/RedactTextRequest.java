@@ -19,6 +19,10 @@ public class RedactTextRequest extends BaseRequest {
 	String[] rules = null;
 
 	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("rulesets")
+	String[] rulesets = null;
+
+	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("return_result")
 	Boolean returnResult = null;
 
@@ -26,6 +30,7 @@ public class RedactTextRequest extends BaseRequest {
 		this.text = builder.text;
 		this.debug = builder.debug;
 		this.rules = builder.rules;
+		this.rulesets = builder.rulesets;
 		this.returnResult = builder.returnResult;
 	}
 
@@ -41,6 +46,10 @@ public class RedactTextRequest extends BaseRequest {
 		return rules;
 	}
 
+	public String[] getRulesets() {
+		return rulesets;
+	}
+
 	public Boolean getReturnResult() {
 		return returnResult;
 	}
@@ -50,6 +59,7 @@ public class RedactTextRequest extends BaseRequest {
 		String text;
 		Boolean debug = null;
 		String[] rules = null;
+		String[] rulesets = null;
 		Boolean returnResult = null;
 
 		public Builder(String text) {
@@ -67,6 +77,11 @@ public class RedactTextRequest extends BaseRequest {
 
 		public Builder setRules(String[] rules) {
 			this.rules = rules;
+			return this;
+		}
+
+		public Builder setRulesets(String[] rulesets) {
+			this.rulesets = rulesets;
 			return this;
 		}
 

@@ -68,7 +68,7 @@ public abstract class BaseClient {
 			.newLayout("PatternLayout")
 			.addAttribute(
 				"pattern",
-				"{\"time\": %d{yyyy-MM-dd HH:mm:ss.SSS}, \"name\": \"%logger{36}\", \"level\": \"%-5level\", \"message\": %msg%n"
+				"{\"time\": \"%d{yyyy-MM-dd HH:mm:ss.SSS}\", \"name\": \"%logger{36}\", \"level\": \"%-5level\", \"message\": %msg},%n"
 			);
 		AppenderComponentBuilder fileAppenderBuilder = builder
 			.newAppender("File", "File")
@@ -200,7 +200,7 @@ public abstract class BaseClient {
 	private CloseableHttpResponse doGet(String path) throws PangeaException {
 		try {
 			this.logger.debug(
-					String.format("{\"service\": \"%s\", \"action\": \"get\", \"path\": \"%s\"},", serviceName, path)
+					String.format("{\"service\": \"%s\", \"action\": \"get\", \"path\": \"%s\"}", serviceName, path)
 				);
 			HttpGet httpGet = new HttpGet(config.getServiceUrl(serviceName, path));
 			fillHeaders(httpGet);
@@ -208,7 +208,7 @@ public abstract class BaseClient {
 		} catch (Exception e) {
 			this.logger.error(
 					String.format(
-						"{\"service\": \"%s\", \"action\": \"get\", \"path\": \"%s\", \"message\": \"failed to send request\", \"exception\": \"%s\"},",
+						"{\"service\": \"%s\", \"action\": \"get\", \"path\": \"%s\", \"message\": \"failed to send request\", \"exception\": \"%s\"}",
 						serviceName,
 						path,
 						e.toString()
@@ -247,7 +247,7 @@ public abstract class BaseClient {
 
 		this.logger.debug(
 				String.format(
-					"{\"service\": \"%s\", \"action\": \"post\", \"path\": \"%s\", \"data\": %s},",
+					"{\"service\": \"%s\", \"action\": \"post\", \"path\": \"%s\", \"data\": %s}",
 					serviceName,
 					path,
 					body
@@ -268,7 +268,7 @@ public abstract class BaseClient {
 		} catch (Exception e) {
 			this.logger.error(
 					String.format(
-						"{\"service\": \"%s\", \"action\": \"post\", \"path\": \"%s\", \"message\": \"failed to send request\", \"exception\": \"%s\"},",
+						"{\"service\": \"%s\", \"action\": \"post\", \"path\": \"%s\", \"message\": \"failed to send request\", \"exception\": \"%s\"}",
 						serviceName,
 						path,
 						e.toString()
@@ -319,7 +319,7 @@ public abstract class BaseClient {
 
 		this.logger.info(
 				String.format(
-					"{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"start\", \"response\": %s},",
+					"{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"start\", \"response\": %s}",
 					serviceName,
 					body
 				)
@@ -332,7 +332,7 @@ public abstract class BaseClient {
 			delay = getDelay(retryCounter, start);
 			this.logger.debug(
 					String.format(
-						"{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"%d\"},",
+						"{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"%d\"}",
 						serviceName,
 						retryCounter
 					)
@@ -347,7 +347,7 @@ public abstract class BaseClient {
 		}
 
 		this.logger.debug(
-				String.format("{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"exit\"},", serviceName)
+				String.format("{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"exit\"}", serviceName)
 			);
 
 		return response;
@@ -382,7 +382,7 @@ public abstract class BaseClient {
 		String body = readBody(httpResponse);
 		this.logger.debug(
 				String.format(
-					"{\"service\": \"%s\", \"action\": \"check response\", \"response\": %s},",
+					"{\"service\": \"%s\", \"action\": \"check response\", \"response\": %s}",
 					serviceName,
 					body
 				)
@@ -399,7 +399,7 @@ public abstract class BaseClient {
 			} catch (Exception e) {
 				this.logger.error(
 						String.format(
-							"{\"service\": \"%s\", \"action\": \"check response\", \"message\": \"failed to parse result\", \"response\": %s, \"exception\": \"%s\"},",
+							"{\"service\": \"%s\", \"action\": \"check response\", \"message\": \"failed to parse result\", \"response\": %s, \"exception\": \"%s\"}",
 							serviceName,
 							body,
 							e.toString()
@@ -420,7 +420,7 @@ public abstract class BaseClient {
 		} catch (Exception e) {
 			this.logger.error(
 					String.format(
-						"{\"service\": \"%s\", \"action\": \"check response\", \"message\": \"failed to parse response error\", \"response\": %s, \"exception\": \"%s\"},",
+						"{\"service\": \"%s\", \"action\": \"check response\", \"message\": \"failed to parse response error\", \"response\": %s, \"exception\": \"%s\"}",
 						serviceName,
 						body,
 						e.toString()

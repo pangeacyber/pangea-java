@@ -1,5 +1,8 @@
 package cloud.pangeacyber.pangea;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -19,6 +22,14 @@ public class Utils {
 
 	public static String hashSHA1(String data) {
 		return DigestUtils.sha1Hex(data);
+	}
+
+	public static String hashSHA256fromFilepath(String filepath) throws IOException, FileNotFoundException {
+		return DigestUtils.sha256Hex(new FileInputStream(filepath));
+	}
+
+	public static String hashSHA1fromFilepath(String filepath) throws IOException, FileNotFoundException {
+		return DigestUtils.sha1Hex(new FileInputStream(filepath));
 	}
 
 	public static String getHashPrefix(String hash, int len) {

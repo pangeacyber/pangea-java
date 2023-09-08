@@ -18,14 +18,14 @@ public final class DomainReputationResult extends IntelCommonResult {
 	DomainReputationData data;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("data_list")
-	HashMap<String,DomainReputationDataItem> dataList = null;
+	@JsonProperty("data_details")
+	HashMap<String,DomainReputationDataItem> dataDetails = null;
 
 	public DomainReputationData getData() {
 		return data;
 	}
 
-	public Map<String,DomainReputationDataItem> getDataList() {
-		return dataList;
+	public Map<String,DomainReputationDataItem> getDataDetails() {
+		return dataDetails;
 	}
 }

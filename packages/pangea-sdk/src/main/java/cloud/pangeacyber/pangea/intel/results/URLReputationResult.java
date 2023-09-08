@@ -18,15 +18,15 @@ public final class URLReputationResult extends IntelCommonResult {
 	URLReputationData data;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("data_list")
-	HashMap<String,URLReputationDataItem> dataList = null;
+	@JsonProperty("data_details")
+	HashMap<String,URLReputationDataItem> dataDetails = null;
 
 	public URLReputationData getData() {
 		return data;
 	}
 
-	public Map<String,URLReputationDataItem> getDataList() {
-		return dataList;
+	public Map<String,URLReputationDataItem> getDataDetails() {
+		return dataDetails;
 	}
 
 }

@@ -40,7 +40,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataList());
+		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -55,7 +55,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataList());
+		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataList());
+		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -87,7 +87,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataList());
+		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataList());
+		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -119,7 +119,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataList());
+		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -139,7 +139,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataList());
+		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -159,7 +159,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataList());
+		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -182,7 +182,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
-		assertEquals(3, response.getResult().getDataList().size());
+		assertEquals(3, response.getResult().getDataDetails().size());
 	}
 
 

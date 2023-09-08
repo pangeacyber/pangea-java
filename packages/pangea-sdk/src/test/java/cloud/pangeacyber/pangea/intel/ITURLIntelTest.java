@@ -40,6 +40,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
+		assertNull(response.getResult().getDataList());
 	}
 
 	@Test
@@ -54,6 +55,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
+		assertNull(response.getResult().getDataList());
 	}
 
 	@Test
@@ -69,6 +71,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
+		assertNull(response.getResult().getDataList());
 	}
 
 	@Test
@@ -84,6 +87,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
+		assertNull(response.getResult().getDataList());
 	}
 
 	@Test
@@ -99,6 +103,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+		assertNull(response.getResult().getDataList());
 	}
 
 	@Test
@@ -114,6 +119,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+		assertNull(response.getResult().getDataList());
 	}
 
 	@Test
@@ -133,6 +139,7 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
+		assertNull(response.getResult().getDataList());
 	}
 
 	@Test
@@ -152,7 +159,32 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+		assertNull(response.getResult().getDataList());
 	}
+
+	@Test
+	public void testUrlReputationMaliciousBulk() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		String[] urlList = {"http://113.235.101.11:54384",
+			"http://45.14.49.109:54819",
+			"https://chcial.ru/uplcv?utm_term%3Dcost%2Bto%2Brezone%2Bland"};
+		URLReputationResponse response = client.reputation(
+			new URLReputationRequest.Builder(urlList)
+				.provider("crowdstrike")
+				.verbose(true)
+				.raw(true)
+				.build()
+		);
+
+		assertTrue(response.isOk());
+
+		IntelReputationData data = response.getResult().getData();
+		assertEquals("malicious", data.getVerdict());
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+		assertEquals(3, response.getResult().getDataList().size());
+	}
+
 
 	@Test(expected = ValidationException.class)
 	public void testEmptyURL() throws PangeaException, PangeaAPIException {

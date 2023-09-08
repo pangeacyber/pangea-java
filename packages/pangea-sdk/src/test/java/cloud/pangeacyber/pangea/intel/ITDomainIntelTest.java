@@ -169,7 +169,7 @@ public class ITDomainIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
-		assertEquals(3, response.getResult().getDataList().length);
+		assertEquals(3, response.getResult().getDataList().size());
 	}
 
 	@Test(expected = ValidationException.class)

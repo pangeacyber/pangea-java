@@ -2,6 +2,10 @@ package cloud.pangeacyber.pangea.intel.results;
 
 import cloud.pangeacyber.pangea.intel.models.DomainReputationData;
 import cloud.pangeacyber.pangea.intel.models.DomainReputationDataItem;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -15,13 +19,13 @@ public final class DomainReputationResult extends IntelCommonResult {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("data_list")
-	DomainReputationDataItem[] dataList;
+	HashMap<String,DomainReputationDataItem> dataList = null;
 
 	public DomainReputationData getData() {
 		return data;
 	}
 
-	public DomainReputationDataItem[] getDataList() {
+	public Map<String,DomainReputationDataItem> getDataList() {
 		return dataList;
 	}
 }

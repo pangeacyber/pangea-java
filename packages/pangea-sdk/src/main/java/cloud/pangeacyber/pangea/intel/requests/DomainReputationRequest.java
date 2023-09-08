@@ -22,16 +22,14 @@ public class DomainReputationRequest extends IntelCommonRequest {
 
 	public static class Builder extends IntelCommonRequest.CommonBuilder<Builder> {
 
-		String domain;
-		String[] domainList;
+		String domain = null;
+		String[] domainList = null;
 
 		public Builder(String domain) {
 			this.domain = domain;
-			this.domainList = null;
 		}
 
 		public Builder(String[] domainList) {
-			this.domain = null;
 			this.domainList = domainList;
 		}
 
@@ -42,5 +40,9 @@ public class DomainReputationRequest extends IntelCommonRequest {
 
 	public String getDomain() {
 		return domain;
+	}
+
+	public String[] getDomainList() {
+		return domainList;
 	}
 }

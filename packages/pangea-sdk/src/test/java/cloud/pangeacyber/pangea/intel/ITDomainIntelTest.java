@@ -12,6 +12,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
+import cloud.pangeacyber.pangea.intel.models.DomainWhoIsData;
 import cloud.pangeacyber.pangea.intel.models.IntelReputationData;
 import cloud.pangeacyber.pangea.intel.requests.*;
 import cloud.pangeacyber.pangea.intel.responses.*;
@@ -21,7 +22,7 @@ import org.junit.Test;
 public class ITDomainIntelTest {
 
 	DomainIntelClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	TestEnvironment environment = TestEnvironment.DEVELOP;
 
 	@Before
 	public void setUp() throws ConfigException {
@@ -144,6 +145,21 @@ public class ITDomainIntelTest {
 
 		IntelReputationData data = response.getResult().getData();
 		assertEquals("malicious", data.getVerdict());
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testDomainWhoIs() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		DomainWhoIsResponse response = client.whoIs(
+			new DomainWhoIsRequest.Builder("737updatesboeing.com").provider("whoisxml").verbose(true).raw(true).build()
+		);
+		assertTrue(response.isOk());
+
+		DomainWhoIsData data = response.getResult().getData();
+		assertNotNull(data.getDomainName());
+		assertNotNull(data.getDomainAvailability());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}

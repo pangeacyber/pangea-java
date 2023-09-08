@@ -28,6 +28,26 @@ public class FileScanClient extends BaseClient {
 		}
 	}
 
+	/**
+	 * Scan
+	 * @pangea.description Scan a file for malicious content.
+	 * @pangea.operationId file_scan_post_v1_scan
+	 * @param request
+	 * @param file
+	 * @return FileScanResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * File file = new File("./path/to/file.pdf");
+	 *
+	 * FileScanResponse response = client.scan(
+	 * 	new FileScanRequest.Builder().provider("crowdstrike")
+	 * 		.raw(true)
+	 * 		.build(),
+	 * 	file);
+	 * }
+	 */
 	public FileScanResponse scan(FileScanRequest request, File file) throws PangeaException, PangeaAPIException {
 		return post("/v1/scan", request, file, FileScanResponse.class);
 	}

@@ -1,0 +1,206 @@
+package cloud.pangeacyber.pangea.authn.models;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.List;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class FilterUserInviteList extends Filter {
+
+	public String getCallback() {
+		return (String) this.get("callback");
+	}
+
+	public void setCallback(String callback) {
+		this.put("callback", callback);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> getCallbackContains() {
+		return (List<String>) this.get("callback__contains");
+	}
+
+	public void setCallbackContains(List<String> callbackContains) {
+		this.put("callback__contains", callbackContains);
+	}
+
+	public String getCreatedAt() {
+		return (String) this.get("created_at");
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.put("created_at", createdAt);
+	}
+
+	public String getCreatedAtGt() {
+		return (String) this.get("created_at__gt");
+	}
+
+	public void setCreatedAtGt(String createdAtGt) {
+		this.put("created_at__gt", createdAtGt);
+	}
+
+	public String getCreatedAtGte() {
+		return (String) this.get("created_at__gte");
+	}
+
+	public void setCreatedAtGte(String createdAtGte) {
+		this.put("created_at__gte", createdAtGte);
+	}
+
+	public String getCreatedAtLt() {
+		return (String) this.get("created_at__lt");
+	}
+
+	public void setCreatedAtLt(String createdAtLt) {
+		this.put("created_at__lt", createdAtLt);
+	}
+
+	public String getCreatedAtLte() {
+		return (String) this.get("created_at__lte");
+	}
+
+	public void setCreatedAtLte(String createdAtLte) {
+		this.put("created_at__lte", createdAtLte);
+	}
+
+	public String getEmail() {
+		return (String) this.get("email");
+	}
+
+	public void setEmail(String email) {
+		this.put("email", email);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> getEmailContains() {
+		return (List<String>) this.get("email__contains");
+	}
+
+	public void setEmailContains(List<String> emailContains) {
+		this.put("email__contains", emailContains);
+	}
+
+	public String getExpire() {
+		return (String) this.get("expire");
+	}
+
+	public void setExpire(String expire) {
+		this.put("expire", expire);
+	}
+
+	public String getExpireGt() {
+		return (String) this.get("expire__gt");
+	}
+
+	public void setExpireGt(String expireGt) {
+		this.put("expire__gt", expireGt);
+	}
+
+	public String getExpireGte() {
+		return (String) this.get("expire__gte");
+	}
+
+	public void setExpireGte(String expireGte) {
+		this.put("expire__gte", expireGte);
+	}
+
+	public String getExpireLt() {
+		return (String) this.get("expire__lt");
+	}
+
+	public void setExpireLt(String expireLt) {
+		this.put("expire__lt", expireLt);
+	}
+
+	public String getExpireLte() {
+		return (String) this.get("expire__lte");
+	}
+
+	public void setExpireLte(String expireLte) {
+		this.put("expire__lte", expireLte);
+	}
+
+	public String getId() {
+		return (String) this.get("id");
+	}
+
+	public void setId(String id) {
+		this.put("id", id);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> getIdContains() {
+		return (List<String>) this.get("id__contains");
+	}
+
+	public void setIdContains(List<String> idContains) {
+		this.put("id__contains", idContains);
+	}
+
+	public String getInviteOrg() {
+		return (String) this.get("invite_org");
+	}
+
+	public void setInviteOrg(String inviteOrg) {
+		this.put("invite_org", inviteOrg);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> getInviteOrgContains() {
+		return (List<String>) this.get("invite_org__contains");
+	}
+
+	public void setInviteOrgContains(List<String> inviteOrgContains) {
+		this.put("invite_org__contains", inviteOrgContains);
+	}
+
+	public String getInviter() {
+		return (String) this.get("inviter");
+	}
+
+	public void setInviter(String inviter) {
+		this.put("inviter", inviter);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> getInviterContains() {
+		return (List<String>) this.get("inviter__contains");
+	}
+
+	public void setInviterContains(List<String> inviterContains) {
+		this.put("inviter__contains", inviterContains);
+	}
+
+	public Boolean getIsSignup() {
+		return (Boolean) this.get("is_signup");
+	}
+
+	public void setIsSignup(Boolean isSignup) {
+		this.put("is_signup", isSignup);
+	}
+
+	public Boolean getRequireMfa() {
+		return (Boolean) this.get("require_mfa");
+	}
+
+	public void setRequireMfa(Boolean requireMfa) {
+		this.put("require_mfa", requireMfa);
+	}
+
+	public String getState() {
+		return (String) this.get("state");
+	}
+
+	public void setState(String state) {
+		this.put("state", state);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<String> getStateContains() {
+		return (List<String>) this.get("state__contains");
+	}
+
+	public void setStateContains(List<String> stateContains) {
+		this.put("state__contains", stateContains);
+	}
+}

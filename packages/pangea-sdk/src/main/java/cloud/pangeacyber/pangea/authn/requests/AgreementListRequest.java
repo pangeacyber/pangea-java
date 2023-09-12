@@ -2,6 +2,8 @@ package cloud.pangeacyber.pangea.authn.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.models.AgreementListOrderBy;
+import cloud.pangeacyber.pangea.authn.models.Filter;
+import cloud.pangeacyber.pangea.authn.models.FilterAgreementList;
 import cloud.pangeacyber.pangea.authn.models.ListOrder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,7 +16,7 @@ public class AgreementListRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("filter")
-	Map<String, String> filter;
+	Filter filter;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("last")
@@ -42,7 +44,7 @@ public class AgreementListRequest extends BaseRequest {
 
 	public static class Builder {
 
-		Map<String, String> filter;
+		Filter filter;
 		String last;
 		ListOrder order;
 		AgreementListOrderBy orderBy;
@@ -54,8 +56,18 @@ public class AgreementListRequest extends BaseRequest {
 			return new AgreementListRequest(this);
 		}
 
+		/**
+		 * @deprecated Use setFilter(FilterAgreementList filter) instead
+		 */
 		public Builder setFilter(Map<String, String> filter) {
-			this.filter = filter;
+			this.filter = new Filter();
+			this.filter.putAll(filter);
+			return this;
+		}
+
+		public Builder setFilter(FilterAgreementList filter) {
+			this.filter = new Filter();
+			this.filter.putAll(filter);
 			return this;
 		}
 

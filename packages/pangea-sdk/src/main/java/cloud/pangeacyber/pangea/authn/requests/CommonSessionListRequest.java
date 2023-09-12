@@ -2,6 +2,8 @@ package cloud.pangeacyber.pangea.authn.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.models.Filter;
+import cloud.pangeacyber.pangea.authn.models.FilterSessionList;
+import cloud.pangeacyber.pangea.authn.models.FilterUserInviteList;
 import cloud.pangeacyber.pangea.authn.models.ListOrder;
 import cloud.pangeacyber.pangea.authn.models.SessionOrderBy;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -59,8 +61,18 @@ public class CommonSessionListRequest extends BaseRequest {
 			return (B) this;
 		}
 
+		/**
+		 * @deprecated Use setFilter(FilterSessionList filter) instead
+		 */
 		public B setFilter(Filter filter) {
-			this.filter = filter;
+			this.filter = new Filter();
+			this.filter.putAll(filter);
+			return self();
+		}
+
+		public B setFilter(FilterSessionList filter) {
+			this.filter = new Filter();
+			this.filter.putAll(filter);
 			return self();
 		}
 

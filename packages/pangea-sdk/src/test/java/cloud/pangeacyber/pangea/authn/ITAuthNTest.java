@@ -212,11 +212,13 @@ public class ITAuthNTest {
 			assertNotNull(loginResp.getResult().getRefreshToken());
 			String token = loginResp.getResult().getActiveToken().getToken();
 
+			FilterSessionList filter = new FilterSessionList();
+
 			// List client sessions
 			ClientSessionListResponse listResp = client
 				.client()
 				.session()
-				.list(new ClientSessionListRequest.Builder(token).build());
+				.list(new ClientSessionListRequest.Builder(token).setFilter(filter).build());
 			assertTrue(listResp.isOk());
 			assertTrue(listResp.getResult().getSessions().length > 0);
 
@@ -251,8 +253,12 @@ public class ITAuthNTest {
 			assertNotNull(loginResp.getResult().getRefreshToken());
 			String token = loginResp.getResult().getActiveToken().getToken();
 
+			FilterSessionList filter = new FilterSessionList();
+
 			// Session list
-			SessionListResponse listResp = client.session().list(new SessionListRequest.Builder().build());
+			SessionListResponse listResp = client
+				.session()
+				.list(new SessionListRequest.Builder().setFilter(filter).build());
 			assertTrue(listResp.isOk());
 			assertTrue(listResp.getResult().getSessions().length > 0);
 
@@ -327,12 +333,14 @@ public class ITAuthNTest {
 			assertTrue(false);
 		}
 
+		FilterUserInviteList filter = new FilterUserInviteList();
+
 		try {
 			// List users invites
 			UserInviteListResponse inviteListResp1 = client
 				.user()
 				.invite()
-				.list(new UserInviteListRequest.Builder().build());
+				.list(new UserInviteListRequest.Builder().setFilter(filter).build());
 			assertTrue(inviteListResp1.isOk());
 			assertNotNull(inviteListResp1.getResult().getInvites());
 			assertTrue(inviteListResp1.getResult().getInvites().length > 0);
@@ -350,8 +358,12 @@ public class ITAuthNTest {
 
 	@Test
 	public void testE_ListUsers() throws PangeaException, PangeaAPIException {
+		FilterUserList filter = new FilterUserList();
+
 		try {
-			UserListResponse userListResp1 = client.user().list(new UserListRequest.Builder().build());
+			UserListResponse userListResp1 = client
+				.user()
+				.list(new UserListRequest.Builder().setFilter(filter).build());
 			assertTrue(userListResp1.isOk());
 			assertTrue(userListResp1.getResult().getUsers().length > 0);
 
@@ -404,7 +416,10 @@ public class ITAuthNTest {
 		assertEquals(active, updateResponse.getResult().isActive());
 
 		// List
-		AgreementListResponse listResponse = client.agreements().list(new AgreementListRequest.Builder().build());
+		FilterAgreementList filter = new FilterAgreementList();
+		AgreementListResponse listResponse = client
+			.agreements()
+			.list(new AgreementListRequest.Builder().setFilter(filter).build());
 		assertTrue(listResponse.getResult().getCount() > 0);
 		assertTrue(listResponse.getResult().getAgreements().length > 0);
 		int count = listResponse.getResult().getCount();

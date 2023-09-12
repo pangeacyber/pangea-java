@@ -2,6 +2,7 @@ package cloud.pangeacyber.pangea.authn.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.models.Filter;
+import cloud.pangeacyber.pangea.authn.models.FilterUserList;
 import cloud.pangeacyber.pangea.authn.models.UserListOrderBy;
 import cloud.pangeacyber.pangea.vault.models.ItemOrder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -50,8 +51,18 @@ public class UserListRequest extends BaseRequest {
 
 		public Builder() {}
 
+		/**
+		 * @deprecated Use setFilter(FilterUserList filter) instead
+		 */
 		public Builder setFilter(Filter filter) {
-			this.filter = filter;
+			this.filter = new Filter();
+			this.filter.putAll(filter);
+			return this;
+		}
+
+		public Builder setFilter(FilterUserList filter) {
+			this.filter = new Filter();
+			this.filter.putAll(filter);
 			return this;
 		}
 

@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FilterAgreementList extends Filter {
 	private FilterEqual<Boolean> _active;
-	private FilterFullRange<String> _created_at;
-	private FilterFullRange<String> _published_at;
+	private FilterRange<String> _created_at;
+	private FilterRange<String> _published_at;
 	private FilterMatch<String> _type;
 	private FilterMatch<String> _id;
 	private FilterMatch<String> _name;
@@ -15,8 +15,8 @@ public class FilterAgreementList extends Filter {
 
 	public FilterAgreementList(){
 		_active = new FilterEqual<Boolean>("active", this);
-		_created_at = new FilterFullRange<String>("created_at", this);
-		_published_at = new FilterFullRange<String>("published_at", this);
+		_created_at = new FilterRange<String>("created_at", this);
+		_published_at = new FilterRange<String>("published_at", this);
 		_type = new FilterMatch<String>("type", this);
 		_id = new FilterMatch<String>("id", this);
 		_name = new FilterMatch<String>("name", this);
@@ -27,11 +27,11 @@ public class FilterAgreementList extends Filter {
 		return _active;
 	}
 
-	public FilterFullRange<String> created_at() {
+	public FilterRange<String> created_at() {
 		return _created_at;
 	}
 
-	public FilterFullRange<String> published_at() {
+	public FilterRange<String> published_at() {
 		return _published_at;
 	}
 

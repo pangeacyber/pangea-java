@@ -1,13 +1,9 @@
 package cloud.pangeacyber.pangea.authn.models;
 
-public class FilterRange<T> {
-
-    String name;
-    Filter map;
+public class FilterRange<T> extends FilterEqual<T>{
 
     public FilterRange(String name, Filter map){
-        this.name = name;
-        this.map = map;
+        super(name, map);
     }
 
     public void setLessThan(T value){

@@ -1,206 +1,76 @@
 package cloud.pangeacyber.pangea.authn.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FilterUserInviteList extends Filter {
 
-	public String getCallback() {
-		return (String) this.get("callback");
+	private FilterMatch<String> _callback;
+	private FilterMatch<String> _email;
+	private FilterMatch<String> _id;
+	private FilterMatch<String> _invite_org;
+	private FilterMatch<String> _inviter;
+	private FilterMatch<String> _state;
+
+	private FilterEqual<Boolean> _signup;
+	private FilterEqual<Boolean> _require_mfa;
+
+	private FilterRange<String> _expire;
+	private FilterRange<String> _created_at;
+
+	public FilterUserInviteList() {
+		_callback = new FilterMatch<String>("callback", this);
+		_email = new FilterMatch<String>("email", this);
+		_id = new FilterMatch<String>("id", this);
+		_invite_org = new FilterMatch<String>("invite_org", this);
+		_inviter = new FilterMatch<String>("inviter", this);
+		_state = new FilterMatch<String>("state", this);
+
+		_signup = new FilterEqual<Boolean>("signup", this);
+		_require_mfa = new FilterEqual<Boolean>("require_mfa", this);
+
+		_expire = new FilterRange<String>("expire", this);
+		_created_at = new FilterRange<String>("created_at", this);
 	}
 
-	public void setCallback(String callback) {
-		this.put("callback", callback);
+	public FilterMatch<String> callback() {
+		return _callback;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<String> getCallbackContains() {
-		return (List<String>) this.get("callback__contains");
+	public FilterMatch<String> email() {
+		return _email;
 	}
 
-	public void setCallbackContains(List<String> callbackContains) {
-		this.put("callback__contains", callbackContains);
+	public FilterMatch<String> id() {
+		return _id;
 	}
 
-	public String getCreatedAt() {
-		return (String) this.get("created_at");
+	public FilterMatch<String> invite_org() {
+		return _invite_org;
 	}
 
-	public void setCreatedAt(String createdAt) {
-		this.put("created_at", createdAt);
+	public FilterMatch<String> inviter() {
+		return _inviter;
 	}
 
-	public String getCreatedAtGt() {
-		return (String) this.get("created_at__gt");
+	public FilterMatch<String> state() {
+		return _state;
 	}
 
-	public void setCreatedAtGt(String createdAtGt) {
-		this.put("created_at__gt", createdAtGt);
+	public FilterEqual<Boolean> signup() {
+		return _signup;
 	}
 
-	public String getCreatedAtGte() {
-		return (String) this.get("created_at__gte");
+	public FilterEqual<Boolean> require_mfa() {
+		return _require_mfa;
 	}
 
-	public void setCreatedAtGte(String createdAtGte) {
-		this.put("created_at__gte", createdAtGte);
+	public FilterRange<String> expire() {
+		return _expire;
 	}
 
-	public String getCreatedAtLt() {
-		return (String) this.get("created_at__lt");
+	public FilterRange<String> created_at() {
+		return _created_at;
 	}
 
-	public void setCreatedAtLt(String createdAtLt) {
-		this.put("created_at__lt", createdAtLt);
-	}
-
-	public String getCreatedAtLte() {
-		return (String) this.get("created_at__lte");
-	}
-
-	public void setCreatedAtLte(String createdAtLte) {
-		this.put("created_at__lte", createdAtLte);
-	}
-
-	public String getEmail() {
-		return (String) this.get("email");
-	}
-
-	public void setEmail(String email) {
-		this.put("email", email);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<String> getEmailContains() {
-		return (List<String>) this.get("email__contains");
-	}
-
-	public void setEmailContains(List<String> emailContains) {
-		this.put("email__contains", emailContains);
-	}
-
-	public String getExpire() {
-		return (String) this.get("expire");
-	}
-
-	public void setExpire(String expire) {
-		this.put("expire", expire);
-	}
-
-	public String getExpireGt() {
-		return (String) this.get("expire__gt");
-	}
-
-	public void setExpireGt(String expireGt) {
-		this.put("expire__gt", expireGt);
-	}
-
-	public String getExpireGte() {
-		return (String) this.get("expire__gte");
-	}
-
-	public void setExpireGte(String expireGte) {
-		this.put("expire__gte", expireGte);
-	}
-
-	public String getExpireLt() {
-		return (String) this.get("expire__lt");
-	}
-
-	public void setExpireLt(String expireLt) {
-		this.put("expire__lt", expireLt);
-	}
-
-	public String getExpireLte() {
-		return (String) this.get("expire__lte");
-	}
-
-	public void setExpireLte(String expireLte) {
-		this.put("expire__lte", expireLte);
-	}
-
-	public String getId() {
-		return (String) this.get("id");
-	}
-
-	public void setId(String id) {
-		this.put("id", id);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<String> getIdContains() {
-		return (List<String>) this.get("id__contains");
-	}
-
-	public void setIdContains(List<String> idContains) {
-		this.put("id__contains", idContains);
-	}
-
-	public String getInviteOrg() {
-		return (String) this.get("invite_org");
-	}
-
-	public void setInviteOrg(String inviteOrg) {
-		this.put("invite_org", inviteOrg);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<String> getInviteOrgContains() {
-		return (List<String>) this.get("invite_org__contains");
-	}
-
-	public void setInviteOrgContains(List<String> inviteOrgContains) {
-		this.put("invite_org__contains", inviteOrgContains);
-	}
-
-	public String getInviter() {
-		return (String) this.get("inviter");
-	}
-
-	public void setInviter(String inviter) {
-		this.put("inviter", inviter);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<String> getInviterContains() {
-		return (List<String>) this.get("inviter__contains");
-	}
-
-	public void setInviterContains(List<String> inviterContains) {
-		this.put("inviter__contains", inviterContains);
-	}
-
-	public Boolean getIsSignup() {
-		return (Boolean) this.get("is_signup");
-	}
-
-	public void setIsSignup(Boolean isSignup) {
-		this.put("is_signup", isSignup);
-	}
-
-	public Boolean getRequireMfa() {
-		return (Boolean) this.get("require_mfa");
-	}
-
-	public void setRequireMfa(Boolean requireMfa) {
-		this.put("require_mfa", requireMfa);
-	}
-
-	public String getState() {
-		return (String) this.get("state");
-	}
-
-	public void setState(String state) {
-		this.put("state", state);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<String> getStateContains() {
-		return (List<String>) this.get("state__contains");
-	}
-
-	public void setStateContains(List<String> stateContains) {
-		this.put("state__contains", stateContains);
-	}
 }

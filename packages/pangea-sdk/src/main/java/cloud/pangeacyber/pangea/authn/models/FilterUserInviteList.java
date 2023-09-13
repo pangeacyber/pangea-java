@@ -2,6 +2,10 @@ package cloud.pangeacyber.pangea.authn.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import cloud.pangeacyber.pangea.filters.FilterEqual;
+import cloud.pangeacyber.pangea.filters.FilterMatch;
+import cloud.pangeacyber.pangea.filters.FilterRange;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FilterUserInviteList extends Filter {
 

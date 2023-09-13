@@ -1,6 +1,8 @@
-package cloud.pangeacyber.pangea.authn.models;
+package cloud.pangeacyber.pangea.filters;
 
 import java.util.List;
+
+import cloud.pangeacyber.pangea.authn.models.Filter;
 
 public class FilterMatch<T> extends FilterEqual<T> {
 

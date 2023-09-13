@@ -2,6 +2,7 @@ package cloud.pangeacyber.pangea.authn.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import cloud.pangeacyber.pangea.filters.Filter;
 import cloud.pangeacyber.pangea.filters.FilterEqual;
 import cloud.pangeacyber.pangea.filters.FilterMatch;
 import cloud.pangeacyber.pangea.filters.FilterRange;

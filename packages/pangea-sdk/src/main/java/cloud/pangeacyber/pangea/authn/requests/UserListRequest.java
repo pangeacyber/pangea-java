@@ -1,9 +1,9 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
-import cloud.pangeacyber.pangea.authn.models.Filter;
 import cloud.pangeacyber.pangea.authn.models.FilterUserList;
 import cloud.pangeacyber.pangea.authn.models.UserListOrderBy;
+import cloud.pangeacyber.pangea.filters.Filter;
 import cloud.pangeacyber.pangea.vault.models.ItemOrder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

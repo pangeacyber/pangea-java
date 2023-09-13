@@ -1,7 +1,5 @@
 package cloud.pangeacyber.pangea.filters;
 
-import cloud.pangeacyber.pangea.authn.models.Filter;
-
 public class FilterBase {
     protected String name;
     protected Filter map;

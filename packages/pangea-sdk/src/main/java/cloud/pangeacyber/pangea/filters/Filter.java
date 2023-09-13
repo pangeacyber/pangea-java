@@ -1,4 +1,4 @@
-package cloud.pangeacyber.pangea.authn.models;
+package cloud.pangeacyber.pangea.filters;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;

@@ -1,8 +1,10 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
-import cloud.pangeacyber.pangea.authn.models.Filter;
+import cloud.pangeacyber.pangea.authn.models.FilterUserInviteList;
+import cloud.pangeacyber.pangea.authn.models.FilterUserList;
 import cloud.pangeacyber.pangea.authn.models.UserInviteListOrderBy;
+import cloud.pangeacyber.pangea.filters.Filter;
 import cloud.pangeacyber.pangea.vault.models.ItemOrder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -50,8 +52,18 @@ public class UserInviteListRequest extends BaseRequest {
 
 		public Builder() {}
 
+		/**
+		 * @deprecated Use setFilter(FilterUserInviteList filter) instead
+		 */
 		public Builder setFilter(Filter filter) {
-			this.filter = filter;
+			this.filter = new Filter();
+			this.filter.putAll(filter);
+			return this;
+		}
+
+		public Builder setFilter(FilterUserInviteList filter) {
+			this.filter = new Filter();
+			this.filter.putAll(filter);
 			return this;
 		}
 

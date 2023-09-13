@@ -6,7 +6,7 @@ import cloud.pangeacyber.pangea.authn.models.Filter;
 
 public class FilterMatch<T> extends FilterEqual<T> {
 
-    FilterMatch(String name, Filter map) {
+    public FilterMatch(String name, Filter map) {
         super(name, map);
     }
 

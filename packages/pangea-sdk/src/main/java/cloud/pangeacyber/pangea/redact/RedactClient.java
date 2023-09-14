@@ -12,10 +12,9 @@ import cloud.pangeacyber.pangea.redact.responses.RedactTextResponse;
 public class RedactClient extends BaseClient {
 
 	public static final String serviceName = "redact";
-	private static final boolean supportMultiConfig = false;
 
 	public RedactClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

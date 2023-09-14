@@ -35,16 +35,16 @@ import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 public abstract class BaseClient {
 
-	Config config;
+	protected Config config;
 	protected Logger logger;
 	CloseableHttpClient httpClient;
 	HttpRequest.Builder httpRequestBuilder;
 	String serviceName;
 	Map<String, String> customHeaders = null;
 	String userAgent = "pangea-java/default";
-	private boolean supportMultiConfig = false;
+	private String configID = null;
 
-	protected BaseClient(Builder<?> builder, String serviceName, boolean supportMultiConfig) {
+	protected BaseClient(Builder<?> builder, String serviceName) {
 		this.config = builder.config;
 		this.serviceName = serviceName;
 		if (builder.logger != null) {
@@ -54,7 +54,6 @@ public abstract class BaseClient {
 		}
 		this.httpClient = buildClient();
 		this.setUserAgent(config.getCustomUserAgent());
-		this.supportMultiConfig = supportMultiConfig;
 	}
 
 	private Logger buildDefaultLogger() {
@@ -80,6 +79,14 @@ public abstract class BaseClient {
 		Configurator.initialize(builder.build());
 
 		return LogManager.getLogger("pangea");
+	}
+
+	protected void setConfigID(String configID) {
+		this.configID = configID;
+	}
+
+	public String getConfigID() {
+		return this.configID;
 	}
 
 	public static class Builder<B extends Builder<B>> {
@@ -235,8 +242,8 @@ public abstract class BaseClient {
 		ObjectMapper mapper = new ObjectMapper();
 		String body;
 
-		if (this.supportMultiConfig == true && this.config.getConfigID() != null && request.getConfigID() == null) {
-			request.setConfigID(this.config.getConfigID());
+		if (this.configID != null && request.getConfigID() == null) {
+			request.setConfigID(this.configID);
 		}
 
 		try {

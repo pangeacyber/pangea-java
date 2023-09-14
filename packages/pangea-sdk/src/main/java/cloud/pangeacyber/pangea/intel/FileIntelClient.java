@@ -17,10 +17,9 @@ import org.apache.commons.codec.binary.Hex;
 public class FileIntelClient extends BaseClient {
 
 	public static final String serviceName = "file-intel";
-	private static final boolean supportMultiConfig = false;
 
 	public FileIntelClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

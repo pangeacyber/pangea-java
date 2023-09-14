@@ -130,10 +130,9 @@ final class DeleteRequest extends BaseRequest {
 public class VaultClient extends BaseClient {
 
 	public static final String serviceName = "vault";
-	private static final boolean supportMultiConfig = false;
 
 	public VaultClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

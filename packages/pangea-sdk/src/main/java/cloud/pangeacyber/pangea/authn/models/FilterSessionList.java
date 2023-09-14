@@ -1,16 +1,15 @@
 package cloud.pangeacyber.pangea.authn.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import cloud.pangeacyber.pangea.filters.Filter;
 import cloud.pangeacyber.pangea.filters.FilterEqual;
 import cloud.pangeacyber.pangea.filters.FilterMatch;
 import cloud.pangeacyber.pangea.filters.FilterRange;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FilterSessionList extends Filter {
+
 	private FilterMatch<String> _id;
 	private FilterMatch<String> _type;
 	private FilterMatch<String> _identity;
@@ -20,7 +19,6 @@ public class FilterSessionList extends Filter {
 	private FilterRange<String> _expire;
 
 	private FilterEqual<List<String>> _scopes;
-
 
 	public FilterSessionList() {
 		_id = new FilterMatch<String>("id", this);
@@ -61,5 +59,4 @@ public class FilterSessionList extends Filter {
 	public FilterEqual<List<String>> scopes() {
 		return _scopes;
 	}
-
 }

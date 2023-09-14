@@ -1,11 +1,10 @@
 package cloud.pangeacyber.pangea.authn.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import cloud.pangeacyber.pangea.filters.Filter;
 import cloud.pangeacyber.pangea.filters.FilterEqual;
 import cloud.pangeacyber.pangea.filters.FilterMatch;
 import cloud.pangeacyber.pangea.filters.FilterRange;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FilterUserInviteList extends Filter {
@@ -77,5 +76,4 @@ public class FilterUserInviteList extends Filter {
 	public FilterRange<String> created_at() {
 		return _created_at;
 	}
-
 }

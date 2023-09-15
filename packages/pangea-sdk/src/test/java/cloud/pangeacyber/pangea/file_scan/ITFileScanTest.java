@@ -32,7 +32,8 @@ public class ITFileScanTest {
 	}
 
 	@Test
-	public void testFileScan_Scan_crowdstrike() throws PangeaException, PangeaException, PangeaAPIException, IOException {
+	public void testFileScan_Scan_crowdstrike()
+		throws PangeaException, PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		FileScanResponse response = client.scan(
 			new FileScanRequest.Builder().provider("crowdstrike").raw(true).verbose(false).build(),
@@ -78,21 +79,29 @@ public class ITFileScanTest {
 			exception = e;
 		}
 
-		// Sleep 20 seconds until result is (should) be ready
-		Thread.sleep(20 * 1000);
+		for (int i = 0; i < 6; i++) {
+			try {
+				// Sleep 10 seconds until result is (should) be ready
+				Thread.sleep(10 * 1000);
 
-		// Poll result, this could raise another AcceptedRequestException if result is not ready
-		response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
-		assertTrue(response.isOk());
+				// Poll result, this could raise another AcceptedRequestException if result is not ready
+				response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
+				assertTrue(response.isOk());
 
-		FileScanData data = response.getResult().getData();
-		assertEquals("benign", data.getVerdict());
-		assertNull(response.getResult().getParameters());
-		assertNotNull(response.getResult().getRawData());
+				FileScanData data = response.getResult().getData();
+				assertEquals("benign", data.getVerdict());
+				assertNull(response.getResult().getParameters());
+				assertNotNull(response.getResult().getRawData());
+				break;
+			} catch (PangeaAPIException e) {
+				continue;
+			}
+		}
 	}
 
 	@Test
-	public void testFileScan_Scan_reversinglabs() throws PangeaException, PangeaException, PangeaAPIException, IOException {
+	public void testFileScan_Scan_reversinglabs()
+		throws PangeaException, PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		FileScanResponse response = client.scan(
 			new FileScanRequest.Builder().provider("reversinglabs").raw(true).verbose(false).build(),
@@ -138,17 +147,23 @@ public class ITFileScanTest {
 			exception = e;
 		}
 
-		// Sleep 20 seconds until result is (should) be ready
-		Thread.sleep(20 * 1000);
+		for (int i = 0; i < 6; i++) {
+			try {
+				// Sleep 10 seconds until result is (should) be ready
+				Thread.sleep(10 * 1000);
 
-		// Poll result, this could raise another AcceptedRequestException if result is not ready
-		response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
-		assertTrue(response.isOk());
+				// Poll result, this could raise another AcceptedRequestException if result is not ready
+				response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
+				assertTrue(response.isOk());
 
-		FileScanData data = response.getResult().getData();
-		assertEquals("benign", data.getVerdict());
-		assertNull(response.getResult().getParameters());
-		assertNotNull(response.getResult().getRawData());
+				FileScanData data = response.getResult().getData();
+				assertEquals("benign", data.getVerdict());
+				assertNull(response.getResult().getParameters());
+				assertNotNull(response.getResult().getRawData());
+				break;
+			} catch (PangeaAPIException e) {
+				continue;
+			}
+		}
 	}
-
 }

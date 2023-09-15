@@ -1,12 +1,10 @@
 package cloud.pangeacyber.pangea.authn.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import cloud.pangeacyber.pangea.filters.Filter;
 import cloud.pangeacyber.pangea.filters.FilterEqual;
 import cloud.pangeacyber.pangea.filters.FilterMatch;
 import cloud.pangeacyber.pangea.filters.FilterRange;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,7 +26,7 @@ public class FilterUserList extends Filter {
 	private FilterRange<String> _last_login_at;
 	private FilterRange<Integer> _login_count;
 
-	public FilterUserList(){
+	public FilterUserList() {
 		_disabled = new FilterEqual<Boolean>("disabled", this);
 		_require_mfa = new FilterEqual<Boolean>("require_mfa", this);
 		_verified = new FilterEqual<Boolean>("verified", this);
@@ -97,5 +95,4 @@ public class FilterUserList extends Filter {
 	public FilterRange<Integer> login_count() {
 		return _login_count;
 	}
-
 }

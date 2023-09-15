@@ -4,9 +4,9 @@ import java.util.List;
 
 public class FilterMatch<T> extends FilterEqual<T> {
 
-    public FilterMatch(String name, Filter map) {
-        super(name, map);
-    }
+	public FilterMatch(String name, Filter map) {
+		super(name, map);
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<T> getContains() {

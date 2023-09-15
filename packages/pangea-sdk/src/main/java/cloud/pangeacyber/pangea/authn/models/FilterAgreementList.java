@@ -1,15 +1,14 @@
 package cloud.pangeacyber.pangea.authn.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import cloud.pangeacyber.pangea.filters.Filter;
 import cloud.pangeacyber.pangea.filters.FilterEqual;
 import cloud.pangeacyber.pangea.filters.FilterMatch;
 import cloud.pangeacyber.pangea.filters.FilterRange;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FilterAgreementList extends Filter {
+
 	private FilterEqual<Boolean> _active;
 	private FilterRange<String> _created_at;
 	private FilterRange<String> _published_at;
@@ -18,7 +17,7 @@ public class FilterAgreementList extends Filter {
 	private FilterMatch<String> _name;
 	private FilterMatch<String> _text;
 
-	public FilterAgreementList(){
+	public FilterAgreementList() {
 		_active = new FilterEqual<Boolean>("active", this);
 		_created_at = new FilterRange<String>("created_at", this);
 		_published_at = new FilterRange<String>("published_at", this);
@@ -55,5 +54,4 @@ public class FilterAgreementList extends Filter {
 	public FilterMatch<String> text() {
 		return _text;
 	}
-
 }

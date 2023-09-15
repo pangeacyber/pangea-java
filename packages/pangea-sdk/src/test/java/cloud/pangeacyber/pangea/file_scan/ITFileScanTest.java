@@ -79,7 +79,8 @@ public class ITFileScanTest {
 			exception = e;
 		}
 
-		for (int i = 0; i < 6; i++) {
+		int maxRetry = 6;
+		for (int retry = 0; retry < maxRetry; retry++) {
 			try {
 				// Sleep 10 seconds until result is (should) be ready
 				Thread.sleep(10 * 1000);
@@ -94,7 +95,7 @@ public class ITFileScanTest {
 				assertNotNull(response.getResult().getRawData());
 				break;
 			} catch (PangeaAPIException e) {
-				continue;
+				assertTrue(retry < maxRetry - 1);
 			}
 		}
 	}
@@ -147,7 +148,8 @@ public class ITFileScanTest {
 			exception = e;
 		}
 
-		for (int i = 0; i < 6; i++) {
+		int maxRetry = 6;
+		for (int retry = 0; retry < maxRetry; retry++) {
 			try {
 				// Sleep 10 seconds until result is (should) be ready
 				Thread.sleep(10 * 1000);
@@ -162,7 +164,7 @@ public class ITFileScanTest {
 				assertNotNull(response.getResult().getRawData());
 				break;
 			} catch (PangeaAPIException e) {
-				continue;
+				assertTrue(retry < maxRetry - 1);
 			}
 		}
 	}

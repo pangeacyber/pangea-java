@@ -242,7 +242,7 @@ public abstract class BaseClient {
 		ObjectMapper mapper = new ObjectMapper();
 		String body;
 
-		if (this.configID != null && request.getConfigID() == null) {
+		if (configID != null && !configID.isEmpty() && request.getConfigID() == null) {
 			request.setConfigID(this.configID);
 		}
 

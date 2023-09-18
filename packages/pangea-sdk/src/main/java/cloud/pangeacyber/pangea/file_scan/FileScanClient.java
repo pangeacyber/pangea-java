@@ -11,10 +11,9 @@ import java.io.File;
 public class FileScanClient extends BaseClient {
 
 	public static String serviceName = "file-scan";
-	private static final boolean supportMultiConfig = false;
 
 	public FileScanClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.intel;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -141,6 +142,22 @@ public class ITIPIntelTest {
 		assertTrue(response.isOk());
 		IntelReputationData data = response.getResult().getData();
 		assertEquals("malicious", data.getVerdict());
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testIPReputationNotFound() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		IPReputationResponse response = client.reputation(
+			new IPReputationRequest.Builder("127.0.0.1").provider("crowdstrike").verbose(true).raw(true).build()
+		);
+		assertTrue(response.isOk());
+		IntelReputationData data = response.getResult().getData();
+		assertNotNull(data);
+		assertNotNull(data.getCategory());
+		assertNotNull(data.getScore());
+		assertNotNull(data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}
@@ -389,6 +406,22 @@ public class ITIPIntelTest {
 	}
 
 	@Test
+	public void testIPDomainNotFound() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		IPDomainResponse response = client.getDomain(
+			new IPDomainRequest.Builder("127.0.0.1").provider("digitalelement").verbose(true).raw(true).build()
+		);
+		assertTrue(response.isOk());
+
+		IPDomainData data = response.getResult().getData();
+		assertNotNull(data);
+		assertFalse(data.isDomainFound());
+		assertFalse(data.isDomainFound());
+		assertNull(data.getDomain());
+		assertNotNull(response.getResult().getParameters());
+	}
+
+	@Test
 	public void testIPVPN_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		IPVPNResponse response = client.isVPN(new IPVPNRequest.Builder("2.56.189.74").build());
@@ -488,9 +521,24 @@ public class ITIPIntelTest {
 		assertTrue(response.isOk());
 
 		IPVPNData data = response.getResult().getData();
+		assertNotNull(data);
 		assertTrue(data.isVPN());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testIPVPNnotFound() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		IPVPNResponse response = client.isVPN(
+			new IPVPNRequest.Builder("127.0.0.1").provider("digitalelement").verbose(true).raw(true).build()
+		);
+
+		assertTrue(response.isOk());
+
+		IPVPNData data = response.getResult().getData();
+		assertFalse(data.isVPN());
+		assertNotNull(response.getResult().getParameters());
 	}
 
 	@Test
@@ -608,6 +656,19 @@ public class ITIPIntelTest {
 		assertTrue(data.isProxy());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testIPProxyNotFound() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		IPProxyResponse response = client.isProxy(
+			new IPProxyRequest.Builder("127.0.0.1").provider("digitalelement").verbose(true).raw(true).build()
+		);
+		assertTrue(response.isOk());
+
+		IPProxyData data = response.getResult().getData();
+		assertFalse(data.isProxy());
+		assertNotNull(response.getResult().getParameters());
 	}
 
 	@Test(expected = ValidationException.class)

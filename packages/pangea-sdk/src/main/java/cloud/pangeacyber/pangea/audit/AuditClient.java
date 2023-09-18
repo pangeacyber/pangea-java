@@ -74,11 +74,10 @@ public class AuditClient extends BaseClient {
 	String prevUnpublishedRoot = null;
 	Map<String, Object> pkInfo = null;
 	String tenantID = null;
-	private static final boolean supportMultiConfig = true;
 	Class<?> customSchemaClass = null;
 
 	public AuditClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 		if (builder.privateKeyFilename != null) {
 			this.signer = new LogSigner(builder.privateKeyFilename);
 		} else {
@@ -88,6 +87,13 @@ public class AuditClient extends BaseClient {
 		this.pkInfo = builder.pkInfo;
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
 		this.customSchemaClass = builder.customSchemaClass;
+
+		// FIXME: still support config id in PangeaConfig. Remove this code block when totally deprecated
+		if (builder.configID != null && !builder.configID.isEmpty()) {
+			setConfigID(builder.configID);
+		} else if (this.config.getConfigID() != null && !this.config.getConfigID().isEmpty()) {
+			setConfigID(this.config.getConfigID());
+		}
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
@@ -96,6 +102,7 @@ public class AuditClient extends BaseClient {
 		String tenantID = null;
 		Config config;
 		Map<String, Object> pkInfo = null;
+		String configID = null;
 		Class<?> customSchemaClass = StandardEvent.class;
 
 		public Builder(Config config) {
@@ -118,6 +125,11 @@ public class AuditClient extends BaseClient {
 
 		public Builder withPkInfo(Map<String, Object> pkInfo) {
 			this.pkInfo = pkInfo;
+			return this;
+		}
+
+		public Builder withConfigID(String configID) {
+			this.configID = configID;
 			return this;
 		}
 

@@ -10,10 +10,9 @@ import cloud.pangeacyber.pangea.intel.responses.URLReputationResponse;
 public class URLIntelClient extends BaseClient {
 
 	public static String serviceName = "url-intel";
-	private static final boolean supportMultiConfig = false;
 
 	public URLIntelClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

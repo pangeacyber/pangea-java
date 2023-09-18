@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
-import java.time.Duration;
 import org.junit.Before;
 import org.junit.Test;
 

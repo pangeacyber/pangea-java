@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum HashType {
 	SHA256("sha256"),
 	SHA1("sha1"),
-	MD5("md5");
+	SHA512("sha512"),
+	NTLM("ntlm");
 
 	private final String text;
 

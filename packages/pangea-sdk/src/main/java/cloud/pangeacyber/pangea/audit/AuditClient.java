@@ -74,11 +74,10 @@ public class AuditClient extends BaseClient {
 	String prevUnpublishedRoot = null;
 	Map<String, Object> pkInfo = null;
 	String tenantID = null;
-	private static final boolean supportMultiConfig = true;
 	Class<?> customSchemaClass = null;
 
 	public AuditClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 		if (builder.privateKeyFilename != null) {
 			this.signer = new LogSigner(builder.privateKeyFilename);
 		} else {
@@ -88,6 +87,13 @@ public class AuditClient extends BaseClient {
 		this.pkInfo = builder.pkInfo;
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
 		this.customSchemaClass = builder.customSchemaClass;
+
+		// FIXME: still support config id in PangeaConfig. Remove this code block when totally deprecated
+		if (builder.configID != null && !builder.configID.isEmpty()) {
+			setConfigID(builder.configID);
+		} else if (this.config.getConfigID() != null && !this.config.getConfigID().isEmpty()) {
+			setConfigID(this.config.getConfigID());
+		}
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
@@ -96,6 +102,7 @@ public class AuditClient extends BaseClient {
 		String tenantID = null;
 		Config config;
 		Map<String, Object> pkInfo = null;
+		String configID = null;
 		Class<?> customSchemaClass = StandardEvent.class;
 
 		public Builder(Config config) {
@@ -118,6 +125,11 @@ public class AuditClient extends BaseClient {
 
 		public Builder withPkInfo(Map<String, Object> pkInfo) {
 			this.pkInfo = pkInfo;
+			return this;
+		}
+
+		public Builder withConfigID(String configID) {
+			this.configID = configID;
 			return this;
 		}
 
@@ -212,13 +224,25 @@ public class AuditClient extends BaseClient {
 	}
 
 	/**
-	 * Log an entry - event, sign, verbose
-	 * @pangea.description Log an event to Audit Secure Log. Can select sign event or not and verbosity of the response.
+	 * Log an entry
+	 * @pangea.description Create a log entry in the Secure Audit Log.
+	 * @pangea.operationId audit_post_v1_log
 	 * @param event event to log
 	 * @param config
 	 * @return LogResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * StandardEvent event = new StandardEvent
+	 * 	.Builder("Hello, World!")
+	 * 	.action("Login")
+	 * 	.actor("Terminal")
+	 * 	.build();
+	 * LogConfig config = new LogConfig.Builder().build();
+	 *
+	 * LogResponse response = client.log(event, config);
+	 * }
 	 */
 	public LogResponse log(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
 		if (config == null) {
@@ -357,12 +381,20 @@ public class AuditClient extends BaseClient {
 	/**
 	 * Search
 	 * @pangea.description Perform a search of logs according to input param. By default verify logs consistency and events hash and signature.
-	 * @pangea.operationId _audit_post_v1_search
+	 * @pangea.operationId audit_post_v1_search
 	 * @param request
 	 * @param config
 	 * @return SearchResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * SearchRequest searchRequest = new SearchRequest
+	 * 	.Builder("message:\"\"").limit(10).build();
+	 * SearchConfig searchConfig = new SearchConfig.Builder().build();
+	 *
+	 * SearchResponse response = client.search(searchRequest, searchConfig);
+	 * }
 	 */
 	public SearchResponse search(SearchRequest request, SearchConfig config)
 		throws PangeaException, PangeaAPIException {
@@ -381,12 +413,23 @@ public class AuditClient extends BaseClient {
 	/**
 	 * Results of a search
 	 * @pangea.description Fetch paginated results of a previously executed search. By default: `verifyEvents` is true and `verifyConsistency` is false.
-	 * @pangea.operationId _audit_post_v1_results
+	 * @pangea.operationId audit_post_v1_results
 	 * @param request
 	 * @param config
 	 * @return ResultsResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * ResultRequest request = new ResultRequest
+	 * 	.Builder("pas_sqilrhruwu54uggihqj3aie24wrctakr")
+	 * 	.limit(3)
+	 * 	.offset(0)
+	 * 	.build();
+	 * SearchConfig searchConfig = new SearchConfig.Builder().build();
+	 *
+	 * ResultsResponse response = client.results(request, searchConfig);
+	 * }
 	 */
 	public ResultsResponse results(ResultRequest request, SearchConfig config)
 		throws PangeaException, PangeaAPIException {

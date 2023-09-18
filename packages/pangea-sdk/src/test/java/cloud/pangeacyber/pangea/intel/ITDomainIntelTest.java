@@ -148,6 +148,26 @@ public class ITDomainIntelTest {
 		assertNotNull(response.getResult().getRawData());
 	}
 
+	@Test
+	public void testDomainReputationNotFound() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		DomainReputationResponse response = client.reputation(
+			new DomainReputationRequest.Builder("thisshouldbeafakedomain123asd.com")
+				.provider("crowdstrike")
+				.verbose(true)
+				.raw(true)
+				.build()
+		);
+		assertTrue(response.isOk());
+
+		IntelReputationData data = response.getResult().getData();
+		assertNotNull(data);
+		assertNotNull(data.getVerdict());
+		assertNotNull(data.getCategory());
+		assertNotNull(data.getScore());
+		assertNotNull(response.getResult().getParameters());
+	}
+
 	@Test(expected = ValidationException.class)
 	public void testEmptyIP() throws PangeaException, PangeaAPIException {
 		DomainReputationResponse response = client.reputation(new DomainReputationRequest.Builder("").build());

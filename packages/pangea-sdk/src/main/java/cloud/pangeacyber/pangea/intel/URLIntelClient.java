@@ -10,10 +10,9 @@ import cloud.pangeacyber.pangea.intel.responses.URLReputationResponse;
 public class URLIntelClient extends BaseClient {
 
 	public static String serviceName = "url-intel";
-	private static final boolean supportMultiConfig = false;
 
 	public URLIntelClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
@@ -28,12 +27,24 @@ public class URLIntelClient extends BaseClient {
 	}
 
 	/**
-	 * Reputation check - provider, verbose, raw
+	 * Reputation
 	 * @pangea.description Retrieve a reputation score for a URL from a provider, including an optional detailed report.
+	 * @pangea.operationId url_intel_post_v1_reputation
 	 * @param request
 	 * @return URLReputationResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * URLReputationRequest request = new URLReputationRequest
+	 * 	.Builder("http://113.235.101.11:54384")
+	 * 	.provider("crowdstrike")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 *
+	 * URLReputationResponse response = client.reputation(request);
+	 * }
 	 */
 	public URLReputationResponse reputation(URLReputationRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/reputation", request, URLReputationResponse.class);

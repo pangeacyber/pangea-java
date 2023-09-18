@@ -27,6 +27,10 @@ public class RedactStructuredRequest extends BaseRequest {
 	String[] rules = null;
 
 	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("rulesets")
+	String[] rulesets = null;
+
+	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("return_result")
 	Boolean returnResult = null;
 
@@ -37,6 +41,7 @@ public class RedactStructuredRequest extends BaseRequest {
 		this.debug = builder.debug;
 		this.rules = builder.rules;
 		this.returnResult = builder.returnResult;
+		this.rulesets = builder.rulesets;
 	}
 
 	public Object getData() {
@@ -59,6 +64,10 @@ public class RedactStructuredRequest extends BaseRequest {
 		return rules;
 	}
 
+	public String[] getRulesets() {
+		return rulesets;
+	}
+
 	public Boolean getReturnResult() {
 		return returnResult;
 	}
@@ -70,6 +79,7 @@ public class RedactStructuredRequest extends BaseRequest {
 		String format = null;
 		Boolean debug = null;
 		String[] rules = null;
+		String[] rulesets = null;
 		Boolean returnResult = null;
 
 		public Builder(Object data) {
@@ -97,6 +107,11 @@ public class RedactStructuredRequest extends BaseRequest {
 
 		public Builder setRules(String[] rules) {
 			this.rules = rules;
+			return this;
+		}
+
+		public Builder setRulesets(String[] rulesets) {
+			this.rulesets = rulesets;
 			return this;
 		}
 

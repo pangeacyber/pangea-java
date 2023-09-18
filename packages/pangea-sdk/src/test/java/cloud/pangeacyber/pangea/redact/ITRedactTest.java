@@ -74,6 +74,7 @@ public class ITRedactTest {
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
+		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(new RedactStructuredRequest.Builder(data).build());
 		assertTrue(response.isOk());
@@ -83,6 +84,7 @@ public class ITRedactTest {
 		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("Name", "<PERSON>");
 		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+		expected.put("IP", "Its ip is 127.0.0.1");
 		assertEquals(2, result.getCount());
 
 		assertEquals(expected, result.getRedactedData());
@@ -94,6 +96,7 @@ public class ITRedactTest {
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
+		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
 			new RedactStructuredRequest.Builder(data).setFormat("json").build()
@@ -105,6 +108,7 @@ public class ITRedactTest {
 		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("Name", "<PERSON>");
 		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+		expected.put("IP", "Its ip is 127.0.0.1");
 
 		assertEquals(expected, result.getRedactedData());
 		assertNull(result.getReport());
@@ -115,6 +119,7 @@ public class ITRedactTest {
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
+		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
 			new RedactStructuredRequest.Builder(data).setDebug(true).build()
@@ -126,6 +131,7 @@ public class ITRedactTest {
 		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("Name", "<PERSON>");
 		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+		expected.put("IP", "Its ip is 127.0.0.1");
 
 		assertEquals(expected, result.getRedactedData());
 		assertNotNull(result.getReport());
@@ -136,6 +142,7 @@ public class ITRedactTest {
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
+		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
 			new RedactStructuredRequest.Builder(data).setDebug(false).build()
@@ -147,6 +154,7 @@ public class ITRedactTest {
 		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("Name", "<PERSON>");
 		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+		expected.put("IP", "Its ip is 127.0.0.1");
 
 		assertEquals(expected, result.getRedactedData());
 		assertNull(result.getReport());
@@ -157,6 +165,7 @@ public class ITRedactTest {
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
+		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
 			new RedactStructuredRequest.Builder(data).setFormat("json").setDebug(true).build()
@@ -168,6 +177,7 @@ public class ITRedactTest {
 		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("Name", "<PERSON>");
 		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+		expected.put("IP", "Its ip is 127.0.0.1");
 
 		assertEquals(expected, result.getRedactedData());
 		assertNotNull(result.getReport());
@@ -178,6 +188,7 @@ public class ITRedactTest {
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
+		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
 			new RedactStructuredRequest.Builder(data).setDebug(true).setJsonp(new String[] { "Phone" }).build()
@@ -189,6 +200,7 @@ public class ITRedactTest {
 		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("Name", "Jenny Jenny");
 		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+		expected.put("IP", "Its ip is 127.0.0.1");
 
 		assertEquals(expected, result.getRedactedData());
 		assertNotNull(result.getReport());
@@ -199,17 +211,19 @@ public class ITRedactTest {
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
+		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.Builder(data).setRules(new String[] { "PHONE_NUMBER" }).build()
+			new RedactStructuredRequest.Builder(data).setRules(new String[] { "IP_ADDRESS" }).build()
 		);
 		assertTrue(response.isOk());
 
 		RedactStructuredResult result = response.getResult();
 
 		Map<String, Object> expected = new LinkedHashMap<String, Object>();
-		expected.put("Name", "Jenny Jenny");
+		expected.put("Name", "<PERSON>");
 		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+		expected.put("IP", "Its ip is <IP_ADDRESS>");
 
 		assertEquals(expected, result.getRedactedData());
 		assertNull(result.getReport());
@@ -220,12 +234,13 @@ public class ITRedactTest {
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
+		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
 			new RedactStructuredRequest.Builder(data)
 				.setDebug(true)
-				.setJsonp(new String[] { "Phone", "Name" })
-				.setRules(new String[] { "PHONE_NUMBER" })
+				.setJsonp(new String[] { "Phone", "IP" })
+				.setRules(new String[] { "IP_ADDRESS" })
 				.build()
 		);
 		assertTrue(response.isOk());
@@ -235,6 +250,7 @@ public class ITRedactTest {
 		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("Name", "Jenny Jenny");
 		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+		expected.put("IP", "Its ip is <IP_ADDRESS>");
 
 		assertEquals(expected, result.getRedactedData());
 		assertNotNull(result.getReport());

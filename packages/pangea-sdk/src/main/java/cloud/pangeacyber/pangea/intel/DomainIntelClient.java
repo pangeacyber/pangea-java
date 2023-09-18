@@ -10,10 +10,9 @@ import cloud.pangeacyber.pangea.intel.responses.DomainReputationResponse;
 public class DomainIntelClient extends BaseClient {
 
 	public static final String serviceName = "domain-intel";
-	private static final boolean supportMultiConfig = false;
 
 	public DomainIntelClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
@@ -28,12 +27,24 @@ public class DomainIntelClient extends BaseClient {
 	}
 
 	/**
-	 * Reputation check - domain, provider, verbose, raw
+	 * Reputation
 	 * @pangea.description Retrieve domain reputation for a particular provider
+	 * @pangea.operationId domain_intel_post_v1_reputation
 	 * @param request
 	 * @return DomainReputationResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * DomainReputationRequest request = new DomainReputationRequest
+	 * 	.Builder("737updatesboeing.com")
+	 * 	.provider("domaintools")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 *
+	 * DomainReputationResponse response = client.reputation(request);
+	 * }
 	 */
 	public DomainReputationResponse reputation(DomainReputationRequest request)
 		throws PangeaException, PangeaAPIException {

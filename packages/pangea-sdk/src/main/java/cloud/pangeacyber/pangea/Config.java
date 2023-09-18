@@ -13,6 +13,9 @@ public final class Config {
 	String domain;
 
 	// Project config id need for multi-config projects
+	/**
+	 * @deprecated set configID in service builder.
+	 */
 	String configID;
 
 	// Set to true to use plain http
@@ -184,6 +187,14 @@ public final class Config {
 		return loadEnvVar(envVarName);
 	}
 
+	public void setQueuedRetryEnabled(boolean queuedRetryEnabled) {
+		this.queuedRetryEnabled = queuedRetryEnabled;
+	}
+
+	public void setPollResultTimeout(long pollResultTimeout) {
+		this.pollResultTimeout = pollResultTimeout;
+	}
+
 	public static class Builder {
 
 		String token;
@@ -237,6 +248,9 @@ public final class Config {
 			return this;
 		}
 
+		/**
+		 * @deprecated set configID in service builder.
+		 */
 		public Builder configID(String configID) {
 			this.configID = configID;
 			return this;

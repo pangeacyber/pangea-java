@@ -12,10 +12,9 @@ import java.util.Map;
 public class UserIntelClient extends BaseClient {
 
 	public static final String serviceName = "user-intel";
-	private static final boolean supportMultiConfig = false;
 
 	public UserIntelClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

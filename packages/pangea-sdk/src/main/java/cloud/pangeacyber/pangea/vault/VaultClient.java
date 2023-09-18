@@ -130,10 +130,9 @@ final class DeleteRequest extends BaseRequest {
 public class VaultClient extends BaseClient {
 
 	public static final String serviceName = "vault";
-	private static final boolean supportMultiConfig = false;
 
 	public VaultClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
@@ -159,7 +158,7 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *  StateChangeResponse stateChangeResponse = client.stateChange("id", 1, ItemVersionState.DEACTIVATED);
+	 * StateChangeResponse stateChangeResponse = client.stateChange("id", 1, ItemVersionState.DEACTIVATED);
 	 * }
 	 */
 	public StateChangeResponse stateChange(String id, int version, ItemVersionState state)
@@ -177,7 +176,7 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *  DeleteResponse deleteResponse = client.delele("id");
+	 * DeleteResponse deleteResponse = client.delele("id");
 	 * }
 	 */
 	public DeleteResponse delete(String id) throws PangeaException, PangeaAPIException {
@@ -194,9 +193,9 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * 	GetResponse getResponse = client.get(
-	 *		new GetRequest.GetRequestBuilder("id").build()
-	 *	);
+	 * GetResponse getResponse = client.get(
+	 * 	new GetRequest.GetRequestBuilder("id").build()
+	 * );
 	 * }
 	 */
 	public GetResponse get(GetRequest request) throws PangeaException, PangeaAPIException {
@@ -213,9 +212,9 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * 	ListResponse listResponse = client.list(
-	 *		new ListRequest.ListRequestBuilder().build()
-	 *	);
+	 * ListResponse listResponse = client.list(
+	 * 	new ListRequest.ListRequestBuilder().build()
+	 * );
 	 * }
 	 */
 	public ListResponse list(ListRequest request) throws PangeaException, PangeaAPIException {
@@ -232,11 +231,11 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * 	UpdateResponse updateResponse = client.update(
-	 *		new UpdateRequest.UpdateRequestBuilder("id")
-	 *		.setFolder("updated")
-	 *		.build()
-	 *	);
+	 * UpdateResponse updateResponse = client.update(
+	 * 	new UpdateRequest.UpdateRequestBuilder("id")
+	 * 	.setFolder("updated")
+	 * 	.build()
+	 * );
 	 * }
 	 */
 	public UpdateResponse update(UpdateRequest request) throws PangeaException, PangeaAPIException {
@@ -253,8 +252,8 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *		SecretStoreResponse storeResponse =
-	 *			client.secretStore(new SecretStoreRequest.SecretStoreRequestBuilder("mysecret", "mysecretname").build());
+	 * SecretStoreResponse storeResponse =
+	 * 	client.secretStore(new SecretStoreRequest.SecretStoreRequestBuilder("mysecret", "mysecretname").build());
 	 * }
 	 */
 	public SecretStoreResponse secretStore(SecretStoreRequest request) throws PangeaException, PangeaAPIException {
@@ -271,8 +270,8 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *		SecretStoreResponse storeResponse =
-	 *			client.pangeaTokenStore(new PangeaTokenStoreRequest.PangeaTokenStoreRequestBuilder("mytoken", "mytokenname").build());
+	 * SecretStoreResponse storeResponse =
+	 * 	client.pangeaTokenStore(new PangeaTokenStoreRequest.PangeaTokenStoreRequestBuilder("mytoken", "mytokenname").build());
 	 * }
 	 */
 	public SecretStoreResponse pangeaTokenStore(PangeaTokenStoreRequest request)
@@ -290,11 +289,11 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	SecretRotateResponse rotateResponse = client.secretRotate(
-	 *		new SecretRotateRequest.SecretRotateRequestBuilder("secretid", "mynewsecret")
-	 *			.setRotationState(ItemVersionState.SUSPENDED)
-	 *			.build()
-	 *	);
+	 * SecretRotateResponse rotateResponse = client.secretRotate(
+	 * 	new SecretRotateRequest.SecretRotateRequestBuilder("secretid", "mynewsecret")
+	 * 		.setRotationState(ItemVersionState.SUSPENDED)
+	 * 		.build()
+	 * );
 	 * }
 	 */
 	public SecretRotateResponse secretRotate(SecretRotateRequest request) throws PangeaException, PangeaAPIException {
@@ -311,10 +310,10 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	SecretRotateResponse rotateResponse = client.pangeaTokenRotate(
-	 *		new PangeaTokenStoreRequest.PangeaTokenRotateRequestBuilder("tokenid", "3m")
-	 *			.build()
-	 *	);
+	 * SecretRotateResponse rotateResponse = client.pangeaTokenRotate(
+	 * 	new PangeaTokenStoreRequest.PangeaTokenRotateRequestBuilder("tokenid", "3m")
+	 * 		.build()
+	 * );
 	 * }
 	 */
 	public SecretRotateResponse pangeaTokenRotate(PangeaTokenRotateRequest request)
@@ -332,12 +331,12 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
-	 *		SymmetricAlgorithm.AES,
-	 *		KeyPurpose.ENCRYPTION,
-	 *		"keyname"
-	 *	).build();
-	 *	SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
+	 * SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
+	 * 	SymmetricAlgorithm.AES,
+	 * 	KeyPurpose.ENCRYPTION,
+	 * 	"keyname"
+	 * ).build();
+	 * SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
 	 * }
 	 */
 	public SymmetricGenerateResponse symmetricGenerate(SymmetricGenerateRequest request)
@@ -355,12 +354,12 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder(
-	 *		AsymmetricAlgorithm.ED25519,
-	 *		KeyPurpose.SIGNING,
-	 *		"keyname"
-	 *	).build();
-	 *	AsymmetricGenerateResponse generateResp = client.asymmetricGenerate(generateRequest);
+	 * AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.AsymmetricGenerateRequestBuilder(
+	 * 	AsymmetricAlgorithm.ED25519,
+	 * 	KeyPurpose.SIGNING,
+	 * 	"keyname"
+	 * ).build();
+	 * AsymmetricGenerateResponse generateResp = client.asymmetricGenerate(generateRequest);
 	 * }
 	 */
 	public AsymmetricGenerateResponse asymmetricGenerate(AsymmetricGenerateRequest request)
@@ -378,14 +377,14 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	AsymmetricStoreRequest storeRequest = new AsymmetricStoreRequest.AsymmetricStoreRequestBuilder(
-	 *		"encodedprivatekey",
-	 *		"encodedpublickey",
-	 *		AsymmetricAlgorithm.ED25519,
-	 *		KeyPurpose.SIGNING,
-	 *		"keyname"
-	 *	).build();
-	 *	AsymmetricStoreResponse storeResp = client.asymmetricStore(storeRequest);
+	 * AsymmetricStoreRequest storeRequest = new AsymmetricStoreRequest.AsymmetricStoreRequestBuilder(
+	 * 	"encodedprivatekey",
+	 * 	"encodedpublickey",
+	 * 	AsymmetricAlgorithm.ED25519,
+	 * 	KeyPurpose.SIGNING,
+	 * 	"keyname"
+	 * ).build();
+	 * AsymmetricStoreResponse storeResp = client.asymmetricStore(storeRequest);
 	 * }
 	 */
 	public AsymmetricStoreResponse asymmetricStore(AsymmetricStoreRequest request)
@@ -403,14 +402,13 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	SymmetricStoreRequest storeRequest = new SymmetricStoreRequest.SymmetricStoreRequestBuilder(
-	 *		"encodedkey"
-	 *		SymmetricAlgorithm.AES,
-	 *		KeyPurpose.ENCRYPTION,
-	 *		"keyname"
-	 *	).build();
-	 *	SymmetricStoreResponse storeResp = client.symmetricStore(storeRequest);
-	 * }
+	 * SymmetricStoreRequest storeRequest = new SymmetricStoreRequest.SymmetricStoreRequestBuilder(
+	 * 	"encodedkey"
+	 * 	SymmetricAlgorithm.AES,
+	 * 	KeyPurpose.ENCRYPTION,
+	 * 	"keyname"
+	 * ).build();
+	 * SymmetricStoreResponse storeResp = client.symmetricStore(storeRequest);
 	 * }
 	 */
 	public SymmetricStoreResponse symmetricStore(SymmetricStoreRequest request)
@@ -428,9 +426,9 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	KeyRotateResponse rotateResponse = client.keyRotate(
-	 *		new KeyRotateRequest.KeyRotateRequestBuilder("keyid", ItemVersionState.SUSPENDED).build()
-	 *	);
+	 * KeyRotateResponse rotateResponse = client.keyRotate(
+	 * 	new KeyRotateRequest.KeyRotateRequestBuilder("keyid", ItemVersionState.SUSPENDED).build()
+	 * );
 	 * }
 	 */
 	public KeyRotateResponse keyRotate(KeyRotateRequest request) throws PangeaException, PangeaAPIException {
@@ -447,9 +445,9 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	EncryptResponse encryptResponse = client.encrypt(
-	 *		new EncryptRequest.EncryptRequestBuilder("keyid", "base64message").setVersion(2).build()
-	 *	);
+	 * EncryptResponse encryptResponse = client.encrypt(
+	 * 	new EncryptRequest.EncryptRequestBuilder("keyid", "base64message").setVersion(2).build()
+	 * );
 	 * }
 	 */
 	public EncryptResponse encrypt(EncryptRequest request) throws PangeaException, PangeaAPIException {
@@ -466,11 +464,11 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	DecryptResponse decryptResponse = client.decrypt(
-	 *		new DecryptRequest.DecryptRequestBuilder("keyid", "validciphertext")
-	 *			.setVersion(2)
-	 *			.build()
-	 *	);
+	 * DecryptResponse decryptResponse = client.decrypt(
+	 * 	new DecryptRequest.DecryptRequestBuilder("keyid", "validciphertext")
+	 * 		.setVersion(2)
+	 * 		.build()
+	 * );
 	 * }
 	 */
 	public DecryptResponse decrypt(DecryptRequest request) throws PangeaException, PangeaAPIException {
@@ -488,7 +486,7 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * 	SignResponse signResponse = client.sign("keyid", "base64data2sign");
+	 * SignResponse signResponse = client.sign("keyid", "base64data2sign");
 	 * }
 	 */
 	public SignResponse sign(String id, String message) throws PangeaException, PangeaAPIException {
@@ -506,7 +504,7 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * 	SignResponse signResponse = client.sign("keyid", "base64data2sign", 2);
+	 * SignResponse signResponse = client.sign("keyid", "base64data2sign", 2);
 	 * }
 	 */
 	public SignResponse sign(String id, String message, int version) throws PangeaException, PangeaAPIException {
@@ -524,10 +522,10 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	String payload = """
+	 * String payload = """
 	 *      {'message': 'message to sign', 'data': 'Some extra data'}
 	 *       """;
-	 *	JWTSignResponse signResponse1 = client.jwtSign("keyid", payload);
+	 * JWTSignResponse signResponse1 = client.jwtSign("keyid", payload);
 	 * }
 	 */
 	public JWTSignResponse jwtSign(String id, String payload) throws PangeaException, PangeaAPIException {
@@ -546,7 +544,7 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * 	VerifyResponse verifyResponse = client.verify("keyid", "data2verify", "signature");
+	 * VerifyResponse verifyResponse = client.verify("keyid", "data2verify", "signature");
 	 * }
 	 */
 	public VerifyResponse verify(String id, String message, String signature)
@@ -566,7 +564,7 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * 	VerifyResponse verifyResponse = client.verify("keyid", "data2verify", "signature", 1);
+	 * VerifyResponse verifyResponse = client.verify("keyid", "data2verify", "signature", 1);
 	 * }
 	 */
 	public VerifyResponse verify(String id, String message, String signature, Integer version)
@@ -584,7 +582,7 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * 	JWTVerifyResponse verifyResponse = client.jwtVerify(signResponse.getResult().getJws());
+	 * JWTVerifyResponse verifyResponse = client.jwtVerify(signResponse.getResult().getJws());
 	 * }
 	 */
 	public JWTVerifyResponse jwtVerify(String jws) throws PangeaException, PangeaAPIException {
@@ -601,7 +599,7 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *  JWKGetResponse getResponse = client.jwkGet("jwkid");
+	 * JWKGetResponse getResponse = client.jwkGet("jwkid");
 	 * }
 	 */
 	public JWKGetResponse jwkGet(String id) throws PangeaException, PangeaAPIException {
@@ -618,7 +616,7 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *  JWKGetResponse getResponse = client.jwkGet("jwkid", 2);
+	 * JWKGetResponse getResponse = client.jwkGet("jwkid", 2);
 	 * }
 	 */
 	public JWKGetResponse jwkGet(String id, String version) throws PangeaException, PangeaAPIException {
@@ -635,9 +633,9 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *		FolderCreateResponse createParentResp = client.folderCreate(
-	 *			new FolderCreateRequest.Builder("folder_name", "parent/folder/name").build()
-	 *		);
+	 * FolderCreateResponse createParentResp = client.folderCreate(
+	 * 	new FolderCreateRequest.Builder("folder_name", "parent/folder/name").build()
+	 * );
 	 * }
 	 */
 	public FolderCreateResponse folderCreate(FolderCreateRequest request) throws PangeaException, PangeaAPIException {

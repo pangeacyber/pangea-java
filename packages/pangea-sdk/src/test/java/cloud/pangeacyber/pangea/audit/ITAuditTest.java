@@ -916,9 +916,11 @@ public class ITAuditTest {
 		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
 		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
-			.configID(Config.getConfigID(environment, "audit", 1))
 			.build();
-		AuditClient client = new AuditClient.Builder(cfg).build();
+
+		String configID = Config.getConfigID(environment, "audit", 1);
+
+		AuditClient client = new AuditClient.Builder(cfg).withConfigID(configID).build();
 
 		LogResponse response = client.log(
 			event,
@@ -941,9 +943,11 @@ public class ITAuditTest {
 		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
 		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
-			.configID(Config.getConfigID(environment, "audit", 2))
 			.build();
-		AuditClient client = new AuditClient.Builder(cfg).build();
+
+		String configID = Config.getConfigID(environment, "audit", 2);
+
+		AuditClient client = new AuditClient.Builder(cfg).withConfigID(configID).build();
 
 		LogResponse response = client.log(
 			event,

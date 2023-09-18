@@ -32,10 +32,9 @@ final class IpCheckRequest extends BaseRequest {
 public class EmbargoClient extends BaseClient {
 
 	public static final String serviceName = "embargo";
-	private static final boolean supportMultiConfig = false;
 
 	public EmbargoClient(Builder builder) {
-		super(builder, serviceName, supportMultiConfig);
+		super(builder, serviceName);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {

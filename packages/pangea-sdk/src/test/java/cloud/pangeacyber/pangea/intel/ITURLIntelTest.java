@@ -185,6 +185,27 @@ public class ITURLIntelTest {
 		assertEquals(3, response.getResult().getDataDetails().size());
 	}
 
+	@Test
+	public void testUrlReputationNotFound() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		URLReputationResponse response = client.reputation(
+			new URLReputationRequest.Builder("http://thisshouldbeafakeurl123asd:54384")
+				.provider("crowdstrike")
+				.verbose(true)
+				.raw(true)
+				.build()
+		);
+
+		assertTrue(response.isOk());
+
+		IntelReputationData data = response.getResult().getData();
+		assertNotNull(data);
+		assertNotNull(data.getVerdict());
+		assertNotNull(data.getCategory());
+		assertNotNull(data.getScore());
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+	}
 
 	@Test(expected = ValidationException.class)
 	public void testEmptyURL() throws PangeaException, PangeaAPIException {

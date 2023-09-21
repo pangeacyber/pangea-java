@@ -10,25 +10,25 @@ public class InheritedSettings {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_frequency")
-	boolean rotationFrequency;
+	String rotationFrequency;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_state")
-	boolean rotationState;
+	String rotationState;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_grace_period")
-	boolean rotationGracePeriod;
+	String rotationGracePeriod;
 
-	public boolean isRotationFrequency() {
+	public String getRotationFrequency() {
 		return rotationFrequency;
 	}
 
-	public boolean isRotationState() {
+	public String getRotationState() {
 		return rotationState;
 	}
 
-	public boolean isRotationGracePeriod() {
+	public String getRotationGracePeriod() {
 		return rotationGracePeriod;
 	}
 }

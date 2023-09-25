@@ -56,7 +56,7 @@ public class DomainIntelClient extends BaseClient {
 	/**
 	 * WhoIs
 	 * @pangea.description Retrieve who is for a domain from a provider, including an optional detailed report.
-	 * @pangea.operationId domain_intel_post_v1_who_is
+	 * @pangea.operationId domain_intel_post_v1_whois
 	 * @param request
 	 * @return DomainWhoIsResponse
 	 * @throws PangeaException
@@ -64,8 +64,8 @@ public class DomainIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * DomainWhoIsRequest request = new DomainWhoIsRequest
-	 * 	.Builder("737updatesboeing.com")
-	 * 	.provider("domaintools")
+	 * 	.Builder("google.com")
+	 * 	.provider("whoisxml")
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();

@@ -32,7 +32,8 @@ public class ITFileScanTest {
 	}
 
 	@Test
-	public void testFileScan_Scan() throws PangeaException, PangeaException, PangeaAPIException, IOException {
+	public void testFileScan_Scan_crowdstrike()
+		throws PangeaException, PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		FileScanResponse response = client.scan(
 			new FileScanRequest.Builder().provider("crowdstrike").raw(true).verbose(false).build(),
@@ -47,7 +48,7 @@ public class ITFileScanTest {
 	}
 
 	@Test(expected = AcceptedRequestException.class)
-	public void testFileScan_ScanAsync()
+	public void testFileScan_ScanAsync_crowdstrike()
 		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
@@ -58,7 +59,7 @@ public class ITFileScanTest {
 	}
 
 	@Test
-	public void testFileScan_ScanAsyncPollResult()
+	public void testFileScan_ScanAsyncPollResult_crowdstrike()
 		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
@@ -78,16 +79,93 @@ public class ITFileScanTest {
 			exception = e;
 		}
 
-		// Sleep 20 seconds until result is (should) be ready
-		Thread.sleep(20 * 1000);
+		int maxRetry = 6;
+		for (int retry = 0; retry < maxRetry; retry++) {
+			try {
+				// Sleep 10 seconds until result is (should) be ready
+				Thread.sleep(10 * 1000);
 
-		// Poll result, this could raise another AcceptedRequestException if result is not ready
-		response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
+				// Poll result, this could raise another AcceptedRequestException if result is not ready
+				response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
+				assertTrue(response.isOk());
+
+				FileScanData data = response.getResult().getData();
+				assertEquals("benign", data.getVerdict());
+				assertNull(response.getResult().getParameters());
+				assertNotNull(response.getResult().getRawData());
+				break;
+			} catch (PangeaAPIException e) {
+				assertTrue(retry < maxRetry - 1);
+			}
+		}
+	}
+
+	@Test
+	public void testFileScan_Scan_reversinglabs()
+		throws PangeaException, PangeaException, PangeaAPIException, IOException {
+		File file = new File(TESTFILE_PATH);
+		FileScanResponse response = client.scan(
+			new FileScanRequest.Builder().provider("reversinglabs").raw(true).verbose(false).build(),
+			file
+		);
 		assertTrue(response.isOk());
 
 		FileScanData data = response.getResult().getData();
 		assertEquals("benign", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test(expected = AcceptedRequestException.class)
+	public void testFileScan_ScanAsync_reversinglabs()
+		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException {
+		Config cfg = Config.fromIntegrationEnvironment(environment);
+		cfg.setQueuedRetryEnabled(false);
+		client = new FileScanClient.Builder(cfg).build();
+
+		File file = new File(TESTFILE_PATH);
+		FileScanResponse response = client.scan(new FileScanRequest.Builder().provider("reversinglabs").build(), file);
+	}
+
+	@Test
+	public void testFileScan_ScanAsyncPollResult_reversinglabs()
+		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+		Config cfg = Config.fromIntegrationEnvironment(environment);
+		cfg.setQueuedRetryEnabled(false);
+		client = new FileScanClient.Builder(cfg).build();
+
+		FileScanResponse response;
+		AcceptedRequestException exception = null;
+		try {
+			File file = new File(TESTFILE_PATH);
+			response =
+				client.scan(
+					new FileScanRequest.Builder().provider("reversinglabs").raw(true).verbose(false).build(),
+					file
+				);
+			assertTrue(false);
+		} catch (AcceptedRequestException e) {
+			exception = e;
+		}
+
+		int maxRetry = 6;
+		for (int retry = 0; retry < maxRetry; retry++) {
+			try {
+				// Sleep 10 seconds until result is (should) be ready
+				Thread.sleep(10 * 1000);
+
+				// Poll result, this could raise another AcceptedRequestException if result is not ready
+				response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
+				assertTrue(response.isOk());
+
+				FileScanData data = response.getResult().getData();
+				assertEquals("benign", data.getVerdict());
+				assertNull(response.getResult().getParameters());
+				assertNotNull(response.getResult().getRawData());
+				break;
+			} catch (PangeaAPIException e) {
+				assertTrue(retry < maxRetry - 1);
+			}
+		}
 	}
 }

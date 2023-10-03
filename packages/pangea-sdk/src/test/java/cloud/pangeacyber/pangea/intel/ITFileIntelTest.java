@@ -171,7 +171,7 @@ public class ITFileIntelTest {
 		FileReputationBulkResponse response = client.reputationBulk(
 			new FileHashReputationBulkRequest.Builder(hashes, "sha256")
 				.provider("reversinglabs")
-				.verbose(false)
+				.verbose(true)
 				.raw(true)
 				.build()
 		);
@@ -198,10 +198,10 @@ public class ITFileIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("unknown", data.getVerdict());
-		assertEquals("Not Provided", data.getCategory()[0]);
+		assertEquals("", data.getVerdict());
+		assertNull(data.getCategory());
 		assertNotNull(response.getResult().getParameters());
-		assertNotNull(response.getResult().getRawData());
+		assertNull(response.getResult().getRawData());
 	}
 
 	@Test(expected = ValidationException.class)

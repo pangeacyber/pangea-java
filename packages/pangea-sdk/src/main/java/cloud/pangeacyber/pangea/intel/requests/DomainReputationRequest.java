@@ -10,27 +10,17 @@ public class DomainReputationRequest extends IntelCommonRequest {
 	@JsonProperty("domain")
 	String domain;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("domain_list")
-	String[] domainList;
-
 	protected DomainReputationRequest(Builder builder) {
 		super(builder);
 		this.domain = builder.domain;
-		this.domainList = builder.domainList;
 	}
 
 	public static class Builder extends IntelCommonRequest.CommonBuilder<Builder> {
 
 		String domain = null;
-		String[] domainList = null;
 
 		public Builder(String domain) {
 			this.domain = domain;
-		}
-
-		public Builder(String[] domainList) {
-			this.domainList = domainList;
 		}
 
 		public DomainReputationRequest build() {
@@ -40,9 +30,5 @@ public class DomainReputationRequest extends IntelCommonRequest {
 
 	public String getDomain() {
 		return domain;
-	}
-
-	public String[] getDomainList() {
-		return domainList;
 	}
 }

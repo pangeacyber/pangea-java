@@ -10,4 +10,8 @@ public class PangeaException extends Exception {
 		super(message);
 		this.casue = cause;
 	}
+
+	public Throwable getCasue() {
+		return casue;
+	}
 }

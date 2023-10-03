@@ -1,16 +1,16 @@
 package cloud.pangeacyber.pangea.intel.results;
 
-import cloud.pangeacyber.pangea.intel.models.DomainReputationData;
+import cloud.pangeacyber.pangea.intel.models.FileReputationBulkData;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class DomainReputationResult extends IntelCommonResult {
+public final class FileReputationBulkResult extends IntelCommonResult {
 
 	@JsonProperty("data")
-	DomainReputationData data;
+	FileReputationBulkData data;
 
-	public DomainReputationData getData() {
+	public FileReputationBulkData getData() {
 		return data;
 	}
 }

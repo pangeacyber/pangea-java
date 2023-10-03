@@ -395,8 +395,11 @@ public abstract class BaseClient {
 				)
 			);
 
-		ResponseHeader header = parseHeader(body);
+		if (httpResponse.getStatusLine().getStatusCode() == 503) {
+			throw new ServiceTemporarilyUnavailable(body);
+		}
 
+		ResponseHeader header = parseHeader(body);
 		ObjectMapper mapper = new ObjectMapper();
 		ResponseType resultResponse;
 

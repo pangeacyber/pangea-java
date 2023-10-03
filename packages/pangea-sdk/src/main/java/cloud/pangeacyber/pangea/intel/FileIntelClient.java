@@ -4,6 +4,7 @@ import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.intel.requests.FileHashReputationBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.FileHashReputationRequest;
 import cloud.pangeacyber.pangea.intel.responses.*;
 import java.io.BufferedInputStream;
@@ -58,6 +59,33 @@ public class FileIntelClient extends BaseClient {
 	public FileReputationResponse reputation(FileHashReputationRequest request)
 		throws PangeaException, PangeaAPIException {
 		return post("/v1/reputation", request, FileReputationResponse.class);
+	}
+
+	/**
+	 * Reputation
+	 * @pangea.description Retrieve a reputation score for a file hash list from a provider, including an optional detailed report.
+	 * @pangea.operationId FIXME:
+	 * @param request
+	 * @return FileReputationBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * FileHashReputationRequest request = new FileHashReputationBulkRequest
+	 * 	.Builder(
+	 * 		"142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", FIXME:
+	 * 		"sha256")
+	 * 	.provider("reversinglabs")
+	 * 	.verbose(false)
+	 * 	.raw(true)
+	 * 	.build();
+	 *
+	 * FileReputationResponse response = client.reputation(request);
+	 * }
+	 */
+	public FileReputationBulkResponse reputationBulk(FileHashReputationBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/reputation", request, FileReputationBulkResponse.class);
 	}
 
 	public static String calculateSHA256fromFile(String filepath) throws PangeaException {

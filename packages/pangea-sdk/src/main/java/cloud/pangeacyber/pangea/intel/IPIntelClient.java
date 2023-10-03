@@ -145,4 +145,29 @@ public class IPIntelClient extends BaseClient {
 	public IPReputationResponse reputation(IPReputationRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/reputation", request, IPReputationResponse.class);
 	}
+
+	/**
+	 * Reputation
+	 * @pangea.description Retrieve a reputation score for an IP address list from a provider, including an optional detailed report.
+	 * @pangea.operationId FIXME:
+	 * @param request
+	 * @return IpReputationBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * IPReputationBulkRequest request = new IPReputationBulkRequest
+	 * 	.Builder("93.231.182.110") FIXME:
+	 * 	.provider("crowdstrike")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 *
+	 * IPReputationBulkResponse response = client.reputationBulk(request);
+	 * }
+	 */
+	public IPReputationBulkResponse reputationBulk(IPReputationBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/reputation", request, IPReputationBulkResponse.class);
+	}
 }

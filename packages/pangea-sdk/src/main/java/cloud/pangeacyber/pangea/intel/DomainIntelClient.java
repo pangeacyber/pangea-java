@@ -4,8 +4,10 @@ import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.intel.requests.DomainReputationBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.DomainReputationRequest;
 import cloud.pangeacyber.pangea.intel.requests.DomainWhoIsRequest;
+import cloud.pangeacyber.pangea.intel.responses.DomainReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.DomainReputationResponse;
 import cloud.pangeacyber.pangea.intel.responses.DomainWhoIsResponse;
 
@@ -51,6 +53,31 @@ public class DomainIntelClient extends BaseClient {
 	public DomainReputationResponse reputation(DomainReputationRequest request)
 		throws PangeaException, PangeaAPIException {
 		return post("/v1/reputation", request, DomainReputationResponse.class);
+	}
+
+	/**
+	 * Reputation
+	 * @pangea.description Retrieve domain list reputation for a particular provider
+	 * @pangea.operationId FIXME:
+	 * @param request
+	 * @return DomainReputationBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * DomainReputationRequest request = new DomainReputationBulkRequest
+	 * 	.Builder("737updatesboeing.com") FIXME:
+	 * 	.provider("domaintools")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 *
+	 * DomainReputationResponse response = client.reputationBulk(request);
+	 * }
+	 */
+	public DomainReputationBulkResponse reputationBulk(DomainReputationBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/reputation", request, DomainReputationBulkResponse.class);
 	}
 
 	/**

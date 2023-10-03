@@ -12,6 +12,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
+import cloud.pangeacyber.pangea.intel.models.DomainReputationBulkData;
 import cloud.pangeacyber.pangea.intel.models.DomainWhoIsData;
 import cloud.pangeacyber.pangea.intel.models.IntelReputationData;
 import cloud.pangeacyber.pangea.intel.requests.*;
@@ -22,7 +23,7 @@ import org.junit.Test;
 public class ITDomainIntelTest {
 
 	DomainIntelClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	TestEnvironment environment = TestEnvironment.DEVELOP;
 
 	@Before
 	public void setUp() throws ConfigException {
@@ -41,7 +42,6 @@ public class ITDomainIntelTest {
 		assertNotNull(data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -56,7 +56,6 @@ public class ITDomainIntelTest {
 		assertNotNull(data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -71,7 +70,6 @@ public class ITDomainIntelTest {
 		assertNotNull(data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -86,7 +84,6 @@ public class ITDomainIntelTest {
 		assertNotNull(data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -101,7 +98,6 @@ public class ITDomainIntelTest {
 		assertNotNull(data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -116,7 +112,6 @@ public class ITDomainIntelTest {
 		assertNotNull(data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -135,7 +130,6 @@ public class ITDomainIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
@@ -154,23 +148,21 @@ public class ITDomainIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
-		assertNull(response.getResult().getDataDetails());
 	}
 
 	@Test
 	public void testDomainReputationBulk() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
 		String[] domainList = { "pemewizubidob.cafij.co.za", "redbomb.com.tr", "kmbk8.hicp.net" };
-		DomainReputationResponse response = client.reputation(
-			new DomainReputationRequest.Builder(domainList).provider("crowdstrike").verbose(true).raw(true).build()
+		DomainReputationBulkResponse response = client.reputationBulk(
+			new DomainReputationBulkRequest.Builder(domainList).provider("crowdstrike").verbose(true).raw(true).build()
 		);
 		assertTrue(response.isOk());
 
-		IntelReputationData data = response.getResult().getData();
-		assertEquals("malicious", data.getVerdict());
+		DomainReputationBulkData data = response.getResult().getData();
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
-		assertEquals(3, response.getResult().getDataDetails().size());
+		assertEquals(3, data.size());
 	}
 
 	@Test

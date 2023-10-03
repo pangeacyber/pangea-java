@@ -4,7 +4,9 @@ import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.intel.requests.URLReputationBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.URLReputationRequest;
+import cloud.pangeacyber.pangea.intel.responses.URLReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.URLReputationResponse;
 
 public class URLIntelClient extends BaseClient {
@@ -48,5 +50,30 @@ public class URLIntelClient extends BaseClient {
 	 */
 	public URLReputationResponse reputation(URLReputationRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/reputation", request, URLReputationResponse.class);
+	}
+
+	/**
+	 * Reputation
+	 * @pangea.description Retrieve a reputation score for a URL list from a provider, including an optional detailed report.
+	 * @pangea.operationId FIXME:
+	 * @param request
+	 * @return URLReputationBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * URLReputationBulkRequest request = new URLReputationBulkRequest
+	 * 	.Builder("http://113.235.101.11:54384") FIXME:
+	 * 	.provider("crowdstrike")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 *
+	 * URLReputationBulkResponse response = client.reputationBulk(request);
+	 * }
+	 */
+	public URLReputationBulkResponse reputationBulk(URLReputationBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/reputation", request, URLReputationBulkResponse.class);
 	}
 }

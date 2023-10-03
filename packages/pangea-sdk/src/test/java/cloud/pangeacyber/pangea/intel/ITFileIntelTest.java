@@ -13,8 +13,11 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
+import cloud.pangeacyber.pangea.intel.models.FileReputationBulkData;
 import cloud.pangeacyber.pangea.intel.models.IntelReputationData;
+import cloud.pangeacyber.pangea.intel.requests.FileHashReputationBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.FileHashReputationRequest;
+import cloud.pangeacyber.pangea.intel.responses.FileReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.FileReputationResponse;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +25,7 @@ import org.junit.Test;
 public class ITFileIntelTest {
 
 	FileIntelClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	TestEnvironment environment = TestEnvironment.DEVELOP;
 
 	@Before
 	public void setUp() throws ConfigException {
@@ -155,6 +158,29 @@ public class ITFileIntelTest {
 		assertEquals("Trojan", data.getCategory()[0]);
 		assertNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testFileReputationMaliciousBulk() throws PangeaException, PangeaAPIException {
+		// Provider, no verbose, raw data
+		String[] hashes = {
+			"142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+			"179e2b8a4162372cd9344b81793cbf74a9513a002eda3324e6331243f3137a63",
+		};
+
+		FileReputationBulkResponse response = client.reputationBulk(
+			new FileHashReputationBulkRequest.Builder(hashes, "sha256")
+				.provider("reversinglabs")
+				.verbose(false)
+				.raw(true)
+				.build()
+		);
+		assertTrue(response.isOk());
+
+		FileReputationBulkData data = response.getResult().getData();
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+		assertEquals(2, data.size());
 	}
 
 	@Test

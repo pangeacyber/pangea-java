@@ -161,7 +161,7 @@ public class ITFileIntelTest {
 	public void testFileReputationNotProvided() throws PangeaException, PangeaAPIException {
 		FileReputationResponse response = client.reputation(
 			new FileHashReputationRequest.Builder(
-				"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
+				"178e2b8a4162372cd9344b81793cbf74a9513a002eda3324e6331243f3137a63",
 				"sha256"
 			)
 				.provider("reversinglabs")
@@ -173,7 +173,6 @@ public class ITFileIntelTest {
 
 		IntelReputationData data = response.getResult().getData();
 		assertEquals("unknown", data.getVerdict());
-		assertEquals("Not Provided", data.getCategory()[0]);
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
 	}

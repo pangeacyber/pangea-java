@@ -2,51 +2,55 @@ package cloud.pangeacyber.pangea.authn.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 
 	@JsonProperty("id")
-	String id;
+	private String id;
 
 	@JsonProperty("email")
-	String email;
+	private String email;
 
 	@JsonProperty("profile")
-	Profile profile;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("scopes")
-	Scopes scopes;
-
-	@JsonProperty("id_providers")
-	IDProviders idProviders;
-
-	@JsonProperty("mfa_providers")
-	MFAProviders mfaProviders;
-
-	@JsonProperty("require_mfa")
-	Boolean requireMFA;
+	private Profile profile;
 
 	@JsonProperty("verified")
-	Boolean verified;
+	private boolean verified;
 
 	@JsonProperty("disabled")
-	Boolean disabled;
+	private boolean disabled;
 
-	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonProperty("accepted_eula_id")
+	private String acceptedEulaId;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonProperty("accepted_privacy_policy_id")
+	private String acceptedPrivacyPolicyId;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("last_login_at")
-	String lastLoginAt;
+	private String lastLoginAt;
 
 	@JsonProperty("created_at")
-	String createdAt;
+	private String createdAt;
 
-	public Profile getProfile() {
-		return profile;
-	}
+	@JsonProperty("login_count")
+	private int loginCount;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonProperty("last_login_ip")
+	private String lastLoginIp;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonProperty("last_login_city")
+	private String lastLoginCity;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonProperty("last_login_country")
+	private String lastLoginCountry;
 
 	public String getID() {
 		return id;
@@ -56,28 +60,24 @@ public class User {
 		return email;
 	}
 
-	public Scopes getScopes() {
-		return scopes;
+	public Profile getProfile() {
+		return profile;
 	}
 
-	public ArrayList<String> getIdProviders() {
-		return idProviders;
-	}
-
-	public ArrayList<String> getMfaProviders() {
-		return mfaProviders;
-	}
-
-	public Boolean getRequireMFA() {
-		return requireMFA;
-	}
-
-	public Boolean getVerified() {
+	public boolean isVerified() {
 		return verified;
 	}
 
-	public Boolean getDisabled() {
+	public boolean isDisabled() {
 		return disabled;
+	}
+
+	public String getAcceptedEulaId() {
+		return acceptedEulaId;
+	}
+
+	public String getAcceptedPrivacyPolicyId() {
+		return acceptedPrivacyPolicyId;
 	}
 
 	public String getLastLoginAt() {
@@ -86,5 +86,21 @@ public class User {
 
 	public String getCreatedAt() {
 		return createdAt;
+	}
+
+	public int getLoginCount() {
+		return loginCount;
+	}
+
+	public String getLastLoginIp() {
+		return lastLoginIp;
+	}
+
+	public String getLastLoginCity() {
+		return lastLoginCity;
+	}
+
+	public String getLastLoginCountry() {
+		return lastLoginCountry;
 	}
 }

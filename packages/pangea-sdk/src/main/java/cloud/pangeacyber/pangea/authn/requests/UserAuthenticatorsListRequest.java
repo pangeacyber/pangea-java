@@ -1,46 +1,35 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
-import cloud.pangeacyber.pangea.authn.models.IDProvider;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserUpdateRequest extends BaseRequest {
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("email")
-	String email;
+public class UserAuthenticatorsListRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("id")
-	IDProvider id;
+	private String id;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("disabled")
-	Boolean disabled;
+	@JsonProperty("email")
+	private String email;
 
-	private UserUpdateRequest(Builder builder) {
+	private UserAuthenticatorsListRequest(Builder builder) {
 		this.id = builder.id;
 		this.email = builder.email;
-		this.disabled = builder.disabled;
 	}
 
 	public static class Builder {
 
-		IDProvider id;
-		String email;
-		Boolean disabled;
+		private String id = null;
+		private String email = null;
 
 		public Builder() {}
 
-		public UserUpdateRequest build() {
-			return new UserUpdateRequest(this);
-		}
-
-		public Builder setId(IDProvider id) {
+		public Builder setID(String id) {
 			this.id = id;
 			return this;
 		}
@@ -50,9 +39,16 @@ public class UserUpdateRequest extends BaseRequest {
 			return this;
 		}
 
-		public Builder setDisabled(Boolean disabled) {
-			this.disabled = disabled;
-			return this;
+		public UserAuthenticatorsListRequest build() {
+			return new UserAuthenticatorsListRequest(this);
 		}
+	}
+
+	public String getID() {
+		return id;
+	}
+
+	public String getEmail() {
+		return email;
 	}
 }

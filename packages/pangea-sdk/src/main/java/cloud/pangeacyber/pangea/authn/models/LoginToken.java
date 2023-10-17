@@ -43,7 +43,7 @@ public class LoginToken {
 		return token;
 	}
 
-	public String getId() {
+	public String getID() {
 		return id;
 	}
 

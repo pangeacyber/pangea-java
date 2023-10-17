@@ -54,17 +54,11 @@ public class User extends AuthNBaseClient {
 
 	private UserProfile profile;
 	private UserInvite invite;
-	private UserMFA mfa;
-	private UserLogin login;
-	private UserPassword password;
 
 	public User(AuthNClient.Builder builder) {
 		super(builder);
 		profile = new UserProfile(builder);
 		invite = new UserInvite(builder);
-		mfa = new UserMFA(builder);
-		login = new UserLogin(builder);
-		password = new UserPassword(builder);
 	}
 
 	/**
@@ -86,7 +80,7 @@ public class User extends AuthNBaseClient {
 	 * }
 	 */
 	public UserCreateResponse create(UserCreateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/user/create", request, UserCreateResponse.class);
+		return post("/v2/user/create", request, UserCreateResponse.class);
 	}
 
 	/**
@@ -103,7 +97,7 @@ public class User extends AuthNBaseClient {
 	 * }
 	 */
 	public UserDeleteResponse deleteByEmail(String email) throws PangeaException, PangeaAPIException {
-		return post("/v1/user/delete", new UserDeleteByEmailRequest(email), UserDeleteResponse.class);
+		return post("/v2/user/delete", new UserDeleteByEmailRequest(email), UserDeleteResponse.class);
 	}
 
 	/**
@@ -120,7 +114,7 @@ public class User extends AuthNBaseClient {
 	 * }
 	 */
 	public UserDeleteResponse deleteByID(String id) throws PangeaException, PangeaAPIException {
-		return post("/v1/user/delete", new UserDeleteByIDRequest(id), UserDeleteResponse.class);
+		return post("/v2/user/delete", new UserDeleteByIDRequest(id), UserDeleteResponse.class);
 	}
 
 	/**
@@ -141,7 +135,7 @@ public class User extends AuthNBaseClient {
 	 * }
 	 */
 	public UserUpdateResponse update(UserUpdateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/user/update", request, UserUpdateResponse.class);
+		return post("/v2/user/update", request, UserUpdateResponse.class);
 	}
 
 	/**
@@ -166,7 +160,7 @@ public class User extends AuthNBaseClient {
 	 * }
 	 */
 	public UserInviteResponse invite(UserInviteRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/user/invite", request, UserInviteResponse.class);
+		return post("/v2/user/invite", request, UserInviteResponse.class);
 	}
 
 	/**
@@ -186,31 +180,7 @@ public class User extends AuthNBaseClient {
 	 * }
 	 */
 	public UserListResponse list(UserListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/user/list", request, UserListResponse.class);
-	}
-
-	/**
-	 * Verify User
-	 * @pangea.description Verify a user's primary authentication.
-	 * @pangea.operationId authn_post_v1_user_verify
-	 * @param idProvider
-	 * @param email
-	 * @param authenticator
-	 * @return UserVerifyResponse
-	 * @throws PangeaException
-	 * @throws PangeaAPIException
-	 * @pangea.code
-	 * {@code
-	 * UserVerifyResponse response = client.user().verify(
-	 * 	IDProvider.PASSWORD,
-	 * 	"joe.user@email.com",
-	 * 	"My1s+Password");
-	 * }
-	 */
-	public UserVerifyResponse verify(IDProvider idProvider, String email, String authenticator)
-		throws PangeaException, PangeaAPIException {
-		UserVerifyRequest request = new UserVerifyRequest(idProvider, email, authenticator);
-		return post("/v1/user/verify", request, UserVerifyResponse.class);
+		return post("/v2/user/list", request, UserListResponse.class);
 	}
 
 	public UserProfile profile() {
@@ -219,17 +189,5 @@ public class User extends AuthNBaseClient {
 
 	public UserInvite invite() {
 		return invite;
-	}
-
-	public UserMFA mfa() {
-		return mfa;
-	}
-
-	public UserLogin login() {
-		return login;
-	}
-
-	public UserPassword password() {
-		return password;
 	}
 }

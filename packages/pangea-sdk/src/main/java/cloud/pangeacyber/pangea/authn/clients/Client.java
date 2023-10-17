@@ -46,7 +46,7 @@ public class Client extends AuthNBaseClient {
 	 */
 	public ClientUserinfoResponse userinfo(String code) throws PangeaException, PangeaAPIException {
 		UserinfoRequest request = new UserinfoRequest(code);
-		ClientUserinfoResponse resp = post("/v1/client/userinfo", request, ClientUserinfoResponse.class);
+		ClientUserinfoResponse resp = post("/v2/client/userinfo", request, ClientUserinfoResponse.class);
 		return resp;
 	}
 
@@ -63,7 +63,7 @@ public class Client extends AuthNBaseClient {
 	 * }
 	 */
 	public ClientJWKSResponse jwks() throws PangeaException, PangeaAPIException {
-		return post("/v1/client/jwks", new BaseRequest(), ClientJWKSResponse.class);
+		return post("/v2/client/jwks", new BaseRequest(), ClientJWKSResponse.class);
 	}
 
 	public ClientSession session() {

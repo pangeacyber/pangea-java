@@ -38,7 +38,7 @@ public class ClientToken extends AuthNBaseClient {
 	 */
 	public ClientTokenCheckResponse check(String token) throws PangeaException, PangeaAPIException {
 		TokenCheckRequest request = new TokenCheckRequest(token);
-		ClientTokenCheckResponse resp = post("/v1/client/token/check", request, ClientTokenCheckResponse.class);
+		ClientTokenCheckResponse resp = post("/v2/client/token/check", request, ClientTokenCheckResponse.class);
 		return resp;
 	}
 }

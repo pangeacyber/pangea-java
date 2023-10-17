@@ -14,21 +14,21 @@ public class Agreements extends AuthNBaseClient {
 
 	// TODO: Docs
 	public AgreementCreateResponse create(AgreementCreateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/agreements/create", request, AgreementCreateResponse.class);
+		return post("/v2/agreements/create", request, AgreementCreateResponse.class);
 	}
 
 	// TODO: Docs
 	public AgreementDeleteResponse delete(AgreementDeleteRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/agreements/delete", request, AgreementDeleteResponse.class);
+		return post("/v2/agreements/delete", request, AgreementDeleteResponse.class);
 	}
 
 	// TODO: Docs
 	public AgreementUpdateResponse update(AgreementUpdateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/agreements/update", request, AgreementUpdateResponse.class);
+		return post("/v2/agreements/update", request, AgreementUpdateResponse.class);
 	}
 
 	// TODO: Docs
 	public AgreementListResponse list(AgreementListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/agreements/list", request, AgreementListResponse.class);
+		return post("/v2/agreements/list", request, AgreementListResponse.class);
 	}
 }

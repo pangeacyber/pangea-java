@@ -2,7 +2,6 @@ package cloud.pangeacyber.pangea.authn.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.models.FilterUserInviteList;
-import cloud.pangeacyber.pangea.authn.models.FilterUserList;
 import cloud.pangeacyber.pangea.authn.models.UserInviteListOrderBy;
 import cloud.pangeacyber.pangea.filters.Filter;
 import cloud.pangeacyber.pangea.vault.models.ItemOrder;

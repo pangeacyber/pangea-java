@@ -74,7 +74,7 @@ public class ClientSession extends AuthNBaseClient {
 	public ClientSessionInvalidateResponse invalidate(String token, String sessionID)
 		throws PangeaException, PangeaAPIException {
 		ClientSessionInvalidateRequest request = new ClientSessionInvalidateRequest(token, sessionID);
-		return post("/v1/client/session/invalidate", request, ClientSessionInvalidateResponse.class);
+		return post("/v2/client/session/invalidate", request, ClientSessionInvalidateResponse.class);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class ClientSession extends AuthNBaseClient {
 	 * }
 	 */
 	public ClientSessionListResponse list(ClientSessionListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/client/session/list", request, ClientSessionListResponse.class);
+		return post("/v2/client/session/list", request, ClientSessionListResponse.class);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class ClientSession extends AuthNBaseClient {
 	 */
 	public ClientSessionLogoutResponse logout(String token) throws PangeaException, PangeaAPIException {
 		ClientSessionLogoutRequest request = new ClientSessionLogoutRequest(token);
-		return post("/v1/client/session/logout", request, ClientSessionLogoutResponse.class);
+		return post("/v2/client/session/logout", request, ClientSessionLogoutResponse.class);
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class ClientSession extends AuthNBaseClient {
 	 */
 	public ClientSessionRefreshResponse refresh(String refreshToken) throws PangeaException, PangeaAPIException {
 		ClientSessionRefreshRequest request = new ClientSessionRefreshRequest(refreshToken, null);
-		return post("/v1/client/session/refresh", request, ClientSessionRefreshResponse.class);
+		return post("/v2/client/session/refresh", request, ClientSessionRefreshResponse.class);
 	}
 
 	/**
@@ -149,6 +149,6 @@ public class ClientSession extends AuthNBaseClient {
 	public ClientSessionRefreshResponse refresh(String refreshToken, String userToken)
 		throws PangeaException, PangeaAPIException {
 		ClientSessionRefreshRequest request = new ClientSessionRefreshRequest(refreshToken, userToken);
-		return post("/v1/client/session/refresh", request, ClientSessionRefreshResponse.class);
+		return post("/v2/client/session/refresh", request, ClientSessionRefreshResponse.class);
 	}
 }

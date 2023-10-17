@@ -48,7 +48,7 @@ public class UserProfile extends AuthNBaseClient {
 	 */
 	public UserProfileGetResponse getByEmail(String email) throws PangeaException, PangeaAPIException {
 		UserProfileGetRequest request = new UserProfileGetRequest(email, null);
-		return post("/v1/user/profile/get", request, UserProfileGetResponse.class);
+		return post("/v2/user/profile/get", request, UserProfileGetResponse.class);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class UserProfile extends AuthNBaseClient {
 	 */
 	public UserProfileGetResponse getByID(String id) throws PangeaException, PangeaAPIException {
 		UserProfileGetRequest request = new UserProfileGetRequest(null, id);
-		return post("/v1/user/profile/get", request, UserProfileGetResponse.class);
+		return post("/v2/user/profile/get", request, UserProfileGetResponse.class);
 	}
 
 	/**
@@ -91,6 +91,6 @@ public class UserProfile extends AuthNBaseClient {
 	 */
 	public UserProfileUpdateResponse update(UserProfileUpdateRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/user/profile/update", request, UserProfileUpdateResponse.class);
+		return post("/v2/user/profile/update", request, UserProfileUpdateResponse.class);
 	}
 }

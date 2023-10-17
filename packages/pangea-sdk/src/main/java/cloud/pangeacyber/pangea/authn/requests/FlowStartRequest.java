@@ -3,12 +3,10 @@ package cloud.pangeacyber.pangea.authn.requests;
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.models.FlowType;
 import cloud.pangeacyber.pangea.authn.models.IDProvider;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class FlowStartRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
@@ -21,7 +19,7 @@ public class FlowStartRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("flow_types")
-	FlowType flowType;
+	FlowType[] flowType;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("provider")
@@ -38,7 +36,7 @@ public class FlowStartRequest extends BaseRequest {
 
 		private String cbURI;
 		private String email;
-		private FlowType flowType;
+		private FlowType[] flowType;
 		private IDProvider provider;
 
 		public Builder() {}
@@ -53,7 +51,7 @@ public class FlowStartRequest extends BaseRequest {
 			return this;
 		}
 
-		public Builder setFlowType(FlowType flowType) {
+		public Builder setFlowType(FlowType[] flowType) {
 			this.flowType = flowType;
 			return this;
 		}

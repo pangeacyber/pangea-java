@@ -40,7 +40,7 @@ public class UserInvite extends AuthNBaseClient {
 	 * }
 	 */
 	public UserInviteListResponse list(UserInviteListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/user/invite/list", request, UserInviteListResponse.class);
+		return post("/v2/user/invite/list", request, UserInviteListResponse.class);
 	}
 
 	/**
@@ -58,6 +58,6 @@ public class UserInvite extends AuthNBaseClient {
 	 */
 	public UserInviteDeleteResponse delete(String id) throws PangeaException, PangeaAPIException {
 		UserInviteDeleteRequest request = new UserInviteDeleteRequest(id);
-		return post("/v1/user/invite/delete", request, UserInviteDeleteResponse.class);
+		return post("/v2/user/invite/delete", request, UserInviteDeleteResponse.class);
 	}
 }

@@ -49,7 +49,7 @@ public class Session extends AuthNBaseClient {
 	 */
 	public SessionInvalidateResponse invalidate(String sessionID) throws PangeaException, PangeaAPIException {
 		SessionInvalidateRequest request = new SessionInvalidateRequest(sessionID);
-		return post("/v1/session/invalidate", request, SessionInvalidateResponse.class);
+		return post("/v2/session/invalidate", request, SessionInvalidateResponse.class);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class Session extends AuthNBaseClient {
 	 * }
 	 */
 	public SessionListResponse list(SessionListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/session/list", request, SessionListResponse.class);
+		return post("/v2/session/list", request, SessionListResponse.class);
 	}
 
 	/**
@@ -85,6 +85,6 @@ public class Session extends AuthNBaseClient {
 	 */
 	public SessionLogoutResponse logout(String userID) throws PangeaException, PangeaAPIException {
 		SessionLogoutRequest request = new SessionLogoutRequest(userID);
-		return post("/v1/session/logout", request, SessionLogoutResponse.class);
+		return post("/v2/session/logout", request, SessionLogoutResponse.class);
 	}
 }

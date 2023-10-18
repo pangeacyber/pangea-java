@@ -1,6 +1,8 @@
 package cloud.pangeacyber.pangea.authn.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,6 +20,9 @@ public class SessionToken {
 	@JsonProperty("expire")
 	String expire;
 
+	@JsonProperty("identity")
+	String identity;
+
 	@JsonProperty("email")
 	String email;
 
@@ -29,6 +34,10 @@ public class SessionToken {
 
 	@JsonProperty("created_at")
 	String createdAt;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("intelligence")
+	Intelligence intelligence;
 
 	public String getId() {
 		return id;
@@ -60,5 +69,9 @@ public class SessionToken {
 
 	public Scopes getScopes() {
 		return scopes;
+	}
+
+	public String getIdentity() {
+		return identity;
 	}
 }

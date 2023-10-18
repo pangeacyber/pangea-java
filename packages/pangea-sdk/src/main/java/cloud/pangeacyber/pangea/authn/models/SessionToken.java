@@ -39,7 +39,7 @@ public class SessionToken {
 	@JsonProperty("intelligence")
 	Intelligence intelligence;
 
-	public String getId() {
+	public String getID() {
 		return id;
 	}
 

@@ -52,6 +52,10 @@ public class User {
 	@JsonProperty("last_login_country")
 	private String lastLoginCountry;
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonProperty("authenticators")
+	Authenticator[] authenticators;
+
 	public String getID() {
 		return id;
 	}
@@ -102,5 +106,9 @@ public class User {
 
 	public String getLastLoginCountry() {
 		return lastLoginCountry;
+	}
+
+	public Authenticator[] getAuthenticators() {
+		return authenticators;
 	}
 }

@@ -14,7 +14,23 @@ public class UserAuthenticators extends AuthNBaseClient {
 	}
 
 	/**
-	// TODO: Docs
+	 * Delete user authenticator
+	 * @pangea.description Delete user authenticator.
+	 * @pangea.operationId authn_post_v2_user_authenticators_delete
+	 * @param request
+	 * @return UserAuthenticatorsDeleteResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * UserAuthenticatorsDeleteRequest request = 
+	 * 	new UserAuthenticatorsDeleteRequest
+	 * 		.Builder("pau_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a")
+	 * 		.setID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5")
+	 * 		.build();
+	 * 
+	 * client.user().authenticators().delete(request);
+	 * }
 	 */
 	public UserAuthenticatorsDeleteResponse delete(UserAuthenticatorsDeleteRequest request)
 		throws PangeaException, PangeaAPIException {
@@ -22,7 +38,24 @@ public class UserAuthenticators extends AuthNBaseClient {
 	}
 
 	/**
-	// TODO: Docs
+	 * Get user authenticators
+	 * @pangea.description Get user authenticators.
+	 * @pangea.operationId authn_post_v2_user_authenticators_list
+	 * @param request
+	 * @return UserAuthenticatorsListResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * UserAuthenticatorsListRequest request = 
+	 * 	new UserAuthenticatorsListRequest
+	 * 		.Builder()
+	 * 		.setID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5")
+	 * 		.build();
+	 * 
+	 * UserAuthenticatorsListResponse response = 
+	 * 	client.user().authenticators.list(request);
+	 * }
 	 */
 	public UserAuthenticatorsListResponse list(UserAuthenticatorsListRequest request)
 		throws PangeaException, PangeaAPIException {

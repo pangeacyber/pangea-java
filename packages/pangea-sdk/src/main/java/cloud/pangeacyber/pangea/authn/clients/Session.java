@@ -37,8 +37,8 @@ public class Session extends AuthNBaseClient {
 	/**
 	 * Invalidate Session
 	 * @pangea.description Invalidate a session by session ID.
-	 * @pangea.operationId authn_post_v1_session_invalidate
-	 * @param sessionID
+	 * @pangea.operationId authn_post_v2_session_invalidate
+	 * @param sessionID An ID for a token
 	 * @return SessionInvalidateResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
@@ -55,7 +55,7 @@ public class Session extends AuthNBaseClient {
 	/**
 	 * List session (service token)
 	 * @pangea.description List sessions.
-	 * @pangea.operationId authn_post_v1_session_list
+	 * @pangea.operationId authn_post_v2_session_list
 	 * @param request
 	 * @return SessionListResponse
 	 * @throws PangeaException
@@ -73,7 +73,7 @@ public class Session extends AuthNBaseClient {
 	/**
 	 * Log out (service token)
 	 * @pangea.description Invalidate all sessions belonging to a user.
-	 * @pangea.operationId authn_post_v1_session_logout
+	 * @pangea.operationId authn_post_v2_session_logout
 	 * @param userID The identity of a user or a service
 	 * @return SessionLogoutResponse
 	 * @throws PangeaException

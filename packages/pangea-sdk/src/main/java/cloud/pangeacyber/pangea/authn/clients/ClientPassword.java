@@ -34,7 +34,7 @@ public class ClientPassword extends AuthNBaseClient {
 	/**
 	 * Change a user's password
 	 * @pangea.description Change a user's password given the current password.
-	 * @pangea.operationId authn_post_v1_client_password_change
+	 * @pangea.operationId authn_post_v2_client_password_change
 	 * @param token A user token value
 	 * @param oldPassword
 	 * @param newPassword

@@ -64,19 +64,23 @@ public class User extends AuthNBaseClient {
 	/**
 	 * Create User
 	 * @pangea.description Create a user.
-	 * @pangea.operationId authn_post_v1_user_create
+	 * @pangea.operationId authn_post_v2_user_create
 	 * @param request
 	 * @return UserCreateResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserCreateResponse response = client.user().create(
-	 * 	new UserCreateRequest
-	 * 		.Builder(
-	 * 			"joe.user@email.com",
-	 * 			"My1s+Password",
-	 * 			IDProvider.PASSWORD).build());
+	 * Profile profile = new Profile();
+	 * profile.put("first_name", "Joe");
+	 * profile.put("last_name", "User");
+	 * 
+	 * UserCreateRequest request = new UserCreateRequest.Builder(
+	 * 	"joe.user@email.com",
+	 * 	profile
+	 * ).build();
+	 * 
+	 * UserCreateResponse response = client.user().create(request);
 	 * }
 	 */
 	public UserCreateResponse create(UserCreateRequest request) throws PangeaException, PangeaAPIException {
@@ -86,14 +90,14 @@ public class User extends AuthNBaseClient {
 	/**
 	 * Delete User
 	 * @pangea.description Delete a user by email address.
-	 * @pangea.operationId authn_post_v1_user_delete 1
+	 * @pangea.operationId authn_post_v2_user_delete 1
 	 * @param email An email address
 	 * @return UserDeleteResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * client.user().deleteByEmail("example@example.com");
+	 * client.user().deleteByEmail("joe.user@email.com");
 	 * }
 	 */
 	public UserDeleteResponse deleteByEmail(String email) throws PangeaException, PangeaAPIException {
@@ -103,8 +107,8 @@ public class User extends AuthNBaseClient {
 	/**
 	 * Delete User
 	 * @pangea.description Delete a user by ID.
-	 * @pangea.operationId authn_post_v1_user_delete 2
-	 * @param id
+	 * @pangea.operationId authn_post_v2_user_delete 2
+	 * @param id The identity of a user or a service
 	 * @return UserDeleteResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
@@ -120,18 +124,19 @@ public class User extends AuthNBaseClient {
 	/**
 	 * Update user's settings
 	 * @pangea.description Update user's settings.
-	 * @pangea.operationId authn_post_v1_user_update
+	 * @pangea.operationId authn_post_v2_user_update
 	 * @param request
 	 * @return UserUpdateResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserUpdateResponse response = client.user().update(
-	 * 	new UserUpdateRequest
-	 * 		.Builder()
-	 * 		.setEmail("joe.user@email.com")
-	 * 		.setRequireMFA(true).build());
+	 * UserUpdateRequest request = new UserUpdateRequest.Builder()
+	 * 	.setEmail("joe.user@email.com")
+	 * 	.setDisabled(true)
+	 * 	.build();
+	 * 
+	 * UserUpdateResponse response = client.user().update(request);
 	 * }
 	 */
 	public UserUpdateResponse update(UserUpdateRequest request) throws PangeaException, PangeaAPIException {
@@ -141,7 +146,7 @@ public class User extends AuthNBaseClient {
 	/**
 	 * Invite User
 	 * @pangea.description Send an invitation to a user.
-	 * @pangea.operationId authn_post_v1_user_invite
+	 * @pangea.operationId authn_post_v2_user_invite
 	 * @param request
 	 * @return UserInviteResponse
 	 * @throws PangeaException
@@ -152,7 +157,7 @@ public class User extends AuthNBaseClient {
 	 * 	.Builder(
 	 * 		"admin@email.com",
 	 * 		"joe.user@email.com",
-	 * 		"/callback",
+	 * 		"https://www.myserver.com/callback",
 	 * 		"pcb_zurr3lkcwdp5keq73htsfpcii5k4zgm7")
 	 * 	.build();
 	 *
@@ -166,7 +171,7 @@ public class User extends AuthNBaseClient {
 	/**
 	 * List Users
 	 * @pangea.description Look up users by scopes.
-	 * @pangea.operationId authn_post_v1_user_list
+	 * @pangea.operationId authn_post_v2_user_list
 	 * @param request
 	 * @return UserListResponse
 	 * @throws PangeaException

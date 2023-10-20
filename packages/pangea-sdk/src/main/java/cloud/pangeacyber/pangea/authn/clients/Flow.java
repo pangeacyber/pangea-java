@@ -64,6 +64,7 @@ public class Flow extends AuthNBaseClient {
 	 * 	.setFlowType(flowTypes)
 	 * 	.setInvitation("pmc_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a")
 	 * 	.build();
+	 * 
 	 * FlowStartResponse response = client.flow().start(request);
 	 * }
 	 */

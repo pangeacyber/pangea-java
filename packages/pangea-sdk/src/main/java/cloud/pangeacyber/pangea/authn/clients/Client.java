@@ -34,7 +34,7 @@ public class Client extends AuthNBaseClient {
 	/**
 	 * Get User (client token)
 	 * @pangea.description Retrieve the logged in user's token and information.
-	 * @pangea.operationId authn_post_v1_client_userinfo
+	 * @pangea.operationId authn_post_v2_client_userinfo
 	 * @param code Login code returned by the login callback
 	 * @return ClientUserinfoResponse
 	 * @throws PangeaException
@@ -53,7 +53,7 @@ public class Client extends AuthNBaseClient {
 	/**
 	 * Get JWT verification keys
 	 * @pangea.description Get JWT verification keys.
-	 * @pangea.operationId authn_post_v1_client_jwks
+	 * @pangea.operationId authn_post_v2_client_jwks
 	 * @return ClientJWKSResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException

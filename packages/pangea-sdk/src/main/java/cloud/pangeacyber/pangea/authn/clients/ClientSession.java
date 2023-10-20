@@ -58,7 +58,7 @@ public class ClientSession extends AuthNBaseClient {
 	/**
 	 * Invalidate Session | Client
 	 * @pangea.description Invalidate a session by session ID using a client token.
-	 * @pangea.operationId authn_post_v1_client_session_invalidate
+	 * @pangea.operationId authn_post_v2_client_session_invalidate
 	 * @param token A user token value
 	 * @param sessionID An ID for a token
 	 * @return ClientSessionInvalidateResponse
@@ -80,7 +80,7 @@ public class ClientSession extends AuthNBaseClient {
 	/**
 	 * List sessions (client token)
 	 * @pangea.description List sessions using a client token.
-	 * @pangea.operationId authn_post_v1_client_session_list
+	 * @pangea.operationId authn_post_v2_client_session_list
 	 * @param request
 	 * @return ClientSessionListResponse
 	 * @throws PangeaException
@@ -98,7 +98,7 @@ public class ClientSession extends AuthNBaseClient {
 	/**
 	 * Log out (client token)
 	 * @pangea.description Log out the current user's session.
-	 * @pangea.operationId authn_post_v1_client_session_logout
+	 * @pangea.operationId authn_post_v2_client_session_logout
 	 * @param token A user token value
 	 * @return ClientSessionLogoutResponse
 	 * @throws PangeaException
@@ -134,7 +134,7 @@ public class ClientSession extends AuthNBaseClient {
 	/**
 	 * Refresh a Session
 	 * @pangea.description Refresh a session token.
-	 * @pangea.operationId authn_post_v1_client_session_refresh
+	 * @pangea.operationId authn_post_v2_client_session_refresh
 	 * @param refreshToken
 	 * @param userToken
 	 * @return ClientSessionRefreshResponse
@@ -143,7 +143,8 @@ public class ClientSession extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * ClientSessionRefreshResponse response = client.client().session().refresh(
-	 * 	"ptr_xpkhwpnz2cmegsws737xbsqnmnuwtbm5", "ptu_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a");
+	 * 	"ptr_xpkhwpnz2cmegsws737xbsqnmnuwtbm5", 
+	 * 	"ptu_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a");
 	 * }
 	 */
 	public ClientSessionRefreshResponse refresh(String refreshToken, String userToken)

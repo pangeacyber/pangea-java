@@ -21,15 +21,10 @@ public class FlowStartRequest extends BaseRequest {
 	@JsonProperty("flow_types")
 	FlowType[] flowType;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("provider")
-	IDProvider provider;
-
 	private FlowStartRequest(Builder builder) {
 		this.cbURI = builder.cbURI;
 		this.email = builder.email;
 		this.flowType = builder.flowType;
-		this.provider = builder.provider;
 	}
 
 	public static class Builder {
@@ -37,7 +32,6 @@ public class FlowStartRequest extends BaseRequest {
 		private String cbURI;
 		private String email;
 		private FlowType[] flowType;
-		private IDProvider provider;
 
 		public Builder() {}
 
@@ -53,11 +47,6 @@ public class FlowStartRequest extends BaseRequest {
 
 		public Builder setFlowType(FlowType[] flowType) {
 			this.flowType = flowType;
-			return this;
-		}
-
-		public Builder setProvider(IDProvider provider) {
-			this.provider = provider;
 			return this;
 		}
 

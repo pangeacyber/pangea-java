@@ -53,7 +53,7 @@ public class ClientPassword extends AuthNBaseClient {
 		throws PangeaException, PangeaAPIException {
 		ClientPasswordChangeRequest request = new ClientPasswordChangeRequest(token, oldPassword, newPassword);
 		ClientPasswordChangeResponse resp = post(
-			"/v1/client/password/change",
+			"/v2/client/password/change",
 			request,
 			ClientPasswordChangeResponse.class
 		);

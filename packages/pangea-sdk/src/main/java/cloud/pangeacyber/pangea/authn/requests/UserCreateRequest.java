@@ -1,12 +1,8 @@
 package cloud.pangeacyber.pangea.authn.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
-import cloud.pangeacyber.pangea.authn.models.IDProvider;
 import cloud.pangeacyber.pangea.authn.models.Profile;
-import cloud.pangeacyber.pangea.authn.models.Scopes;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

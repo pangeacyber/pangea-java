@@ -3,11 +3,9 @@ package cloud.pangeacyber.pangea;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import jcifs.util.Hexdump;
 import jcifs.util.MD4;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class Utils {

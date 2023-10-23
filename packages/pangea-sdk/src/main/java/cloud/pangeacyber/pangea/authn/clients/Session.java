@@ -37,8 +37,8 @@ public class Session extends AuthNBaseClient {
 	/**
 	 * Invalidate Session
 	 * @pangea.description Invalidate a session by session ID.
-	 * @pangea.operationId authn_post_v1_session_invalidate
-	 * @param sessionID
+	 * @pangea.operationId authn_post_v2_session_invalidate
+	 * @param sessionID An ID for a token
 	 * @return SessionInvalidateResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
@@ -49,13 +49,13 @@ public class Session extends AuthNBaseClient {
 	 */
 	public SessionInvalidateResponse invalidate(String sessionID) throws PangeaException, PangeaAPIException {
 		SessionInvalidateRequest request = new SessionInvalidateRequest(sessionID);
-		return post("/v1/session/invalidate", request, SessionInvalidateResponse.class);
+		return post("/v2/session/invalidate", request, SessionInvalidateResponse.class);
 	}
 
 	/**
 	 * List session (service token)
 	 * @pangea.description List sessions.
-	 * @pangea.operationId authn_post_v1_session_list
+	 * @pangea.operationId authn_post_v2_session_list
 	 * @param request
 	 * @return SessionListResponse
 	 * @throws PangeaException
@@ -67,13 +67,13 @@ public class Session extends AuthNBaseClient {
 	 * }
 	 */
 	public SessionListResponse list(SessionListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/session/list", request, SessionListResponse.class);
+		return post("/v2/session/list", request, SessionListResponse.class);
 	}
 
 	/**
 	 * Log out (service token)
 	 * @pangea.description Invalidate all sessions belonging to a user.
-	 * @pangea.operationId authn_post_v1_session_logout
+	 * @pangea.operationId authn_post_v2_session_logout
 	 * @param userID The identity of a user or a service
 	 * @return SessionLogoutResponse
 	 * @throws PangeaException
@@ -85,6 +85,6 @@ public class Session extends AuthNBaseClient {
 	 */
 	public SessionLogoutResponse logout(String userID) throws PangeaException, PangeaAPIException {
 		SessionLogoutRequest request = new SessionLogoutRequest(userID);
-		return post("/v1/session/logout", request, SessionLogoutResponse.class);
+		return post("/v2/session/logout", request, SessionLogoutResponse.class);
 	}
 }

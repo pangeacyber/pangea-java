@@ -58,7 +58,7 @@ public class ClientSession extends AuthNBaseClient {
 	/**
 	 * Invalidate Session | Client
 	 * @pangea.description Invalidate a session by session ID using a client token.
-	 * @pangea.operationId authn_post_v1_client_session_invalidate
+	 * @pangea.operationId authn_post_v2_client_session_invalidate
 	 * @param token A user token value
 	 * @param sessionID An ID for a token
 	 * @return ClientSessionInvalidateResponse
@@ -74,13 +74,13 @@ public class ClientSession extends AuthNBaseClient {
 	public ClientSessionInvalidateResponse invalidate(String token, String sessionID)
 		throws PangeaException, PangeaAPIException {
 		ClientSessionInvalidateRequest request = new ClientSessionInvalidateRequest(token, sessionID);
-		return post("/v1/client/session/invalidate", request, ClientSessionInvalidateResponse.class);
+		return post("/v2/client/session/invalidate", request, ClientSessionInvalidateResponse.class);
 	}
 
 	/**
 	 * List sessions (client token)
 	 * @pangea.description List sessions using a client token.
-	 * @pangea.operationId authn_post_v1_client_session_list
+	 * @pangea.operationId authn_post_v2_client_session_list
 	 * @param request
 	 * @return ClientSessionListResponse
 	 * @throws PangeaException
@@ -92,13 +92,13 @@ public class ClientSession extends AuthNBaseClient {
 	 * }
 	 */
 	public ClientSessionListResponse list(ClientSessionListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/client/session/list", request, ClientSessionListResponse.class);
+		return post("/v2/client/session/list", request, ClientSessionListResponse.class);
 	}
 
 	/**
 	 * Log out (client token)
 	 * @pangea.description Log out the current user's session.
-	 * @pangea.operationId authn_post_v1_client_session_logout
+	 * @pangea.operationId authn_post_v2_client_session_logout
 	 * @param token A user token value
 	 * @return ClientSessionLogoutResponse
 	 * @throws PangeaException
@@ -110,7 +110,7 @@ public class ClientSession extends AuthNBaseClient {
 	 */
 	public ClientSessionLogoutResponse logout(String token) throws PangeaException, PangeaAPIException {
 		ClientSessionLogoutRequest request = new ClientSessionLogoutRequest(token);
-		return post("/v1/client/session/logout", request, ClientSessionLogoutResponse.class);
+		return post("/v2/client/session/logout", request, ClientSessionLogoutResponse.class);
 	}
 
 	/**
@@ -128,13 +128,13 @@ public class ClientSession extends AuthNBaseClient {
 	 */
 	public ClientSessionRefreshResponse refresh(String refreshToken) throws PangeaException, PangeaAPIException {
 		ClientSessionRefreshRequest request = new ClientSessionRefreshRequest(refreshToken, null);
-		return post("/v1/client/session/refresh", request, ClientSessionRefreshResponse.class);
+		return post("/v2/client/session/refresh", request, ClientSessionRefreshResponse.class);
 	}
 
 	/**
 	 * Refresh a Session
 	 * @pangea.description Refresh a session token.
-	 * @pangea.operationId authn_post_v1_client_session_refresh
+	 * @pangea.operationId authn_post_v2_client_session_refresh
 	 * @param refreshToken
 	 * @param userToken
 	 * @return ClientSessionRefreshResponse
@@ -143,12 +143,13 @@ public class ClientSession extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * ClientSessionRefreshResponse response = client.client().session().refresh(
-	 * 	"ptr_xpkhwpnz2cmegsws737xbsqnmnuwtbm5", "ptu_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a");
+	 * 	"ptr_xpkhwpnz2cmegsws737xbsqnmnuwtbm5", 
+	 * 	"ptu_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a");
 	 * }
 	 */
 	public ClientSessionRefreshResponse refresh(String refreshToken, String userToken)
 		throws PangeaException, PangeaAPIException {
 		ClientSessionRefreshRequest request = new ClientSessionRefreshRequest(refreshToken, userToken);
-		return post("/v1/client/session/refresh", request, ClientSessionRefreshResponse.class);
+		return post("/v2/client/session/refresh", request, ClientSessionRefreshResponse.class);
 	}
 }

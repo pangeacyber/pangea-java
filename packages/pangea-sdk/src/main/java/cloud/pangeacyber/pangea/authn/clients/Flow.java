@@ -2,9 +2,13 @@ package cloud.pangeacyber.pangea.authn.clients;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
+import cloud.pangeacyber.pangea.authn.requests.FlowRestartRequest;
 import cloud.pangeacyber.pangea.authn.requests.FlowStartRequest;
+import cloud.pangeacyber.pangea.authn.requests.FlowUpdateRequest;
 import cloud.pangeacyber.pangea.authn.responses.FlowCompleteResponse;
+import cloud.pangeacyber.pangea.authn.responses.FlowRestartResponse;
 import cloud.pangeacyber.pangea.authn.responses.FlowStartResponse;
+import cloud.pangeacyber.pangea.authn.responses.FlowUpdateResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,39 +25,14 @@ final class FlowCompleteRequest extends BaseRequest {
 
 public class Flow extends AuthNBaseClient {
 
-	private FlowEnroll enroll;
-	private FlowSignup signup;
-	private FlowVerify verify;
-	private FlowReset reset;
-
 	public Flow(AuthNClient.Builder builder) {
 		super(builder);
-		enroll = new FlowEnroll(builder);
-		signup = new FlowSignup(builder);
-		verify = new FlowVerify(builder);
-		reset = new FlowReset(builder);
-	}
-
-	public FlowEnroll getEnroll() {
-		return enroll;
-	}
-
-	public FlowSignup getSignup() {
-		return signup;
-	}
-
-	public FlowVerify getVerify() {
-		return verify;
-	}
-
-	public FlowReset getReset() {
-		return reset;
 	}
 
 	/**
-	 * Complete Sign-up/in
-	 * @pangea.description Complete a login or signup flow.
-	 * @pangea.operationId authn_post_v1_flow_complete
+	 * Complete sign-up/sign-in
+	 * @pangea.description Complete a sign-up or sign-in flow.
+	 * @pangea.operationId authn_post_v2_flow_complete
 	 * @param flowID An ID for a login or signup flow
 	 * @return FlowCompleteResponse
 	 * @throws PangeaException
@@ -65,41 +44,80 @@ public class Flow extends AuthNBaseClient {
 	 */
 	public FlowCompleteResponse complete(String flowID) throws PangeaException, PangeaAPIException {
 		FlowCompleteRequest request = new FlowCompleteRequest(flowID);
-		return post("/v1/flow/complete", request, FlowCompleteResponse.class);
+		return post("/v2/flow/complete", request, FlowCompleteResponse.class);
 	}
 
 	/**
-	 * Start a sign-up/in
-	 * @pangea.description Start a new signup or signin flow.
-	 * @pangea.operationId authn_post_v1_flow_start
+	 * Start a sign-up/sign-in flow
+	 * @pangea.description Start a new sign-up or sign-in flow.
+	 * @pangea.operationId authn_post_v2_flow_start
 	 * @param request
 	 * @return FlowStartResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * FlowStartResponse response = client.flow().start(
-	 * 	new FlowStartRequest.Builder()
-	 * 		.setCbURI("https://www.myserver.com/callback")
-	 * 		.setEmail("joe.user@email.com")
-	 * 		.setFlowType(FlowType.SIGNIN)
-	 * 		.setProvider(IDProvider.PASSWORD)
-	 * 		.build());
+	 * FlowType[] flowTypes = new FlowType[]{FlowType.SIGNIN,FlowType.SIGNUP};
+	 * FlowStartRequest request = new FlowStartRequest.Builder()
+	 * 	.setEmail("joe.user@email.com")
+	 * 	.setCbURI("https://www.myserver.com/callback")
+	 * 	.setFlowType(flowTypes)
+	 * 	.setInvitation("pmc_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a")
+	 * 	.build();
+	 * 
+	 * FlowStartResponse response = client.flow().start(request);
 	 * }
 	 */
 	public FlowStartResponse start(FlowStartRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/flow/start", request, FlowStartResponse.class);
+		return post("/v2/flow/start", request, FlowStartResponse.class);
 	}
 
-	public FlowEnroll enroll() {
-		return enroll;
+	/**
+	 * Restart a sign-up/sign-in flow
+	 * @pangea.description Restart a sign-up/sign-in flow choice.
+	 * @pangea.operationId authn_post_v2_flow_restart
+	 * @param request
+	 * @return FlowRestartResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * FlowRestartRequest request = new FlowRestartRequest.Builder(
+	 * 	"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
+	 * 	FlowChoice.PASSWORD,
+	 * 	new FlowRestartData()
+	 * ).build();
+	 * 
+	 * FlowRestartResponse response = client.flow().restart(request);
+	 * }
+	 */
+	public FlowRestartResponse restart(FlowRestartRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v2/flow/restart", request, FlowRestartResponse.class);
 	}
 
-	public FlowSignup signup() {
-		return signup;
-	}
-
-	public FlowVerify verify() {
-		return verify;
+	/**
+	 * Update a sign-up/sign-in flow
+	 * @pangea.description Update a sign-up/sign-in flow.
+	 * @pangea.operationId authn_post_v2_flow_update
+	 * @param request
+	 * @return FlowUpdateResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * FlowUpdateData data = new FlowUpdateData();
+	 * data.password = "somenewpassword";
+	 * 
+	 * FlowUpdateRequest request = new FlowUpdateRequest.Builder(
+	 * 	"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
+	 * 	FlowChoice.PASSWORD,
+	 * 	data
+	 * ).build();
+	 * 
+	 * FlowUpdateResponse response = client.flow().update(request);
+	 * }
+	 */
+	public FlowUpdateResponse update(FlowUpdateRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v2/flow/update", request, FlowUpdateResponse.class);
 	}
 }

@@ -2,13 +2,10 @@ package cloud.pangeacyber.pangea.authn.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authn.models.FlowType;
-import cloud.pangeacyber.pangea.authn.models.IDProvider;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class FlowStartRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
@@ -21,25 +18,25 @@ public class FlowStartRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("flow_types")
-	FlowType flowType;
+	FlowType[] flowType;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("provider")
-	IDProvider provider;
+	@JsonProperty("invitation")
+	String invitation;
 
 	private FlowStartRequest(Builder builder) {
 		this.cbURI = builder.cbURI;
 		this.email = builder.email;
 		this.flowType = builder.flowType;
-		this.provider = builder.provider;
+		this.invitation = builder.invitation;
 	}
 
 	public static class Builder {
 
 		private String cbURI;
 		private String email;
-		private FlowType flowType;
-		private IDProvider provider;
+		private FlowType[] flowType;
+		private String invitation;
 
 		public Builder() {}
 
@@ -53,13 +50,13 @@ public class FlowStartRequest extends BaseRequest {
 			return this;
 		}
 
-		public Builder setFlowType(FlowType flowType) {
+		public Builder setFlowType(FlowType[] flowType) {
 			this.flowType = flowType;
 			return this;
 		}
 
-		public Builder setProvider(IDProvider provider) {
-			this.provider = provider;
+		public Builder setInvitation(String invitation) {
+			this.invitation = invitation;
 			return this;
 		}
 

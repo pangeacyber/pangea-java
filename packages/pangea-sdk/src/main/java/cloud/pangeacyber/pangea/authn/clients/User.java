@@ -74,12 +74,12 @@ public class User extends AuthNBaseClient {
 	 * Profile profile = new Profile();
 	 * profile.put("first_name", "Joe");
 	 * profile.put("last_name", "User");
-	 * 
+	 *
 	 * UserCreateRequest request = new UserCreateRequest.Builder(
 	 * 	"joe.user@email.com",
 	 * 	profile
 	 * ).build();
-	 * 
+	 *
 	 * UserCreateResponse response = client.user().create(request);
 	 * }
 	 */
@@ -135,7 +135,7 @@ public class User extends AuthNBaseClient {
 	 * 	.setEmail("joe.user@email.com")
 	 * 	.setDisabled(true)
 	 * 	.build();
-	 * 
+	 *
 	 * UserUpdateResponse response = client.user().update(request);
 	 * }
 	 */

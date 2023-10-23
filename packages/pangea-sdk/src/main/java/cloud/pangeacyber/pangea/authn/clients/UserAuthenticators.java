@@ -23,12 +23,12 @@ public class UserAuthenticators extends AuthNBaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserAuthenticatorsDeleteRequest request = 
+	 * UserAuthenticatorsDeleteRequest request =
 	 * 	new UserAuthenticatorsDeleteRequest
 	 * 		.Builder("pau_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a")
 	 * 		.setID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5")
 	 * 		.build();
-	 * 
+	 *
 	 * client.user().authenticators().delete(request);
 	 * }
 	 */
@@ -47,13 +47,13 @@ public class UserAuthenticators extends AuthNBaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserAuthenticatorsListRequest request = 
+	 * UserAuthenticatorsListRequest request =
 	 * 	new UserAuthenticatorsListRequest
 	 * 		.Builder()
 	 * 		.setID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5")
 	 * 		.build();
-	 * 
-	 * UserAuthenticatorsListResponse response = 
+	 *
+	 * UserAuthenticatorsListResponse response =
 	 * 	client.user().authenticators.list(request);
 	 * }
 	 */

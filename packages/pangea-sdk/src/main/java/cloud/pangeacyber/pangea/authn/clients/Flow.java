@@ -64,7 +64,7 @@ public class Flow extends AuthNBaseClient {
 	 * 	.setFlowType(flowTypes)
 	 * 	.setInvitation("pmc_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a")
 	 * 	.build();
-	 * 
+	 *
 	 * FlowStartResponse response = client.flow().start(request);
 	 * }
 	 */
@@ -87,7 +87,7 @@ public class Flow extends AuthNBaseClient {
 	 * 	FlowChoice.PASSWORD,
 	 * 	new FlowRestartData()
 	 * ).build();
-	 * 
+	 *
 	 * FlowRestartResponse response = client.flow().restart(request);
 	 * }
 	 */
@@ -107,13 +107,13 @@ public class Flow extends AuthNBaseClient {
 	 * {@code
 	 * FlowUpdateData data = new FlowUpdateData();
 	 * data.password = "somenewpassword";
-	 * 
+	 *
 	 * FlowUpdateRequest request = new FlowUpdateRequest.Builder(
 	 * 	"pfl_dxiqyuq7ndc5ycjwdgmguwuodizcaqhh",
 	 * 	FlowChoice.PASSWORD,
 	 * 	data
 	 * ).build();
-	 * 
+	 *
 	 * FlowUpdateResponse response = client.flow().update(request);
 	 * }
 	 */

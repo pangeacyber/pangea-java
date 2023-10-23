@@ -26,7 +26,7 @@ public class Agreements extends AuthNBaseClient {
 	 * 	AgreementType.EULA,
 	 * 	"EULA_V1",
 	 * 	"You agree to behave yourself while logged in.").build();
-	 * 
+	 *
 	 * AgreementCreateResponse response = client.agreements().create(request);
 	 * }
 	 */
@@ -47,7 +47,7 @@ public class Agreements extends AuthNBaseClient {
 	 * AgreementDeleteRequest request = new AgreementDeleteRequest.Builder(
 	 * 	AgreementType.EULA,
 	 * 	"peu_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a").build();
-	 * 
+	 *
 	 * AgreementDeleteResponse response = client.agreements().delete(request);
 	 * }
 	 */
@@ -69,7 +69,7 @@ public class Agreements extends AuthNBaseClient {
 	 * 	AgreementType.EULA,
 	 * 	"peu_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a"
 	 * ).setText("You agree to behave yourself while logged in. Don't be evil.").build();
-	 * 
+	 *
 	 * AgreementUpdateResponse response = client.agreements().update(request);
 	 * }
 	 */
@@ -88,7 +88,7 @@ public class Agreements extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * AgreementListRequest request = new AgreementListRequest.Builder().build();
-	 * 
+	 *
 	 * AgreementListResponse response = client.agreements().list();
 	 * }
 	 */

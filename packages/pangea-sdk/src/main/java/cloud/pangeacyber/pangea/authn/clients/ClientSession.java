@@ -143,7 +143,7 @@ public class ClientSession extends AuthNBaseClient {
 	 * @pangea.code
 	 * {@code
 	 * ClientSessionRefreshResponse response = client.client().session().refresh(
-	 * 	"ptr_xpkhwpnz2cmegsws737xbsqnmnuwtbm5", 
+	 * 	"ptr_xpkhwpnz2cmegsws737xbsqnmnuwtbm5",
 	 * 	"ptu_wuk7tvtpswyjtlsx52b7yyi2l7zotv4a");
 	 * }
 	 */

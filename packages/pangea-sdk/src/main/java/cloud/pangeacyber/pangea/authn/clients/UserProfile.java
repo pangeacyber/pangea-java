@@ -43,7 +43,7 @@ public class UserProfile extends AuthNBaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserProfileGetResponse response = 
+	 * UserProfileGetResponse response =
 	 * 	client.user().profile().getByEmail("joe.user@email.com");
 	 * }
 	 */
@@ -62,7 +62,7 @@ public class UserProfile extends AuthNBaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserProfileGetResponse response = 
+	 * UserProfileGetResponse response =
 	 * 	client.user().profile().getByID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5");
 	 * }
 	 */
@@ -83,14 +83,14 @@ public class UserProfile extends AuthNBaseClient {
 	 * {@code
 	 * Profile updatedProfile = new Profile();
 	 * updatedProfile.put("country", "Argentina");
-	 * 
-	 * UserProfileUpdateRequest request = 
+	 *
+	 * UserProfileUpdateRequest request =
 	 * 	new UserProfileUpdateRequest
 	 * 		.Builder(updatedProfile)
 	 * 		.setID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5")
 	 * 		.build();
 	 *
-	 * UserProfileUpdateResponse response = 
+	 * UserProfileUpdateResponse response =
 	 * 	client.user().profile().update(request);
 	 * }
 	 */

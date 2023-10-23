@@ -32,6 +32,5 @@ public class UserCreateRequest extends BaseRequest {
 		public UserCreateRequest build() {
 			return new UserCreateRequest(this);
 		}
-
 	}
 }

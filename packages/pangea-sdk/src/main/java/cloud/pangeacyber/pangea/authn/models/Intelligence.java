@@ -5,17 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Intelligence {
-    @JsonProperty("embargo")
-    private boolean embargo;
 
-    @JsonProperty("ip_intel")
-    private IPIntelligence ipIntel;
+	@JsonProperty("embargo")
+	private boolean embargo;
 
-    @JsonProperty("domain_intel")
-    private DomainIntelligence domainIntel;
+	@JsonProperty("ip_intel")
+	private IPIntelligence ipIntel;
 
-    @JsonProperty("user_intel")
-    private boolean userIntel;
+	@JsonProperty("domain_intel")
+	private DomainIntelligence domainIntel;
+
+	@JsonProperty("user_intel")
+	private boolean userIntel;
 
 	public boolean getEmbargo() {
 		return embargo;

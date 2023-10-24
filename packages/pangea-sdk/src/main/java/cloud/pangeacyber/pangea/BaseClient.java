@@ -4,6 +4,7 @@ import cloud.pangeacyber.pangea.exceptions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -11,12 +12,14 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Map;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -33,6 +36,41 @@ import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
 import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
 import org.apache.logging.log4j.core.config.builder.api.LayoutComponentBuilder;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
+
+final class InternalHttpResponse {
+
+	CloseableHttpResponse response;
+	String body;
+
+	public InternalHttpResponse(CloseableHttpResponse response) throws PangeaException {
+		this.response = response;
+		this.body = readBody(response);
+	}
+
+	private String readBody(CloseableHttpResponse response) throws PangeaException {
+		String body = "";
+		HttpEntity entity = response.getEntity();
+		if (entity == null) {
+			return body;
+		}
+
+		try {
+			body = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			throw new PangeaException("Failed to read response body", e);
+		}
+		return body;
+	}
+
+	public CloseableHttpResponse getResponse() {
+		return response;
+	}
+
+	public String getBody() {
+		return body;
+	}
+}
 
 public abstract class BaseClient {
 
@@ -68,7 +106,7 @@ public abstract class BaseClient {
 			.newLayout("PatternLayout")
 			.addAttribute(
 				"pattern",
-				"{\"time\": %d{yyyy-MM-dd HH:mm:ss.SSS}, \"name\": \"%logger{36}\", \"level\": \"%-5level\", \"message\": %msg%n"
+				"{\"time\": \"%d{yyyy-MM-dd HH:mm:ss.SSS}\", \"name\": \"%logger{36}\", \"level\": \"%-5level\", \"message\": %msg },%n"
 			);
 		AppenderComponentBuilder fileAppenderBuilder = builder
 			.newAppender("File", "File")
@@ -222,24 +260,29 @@ public abstract class BaseClient {
 		boolean checkResponse,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
-		CloseableHttpResponse httpResponse = doGet(path);
-		return checkResponse(httpResponse, responseClass, path);
+		InternalHttpResponse response = doGet(path);
+		return checkResponse(response, responseClass, path);
 	}
 
-	private CloseableHttpResponse doGet(String path) throws PangeaException {
+	private InternalHttpResponse doGet(String path) throws PangeaException {
+		URI uri = config.getServiceUrl(serviceName, path);
 		try {
 			this.logger.debug(
-					String.format("{\"service\": \"%s\", \"action\": \"get\", \"path\": \"%s\"},", serviceName, path)
+					String.format(
+						"{\"service\": \"%s\", \"action\": \"get\", \"url\": \"%s\"}",
+						serviceName,
+						uri.toString()
+					)
 				);
-			HttpGet httpGet = new HttpGet(config.getServiceUrl(serviceName, path));
+			HttpGet httpGet = new HttpGet(uri);
 			fillHeaders(httpGet);
-			return httpClient.execute(httpGet);
+			return executeRequest(httpGet);
 		} catch (Exception e) {
 			this.logger.error(
 					String.format(
-						"{\"service\": \"%s\", \"action\": \"get\", \"path\": \"%s\", \"message\": \"failed to send request\", \"exception\": \"%s\"},",
+						"{\"service\": \"%s\", \"action\": \"get\", \"url\": \"%s\", \"message\": \"failed to send request\", \"exception\": \"%s\"}",
 						serviceName,
-						path,
+						uri.toString(),
 						e.toString()
 					)
 				);
@@ -265,18 +308,18 @@ public abstract class BaseClient {
 			request.setConfigID(this.configID);
 		}
 
-		CloseableHttpResponse httpResponse;
 		URI url = config.getServiceUrl(serviceName, path);
 
+		InternalHttpResponse response;
+
 		if (request.getTransferMethod() == TransferMethod.DIRECT) {
-			httpResponse = postPresignedURL(url, request, file, responseClass);
+			response = postPresignedURL(url, request, file, responseClass);
 		} else {
-			httpResponse = postSingle(url, request, file);
+			response = postSingle(url, request, file);
 		}
 
-		httpResponse = this.handleQueued(httpResponse);
-
-		return checkResponse(httpResponse, responseClass, url.toString());
+		response = this.handleQueued(response);
+		return checkResponse(response, responseClass, url.toString());
 	}
 
 	private <ResponseType extends Response<?>> AcceptedResult pollPresignedURL(
@@ -310,7 +353,7 @@ public abstract class BaseClient {
 		) {
 			this.logger.debug(
 					String.format(
-						"{\"service\": \"%s\", \"action\": \"poll presigned URL\", \"step\": \"%d\"},",
+						"{\"service\": \"%s\", \"action\": \"poll presigned URL\", \"step\": \"%d\"}",
 						serviceName,
 						retryCounter
 					)
@@ -325,8 +368,7 @@ public abstract class BaseClient {
 
 			retryCounter++;
 			try {
-				CloseableHttpResponse response = doGet(path);
-				// EntityUtils.consumeQuietly(response.getEntity()); //response need to be consumed
+				InternalHttpResponse response = doGet(path);
 				checkResponse(response, responseClass, path);
 			} catch (AcceptedRequestException e) {
 				acceptedResult = e.getAcceptedResult();
@@ -343,17 +385,18 @@ public abstract class BaseClient {
 		return acceptedResult;
 	}
 
-	private <Req extends BaseRequest, ResponseType extends Response<?>> CloseableHttpResponse postPresignedURL(
+	private <Req extends BaseRequest, ResponseType extends Response<?>> InternalHttpResponse postPresignedURL(
 		URI url,
 		Req request,
 		File file,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
-		CloseableHttpResponse httpResponse = postSingle(url, request, null);
 		AcceptedRequestException acceptedException = null;
+		InternalHttpResponse response = null;
 		try {
-			checkResponse(httpResponse, responseClass, url.toString());
-			throw new PresignedURLException("This should return 202", null, readBody(httpResponse));
+			response = postSingle(url, request, null);
+			checkResponse(response, responseClass, url.toString());
+			throw new PresignedURLException("First call should return 202", null, "");
 		} catch (AcceptedRequestException e) {
 			acceptedException = e;
 		}
@@ -368,23 +411,49 @@ public abstract class BaseClient {
 		}
 
 		HttpPost httpPost = buildPostPresignedURL(uri, acceptedResult.getAcceptedStatus().getUploadDetails(), file);
+		this.logger.debug(
+				String.format(
+					"{\"service\": \"%s\", \"action\": \"post presigned url\", \"url\": \"%s\"}",
+					serviceName,
+					presignedURL
+				)
+			);
+
+		InternalHttpResponse psURLresponse;
 		try {
-			httpResponse = httpClient.execute(httpPost);
-			int statusCode = httpResponse.getStatusLine().getStatusCode();
-			if (statusCode < 200 || statusCode >= 300) {
-				throw new PresignedURLException(
-					String.format("Error when posting to presigned URL. StatusCode: %d", statusCode),
-					null,
-					readBody(httpResponse)
-				);
-			}
-			return httpResponse;
+			psURLresponse = executeRequest(httpPost);
 		} catch (Exception e) {
+			System.out.println(e.toString());
 			throw new PresignedURLException("Failed to post to presigned URL", e, null);
 		}
+
+		int statusCode = psURLresponse.getResponse().getStatusLine().getStatusCode();
+		if (statusCode < 200 || statusCode >= 300) {
+			throw new PresignedURLException(
+				String.format("Error when posting to presigned URL. StatusCode: %d", statusCode),
+				null,
+				psURLresponse.getBody()
+			);
+		}
+
+		this.logger.debug(
+				String.format(
+					"{\"service\": \"%s\", \"action\": \"post presigned url\", \"url\": \"%s\", \"response\": \"%s\"}",
+					serviceName,
+					presignedURL,
+					psURLresponse.getBody()
+				)
+			);
+
+		return response;
 	}
 
-	private <Req extends BaseRequest> CloseableHttpResponse postSingle(URI url, Req request, File file)
+	private InternalHttpResponse executeRequest(HttpUriRequest request)
+		throws PangeaException, IOException, ClientProtocolException {
+		return new InternalHttpResponse(httpClient.execute(request));
+	}
+
+	private <Req extends BaseRequest> InternalHttpResponse postSingle(URI url, Req request, File file)
 		throws PangeaException, PangeaAPIException {
 		ObjectMapper mapper = new ObjectMapper();
 		String body;
@@ -397,7 +466,7 @@ public abstract class BaseClient {
 
 		this.logger.debug(
 				String.format(
-					"{\"service\": \"%s\", \"action\": \"post\", \"url\": \"%s\", \"data\": %s},",
+					"{\"service\": \"%s\", \"action\": \"post\", \"url\": \"%s\", \"data\": %s}",
 					serviceName,
 					url.toString(),
 					body
@@ -412,11 +481,11 @@ public abstract class BaseClient {
 				httpRequest = buildPostRequest(url, body);
 			}
 
-			return httpClient.execute(httpRequest);
+			return executeRequest(httpRequest);
 		} catch (Exception e) {
 			this.logger.error(
 					String.format(
-						"{\"service\": \"%s\", \"action\": \"post\", \"url\": \"%s\", \"message\": \"failed to send request\", \"exception\": \"%s\"},",
+						"{\"service\": \"%s\", \"action\": \"post\", \"url\": \"%s\", \"message\": \"failed to send request\", \"exception\": \"%s\"}",
 						serviceName,
 						url.toString(),
 						e.toString()
@@ -445,23 +514,24 @@ public abstract class BaseClient {
 		return String.format("/request/%s", requestId);
 	}
 
-	private CloseableHttpResponse handleQueued(CloseableHttpResponse response) throws PangeaException {
+	private InternalHttpResponse handleQueued(InternalHttpResponse response) throws PangeaException {
 		if (
-			response.getStatusLine().getStatusCode() != 202 ||
+			response.getResponse().getStatusLine().getStatusCode() != 202 ||
 			!this.config.isQueuedRetryEnabled() ||
 			this.config.getPollResultTimeout() <= 1
 		) {
 			return response;
 		}
 
+		String body = response.getBody();
+
 		int retryCounter = 1;
 		Duration start = Duration.ofMillis(System.currentTimeMillis());
 		long delay;
-		String body = readBody(response);
 
 		this.logger.info(
 				String.format(
-					"{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"start\", \"response\": %s},",
+					"{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"start\", \"response\": %s}",
 					serviceName,
 					body
 				)
@@ -470,11 +540,11 @@ public abstract class BaseClient {
 		String requestId = header.getRequestId();
 		String path = pollResultPath(requestId);
 
-		while (response.getStatusLine().getStatusCode() == 202 && !reachedTimeout(start)) {
+		while (response.getResponse().getStatusLine().getStatusCode() == 202 && !reachedTimeout(start)) {
 			delay = getDelay(retryCounter, start);
 			this.logger.debug(
 					String.format(
-						"{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"%d\"},",
+						"{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"%d\"}",
 						serviceName,
 						retryCounter
 					)
@@ -482,27 +552,17 @@ public abstract class BaseClient {
 
 			try {
 				Thread.sleep(delay * 1000); // sleep(Duration) is supported on v19. We use v18.
-				EntityUtils.consumeQuietly(response.getEntity()); // response need to be consumed
+				EntityUtils.consumeQuietly(response.getResponse().getEntity()); // response need to be consumed
 				response = doGet(path);
 				retryCounter++;
 			} catch (InterruptedException e) {}
 		}
 
 		this.logger.debug(
-				String.format("{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"exit\"},", serviceName)
+				String.format("{\"service\": \"%s\", \"action\": \"handle queued\", \"step\": \"exit\"}", serviceName)
 			);
 
 		return response;
-	}
-
-	private String readBody(CloseableHttpResponse response) throws PangeaException {
-		String body;
-		try {
-			body = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-		} catch (Exception e) {
-			throw new PangeaException("Failed to read response body", e);
-		}
-		return body;
 	}
 
 	private ResponseHeader parseHeader(String body) throws PangeaException {
@@ -517,38 +577,37 @@ public abstract class BaseClient {
 	}
 
 	private <ResponseType extends Response<?>> ResponseType checkResponse(
-		CloseableHttpResponse httpResponse,
+		InternalHttpResponse httpResponse,
 		Class<ResponseType> responseClass,
 		String url
 	) throws PangeaException, PangeaAPIException {
-		String body = readBody(httpResponse);
 		this.logger.debug(
 				String.format(
-					"{\"service\": \"%s\", \"action\": \"check response\", \"response\": %s},",
+					"{\"service\": \"%s\", \"action\": \"check response\", \"response\": %s}",
 					serviceName,
-					body
+					httpResponse.getBody()
 				)
 			);
 
-		ResponseHeader header = parseHeader(body);
+		ResponseHeader header = parseHeader(httpResponse.getBody());
 		ObjectMapper mapper = new ObjectMapper();
 		ResponseType resultResponse;
 
 		if (header.isOk()) {
 			try {
-				resultResponse = mapper.readValue(body, responseClass);
+				resultResponse = mapper.readValue(httpResponse.getBody(), responseClass);
 			} catch (Exception e) {
 				this.logger.error(
 						String.format(
-							"{\"service\": \"%s\", \"action\": \"check response\", \"message\": \"failed to parse result\", \"response\": %s, \"exception\": \"%s\"},",
+							"{\"service\": \"%s\", \"action\": \"check response\", \"message\": \"failed to parse result\", \"response\": %s, \"exception\": \"%s\"}",
 							serviceName,
-							body,
+							httpResponse.getBody(),
 							e.toString()
 						)
 					);
-				throw new ParseResultFailed("Failed to parse response result", e, header, body);
+				throw new ParseResultFailed("Failed to parse response result", e, header, httpResponse.getBody());
 			}
-			resultResponse.setHttpResponse(httpResponse);
+			resultResponse.setHttpResponse(httpResponse.getResponse());
 			return resultResponse;
 		}
 
@@ -559,22 +618,22 @@ public abstract class BaseClient {
 		String status = header.getStatus();
 
 		try {
-			response = mapper.readValue(body, ResponseError.class);
+			response = mapper.readValue(httpResponse.getBody(), ResponseError.class);
 			if (ResponseStatus.ACCEPTED.equals(status)) {
-				responseAccepted = mapper.readValue(body, ResponseAccepted.class);
+				responseAccepted = mapper.readValue(httpResponse.getBody(), ResponseAccepted.class);
 			}
 		} catch (Exception e) {
 			this.logger.error(
 					String.format(
-						"{\"service\": \"%s\", \"action\": \"check response\", \"message\": \"failed to parse response error\", \"response\": %s, \"exception\": \"%s\"},",
+						"{\"service\": \"%s\", \"action\": \"check response\", \"message\": \"failed to parse response error\", \"response\": %s, \"exception\": \"%s\"}",
 						serviceName,
-						body,
+						httpResponse.getBody(),
 						e.toString()
 					)
 				);
-			throw new ParseResultFailed("Failed to parse response errors", e, header, body);
+			throw new ParseResultFailed("Failed to parse response errors", e, header, httpResponse.getBody());
 		}
-		response.setHttpResponse(httpResponse);
+		response.setHttpResponse(response.getHttpResponse());
 
 		if (ResponseStatus.ACCEPTED.equals(status)) {
 			throw new AcceptedRequestException(

@@ -2,11 +2,52 @@ package cloud.pangeacyber.pangea.file_scan;
 
 import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.TransferMethod;
+import cloud.pangeacyber.pangea.Utils;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.file_scan.models.FileParams;
 import cloud.pangeacyber.pangea.file_scan.requests.FileScanRequest;
 import cloud.pangeacyber.pangea.file_scan.responses.FileScanResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.File;
+
+final class FileScanFullRequest extends FileScanRequest {
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("transfer_size")
+	Integer size;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("transfer_crc32c")
+	String crc32c;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("transfer_sha256")
+	String sha256;
+
+	public FileScanFullRequest(FileScanRequest request, FileParams params, TransferMethod method) {
+		super(request);
+		this.size = params.getSize();
+		this.crc32c = params.getCRC32C();
+		this.sha256 = params.getSHA256();
+		setTransferMethod(method);
+	}
+
+	public Integer getSize() {
+		return size;
+	}
+
+	public String getCRC32c() {
+		return crc32c;
+	}
+
+	public String getSHA256() {
+		return sha256;
+	}
+}
 
 public class FileScanClient extends BaseClient {
 
@@ -48,6 +89,8 @@ public class FileScanClient extends BaseClient {
 	 * }
 	 */
 	public FileScanResponse scan(FileScanRequest request, File file) throws PangeaException, PangeaAPIException {
-		return post("/v1/scan", request, file, FileScanResponse.class);
+		FileParams fileParams = Utils.getFSparams(file);
+		FileScanFullRequest fullRequest = new FileScanFullRequest(request, fileParams, TransferMethod.DIRECT);
+		return post("/v1/scan", fullRequest, file, FileScanResponse.class);
 	}
 }

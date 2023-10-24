@@ -215,7 +215,7 @@ public final class Config {
 			this.connectionTimeout = Duration.ofSeconds(20);
 			this.customUserAgent = "";
 			this.queuedRetryEnabled = true;
-			this.pollResultTimeout = 120;
+			this.pollResultTimeout = 240;
 		}
 
 		public Builder queuedRetryEnabled(boolean queuedRetryEnabled) {

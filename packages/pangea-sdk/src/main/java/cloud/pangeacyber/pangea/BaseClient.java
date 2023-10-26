@@ -633,7 +633,7 @@ public abstract class BaseClient {
 				);
 			throw new ParseResultFailed("Failed to parse response errors", e, header, httpResponse.getBody());
 		}
-		response.setHttpResponse(response.getHttpResponse());
+		response.setHttpResponse(httpResponse.getResponse());
 
 		if (ResponseStatus.ACCEPTED.equals(status)) {
 			throw new AcceptedRequestException(

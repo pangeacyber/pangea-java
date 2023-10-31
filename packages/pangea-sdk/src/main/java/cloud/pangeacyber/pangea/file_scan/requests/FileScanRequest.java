@@ -19,6 +19,12 @@ public class FileScanRequest extends BaseRequest {
 	@JsonProperty("raw")
 	Boolean raw;
 
+	protected FileScanRequest(FileScanRequest request) {
+		this.provider = request.getProvider();
+		this.verbose = request.getVerbose();
+		this.raw = request.getRaw();
+	}
+
 	protected FileScanRequest(Builder builder) {
 		this.provider = builder.provider;
 		this.verbose = builder.verbose;

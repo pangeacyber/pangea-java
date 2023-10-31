@@ -7,13 +7,19 @@ import cloud.pangeacyber.pangea.Response;
 public class AcceptedRequestException extends PangeaAPIException {
 
 	String requestId;
+	AcceptedResult acceptedResult;
 
-	public AcceptedRequestException(String message, Response<PangeaErrors> response) {
+	public AcceptedRequestException(String message, Response<PangeaErrors> response, AcceptedResult acceptedResult) {
 		super(message, response);
 		requestId = response.getRequestId();
+		this.acceptedResult = acceptedResult;
 	}
 
 	public String getRequestId() {
 		return requestId;
+	}
+
+	public AcceptedResult getAcceptedResult() {
+		return acceptedResult;
 	}
 }

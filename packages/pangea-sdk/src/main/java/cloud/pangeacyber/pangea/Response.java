@@ -14,6 +14,9 @@ public class Response<Result> extends ResponseHeader {
 	@JsonIgnore
 	CloseableHttpResponse httpResponse;
 
+	@JsonIgnore
+	String body = "";
+
 	public Response() {}
 
 	public Result getResult() {
@@ -26,5 +29,13 @@ public class Response<Result> extends ResponseHeader {
 
 	protected void setHttpResponse(CloseableHttpResponse httpResponse) {
 		this.httpResponse = httpResponse;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
 	}
 }

@@ -50,6 +50,11 @@ public class IPIntelClient extends BaseClient {
 		return post("/v1/geolocate", request, IPGeolocateResponse.class);
 	}
 
+	public IPGeolocateBulkResponse geolocateBulk(IPGeolocateBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/geolocate", request, IPGeolocateBulkResponse.class);
+	}
+
 	/**
 	 * Domain
 	 * @pangea.description Retrieve the domain name associated with an IP address.
@@ -72,6 +77,10 @@ public class IPIntelClient extends BaseClient {
 	 */
 	public IPDomainResponse getDomain(IPDomainRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/domain", request, IPDomainResponse.class);
+	}
+
+	public IPDomainBulkResponse getDomainBulk(IPDomainBulkRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v2/domain", request, IPDomainBulkResponse.class);
 	}
 
 	/**
@@ -98,6 +107,10 @@ public class IPIntelClient extends BaseClient {
 		return post("/v1/vpn", request, IPVPNResponse.class);
 	}
 
+	public IPVPNBulkResponse isVPNBulk(IPVPNBulkRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v2/vpn", request, IPVPNBulkResponse.class);
+	}
+
 	/**
 	 * Proxy
 	 * @pangea.description Determine if an IP address originates from a proxy.
@@ -120,6 +133,10 @@ public class IPIntelClient extends BaseClient {
 	 */
 	public IPProxyResponse isProxy(IPProxyRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/proxy", request, IPProxyResponse.class);
+	}
+
+	public IPProxyBulkResponse isProxyBulk(IPProxyBulkRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v2/proxy", request, IPProxyBulkResponse.class);
 	}
 
 	/**

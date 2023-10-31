@@ -19,6 +19,8 @@ public class IntelCommonRequest extends BaseRequest {
 	@JsonProperty("raw")
 	Boolean raw;
 
+	protected IntelCommonRequest() {}
+
 	protected IntelCommonRequest(CommonBuilder<?> builder) {
 		this.provider = builder.provider;
 		this.verbose = builder.verbose;

@@ -50,6 +50,11 @@ public class UserIntelClient extends BaseClient {
 		return post("/v1/user/breached", request, UserBreachedResponse.class);
 	}
 
+	public UserBreachedBulkResponse breachedBulk(UserBreachedBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/user/breached", request, UserBreachedBulkResponse.class);
+	}
+
 	/**
 	 * Look up breached passwords
 	 * @pangea.description Find out if a password has been exposed in security breaches by providing a 5 character prefix of the password hash.
@@ -70,6 +75,11 @@ public class UserIntelClient extends BaseClient {
 	public UserPasswordBreachedResponse breached(UserPasswordBreachedRequest request)
 		throws PangeaException, PangeaAPIException {
 		return post("/v1/password/breached", request, UserPasswordBreachedResponse.class);
+	}
+
+	public UserPasswordBreachedBulkResponse breachedBulk(UserPasswordBreachedBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/password/breached", request, UserPasswordBreachedBulkResponse.class);
 	}
 
 	public static PasswordStatus isPasswordBreached(UserPasswordBreachedResponse response, String hash)

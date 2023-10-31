@@ -14,17 +14,25 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 import cloud.pangeacyber.pangea.intel.models.*;
+import cloud.pangeacyber.pangea.intel.requests.IPDomainBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.IPDomainRequest;
+import cloud.pangeacyber.pangea.intel.requests.IPGeolocateBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.IPGeolocateRequest;
+import cloud.pangeacyber.pangea.intel.requests.IPProxyBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.IPProxyRequest;
 import cloud.pangeacyber.pangea.intel.requests.IPReputationBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.IPReputationRequest;
+import cloud.pangeacyber.pangea.intel.requests.IPVPNBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.IPVPNRequest;
+import cloud.pangeacyber.pangea.intel.responses.IPDomainBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPDomainResponse;
+import cloud.pangeacyber.pangea.intel.responses.IPGeolocateBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPGeolocateResponse;
+import cloud.pangeacyber.pangea.intel.responses.IPProxyBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPProxyResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPReputationResponse;
+import cloud.pangeacyber.pangea.intel.responses.IPVPNBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPVPNResponse;
 import org.junit.Before;
 import org.junit.Test;
@@ -149,7 +157,7 @@ public class ITIPIntelTest {
 	}
 
 	@Test
-	public void testIPReputationMaliciousBulk() throws PangeaException, PangeaAPIException {
+	public void testIPReputationBulk() throws PangeaException, PangeaAPIException {
 		// Provider, verbose, raw
 		String[] ips = { "93.231.182.110", "190.28.74.251" };
 		IPReputationBulkResponse response = client.reputationBulk(
@@ -305,6 +313,21 @@ public class ITIPIntelTest {
 	}
 
 	@Test
+	public void testIPGeolocateBulk() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		String[] ips = { "93.231.182.110", "190.28.74.251" };
+		IPGeolocateBulkResponse response = client.geolocateBulk(
+			new IPGeolocateBulkRequest.Builder(ips).verbose(true).raw(true).build()
+		);
+		assertTrue(response.isOk());
+
+		IPGeolocateBulkData data = response.getResult().getData();
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+		assertEquals(2, data.size());
+	}
+
+	@Test
 	public void testIPDomain_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		IPDomainResponse response = client.getDomain(new IPDomainRequest.Builder("24.235.114.61").build());
@@ -420,6 +443,21 @@ public class ITIPIntelTest {
 		assertEquals("rogers.com", data.getDomain());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testIPDomainBulk() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		String[] ips = { "93.231.182.110", "190.28.74.251" };
+		IPDomainBulkResponse response = client.getDomainBulk(
+			new IPDomainBulkRequest.Builder(ips).verbose(true).raw(true).build()
+		);
+		assertTrue(response.isOk());
+
+		IPDomainBulkData data = response.getResult().getData();
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+		assertEquals(2, data.size());
 	}
 
 	@Test
@@ -542,6 +580,21 @@ public class ITIPIntelTest {
 		assertTrue(data.isVPN());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testIPVPNBulk() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		String[] ips = { "93.231.182.110", "190.28.74.251" };
+		IPVPNBulkResponse response = client.isVPNBulk(
+			new IPVPNBulkRequest.Builder(ips).verbose(true).raw(true).build()
+		);
+		assertTrue(response.isOk());
+
+		IPVPNBulkData data = response.getResult().getData();
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+		assertEquals(2, data.size());
 	}
 
 	@Test
@@ -673,6 +726,21 @@ public class ITIPIntelTest {
 		assertTrue(data.isProxy());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testIPProxyBulk() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		String[] ips = { "93.231.182.110", "190.28.74.251" };
+		IPProxyBulkResponse response = client.isProxyBulk(
+			new IPProxyBulkRequest.Builder(ips).verbose(true).raw(true).build()
+		);
+		assertTrue(response.isOk());
+
+		IPProxyBulkData data = response.getResult().getData();
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+		assertEquals(2, data.size());
 	}
 
 	@Test

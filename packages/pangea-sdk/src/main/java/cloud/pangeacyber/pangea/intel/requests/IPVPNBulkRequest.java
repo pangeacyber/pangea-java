@@ -1,8 +1,8 @@
 package cloud.pangeacyber.pangea.intel.requests;
 
-public class IPReputationBulkRequest extends IPCommonBulkRequest {
+public class IPVPNBulkRequest extends IPCommonBulkRequest {
 
-	protected IPReputationBulkRequest(Builder builder) {
+	protected IPVPNBulkRequest(Builder builder) {
 		super(builder);
 	}
 
@@ -12,8 +12,8 @@ public class IPReputationBulkRequest extends IPCommonBulkRequest {
 			this.ips = ips;
 		}
 
-		public IPReputationBulkRequest build() {
-			return new IPReputationBulkRequest(this);
+		public IPVPNBulkRequest build() {
+			return new IPVPNBulkRequest(this);
 		}
 	}
 }

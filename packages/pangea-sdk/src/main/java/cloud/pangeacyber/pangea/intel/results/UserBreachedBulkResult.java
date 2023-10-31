@@ -1,16 +1,16 @@
 package cloud.pangeacyber.pangea.intel.results;
 
-import cloud.pangeacyber.pangea.intel.models.IPProxyData;
+import cloud.pangeacyber.pangea.intel.models.UserBreachedBulkData;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class IPProxyResult extends IntelCommonResult {
+public final class UserBreachedBulkResult extends IntelCommonResult {
 
 	@JsonProperty("data")
-	IPProxyData Data;
+	UserBreachedBulkData data;
 
-	public IPProxyData getData() {
-		return Data;
+	public UserBreachedBulkData getData() {
+		return data;
 	}
 }

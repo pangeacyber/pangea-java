@@ -4,11 +4,15 @@ import java.lang.Exception;
 
 public class PangeaException extends Exception {
 
-	Throwable casue;
+	Throwable cause;
 
 	public PangeaException(String message, Throwable cause) {
 		super(message);
-		this.casue = cause;
+		this.cause = cause;
+	}
+
+	public Throwable getCause() {
+		return cause;
 	}
 
 	public Throwable getCasue() {

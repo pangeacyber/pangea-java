@@ -36,43 +36,45 @@ public class UserProfile extends AuthNBaseClient {
 	/**
 	 * Get user - email
 	 * @pangea.description Get user's information by email.
-	 * @pangea.operationId authn_post_v1_user_profile_get 1
+	 * @pangea.operationId authn_post_v2_user_profile_get 1
 	 * @param email
 	 * @return UserProfileGetResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserProfileGetResponse response = client.user().profile().getByEmail("joe.user@email.com");
+	 * UserProfileGetResponse response =
+	 * 	client.user().profile().getByEmail("joe.user@email.com");
 	 * }
 	 */
 	public UserProfileGetResponse getByEmail(String email) throws PangeaException, PangeaAPIException {
 		UserProfileGetRequest request = new UserProfileGetRequest(email, null);
-		return post("/v1/user/profile/get", request, UserProfileGetResponse.class);
+		return post("/v2/user/profile/get", request, UserProfileGetResponse.class);
 	}
 
 	/**
 	 * Get user - id
 	 * @pangea.description Get user's information by id.
-	 * @pangea.operationId authn_post_v1_user_profile_get 2
+	 * @pangea.operationId authn_post_v2_user_profile_get 2
 	 * @param id The identity of a user or a service
 	 * @return UserProfileGetResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserProfileGetResponse response = client.user().profile().getByID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5");
+	 * UserProfileGetResponse response =
+	 * 	client.user().profile().getByID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5");
 	 * }
 	 */
 	public UserProfileGetResponse getByID(String id) throws PangeaException, PangeaAPIException {
 		UserProfileGetRequest request = new UserProfileGetRequest(null, id);
-		return post("/v1/user/profile/get", request, UserProfileGetResponse.class);
+		return post("/v2/user/profile/get", request, UserProfileGetResponse.class);
 	}
 
 	/**
 	 * Update user
 	 * @pangea.description Update user's information by identity or email.
-	 * @pangea.operationId authn_post_v1_user_profile_update
+	 * @pangea.operationId authn_post_v2_user_profile_update
 	 * @param request
 	 * @return UserProfileUpdateResponse
 	 * @throws PangeaException
@@ -82,15 +84,18 @@ public class UserProfile extends AuthNBaseClient {
 	 * Profile updatedProfile = new Profile();
 	 * updatedProfile.put("country", "Argentina");
 	 *
-	 * UserProfileUpdateResponse response = client.user().profile().update(
+	 * UserProfileUpdateRequest request =
 	 * 	new UserProfileUpdateRequest
 	 * 		.Builder(updatedProfile)
-	 * 		.setEmail("joe.user@email.com")
-	 * 		.build());
+	 * 		.setID("pui_xpkhwpnz2cmegsws737xbsqnmnuwtbm5")
+	 * 		.build();
+	 *
+	 * UserProfileUpdateResponse response =
+	 * 	client.user().profile().update(request);
 	 * }
 	 */
 	public UserProfileUpdateResponse update(UserProfileUpdateRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/user/profile/update", request, UserProfileUpdateResponse.class);
+		return post("/v2/user/profile/update", request, UserProfileUpdateResponse.class);
 	}
 }

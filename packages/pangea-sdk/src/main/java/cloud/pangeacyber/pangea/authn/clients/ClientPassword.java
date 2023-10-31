@@ -34,7 +34,7 @@ public class ClientPassword extends AuthNBaseClient {
 	/**
 	 * Change a user's password
 	 * @pangea.description Change a user's password given the current password.
-	 * @pangea.operationId authn_post_v1_client_password_change
+	 * @pangea.operationId authn_post_v2_client_password_change
 	 * @param token A user token value
 	 * @param oldPassword
 	 * @param newPassword
@@ -53,7 +53,7 @@ public class ClientPassword extends AuthNBaseClient {
 		throws PangeaException, PangeaAPIException {
 		ClientPasswordChangeRequest request = new ClientPasswordChangeRequest(token, oldPassword, newPassword);
 		ClientPasswordChangeResponse resp = post(
-			"/v1/client/password/change",
+			"/v2/client/password/change",
 			request,
 			ClientPasswordChangeResponse.class
 		);

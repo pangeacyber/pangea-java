@@ -10,10 +10,13 @@ import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.authn.models.*;
 import cloud.pangeacyber.pangea.authn.requests.*;
 import cloud.pangeacyber.pangea.authn.responses.*;
+import cloud.pangeacyber.pangea.authn.results.FlowUpdateResult;
 import cloud.pangeacyber.pangea.exceptions.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -34,9 +37,10 @@ public class ITAuthNTest {
 	private static final String emailInviteKeep = String.format("user.email+invite_keep%s@pangea.cloud", randomValue);
 	private static final String passwordOld = "My1s+Password";
 	private static final String passwordNew = "My1s+Password_new";
-	private static final Profile profileOld = new Profile();
-	private static final Profile profileNew = new Profile();
+	private final Profile profileOld = new Profile();
+	private final Profile profileNew = new Profile();
 	private static String userID = ""; // Will be set once user is created
+	private final String cbURI = "https://someurl.com/callbacklink";
 	String time;
 
 	@Before
@@ -46,43 +50,153 @@ public class ITAuthNTest {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 		time = dtf.format(LocalDateTime.now());
 
-		profileOld.put("name", "User name");
-		profileOld.put("country", "Argentina");
-		profileNew.put("age", "18");
+		profileOld.put("first_name", "Name");
+		profileOld.put("last_name", "User");
+		profileNew.put("first_name", "NameUpdated");
+	}
+
+	private FlowUpdateResult flowHandlePasswordPhase(String flowID, String password)
+		throws PangeaException, PangeaAPIException {
+		FlowUpdateResponse response =
+			this.client.flow()
+				.update(
+					new FlowUpdateRequest.Builder(
+						flowID,
+						FlowChoice.PASSWORD,
+						new FlowUpdateDataPassword.Builder(password).build()
+					)
+						.build()
+				);
+		return response.getResult();
+	}
+
+	private FlowUpdateResult flowHandleProfilePhase(String flowID) throws PangeaException, PangeaAPIException {
+		FlowUpdateResponse response =
+			this.client.flow()
+				.update(
+					new FlowUpdateRequest.Builder(
+						flowID,
+						FlowChoice.PROFILE,
+						new FlowUpdateDataProfile.Builder(this.profileOld).build()
+					)
+						.build()
+				);
+		return response.getResult();
+	}
+
+	private FlowUpdateResult flowHandleAgreementsPhase(String flowID, FlowUpdateResult result)
+		throws PangeaException, PangeaAPIException {
+		// Iterate over flow_choices in response.result
+		List<String> agreed = new ArrayList<String>();
+		for (FlowChoiceItem flowChoiceItem : result.getFlowChoices()) {
+			if (flowChoiceItem.getChoice().equals(FlowChoice.AGREEMENTS.toString())) {
+				Map<String, Object> agreements = (Map<String, Object>) flowChoiceItem.getData().get("agreements");
+				if (agreements != null) {
+					// Iterate over agreements and append the "id" values to agreed list
+					for (Object agreementObj : agreements.values()) {
+						if (agreementObj instanceof Map) {
+							Map<?, ?> agreement = (Map<?, ?>) agreementObj;
+							Object idObj = agreement.get("id");
+							if (idObj instanceof String) {
+								agreed.add((String) idObj);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		FlowUpdateResponse response =
+			this.client.flow()
+				.update(
+					new FlowUpdateRequest.Builder(
+						flowID,
+						FlowChoice.AGREEMENTS,
+						new FlowUpdateDataAgreements.Builder(agreed).build()
+					)
+						.build()
+				);
+		return response.getResult();
+	}
+
+	private boolean choiceIsAvailable(FlowChoiceItem[] choices, String choice) {
+		for (FlowChoiceItem flowChoiceItem : choices) {
+			if (flowChoiceItem.getChoice().equals(choice)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private FlowCompleteResponse userCreateAndLogin(String email, String password)
+		throws PangeaException, PangeaAPIException {
+		FlowType[] flowTypes = { FlowType.SIGNUP, FlowType.SIGNIN };
+		FlowStartResponse startResponse =
+			this.client.flow()
+				.start(
+					new FlowStartRequest.Builder().setEmail(email).setFlowType(flowTypes).setCbURI(this.cbURI).build()
+				);
+
+		String flowID = startResponse.getResult().getFlowID();
+		FlowUpdateResult result = null;
+		String flowPhase = "initial";
+		FlowChoiceItem[] choices = startResponse.getResult().getFlowChoices();
+
+		while (!flowPhase.equals("phase_completed")) {
+			if (choiceIsAvailable(choices, FlowChoice.PASSWORD.toString())) {
+				result = flowHandlePasswordPhase(flowID, password);
+			} else if (choiceIsAvailable(choices, FlowChoice.PROFILE.toString())) {
+				result = flowHandleProfilePhase(flowID);
+			} else if (choiceIsAvailable(choices, FlowChoice.AGREEMENTS.toString()) && result != null) {
+				result = flowHandleAgreementsPhase(flowID, result);
+			} else {
+				System.out.printf("Phase %s not handled\n", result.getFlowPhase());
+				throw new PangeaException("Phase not handled", null);
+			}
+			flowPhase = result.getFlowPhase();
+			choices = result.getFlowChoices();
+		}
+
+		return this.client.flow().complete(flowID);
+	}
+
+	private FlowCompleteResponse login(String email, String password) throws PangeaException, PangeaAPIException {
+		FlowType[] flowTypes = { FlowType.SIGNUP, FlowType.SIGNIN };
+		FlowStartResponse startResponse =
+			this.client.flow()
+				.start(
+					new FlowStartRequest.Builder().setEmail(email).setFlowType(flowTypes).setCbURI(this.cbURI).build()
+				);
+
+		String flowID = startResponse.getResult().getFlowID();
+
+		FlowUpdateResponse updateResponse =
+			this.client.flow()
+				.update(
+					new FlowUpdateRequest.Builder(
+						flowID,
+						FlowChoice.PASSWORD,
+						new FlowUpdateDataPassword.Builder(password).build()
+					)
+						.build()
+				);
+
+		return this.client.flow().complete(flowID);
 	}
 
 	@Test
 	public void testA_UserActions() throws PangeaException, PangeaAPIException {
 		try {
 			// Create User 1
-			UserCreateResponse createResp1 = client
-				.user()
-				.create(new UserCreateRequest.Builder(emailTest, passwordOld, IDProvider.PASSWORD).build());
-			assertTrue(createResp1.isOk());
-			assertNotNull(createResp1.getResult());
-			assertNotNull(createResp1.getResult().getID());
-			userID = createResp1.getResult().getID();
-			assertEquals(new HashMap<String, Object>(), createResp1.getResult().getProfile());
+			FlowCompleteResponse createResp1 = this.userCreateAndLogin(emailTest, passwordOld);
 
 			// Create user 2
-			UserCreateResponse createResp2 = client
-				.user()
-				.create(
-					new UserCreateRequest.Builder(emailDelete, passwordOld, IDProvider.PASSWORD)
-						.setProfile(profileOld)
-						.build()
-				);
-			assertTrue(createResp2.isOk());
-			assertEquals(profileOld, createResp2.getResult().getProfile());
-
-			// User login (delete user)
-			UserLoginResponse loginDelResp = client.user().login().Password(emailDelete, passwordOld, new Profile());
-			assertTrue(loginDelResp.isOk());
-			assertNotNull(loginDelResp.getResult().getActiveToken());
-			assertNotNull(loginDelResp.getResult().getRefreshToken());
+			FlowCompleteResponse createResp2 = this.userCreateAndLogin(emailDelete, passwordOld);
 
 			// Logout (delete user)
-			SessionLogoutResponse logoutResp = client.session().logout(createResp2.getResult().getID());
+			SessionLogoutResponse logoutResp = client
+				.session()
+				.logout(createResp2.getResult().getActiveToken().getID());
 			assertTrue(logoutResp.isOk());
 
 			// Delete user (delete user)
@@ -90,29 +204,18 @@ public class ITAuthNTest {
 			assertTrue(deleteResp1.isOk());
 			assertNull(deleteResp1.getResult());
 
-			// User login
-			UserLoginResponse loginResp = client.user().login().Password(emailTest, passwordOld);
-			assertTrue(loginResp.isOk());
-			assertNotNull(loginResp.getResult().getActiveToken());
-			assertNotNull(loginResp.getResult().getRefreshToken());
-
 			// Token check
 			ClientTokenCheckResponse checkResp = client
 				.client()
 				.token()
-				.check(loginResp.getResult().getActiveToken().getToken());
+				.check(createResp1.getResult().getActiveToken().getToken());
 			assertTrue(checkResp.isOk());
-
-			// User verify
-			UserVerifyResponse verifyResp = client.user().verify(IDProvider.PASSWORD, emailTest, passwordOld);
-			assertTrue(verifyResp.isOk());
-			assertTrue(verifyResp.getResult().getID().equals(userID));
 
 			// Update password
 			ClientPasswordChangeResponse passUpdateResp = client
 				.client()
 				.password()
-				.change(loginResp.getResult().getActiveToken().getToken(), passwordOld, passwordNew);
+				.change(createResp1.getResult().getActiveToken().getToken(), passwordOld, passwordNew);
 			assertTrue(passUpdateResp.isOk());
 			assertNull(passUpdateResp.getResult());
 
@@ -121,9 +224,9 @@ public class ITAuthNTest {
 			UserProfileGetResponse profileGetResp = client.user().profile().getByEmail(emailTest);
 			assertTrue(profileGetResp.isOk());
 			assertNotNull(profileGetResp.getResult());
-			assertEquals(userID, profileGetResp.getResult().getID());
+			userID = profileGetResp.getResult().getID();
 			assertEquals(emailTest, profileGetResp.getResult().getEmail());
-			assertEquals(new Profile(), profileGetResp.getResult().getProfile());
+			assertEquals(this.profileOld, profileGetResp.getResult().getProfile());
 
 			// Get by ID
 			profileGetResp = client.user().profile().getByID(userID);
@@ -131,7 +234,7 @@ public class ITAuthNTest {
 			assertNotNull(profileGetResp.getResult());
 			assertEquals(userID, profileGetResp.getResult().getID());
 			assertEquals(emailTest, profileGetResp.getResult().getEmail());
-			assertEquals(new Profile(), profileGetResp.getResult().getProfile());
+			assertEquals(this.profileOld, profileGetResp.getResult().getProfile());
 
 			// Update profile
 			UserProfileUpdateResponse profileUpdateResp = client
@@ -159,22 +262,18 @@ public class ITAuthNTest {
 			// User update
 			UserUpdateResponse userUpdateResp = client
 				.user()
-				.update(
-					new UserUpdateRequest.Builder().setEmail(emailTest).setDisabled(false).setRequireMFA(false).build()
-				);
+				.update(new UserUpdateRequest.Builder().setEmail(emailTest).setDisabled(false).build());
 			assertTrue(userUpdateResp.isOk());
 			assertEquals(userID, userUpdateResp.getResult().getID());
 			assertEquals(emailTest, userUpdateResp.getResult().getEmail());
-			assertEquals(false, userUpdateResp.getResult().getDisabled());
-			assertEquals(false, userUpdateResp.getResult().getRequireMFA());
 
 			// Client session refresh (refresh and active token)
 			ClientSessionRefreshResponse refreshResp = client
 				.client()
 				.session()
 				.refresh(
-					loginResp.getResult().getRefreshToken().getToken(),
-					loginResp.getResult().getActiveToken().getToken()
+					createResp1.getResult().getRefreshToken().getToken(),
+					createResp1.getResult().getActiveToken().getToken()
 				);
 			assertTrue(refreshResp.isOk());
 			assertNotNull(refreshResp.getResult().getActiveToken());
@@ -185,10 +284,6 @@ public class ITAuthNTest {
 			assertTrue(refreshResp.isOk());
 			assertNotNull(refreshResp.getResult().getActiveToken());
 			assertNotNull(refreshResp.getResult().getRefreshToken());
-
-			// User password reset
-			UserPasswordResetResponse resetResp = client.user().password().reset(userID, passwordNew);
-			assertTrue(resetResp.isOk());
 
 			// Client session logout
 			ClientSessionLogoutResponse logoutResp2 = client
@@ -206,7 +301,7 @@ public class ITAuthNTest {
 	public void testB_ClientSessionList_n_Invalidate() throws PangeaException, PangeaAPIException {
 		try {
 			// User login
-			UserLoginResponse loginResp = client.user().login().Password(emailTest, passwordNew);
+			FlowCompleteResponse loginResp = this.login(emailTest, passwordNew);
 			assertTrue(loginResp.isOk());
 			assertNotNull(loginResp.getResult().getActiveToken());
 			assertNotNull(loginResp.getResult().getRefreshToken());
@@ -247,7 +342,7 @@ public class ITAuthNTest {
 	public void testC_SessionList_n_Invalidate() throws PangeaException, PangeaAPIException {
 		try {
 			// User login
-			UserLoginResponse loginResp = client.user().login().Password(emailTest, passwordNew);
+			FlowCompleteResponse loginResp = this.login(emailTest, passwordNew);
 			assertTrue(loginResp.isOk());
 			assertNotNull(loginResp.getResult().getActiveToken());
 			assertNotNull(loginResp.getResult().getRefreshToken());

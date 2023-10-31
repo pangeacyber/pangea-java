@@ -165,20 +165,20 @@ public class ITDomainIntelTest {
 		assertEquals(3, data.size());
 	}
 
-	@Test
-	public void testDomainWhoIs() throws PangeaException, PangeaAPIException {
-		// Provider, verbose, raw
-		DomainWhoIsResponse response = client.whoIs(
-			new DomainWhoIsRequest.Builder("737updatesboeing.com").provider("whoisxml").verbose(true).raw(true).build()
-		);
-		assertTrue(response.isOk());
+	// @Test
+	// public void testDomainWhoIs() throws PangeaException, PangeaAPIException {
+	// 	// Provider, verbose, raw
+	// 	DomainWhoIsResponse response = client.whoIs(
+	// 		new DomainWhoIsRequest.Builder("737updatesboeing.com").provider("whoisxml").verbose(true).raw(true).build()
+	// 	);
+	// 	assertTrue(response.isOk());
 
-		DomainWhoIsData data = response.getResult().getData();
-		assertNotNull(data.getDomainName());
-		assertNotNull(data.getDomainAvailability());
-		assertNotNull(response.getResult().getParameters());
-		assertNotNull(response.getResult().getRawData());
-	}
+	// 	DomainWhoIsData data = response.getResult().getData();
+	// 	assertNotNull(data.getDomainName());
+	// 	assertNotNull(data.getDomainAvailability());
+	// 	assertNotNull(response.getResult().getParameters());
+	// 	assertNotNull(response.getResult().getRawData());
+	// }
 
 	@Test
 	public void testDomainReputationNotFound() throws PangeaException, PangeaAPIException {

@@ -10,6 +10,7 @@ import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.audit.models.*;
 import cloud.pangeacyber.pangea.audit.requests.*;
 import cloud.pangeacyber.pangea.audit.responses.*;
+import cloud.pangeacyber.pangea.audit.results.LogBulkResult;
 import cloud.pangeacyber.pangea.audit.results.RootResult;
 import cloud.pangeacyber.pangea.exceptions.*;
 import java.util.LinkedHashMap;
@@ -20,8 +21,8 @@ import org.junit.Test;
 public class ITAuditTest {
 
 	Config cfgGeneral;
-	AuditClient clientGeneral, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient, customSchemaClient, localSignCustomSchemaClient;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	AuditClient clientGeneral, clientGeneralNoQueue, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient, customSchemaClient, localSignCustomSchemaClient;
+	TestEnvironment environment = TestEnvironment.DEVELOP;
 	CustomEvent customEvent;
 
 	private static final String ACTOR = "java-sdk";
@@ -39,11 +40,14 @@ public class ITAuditTest {
 	public void setUp() throws ConfigException {
 		Config vaultCfg = Config.fromVaultIntegrationEnvironment(environment);
 		this.cfgGeneral = Config.fromIntegrationEnvironment(environment);
+		Config cfgGeneralNoQueue = Config.fromIntegrationEnvironment(environment);
+		cfgGeneralNoQueue.setQueuedRetryEnabled(false);
 		Config customSchemaCfg = Config.fromCustomSchemaIntegrationEnvironment(environment);
 		Map<String, Object> pkInfo = new LinkedHashMap<String, Object>();
 		pkInfo.put("ExtraInfo", "LocalKey");
 
 		clientGeneral = new AuditClient.Builder(cfgGeneral).build();
+		clientGeneralNoQueue = new AuditClient.Builder(cfgGeneralNoQueue).build();
 		vaultSignClient = new AuditClient.Builder(vaultCfg).build();
 		customSchemaClient = new AuditClient.Builder(customSchemaCfg).withCustomSchema(CustomEvent.class).build();
 
@@ -976,6 +980,123 @@ public class ITAuditTest {
 		LogResponse response = client.log(
 			event,
 			new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
+		);
+	}
+
+	@Test
+	public void testLogAsync() throws PangeaAPIException, PangeaException {
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
+		event.setActor(ACTOR);
+		event.setStatus(STATUS_NO_SIGNED);
+
+		try {
+			LogResponse response = clientGeneral.logAsync(
+				event,
+				new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
+			);
+
+			assertTrue(response.isOk());
+
+			LogResult result = response.getResult();
+			assertNotNull(result.getEventEnvelope());
+			assertNotNull(result.getHash());
+			StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
+			assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
+			assertNull(result.getConsistencyProof());
+			assertNotNull(result.getMembershipProof());
+			assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
+			assertEquals(EventVerification.NOT_VERIFIED, result.getMembershipVerification());
+			assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
+		} catch (PangeaAPIException e) {
+			System.out.println(e.toString());
+		}
+	}
+
+	@Test(expected = AcceptedRequestException.class)
+	public void testLogAsyncNoQueue() throws PangeaAPIException, PangeaException {
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
+		event.setActor(ACTOR);
+		event.setStatus(STATUS_NO_SIGNED);
+
+		clientGeneralNoQueue.logAsync(
+			event,
+			new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
+		);
+	}
+
+	@Test
+	public void testLogBulk() throws PangeaAPIException, PangeaException {
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
+		event.setActor(ACTOR);
+		event.setStatus(STATUS_NO_SIGNED);
+
+		IEvent[] events = { event, event };
+
+		try {
+			LogBulkResponse response = clientGeneral.logBulk(
+				events,
+				new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
+			);
+			assertTrue(response.isOk());
+
+			LogBulkResult bulkResult = response.getResult();
+			for (LogResult result : bulkResult.getResults()) {
+				assertNotNull(result.getEventEnvelope());
+				assertNotNull(result.getHash());
+				StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
+				assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
+				assertNull(result.getConsistencyProof());
+				assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
+				assertEquals(EventVerification.NOT_VERIFIED, result.getMembershipVerification());
+				assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
+			}
+		} catch (PangeaAPIException e) {
+			System.out.println(e.toString());
+		}
+	}
+
+	@Test
+	public void testLogBulkAsync() throws PangeaAPIException, PangeaException {
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
+		event.setActor(ACTOR);
+		event.setStatus(STATUS_NO_SIGNED);
+
+		IEvent[] events = { event, event };
+
+		try {
+			LogBulkResponse response = clientGeneral.logBulkAsync(
+				events,
+				new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
+			);
+			assertTrue(response.isOk());
+
+			LogBulkResult bulkResult = response.getResult();
+			for (LogResult result : bulkResult.getResults()) {
+				assertNotNull(result.getEventEnvelope());
+				assertNotNull(result.getHash());
+				StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
+				assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
+				assertNull(result.getConsistencyProof());
+				assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
+				assertEquals(EventVerification.NOT_VERIFIED, result.getMembershipVerification());
+				assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
+			}
+		} catch (PangeaAPIException e) {
+			System.out.println(e.toString());
+		}
+	}
+
+	@Test(expected = AcceptedRequestException.class)
+	public void testLogBulkAsyncNoQueue() throws PangeaAPIException, PangeaException {
+		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
+		event.setActor(ACTOR);
+		event.setStatus(STATUS_NO_SIGNED);
+
+		IEvent[] events = { event, event };
+
+		LogBulkResponse response = clientGeneralNoQueue.logBulkAsync(
+			events,
+			new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
 		);
 	}
 }

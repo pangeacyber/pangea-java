@@ -17,11 +17,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.logging.Log;
 
 final class RootRequest extends BaseRequest {
 
@@ -34,14 +36,10 @@ final class RootRequest extends BaseRequest {
 	}
 }
 
-final class LogRequest extends BaseRequest {
+final class LogEvent {
 
 	@JsonProperty("event")
 	IEvent event;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("verbose")
-	Boolean verbose;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("signature")
@@ -51,16 +49,54 @@ final class LogRequest extends BaseRequest {
 	@JsonProperty("public_key")
 	String publicKey;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("prev_root")
-	String prevRoot;
-
-	public LogRequest(IEvent event, Boolean verbose, String signature, String publicKey, String prevRoot) {
+	public LogEvent(IEvent event, String signature, String publicKey) {
 		this.event = event;
-		this.verbose = verbose;
 		this.signature = signature;
 		this.publicKey = publicKey;
-		this.prevRoot = prevRoot;
+	}
+
+	public IEvent getEvent() {
+		return event;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public String getPublicKey() {
+		return publicKey;
+	}
+}
+
+final class LogRequest extends LogCommonRequest {
+
+	@JsonProperty("event")
+	IEvent event;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("signature")
+	String signature;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("public_key")
+	String publicKey;
+
+	public LogRequest(LogEvent event, Boolean verbose, String prevRoot) {
+		super(verbose, prevRoot);
+		this.event = event.getEvent();
+		this.signature = event.getSignature();
+		this.publicKey = event.getPublicKey();
+	}
+}
+
+final class LogBulkRequest extends LogCommonRequest {
+
+	@JsonProperty("events")
+	ArrayList<LogEvent> events;
+
+	public LogBulkRequest(ArrayList<LogEvent> events, Boolean verbose, String prevRoot) {
+		super(verbose, prevRoot);
+		this.events = events;
 	}
 }
 
@@ -139,18 +175,87 @@ public class AuditClient extends BaseClient {
 		}
 	}
 
-	private LogResponse logPost(IEvent event, Boolean verbose, String signature, String publicKey, boolean verify)
-		throws PangeaException, PangeaAPIException {
+	private LogBulkRequest getLogBulkRequest(ArrayList<LogEvent> events, Boolean verbose, boolean verify) {
 		String prevRoot = null;
 		if (verify) {
 			verbose = true;
 			prevRoot = this.prevUnpublishedRoot;
 		}
-		LogRequest request = new LogRequest(event, verbose, signature, publicKey, prevRoot);
-		return post("/v1/log", request, LogResponse.class);
+		return new LogBulkRequest(events, verbose, prevRoot);
+	}
+
+	private LogRequest getLogRequest(LogEvent event, Boolean verbose, boolean verify) {
+		String prevRoot = null;
+		if (verify) {
+			verbose = true;
+			prevRoot = this.prevUnpublishedRoot;
+		}
+		return new LogRequest(event, verbose, prevRoot);
 	}
 
 	private LogResponse doLog(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
+		LogEvent logEvent = getLogEvent(event, config);
+		LogResponse response = post(
+			"/v1/log",
+			getLogRequest(logEvent, config.getVerbose(), config.getVerify()),
+			LogResponse.class
+		);
+		processLogResult(response.getResult(), config.getVerify());
+		return response;
+	}
+
+	private LogResponse doLogAsync(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
+		LogEvent logEvent = getLogEvent(event, config);
+		LogResponse response = post(
+			"/v1/log_async",
+			getLogRequest(logEvent, config.getVerbose(), config.getVerify()),
+			LogResponse.class
+		);
+		processLogResult(response.getResult(), config.getVerify());
+		return response;
+	}
+
+	private LogBulkResponse doLogBulk(IEvent[] events, LogConfig config) throws PangeaException, PangeaAPIException {
+		LogBulkResponse response = post(
+			"/v2/log",
+			getLogBulkRequest(getLogEvents(events, config), config.getVerbose(), config.getVerify()),
+			LogBulkResponse.class
+		);
+
+		if (response.getResult() != null) {
+			for (LogResult result : response.getResult().getResults()) {
+				processLogResult(result, config.getVerify());
+			}
+		}
+		return response;
+	}
+
+	private LogBulkResponse doLogBulkAsync(IEvent[] events, LogConfig config)
+		throws PangeaException, PangeaAPIException {
+		LogBulkResponse response = post(
+			"/v2/log_async",
+			getLogBulkRequest(getLogEvents(events, config), config.getVerbose(), config.getVerify()),
+			LogBulkResponse.class
+		);
+
+		if (response.getResult() != null) {
+			for (LogResult result : response.getResult().getResults()) {
+				processLogResult(result, config.getVerify());
+			}
+		}
+		return response;
+	}
+
+	private ArrayList<LogEvent> getLogEvents(IEvent[] events, LogConfig config) throws PangeaException {
+		ArrayList<LogEvent> logEvents = new ArrayList<LogEvent>();
+		for (IEvent event : events) {
+			LogEvent logEvent = getLogEvent(event, config);
+			logEvents.add(logEvent);
+		}
+		return logEvents;
+	}
+
+	private LogEvent getLogEvent(IEvent event, LogConfig config) throws PangeaException {
 		String signature = null;
 		String publicKey = null;
 
@@ -173,9 +278,7 @@ public class AuditClient extends BaseClient {
 			}
 		}
 
-		LogResponse response = logPost(event, config.getVerbose(), signature, publicKey, config.getVerify());
-		processLogResponse(response.getResult(), config.getVerify());
-		return response;
+		return new LogEvent(event, signature, publicKey);
 	}
 
 	private String getPublicKeyData() throws PangeaException {
@@ -197,7 +300,7 @@ public class AuditClient extends BaseClient {
 		}
 	}
 
-	private void processLogResponse(LogResult result, boolean verify) throws VerificationFailed, PangeaException {
+	private void processLogResult(LogResult result, boolean verify) throws VerificationFailed, PangeaException {
 		String newUnpublishedRoot = result.getUnpublishedRoot();
 		result.setEventEnvelope(EventEnvelope.fromRaw(result.getRawEnvelope(), (Class<IEvent>) this.customSchemaClass));
 		if (verify) {
@@ -249,6 +352,27 @@ public class AuditClient extends BaseClient {
 			config = new LogConfig.Builder().build();
 		}
 		return doLog(event, config);
+	}
+
+	public LogResponse logAsync(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
+		if (config == null) {
+			config = new LogConfig.Builder().build();
+		}
+		return doLogAsync(event, config);
+	}
+
+	public LogBulkResponse logBulk(IEvent[] events, LogConfig config) throws PangeaException, PangeaAPIException {
+		if (config == null) {
+			config = new LogConfig.Builder().build();
+		}
+		return doLogBulk(events, config);
+	}
+
+	public LogBulkResponse logBulkAsync(IEvent[] events, LogConfig config) throws PangeaException, PangeaAPIException {
+		if (config == null) {
+			config = new LogConfig.Builder().build();
+		}
+		return doLogBulkAsync(events, config);
 	}
 
 	private RootResponse rootPost(Integer treeSize) throws PangeaException, PangeaAPIException {

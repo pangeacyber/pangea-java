@@ -42,7 +42,6 @@ final class FileScanFullRequest extends FileScanRequest {
 		this.sha256 = null;
 	}
 
-
 	public Integer getSize() {
 		return size;
 	}
@@ -97,7 +96,7 @@ public class FileScanClient extends BaseClient {
 	 */
 	public FileScanResponse scan(FileScanRequest request, File file) throws PangeaException, PangeaAPIException {
 		FileScanFullRequest fullRequest;
-		if(request.getTransferMethod() == TransferMethod.DIRECT){
+		if (request.getTransferMethod() == TransferMethod.DIRECT) {
 			FileParams fileParams = Utils.getFSparams(file);
 			fullRequest = new FileScanFullRequest(request, fileParams);
 		} else {

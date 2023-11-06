@@ -2,7 +2,8 @@ package cloud.pangeacyber.pangea.audit.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HexFormat;
+import java.math.BigInteger;
+import java.util.Arrays;
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class Hash {
@@ -12,8 +13,10 @@ public class Hash {
 	}
 
 	public static byte[] unhexlify(String hex) {
-		HexFormat parser = HexFormat.of();
-		return parser.parseHex(hex);
+		BigInteger bigInteger = new BigInteger(hex, 16);
+		byte[] bytes = bigInteger.toByteArray();
+		// Sometimes it add an initial '0' value. Who knows why.
+		return Arrays.copyOfRange(bytes, bytes.length - 32, bytes.length);
 	}
 
 	public static byte[] decode(String hash) {

@@ -24,11 +24,26 @@ public class FolderCreateRequest extends BaseRequest {
 	@JsonProperty("tags")
 	Tags tags = null;
 
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("rotation_frequency")
+	String rotationFrequency = null;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("rotation_state")
+	String rotationState = null;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("rotation_grace_period")
+	String rotationGracePeriod = null;
+
 	protected FolderCreateRequest(Builder builder) {
 		this.name = builder.name;
 		this.folder = builder.folder;
 		this.metadata = builder.metadata;
 		this.tags = builder.tags;
+		this.rotationFrequency = builder.rotationFrequency;
+		this.rotationGracePeriod = builder.rotationGracePeriod;
+		this.rotationState = builder.rotationState;
 	}
 
 	public String getName() {
@@ -53,6 +68,9 @@ public class FolderCreateRequest extends BaseRequest {
 		String folder = null;
 		Metadata metadata = null;
 		Tags tags = null;
+		String rotationFrequency = null;
+		String rotationState = null;
+		String rotationGracePeriod = null;
 
 		public Builder(String name, String folder) {
 			this.name = name;
@@ -72,5 +90,21 @@ public class FolderCreateRequest extends BaseRequest {
 			this.tags = tags;
 			return this;
 		}
+
+		public Builder rotationFrequency(String rotationFrequency) {
+			this.rotationFrequency = rotationFrequency;
+			return this;
+		}
+
+		public Builder rotationState(String rotationState) {
+			this.rotationState = rotationState;
+			return this;
+		}
+
+		public Builder rotationGracePeriod(String rotationGracePeriod) {
+			this.rotationGracePeriod = rotationGracePeriod;
+			return this;
+		}
+
 	}
 }

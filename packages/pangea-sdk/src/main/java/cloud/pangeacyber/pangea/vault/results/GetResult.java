@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import cloud.pangeacyber.pangea.vault.models.InheritedSettings;
 import cloud.pangeacyber.pangea.vault.models.ItemData;
 import cloud.pangeacyber.pangea.vault.models.ItemVersionData;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,6 +19,10 @@ public class GetResult extends ItemData {
 	@JsonProperty("rotation_grace_period")
 	String rotationGracePeriod = null;
 
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("inherited_settings")
+	InheritedSettings inheritedSettings;
+
 	public GetResult() {
 		super();
 	}
@@ -28,5 +33,9 @@ public class GetResult extends ItemData {
 
 	public String getRotationGracePeriod() {
 		return rotationGracePeriod;
+	}
+
+	public InheritedSettings getInheritedSettings() {
+		return inheritedSettings;
 	}
 }

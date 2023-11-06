@@ -6,7 +6,7 @@
 
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>2.3.0</version>
+  <version>3.0.0</version>
   <packaging>jar</packaging>
 
   <name>cloud.pangea:pangea-sdk</name>
@@ -281,11 +281,11 @@
           <artifactId>license-maven-plugin</artifactId>
           <version>2.0.0</version>
         </plugin>
-        <plugin>
+        <!-- <plugin>
           <groupId>cloud.pangea</groupId>
           <artifactId>jsondoclet-maven-plugin</artifactId>
           <version>1.0.0-SNAPSHOT</version>
-        </plugin>
+        </plugin> -->
       </plugins>
     </pluginManagement>
 

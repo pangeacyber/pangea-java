@@ -21,16 +21,11 @@ public class UserInviteRequest extends BaseRequest {
 	@JsonProperty("state")
 	String state;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("require_mfa")
-	Boolean requireMFA;
-
 	private UserInviteRequest(Builder builder) {
 		this.email = builder.email;
 		this.inviter = builder.inviter;
 		this.callback = builder.callback;
 		this.state = builder.state;
-		this.requireMFA = builder.requireMFA;
 	}
 
 	public static class Builder {
@@ -50,10 +45,6 @@ public class UserInviteRequest extends BaseRequest {
 
 		public UserInviteRequest build() {
 			return new UserInviteRequest(this);
-		}
-
-		public void setRequireMFA(Boolean requireMFA) {
-			this.requireMFA = requireMFA;
 		}
 	}
 }

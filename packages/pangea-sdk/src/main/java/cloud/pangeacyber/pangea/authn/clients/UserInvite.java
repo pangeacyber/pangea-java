@@ -28,26 +28,29 @@ public class UserInvite extends AuthNBaseClient {
 	/**
 	 * List Invites
 	 * @pangea.description Look up active invites for the userpool.
-	 * @pangea.operationId authn_post_v1_user_invite_list
+	 * @pangea.operationId authn_post_v2_user_invite_list
 	 * @param request
 	 * @return UserInviteListResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * UserInviteListResponse response = client.user().invite().list(
-	 * 	new UserInviteListRequest.Builder().build());
+	 * UserInviteListRequest request =
+	 * 	new UserInviteListRequest.Builder().build();
+	 *
+	 * UserInviteListResponse response =
+	 * 	client.user().invite().list(request);
 	 * }
 	 */
 	public UserInviteListResponse list(UserInviteListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/user/invite/list", request, UserInviteListResponse.class);
+		return post("/v2/user/invite/list", request, UserInviteListResponse.class);
 	}
 
 	/**
 	 * Delete Invite
 	 * @pangea.description Delete a user invitation.
-	 * @pangea.operationId authn_post_v1_user_invite_delete
-	 * @param id
+	 * @pangea.operationId authn_post_v2_user_invite_delete
+	 * @param id A one-time ticket
 	 * @return UserInviteDeleteResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
@@ -58,6 +61,6 @@ public class UserInvite extends AuthNBaseClient {
 	 */
 	public UserInviteDeleteResponse delete(String id) throws PangeaException, PangeaAPIException {
 		UserInviteDeleteRequest request = new UserInviteDeleteRequest(id);
-		return post("/v1/user/invite/delete", request, UserInviteDeleteResponse.class);
+		return post("/v2/user/invite/delete", request, UserInviteDeleteResponse.class);
 	}
 }

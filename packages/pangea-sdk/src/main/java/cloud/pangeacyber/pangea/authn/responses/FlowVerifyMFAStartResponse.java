@@ -1,6 +1,0 @@
-package cloud.pangeacyber.pangea.authn.responses;
-
-import cloud.pangeacyber.pangea.Response;
-import cloud.pangeacyber.pangea.authn.results.FlowVerifyMFAStartResult;
-
-public final class FlowVerifyMFAStartResponse extends Response<FlowVerifyMFAStartResult> {}

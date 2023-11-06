@@ -17,8 +17,11 @@ import cloud.pangeacyber.pangea.file_scan.responses.FileScanResponse;
 import java.io.File;
 import java.io.IOException;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ITFileScanTest {
 
 	final String TESTFILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/testfile.pdf";
@@ -79,7 +82,7 @@ public class ITFileScanTest {
 			exception = e;
 		}
 
-		int maxRetry = 6;
+		int maxRetry = 12;
 		for (int retry = 0; retry < maxRetry; retry++) {
 			try {
 				// Sleep 10 seconds until result is (should) be ready
@@ -148,7 +151,7 @@ public class ITFileScanTest {
 			exception = e;
 		}
 
-		int maxRetry = 6;
+		int maxRetry = 12;
 		for (int retry = 0; retry < maxRetry; retry++) {
 			try {
 				// Sleep 10 seconds until result is (should) be ready

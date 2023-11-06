@@ -105,6 +105,5 @@ public class FolderCreateRequest extends BaseRequest {
 			this.rotationGracePeriod = rotationGracePeriod;
 			return this;
 		}
-
 	}
 }

@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.file_scan.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
+import cloud.pangeacyber.pangea.TransferMethod;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,12 +24,14 @@ public class FileScanRequest extends BaseRequest {
 		this.provider = request.getProvider();
 		this.verbose = request.getVerbose();
 		this.raw = request.getRaw();
+		this.setTransferMethod(request.getTransferMethod());
 	}
 
 	protected FileScanRequest(Builder builder) {
 		this.provider = builder.provider;
 		this.verbose = builder.verbose;
 		this.raw = builder.raw;
+		this.setTransferMethod(builder.transferMethod);
 	}
 
 	public static class Builder {
@@ -36,6 +39,7 @@ public class FileScanRequest extends BaseRequest {
 		String provider;
 		Boolean verbose;
 		Boolean raw;
+		TransferMethod transferMethod = TransferMethod.DIRECT;
 
 		public Builder() {}
 
@@ -55,6 +59,11 @@ public class FileScanRequest extends BaseRequest {
 
 		public Builder raw(Boolean raw) {
 			this.raw = raw;
+			return this;
+		}
+
+		public Builder transferMethod(TransferMethod transferMethod) {
+			this.transferMethod = transferMethod;
 			return this;
 		}
 	}

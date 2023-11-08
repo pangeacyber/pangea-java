@@ -198,10 +198,10 @@ public class ITFileIntelTest {
 		assertTrue(response.isOk());
 
 		IntelReputationData data = response.getResult().getData();
-		assertEquals("", data.getVerdict());
-		assertNull(data.getCategory());
+		assertEquals("unknown", data.getVerdict());
+		assertNotNull(data.getCategory());
 		assertNotNull(response.getResult().getParameters());
-		assertNull(response.getResult().getRawData());
+		assertNotNull(response.getResult().getRawData());
 	}
 
 	@Test(expected = ValidationException.class)

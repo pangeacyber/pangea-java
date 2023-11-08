@@ -2,11 +2,13 @@ package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.IPIntelClient;
 import cloud.pangeacyber.pangea.intel.models.IPReputationData;
-import cloud.pangeacyber.pangea.intel.requests.IPReputationRequest;
-import cloud.pangeacyber.pangea.intel.responses.IPReputationResponse;
+import cloud.pangeacyber.pangea.intel.models.IPReputationBulkData;
+import cloud.pangeacyber.pangea.intel.requests.IPReputationBulkRequest;
+import cloud.pangeacyber.pangea.intel.responses.IPReputationBulkResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import cloud.pangeacyber.pangea.Config;
 
@@ -20,6 +22,12 @@ public class App
         System.out.printf("\t\t Category: %s\n", Arrays.toString(data.getCategory()));
     }
 
+    private static void printBulkData(IPReputationBulkData data) {
+        for (Map.Entry<String, IPReputationData> entry : data.entrySet()) {
+            printData(entry.getKey(), entry.getValue());
+        }
+    }
+
     public static void main( String[] args )
     {
         Config cfg = null;
@@ -31,11 +39,11 @@ public class App
         }
 
         IPIntelClient client = new IPIntelClient.Builder(cfg).build();
-        IPReputationResponse response = null;
-        String ip = "93.231.182.110";
+        IPReputationBulkResponse response = null;
         try {
-            response = client.reputation(
-                new IPReputationRequest.Builder(ip).provider("crowdstrike").verbose(true).raw(true).build()
+            String[] ips = { "93.231.182.110", "190.28.74.251" };
+            response = client.reputationBulk(
+                new IPReputationBulkRequest.Builder(ips).provider("crowdstrike").verbose(true).raw(true).build()
             );
         } catch (Exception e){
             System.out.println("Fail to perfom request: " + e);
@@ -43,6 +51,6 @@ public class App
         }
 
         System.out.println("Result:");
-        printData(ip, response.getResult().getData());
+        printBulkData(response.getResult().getData());
     }
 }

@@ -1,12 +1,14 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.intel.FileIntelClient;
-import cloud.pangeacyber.pangea.intel.requests.FileHashReputationRequest;
-import cloud.pangeacyber.pangea.intel.responses.FileReputationResponse;
+import cloud.pangeacyber.pangea.intel.requests.FileHashReputationBulkRequest;
+import cloud.pangeacyber.pangea.intel.responses.FileReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.models.FileReputationData;
+import cloud.pangeacyber.pangea.intel.models.FileReputationBulkData;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import cloud.pangeacyber.pangea.Config;
 
@@ -20,6 +22,12 @@ public class App
         System.out.printf("\t\t Category: %s\n", Arrays.toString(data.getCategory()));
     }
 
+    private static void printBulkData(FileReputationBulkData data) {
+        for (Map.Entry<String, FileReputationData> entry : data.entrySet()) {
+            printData(entry.getKey(), entry.getValue());
+        }
+    }
+
     public static void main( String[] args )
     {
         Config cfg = null;
@@ -31,25 +39,26 @@ public class App
         }
 
         FileIntelClient client = new FileIntelClient.Builder(cfg).build();
-        FileReputationResponse response = null;
-        String indicator = "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e";
+        FileReputationBulkResponse response = null;
         try {
-            response = client.reputation(
-			new FileHashReputationRequest .Builder(
-				indicator,
-				"sha256"
-			)
-				.provider("reversinglabs")
-				.verbose(false)
-				.raw(true)
-				.build()
-		);
+            String[] hashes = {
+                "142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+                "179e2b8a4162372cd9344b81793cbf74a9513a002eda3324e6331243f3137a63",
+            };
+
+            response = client.reputationBulk(
+                new FileHashReputationBulkRequest.Builder(hashes, "sha256")
+                    .provider("reversinglabs")
+                    .verbose(true)
+                    .raw(true)
+                    .build()
+            );
         } catch (Exception e){
             System.out.println("Fail to perfom request: " + e);
             System.exit(1);
         }
 
         System.out.println("Result:");
-        printData(indicator, response.getResult().getData());
+        printBulkData(response.getResult().getData());
     }
 }

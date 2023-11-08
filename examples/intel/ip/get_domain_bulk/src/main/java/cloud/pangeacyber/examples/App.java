@@ -2,9 +2,12 @@ package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.intel.IPIntelClient;
+import cloud.pangeacyber.pangea.intel.models.IPDomainBulkData;
 import cloud.pangeacyber.pangea.intel.models.IPDomainData;
-import cloud.pangeacyber.pangea.intel.requests.IPDomainRequest;
-import cloud.pangeacyber.pangea.intel.responses.IPDomainResponse;
+import cloud.pangeacyber.pangea.intel.requests.IPDomainBulkRequest;
+import cloud.pangeacyber.pangea.intel.responses.IPDomainBulkResponse;
+
+import java.util.Map;
 
 import cloud.pangeacyber.pangea.Config;
 
@@ -19,6 +22,12 @@ public class App
         }
     }
 
+    private static void printBulkData(IPDomainBulkData data) {
+        for (Map.Entry<String, IPDomainData> entry : data.entrySet()) {
+            printData(entry.getKey(), entry.getValue());
+        }
+    }
+
     public static void main( String[] args )
     {
         Config cfg = null;
@@ -30,18 +39,18 @@ public class App
         }
 
         IPIntelClient client = new IPIntelClient.Builder(cfg).build();
-        IPDomainResponse response = null;
-        String ip = "24.235.114.61";
+        IPDomainBulkResponse response = null;
         try {
-            response = client.getDomain(
-	    		new IPDomainRequest.Builder(ip).provider("digitalelement").verbose(true).raw(true).build()
-    		);
+            String[] ips = { "93.231.182.110", "190.28.74.251" };
+            response = client.getDomainBulk(
+                new IPDomainBulkRequest.Builder(ips).verbose(true).raw(true).build()
+            );
         } catch (Exception e){
             System.out.println("Fail to perfom request: " + e);
             System.exit(1);
         }
 
         System.out.println("Result:");
-        printData(ip,response.getResult().getData());
+        printBulkData(response.getResult().getData());
     }
 }

@@ -3,9 +3,12 @@ package cloud.pangeacyber.examples;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.intel.IPIntelClient;
 import cloud.pangeacyber.pangea.intel.models.IPProxyData;
-import cloud.pangeacyber.pangea.intel.requests.IPProxyRequest;
-import cloud.pangeacyber.pangea.intel.responses.IPProxyResponse;
+import cloud.pangeacyber.pangea.intel.models.IPProxyBulkData;
+import cloud.pangeacyber.pangea.intel.requests.IPProxyBulkRequest;
+import cloud.pangeacyber.pangea.intel.responses.IPProxyBulkResponse;
 import cloud.pangeacyber.pangea.Config;
+
+import java.util.Map;
 
 public class App
 {
@@ -15,6 +18,12 @@ public class App
             System.out.printf("\t IP %s is a proxy\n", ip);
         } else {
             System.out.printf("\t IP %s is not a proxy\n", ip);
+        }
+    }
+
+    private static void printBulkData(IPProxyBulkData data) {
+        for (Map.Entry<String, IPProxyData> entry : data.entrySet()) {
+            printData(entry.getKey(), entry.getValue());
         }
     }
 
@@ -29,11 +38,11 @@ public class App
         }
 
         IPIntelClient client = new IPIntelClient.Builder(cfg).build();
-        IPProxyResponse response = null;
-        String ip = "34.201.32.172";
+        IPProxyBulkResponse response = null;
         try {
-            response = client.isProxy(
-                new IPProxyRequest.Builder(ip).provider("digitalelement").verbose(true).raw(true).build()
+            String[] ips = { "34.201.32.172", "190.28.74.251" };
+            response = client.isProxyBulk(
+                new IPProxyBulkRequest.Builder(ips).verbose(true).raw(true).build()
             );
         } catch (Exception e){
             System.out.println("Fail to perfom request: " + e);
@@ -41,6 +50,6 @@ public class App
         }
 
         System.out.println("Result:");
-        printData(ip, response.getResult().getData());
+        printBulkData(response.getResult().getData());
     }
 }

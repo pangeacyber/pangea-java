@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.TestEnvironment;
+import cloud.pangeacyber.pangea.TransferMethod;
 import cloud.pangeacyber.pangea.exceptions.AcceptedRequestException;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -40,6 +41,21 @@ public class ITFileScanTest {
 		File file = new File(TESTFILE_PATH);
 		FileScanResponse response = client.scan(
 			new FileScanRequest.Builder().provider("crowdstrike").raw(true).verbose(false).build(),
+			file
+		);
+		assertTrue(response.isOk());
+
+		FileScanData data = response.getResult().getData();
+		assertEquals("benign", data.getVerdict());
+		assertNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testFileScan_Scan_multipart() throws PangeaException, PangeaException, PangeaAPIException, IOException {
+		File file = new File(TESTFILE_PATH);
+		FileScanResponse response = client.scan(
+			new FileScanRequest.Builder().transferMethod(TransferMethod.MULTIPART).raw(true).verbose(false).build(),
 			file
 		);
 		assertTrue(response.isOk());

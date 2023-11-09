@@ -28,12 +28,18 @@ final class FileScanFullRequest extends FileScanRequest {
 	@JsonProperty("transfer_sha256")
 	String sha256;
 
-	public FileScanFullRequest(FileScanRequest request, FileParams params, TransferMethod method) {
+	public FileScanFullRequest(FileScanRequest request, FileParams params) {
 		super(request);
 		this.size = params.getSize();
 		this.crc32c = params.getCRC32C();
 		this.sha256 = params.getSHA256();
-		setTransferMethod(method);
+	}
+
+	public FileScanFullRequest(FileScanRequest request) {
+		super(request);
+		this.size = null;
+		this.crc32c = null;
+		this.sha256 = null;
 	}
 
 	public Integer getSize() {
@@ -89,8 +95,14 @@ public class FileScanClient extends BaseClient {
 	 * }
 	 */
 	public FileScanResponse scan(FileScanRequest request, File file) throws PangeaException, PangeaAPIException {
-		FileParams fileParams = Utils.getFSparams(file);
-		FileScanFullRequest fullRequest = new FileScanFullRequest(request, fileParams, TransferMethod.DIRECT);
+		FileScanFullRequest fullRequest;
+		if (request.getTransferMethod() == TransferMethod.DIRECT) {
+			FileParams fileParams = Utils.getFSparams(file);
+			fullRequest = new FileScanFullRequest(request, fileParams);
+		} else {
+			fullRequest = new FileScanFullRequest(request);
+		}
+
 		return post("/v1/scan", fullRequest, file, FileScanResponse.class);
 	}
 }

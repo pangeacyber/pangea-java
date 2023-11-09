@@ -983,37 +983,8 @@ public class ITAuditTest {
 		);
 	}
 
-	@Test
-	public void testLogAsync() throws PangeaAPIException, PangeaException {
-		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
-		event.setActor(ACTOR);
-		event.setStatus(STATUS_NO_SIGNED);
-
-		try {
-			LogResponse response = clientGeneral.logAsync(
-				event,
-				new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
-			);
-
-			assertTrue(response.isOk());
-
-			LogResult result = response.getResult();
-			assertNotNull(result.getEventEnvelope());
-			assertNotNull(result.getHash());
-			StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
-			assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
-			assertNull(result.getConsistencyProof());
-			assertNotNull(result.getMembershipProof());
-			assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
-			assertEquals(EventVerification.NOT_VERIFIED, result.getMembershipVerification());
-			assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
-		} catch (PangeaAPIException e) {
-			System.out.println(e.toString());
-		}
-	}
-
 	@Test(expected = AcceptedRequestException.class)
-	public void testLogAsyncNoQueue() throws PangeaAPIException, PangeaException {
+	public void testLogAsync() throws PangeaAPIException, PangeaException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);
@@ -1055,39 +1026,8 @@ public class ITAuditTest {
 		}
 	}
 
-	@Test
-	public void testLogBulkAsync() throws PangeaAPIException, PangeaException {
-		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
-		event.setActor(ACTOR);
-		event.setStatus(STATUS_NO_SIGNED);
-
-		IEvent[] events = { event, event };
-
-		try {
-			LogBulkResponse response = clientGeneral.logBulkAsync(
-				events,
-				new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
-			);
-			assertTrue(response.isOk());
-
-			LogBulkResult bulkResult = response.getResult();
-			for (LogResult result : bulkResult.getResults()) {
-				assertNotNull(result.getEventEnvelope());
-				assertNotNull(result.getHash());
-				StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
-				assertEquals(MSG_NO_SIGNED, eventResult.getMessage());
-				assertNull(result.getConsistencyProof());
-				assertEquals(EventVerification.NOT_VERIFIED, result.getConsistencyVerification());
-				assertEquals(EventVerification.NOT_VERIFIED, result.getMembershipVerification());
-				assertEquals(EventVerification.NOT_VERIFIED, result.getSignatureVerification());
-			}
-		} catch (PangeaAPIException e) {
-			System.out.println(e.toString());
-		}
-	}
-
 	@Test(expected = AcceptedRequestException.class)
-	public void testLogBulkAsyncNoQueue() throws PangeaAPIException, PangeaException {
+	public void testLogBulkAsync() throws PangeaAPIException, PangeaException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
 		event.setStatus(STATUS_NO_SIGNED);

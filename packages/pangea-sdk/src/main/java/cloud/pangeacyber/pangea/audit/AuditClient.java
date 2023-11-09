@@ -3,6 +3,7 @@ package cloud.pangeacyber.pangea.audit;
 import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.PostConfig;
 import cloud.pangeacyber.pangea.audit.arweave.*;
 import cloud.pangeacyber.pangea.audit.models.*;
 import cloud.pangeacyber.pangea.audit.requests.*;
@@ -23,7 +24,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.logging.Log;
 
 final class RootRequest extends BaseRequest {
 
@@ -209,7 +209,8 @@ public class AuditClient extends BaseClient {
 		LogResponse response = post(
 			"/v1/log_async",
 			getLogRequest(logEvent, config.getVerbose(), config.getVerify()),
-			LogResponse.class
+			LogResponse.class,
+			new PostConfig.Builder().pollResult(false).build()
 		);
 		processLogResult(response.getResult(), config.getVerify());
 		return response;
@@ -235,7 +236,8 @@ public class AuditClient extends BaseClient {
 		LogBulkResponse response = post(
 			"/v2/log_async",
 			getLogBulkRequest(getLogEvents(events, config), config.getVerbose(), config.getVerify()),
-			LogBulkResponse.class
+			LogBulkResponse.class,
+			new PostConfig.Builder().pollResult(false).build()
 		);
 
 		if (response.getResult() != null) {

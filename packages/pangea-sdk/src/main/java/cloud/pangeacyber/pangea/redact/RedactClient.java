@@ -15,9 +15,12 @@ public class RedactClient extends BaseClient {
 
 	public RedactClient(Builder builder) {
 		super(builder, serviceName);
+		setConfigID(builder.configID);
 	}
 
 	public static class Builder extends BaseClient.Builder<Builder> {
+
+		String configID = null;
 
 		public Builder(Config config) {
 			super(config);
@@ -25,6 +28,11 @@ public class RedactClient extends BaseClient {
 
 		public RedactClient build() {
 			return new RedactClient(this);
+		}
+
+		public Builder withConfigID(String configID) {
+			this.configID = configID;
+			return this;
 		}
 	}
 

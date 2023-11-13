@@ -25,7 +25,7 @@ import org.junit.Test;
 public class ITRedactTest {
 
 	RedactClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	TestEnvironment environment = TestEnvironment.DEVELOP;
 
 	@Before
 	public void setUp() throws ConfigException {
@@ -276,6 +276,58 @@ public class ITRedactTest {
 		data.put("Phone", "This is its number: 415-867-5309");
 		RedactStructuredResponse response = fakeClient.redactStructured(
 			new RedactStructuredRequest.Builder(data).build()
+		);
+	}
+
+	@Test
+	public void testMultiConfig1Redact() throws PangeaException, PangeaAPIException, ConfigException {
+		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
+			.build();
+
+		String configID = Config.getConfigID(environment, "redact", 1);
+
+		RedactClient clientMultiConfig = new RedactClient.Builder(cfg).withConfigID(configID).build();
+
+		RedactTextResponse response = clientMultiConfig.redactText(
+			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").build()
+		);
+		assertTrue(response.isOk());
+
+		RedactTextResult result = response.getResult();
+		assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
+		assertEquals(2, result.getCount());
+		assertNull(result.getReport());
+	}
+
+	@Test
+	public void testMultiConfig2Redact() throws PangeaException, PangeaAPIException, ConfigException {
+		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
+			.build();
+
+		String configID = Config.getConfigID(environment, "redact", 2);
+
+		RedactClient clientMultiConfig = new RedactClient.Builder(cfg).withConfigID(configID).build();
+
+		RedactTextResponse response = clientMultiConfig.redactText(
+			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").build()
+		);
+		assertTrue(response.isOk());
+
+		RedactTextResult result = response.getResult();
+		assertEquals("<PERSON>... <PHONE_NUMBER>", result.getRedactedText());
+		assertEquals(2, result.getCount());
+		assertNull(result.getReport());
+	}
+
+	@Test(expected = PangeaAPIException.class)
+	public void testMultiConfigWithoutConfigID() throws PangeaException, PangeaAPIException, ConfigException {
+		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
+			.build();
+
+		RedactClient clientMultiConfig = new RedactClient.Builder(cfg).build();
+
+		RedactTextResponse response = clientMultiConfig.redactText(
+			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").build()
 		);
 	}
 }

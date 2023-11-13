@@ -81,11 +81,16 @@ final class LogRequest extends LogCommonRequest {
 	@JsonProperty("public_key")
 	String publicKey;
 
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("prev_root")
+	String prevRoot;
+
 	public LogRequest(LogEvent event, Boolean verbose, String prevRoot) {
-		super(verbose, prevRoot);
+		super(verbose);
 		this.event = event.getEvent();
 		this.signature = event.getSignature();
 		this.publicKey = event.getPublicKey();
+		this.prevRoot = prevRoot;
 	}
 }
 
@@ -94,8 +99,8 @@ final class LogBulkRequest extends LogCommonRequest {
 	@JsonProperty("events")
 	ArrayList<LogEvent> events;
 
-	public LogBulkRequest(ArrayList<LogEvent> events, Boolean verbose, String prevRoot) {
-		super(verbose, prevRoot);
+	public LogBulkRequest(ArrayList<LogEvent> events, Boolean verbose) {
+		super(verbose);
 		this.events = events;
 	}
 }
@@ -175,15 +180,6 @@ public class AuditClient extends BaseClient {
 		}
 	}
 
-	private LogBulkRequest getLogBulkRequest(ArrayList<LogEvent> events, Boolean verbose, boolean verify) {
-		String prevRoot = null;
-		if (verify) {
-			verbose = true;
-			prevRoot = this.prevUnpublishedRoot;
-		}
-		return new LogBulkRequest(events, verbose, prevRoot);
-	}
-
 	private LogRequest getLogRequest(LogEvent event, Boolean verbose, boolean verify) {
 		String prevRoot = null;
 		if (verify) {
@@ -207,13 +203,13 @@ public class AuditClient extends BaseClient {
 	private LogBulkResponse doLogBulk(IEvent[] events, LogConfig config) throws PangeaException, PangeaAPIException {
 		LogBulkResponse response = post(
 			"/v2/log",
-			getLogBulkRequest(getLogEvents(events, config), config.getVerbose(), config.getVerify()),
+			new LogBulkRequest(getLogEvents(events, config), config.getVerbose()),
 			LogBulkResponse.class
 		);
 
 		if (response.getResult() != null) {
 			for (LogResult result : response.getResult().getResults()) {
-				processLogResult(result, config.getVerify());
+				processLogResult(result, false);
 			}
 		}
 		return response;
@@ -223,14 +219,14 @@ public class AuditClient extends BaseClient {
 		throws PangeaException, PangeaAPIException {
 		LogBulkResponse response = post(
 			"/v2/log_async",
-			getLogBulkRequest(getLogEvents(events, config), config.getVerbose(), config.getVerify()),
+			new LogBulkRequest(getLogEvents(events, config), config.getVerbose()),
 			LogBulkResponse.class,
 			new PostConfig.Builder().pollResult(false).build()
 		);
 
 		if (response.getResult() != null) {
 			for (LogResult result : response.getResult().getResults()) {
-				processLogResult(result, config.getVerify());
+				processLogResult(result, false);
 			}
 		}
 		return response;

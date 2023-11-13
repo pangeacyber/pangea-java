@@ -11,12 +11,7 @@ public class LogCommonRequest extends BaseRequest {
 	@JsonProperty("verbose")
 	Boolean verbose;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("prev_root")
-	String prevRoot;
-
-	public LogCommonRequest(Boolean verbose, String prevRoot) {
+	public LogCommonRequest(Boolean verbose) {
 		this.verbose = verbose;
-		this.prevRoot = prevRoot;
 	}
 }

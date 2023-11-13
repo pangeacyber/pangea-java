@@ -25,7 +25,7 @@ import org.junit.Test;
 public class ITRedactTest {
 
 	RedactClient client;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	TestEnvironment environment = TestEnvironment.LIVE;
 
 	@Before
 	public void setUp() throws ConfigException {

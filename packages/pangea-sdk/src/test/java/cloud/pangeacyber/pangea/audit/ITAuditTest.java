@@ -983,18 +983,6 @@ public class ITAuditTest {
 		);
 	}
 
-	@Test(expected = AcceptedRequestException.class)
-	public void testLogAsync() throws PangeaAPIException, PangeaException {
-		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
-		event.setActor(ACTOR);
-		event.setStatus(STATUS_NO_SIGNED);
-
-		clientGeneralNoQueue.logAsync(
-			event,
-			new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
-		);
-	}
-
 	@Test
 	public void testLogBulk() throws PangeaAPIException, PangeaException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);

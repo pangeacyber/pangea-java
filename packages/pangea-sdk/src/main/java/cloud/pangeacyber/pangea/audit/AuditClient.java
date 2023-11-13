@@ -204,18 +204,6 @@ public class AuditClient extends BaseClient {
 		return response;
 	}
 
-	private LogResponse doLogAsync(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
-		LogEvent logEvent = getLogEvent(event, config);
-		LogResponse response = post(
-			"/v1/log_async",
-			getLogRequest(logEvent, config.getVerbose(), config.getVerify()),
-			LogResponse.class,
-			new PostConfig.Builder().pollResult(false).build()
-		);
-		processLogResult(response.getResult(), config.getVerify());
-		return response;
-	}
-
 	private LogBulkResponse doLogBulk(IEvent[] events, LogConfig config) throws PangeaException, PangeaAPIException {
 		LogBulkResponse response = post(
 			"/v2/log",
@@ -356,13 +344,7 @@ public class AuditClient extends BaseClient {
 		return doLog(event, config);
 	}
 
-	public LogResponse logAsync(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
-		if (config == null) {
-			config = new LogConfig.Builder().build();
-		}
-		return doLogAsync(event, config);
-	}
-
+	// TODO: Docs
 	public LogBulkResponse logBulk(IEvent[] events, LogConfig config) throws PangeaException, PangeaAPIException {
 		if (config == null) {
 			config = new LogConfig.Builder().build();
@@ -370,6 +352,7 @@ public class AuditClient extends BaseClient {
 		return doLogBulk(events, config);
 	}
 
+	// TODO: Docs
 	public LogBulkResponse logBulkAsync(IEvent[] events, LogConfig config) throws PangeaException, PangeaAPIException {
 		if (config == null) {
 			config = new LogConfig.Builder().build();

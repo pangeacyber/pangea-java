@@ -4,6 +4,7 @@ import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.PostConfig;
+import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.audit.arweave.*;
 import cloud.pangeacyber.pangea.audit.models.*;
 import cloud.pangeacyber.pangea.audit.requests.*;
@@ -209,7 +210,7 @@ public class AuditClient extends BaseClient {
 
 		if (response.getResult() != null) {
 			for (LogResult result : response.getResult().getResults()) {
-				processLogResult(result, false);
+				processLogResult(result, config.getVerify());
 			}
 		}
 		return response;
@@ -217,12 +218,18 @@ public class AuditClient extends BaseClient {
 
 	private LogBulkResponse doLogBulkAsync(IEvent[] events, LogConfig config)
 		throws PangeaException, PangeaAPIException {
-		LogBulkResponse response = post(
-			"/v2/log_async",
-			new LogBulkRequest(getLogEvents(events, config), config.getVerbose()),
-			LogBulkResponse.class,
-			new PostConfig.Builder().pollResult(false).build()
-		);
+		LogBulkResponse response;
+		try {
+			response =
+				post(
+					"/v2/log_async",
+					new LogBulkRequest(getLogEvents(events, config), config.getVerbose()),
+					LogBulkResponse.class,
+					new PostConfig.Builder().pollResult(false).build()
+				);
+		} catch (AcceptedRequestException e) {
+			return (LogBulkResponse) (new Response<LogBulkResult>(e.getResponse(), e.getAcceptedResult()));
+		}
 
 		if (response.getResult() != null) {
 			for (LogResult result : response.getResult().getResults()) {

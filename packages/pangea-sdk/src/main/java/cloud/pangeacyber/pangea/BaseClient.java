@@ -241,9 +241,18 @@ public abstract class BaseClient {
 	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
 		String path,
 		Req request,
+		Class<ResponseType> responseClass,
+		PostConfig postConfig
+	) throws PangeaException, PangeaAPIException {
+		return doPost(path, request, null, responseClass, postConfig);
+	}
+
+	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
+		String path,
+		Req request,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
-		return doPost(path, request, null, responseClass);
+		return doPost(path, request, null, responseClass, new PostConfig.Builder().build());
 	}
 
 	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
@@ -252,7 +261,7 @@ public abstract class BaseClient {
 		File file,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
-		return doPost(path, request, file, responseClass);
+		return doPost(path, request, file, responseClass, new PostConfig.Builder().build());
 	}
 
 	protected <ResponseType extends Response<?>> ResponseType get(
@@ -302,7 +311,8 @@ public abstract class BaseClient {
 		String path,
 		Req request,
 		File file,
-		Class<ResponseType> responseClass
+		Class<ResponseType> responseClass,
+		PostConfig postConfig
 	) throws PangeaException, PangeaAPIException {
 		if (configID != null && !configID.isEmpty() && request.getConfigID() == null) {
 			request.setConfigID(this.configID);
@@ -318,7 +328,9 @@ public abstract class BaseClient {
 			response = postSingle(url, request, file);
 		}
 
-		response = this.handleQueued(response);
+		if (postConfig.getPollResult() == true) {
+			response = this.handleQueued(response);
+		}
 		return checkResponse(response, responseClass, url.toString());
 	}
 

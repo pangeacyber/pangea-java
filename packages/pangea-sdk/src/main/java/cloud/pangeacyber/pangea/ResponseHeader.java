@@ -64,4 +64,14 @@ public class ResponseHeader {
 	public boolean isOk() {
 		return status.equals(ResponseStatus.SUCCESS.toString());
 	}
+
+	protected ResponseHeader(ResponseHeader header) {
+		this.requestId = header.getRequestId();
+		this.requestTime = header.getRequestTime();
+		this.responseTime = header.getResponseTime();
+		this.status = header.getStatus();
+		this.summary = header.getSummary();
+	}
+
+	protected ResponseHeader() {}
 }

@@ -228,7 +228,7 @@ public class AuditClient extends BaseClient {
 					new PostConfig.Builder().pollResult(false).build()
 				);
 		} catch (AcceptedRequestException e) {
-			return (LogBulkResponse) (new Response<LogBulkResult>(e.getResponse(), e.getAcceptedResult()));
+			return new LogBulkResponse(new Response<LogBulkResult>(e.getResponse(), e.getAcceptedResult()));
 		}
 
 		if (response.getResult() != null) {

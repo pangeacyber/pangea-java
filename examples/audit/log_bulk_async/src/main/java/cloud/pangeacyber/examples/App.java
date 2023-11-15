@@ -1,8 +1,6 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.audit.AuditClient;
-import cloud.pangeacyber.pangea.audit.LogResult;
-import cloud.pangeacyber.pangea.exceptions.AcceptedRequestException;
 import cloud.pangeacyber.pangea.audit.models.StandardEvent;
 import cloud.pangeacyber.pangea.audit.models.IEvent;
 import cloud.pangeacyber.pangea.audit.models.LogConfig;
@@ -33,11 +31,10 @@ public class App
                         .build();
 
         try {
-            client.logBulkAsync(new IEvent[]{event1, event2}, new LogConfig.Builder().build());
-        } catch (AcceptedRequestException e){
-            System.out.println("AcceptedRequestException as expected");
+            LogBulkResponse response = client.logBulkAsync(new IEvent[]{event1, event2}, new LogConfig.Builder().build());
+            System.out.printf("Success. request_id: %s\n", response.getRequestId());
         } catch (Exception e){
-            System.out.println("Fail to perfom log: " + e);
+            System.out.println("Failed to send logs: " + e);
             System.exit(1);
         }
 

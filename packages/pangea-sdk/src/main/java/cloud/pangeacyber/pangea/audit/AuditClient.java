@@ -347,7 +347,28 @@ public class AuditClient extends BaseClient {
 		return doLog(event, config);
 	}
 
-	// TODO: Docs
+	/**
+	 * Log multiple entries
+	 * @pangea.description Create multiple log entries in the Secure Audit Log.
+	 * @pangea.operationId audit_post_v2_log
+	 * @param events events to log
+	 * @param config
+	 * @return LogBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * StandardEvent event = new StandardEvent
+	 * 	.Builder("Hello, World!")
+	 * 	.action("Login")
+	 * 	.actor("Terminal")
+	 * 	.build();
+	 * StandardEvent[] events = {event};
+	 * LogConfig config = new LogConfig.Builder().build();
+	 *
+	 * LogBulkResponse response = client.logBulk(events, config);
+	 * }
+	 */
 	public LogBulkResponse logBulk(IEvent[] events, LogConfig config) throws PangeaException, PangeaAPIException {
 		if (config == null) {
 			config = new LogConfig.Builder().build();
@@ -355,7 +376,28 @@ public class AuditClient extends BaseClient {
 		return doLogBulk(events, config);
 	}
 
-	// TODO: Docs
+	/**
+	 * Log multiple entries asynchronously
+	 * @pangea.description Asynchronously create multiple log entries in the Secure Audit Log.
+	 * @pangea.operationId audit_post_v2_log_async
+	 * @param events events to log
+	 * @param config
+	 * @return LogBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * StandardEvent event = new StandardEvent
+	 * 	.Builder("Hello, World!")
+	 * 	.action("Login")
+	 * 	.actor("Terminal")
+	 * 	.build();
+	 * StandardEvent[] events = {event};
+	 * LogConfig config = new LogConfig.Builder().build();
+	 *
+	 * LogBulkResponse response = client.logBulkAsync(events, config);
+	 * }
+	 */
 	public LogBulkResponse logBulkAsync(IEvent[] events, LogConfig config) throws PangeaException, PangeaAPIException {
 		if (config == null) {
 			config = new LogConfig.Builder().build();

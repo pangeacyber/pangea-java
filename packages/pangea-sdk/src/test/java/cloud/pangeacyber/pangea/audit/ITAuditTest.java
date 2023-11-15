@@ -22,7 +22,7 @@ public class ITAuditTest {
 
 	Config cfgGeneral;
 	AuditClient clientGeneral, clientGeneralNoQueue, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient, customSchemaClient, localSignCustomSchemaClient;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	TestEnvironment environment = TestEnvironment.LIVE;
 	CustomEvent customEvent;
 
 	private static final String ACTOR = "java-sdk";

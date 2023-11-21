@@ -31,8 +31,9 @@ public class Response<Result> extends ResponseHeader {
 		return httpResponse;
 	}
 
-	protected void setHttpResponse(CloseableHttpResponse httpResponse) {
-		this.httpResponse = httpResponse;
+	protected void setHttpResponse(InternalHttpResponse httpResponse) {
+		this.httpResponse = httpResponse.getResponse();
+		this.body = httpResponse.getBody();
 	}
 
 	public String getBody() {

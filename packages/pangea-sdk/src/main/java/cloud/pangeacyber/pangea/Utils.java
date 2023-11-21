@@ -58,7 +58,7 @@ public class Utils {
 		return hash.substring(0, len);
 	}
 
-	public static FileParams getFSparams(File file) throws PangeaException {
+	public static FileParams getFileUploadParams(File file) throws PangeaException {
 		String crc, sha256;
 		int size = 0;
 		CRC32C crc32c = new CRC32C();
@@ -83,11 +83,11 @@ public class Utils {
 		return new FileParams(size, sha256, crc);
 	}
 
-	public static FileParams getFSparams(String filepath) throws PangeaException {
+	public static FileParams getFileUploadParams(String filepath) throws PangeaException {
 		File file = null;
 		try {
 			file = new File(filepath);
-			return Utils.getFSparams(file);
+			return Utils.getFileUploadParams(file);
 		} catch (NullPointerException e) {
 			throw new PangeaException(String.format("Failed to read file due to null pathname"), e);
 		}

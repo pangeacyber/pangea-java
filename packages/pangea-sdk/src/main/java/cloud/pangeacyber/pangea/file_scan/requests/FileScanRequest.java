@@ -10,15 +10,15 @@ public class FileScanRequest extends BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("provider")
-	String provider;
+	protected String provider;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("verbose")
-	Boolean verbose;
+	protected Boolean verbose;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("raw")
-	Boolean raw;
+	protected Boolean raw;
 
 	protected FileScanRequest(FileScanRequest request) {
 		this.provider = request.getProvider();
@@ -33,6 +33,8 @@ public class FileScanRequest extends BaseRequest {
 		this.raw = builder.raw;
 		this.setTransferMethod(builder.transferMethod);
 	}
+
+	protected FileScanRequest() {}
 
 	public static class Builder {
 

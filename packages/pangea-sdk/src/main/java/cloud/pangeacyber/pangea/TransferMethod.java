@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TransferMethod {
 	DIRECT("direct"),
-	MULTIPART("multipart");
+	MULTIPART("multipart"),
+	POST_URL("post-url"),
+	PUT_URL("put-url");
 
 	private final String text;
 

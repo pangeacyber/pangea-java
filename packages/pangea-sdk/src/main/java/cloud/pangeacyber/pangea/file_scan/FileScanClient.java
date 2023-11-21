@@ -2,12 +2,15 @@ package cloud.pangeacyber.pangea.file_scan;
 
 import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.FileData;
 import cloud.pangeacyber.pangea.TransferMethod;
 import cloud.pangeacyber.pangea.Utils;
+import cloud.pangeacyber.pangea.exceptions.AcceptedResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.file_scan.models.FileParams;
 import cloud.pangeacyber.pangea.file_scan.requests.FileScanRequest;
+import cloud.pangeacyber.pangea.file_scan.requests.FileScanUploadURLRequest;
 import cloud.pangeacyber.pangea.file_scan.responses.FileScanResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -33,6 +36,19 @@ final class FileScanFullRequest extends FileScanRequest {
 		this.size = params.getSize();
 		this.crc32c = params.getCRC32C();
 		this.sha256 = params.getSHA256();
+	}
+
+	public FileScanFullRequest(FileScanUploadURLRequest request) {
+		this.raw = request.getRaw();
+		this.verbose = request.getVerbose();
+		this.provider = request.getProvider();
+		this.setTransferMethod(request.getTransferMethod());
+		FileParams params = request.getFileParams();
+		if (params != null) {
+			this.size = params.getSize();
+			this.crc32c = params.getCRC32C();
+			this.sha256 = params.getSHA256();
+		}
 	}
 
 	public FileScanFullRequest(FileScanRequest request) {
@@ -96,13 +112,45 @@ public class FileScanClient extends BaseClient {
 	 */
 	public FileScanResponse scan(FileScanRequest request, File file) throws PangeaException, PangeaAPIException {
 		FileScanFullRequest fullRequest;
-		if (request.getTransferMethod() == TransferMethod.DIRECT) {
-			FileParams fileParams = Utils.getFSparams(file);
-			fullRequest = new FileScanFullRequest(request, fileParams);
-		} else {
-			fullRequest = new FileScanFullRequest(request);
+		TransferMethod tm = request.getTransferMethod();
+		String name;
+
+		if (tm == TransferMethod.PUT_URL) {
+			throw new PangeaException(String.format("%s not supported. User GetUploadURL() instead", tm), null);
 		}
 
-		return post("/v1/scan", fullRequest, file, FileScanResponse.class);
+		if (tm == TransferMethod.DIRECT || tm == TransferMethod.POST_URL) {
+			FileParams fileParams = Utils.getFileUploadParams(file);
+			fullRequest = new FileScanFullRequest(request, fileParams);
+			name = "file";
+		} else {
+			fullRequest = new FileScanFullRequest(request);
+			name = "upload";
+		}
+
+		FileData fileData = new FileData(file, name);
+		return post("/v1/scan", fullRequest, fileData, FileScanResponse.class);
+	}
+
+	public AcceptedResponse requestUploadURL(FileScanUploadURLRequest request)
+		throws PangeaException, PangeaAPIException {
+		TransferMethod tm = request.getTransferMethod();
+		if (tm == null) {
+			tm = TransferMethod.PUT_URL;
+		}
+
+		if (tm == TransferMethod.MULTIPART) {
+			throw new PangeaException(String.format("%s not supported. User scan() instead", tm), null);
+		}
+
+		if ((tm == TransferMethod.DIRECT || tm == TransferMethod.POST_URL) && request.getFileParams() == null) {
+			throw new PangeaException(
+				String.format("Should set FileParams in order to use %s transfer method", tm),
+				null
+			);
+		}
+
+		FileScanFullRequest fullRequest = new FileScanFullRequest(request);
+		return requestPresignedURL("/v1/scan", fullRequest);
 	}
 }

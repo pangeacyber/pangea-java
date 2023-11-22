@@ -30,7 +30,7 @@ public class FileUploader extends BaseClient {
 		}
 
 		if (transferMethod == TransferMethod.MULTIPART) {
-			throw new PangeaException(String.format("%s not supported. User scan() instead", transferMethod), null);
+			throw new PangeaException(String.format("%s not supported. Use scan() instead", transferMethod), null);
 		}
 
 		if (

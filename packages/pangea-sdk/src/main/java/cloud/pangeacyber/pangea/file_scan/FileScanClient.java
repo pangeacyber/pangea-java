@@ -116,7 +116,7 @@ public class FileScanClient extends BaseClient {
 		String name;
 
 		if (tm == TransferMethod.PUT_URL) {
-			throw new PangeaException(String.format("%s not supported. User GetUploadURL() instead", tm), null);
+			throw new PangeaException(String.format("%s not supported. Use GetUploadURL() instead", tm), null);
 		}
 
 		if (tm == TransferMethod.DIRECT || tm == TransferMethod.POST_URL) {
@@ -140,7 +140,7 @@ public class FileScanClient extends BaseClient {
 		}
 
 		if (tm == TransferMethod.MULTIPART) {
-			throw new PangeaException(String.format("%s not supported. User scan() instead", tm), null);
+			throw new PangeaException(String.format("%s not supported. Use scan() instead", tm), null);
 		}
 
 		if ((tm == TransferMethod.DIRECT || tm == TransferMethod.POST_URL) && request.getFileParams() == null) {

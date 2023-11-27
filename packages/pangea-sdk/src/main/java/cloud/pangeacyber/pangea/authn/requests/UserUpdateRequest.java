@@ -22,10 +22,15 @@ public class UserUpdateRequest extends BaseRequest {
 	@JsonProperty("disabled")
 	Boolean disabled;
 
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("unlock")
+	Boolean unlock;
+
 	private UserUpdateRequest(Builder builder) {
 		this.id = builder.id;
 		this.email = builder.email;
 		this.disabled = builder.disabled;
+		this.unlock = builder.unlock;
 	}
 
 	public static class Builder {
@@ -33,6 +38,7 @@ public class UserUpdateRequest extends BaseRequest {
 		IDProvider id;
 		String email;
 		Boolean disabled;
+		Boolean unlock;
 
 		public Builder() {}
 
@@ -54,5 +60,11 @@ public class UserUpdateRequest extends BaseRequest {
 			this.disabled = disabled;
 			return this;
 		}
+
+		public Builder setUnlock(Boolean unlock) {
+			this.unlock = unlock;
+			return this;
+		}
+
 	}
 }

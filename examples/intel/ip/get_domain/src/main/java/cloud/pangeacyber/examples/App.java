@@ -25,7 +25,7 @@ public class App
 	    		new IPDomainRequest.Builder("24.235.114.61").provider("digitalelement").verbose(true).raw(true).build()
     		);
         } catch (Exception e){
-            System.out.println("Fail to perfom request: " + e);
+            System.out.println("Request failed: " + e);
             System.exit(1);
         }
 

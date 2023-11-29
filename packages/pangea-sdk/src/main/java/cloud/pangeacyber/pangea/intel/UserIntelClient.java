@@ -30,7 +30,7 @@ public class UserIntelClient extends BaseClient {
 
 	/**
 	 * Look up breached users
-	 * @pangea.description Find out if an email address, username, phone number, or IP address was exposed in a security breach.
+	 * @pangea.description Determine if an email address, username, phone number, or IP address was exposed in a security breach.
 	 * @pangea.operationId user_intel_post_v1_user_breached
 	 * @param request to send to user/breached endpoint
 	 * @return UserBreachedResponse
@@ -38,18 +38,38 @@ public class UserIntelClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	UserBreachedResponse response = client.breached(
-	 *		new UserBreachedRequest.UserBreachedRequestBuilder()
-	 *		.setPhoneNumber("8005550123")
-	 *		.setVerbose(true)
-	 *		.build()
-	 *	);
+	 * UserBreachedRequest request = new UserBreachedRequest
+	 * 	.Builder()
+	 * 	.phoneNumber("8005550123")
+	 * 	.build();
+	 * 
+	 *	UserBreachedResponse response = client.breached(request);
 	 * }
 	 */
 	public UserBreachedResponse breached(UserBreachedRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/user/breached", request, UserBreachedResponse.class);
 	}
 
+	/**
+	 * Look up breached users V2
+	 * @pangea.description Determine if an email address, username, phone number, or IP address was exposed in a security breach.
+	 * @pangea.operationId user_intel_post_v2_user_breached
+	 * @param request
+	 * @return UserBreachedBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * String[] phoneNumbers = {"8005550123"};
+	 * 
+	 * UserBreachedBulkRequest request = new UserBreachedBulkRequest
+	 * 	.Builder()
+	 * 	.phoneNumbers(phoneNumbers)
+	 * 	.build();
+	 * 
+	 * UserBreachedBulkResponse response = client.breachedBulk(request);
+	 * }
+	 */
 	public UserBreachedBulkResponse breachedBulk(UserBreachedBulkRequest request)
 		throws PangeaException, PangeaAPIException {
 		return post("/v2/user/breached", request, UserBreachedBulkResponse.class);
@@ -57,7 +77,7 @@ public class UserIntelClient extends BaseClient {
 
 	/**
 	 * Look up breached passwords
-	 * @pangea.description Find out if a password has been exposed in security breaches by providing a 5 character prefix of the password hash.
+	 * @pangea.description Determine if a password has been exposed in a security breach using a 5 character prefix of the password hash.
 	 * @pangea.operationId user_intel_post_v1_password_breached
 	 * @param request to send to password/breached endpoint
 	 * @return UserPasswordBreachedResponse
@@ -65,11 +85,11 @@ public class UserIntelClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 *	UserPasswordBreachedResponse response = client.breached(
-	 *		new UserPasswordBreachedRequest.UserPasswordBreachedRequestBuilder(HashType.SHA256, "5baa6")
-	 *		.setProvider("spycloud")
-	 *		.build()
-	 *	);
+	 * UserPasswordBreachedRequest request = new UserPasswordBreachedRequest
+	 * 	.Builder(HashType.SHA256, "5baa6")
+	 * 	.build();
+	 * 
+	 *	UserPasswordBreachedResponse response = client.breached(request);
 	 * }
 	 */
 	public UserPasswordBreachedResponse breached(UserPasswordBreachedRequest request)
@@ -77,6 +97,25 @@ public class UserIntelClient extends BaseClient {
 		return post("/v1/password/breached", request, UserPasswordBreachedResponse.class);
 	}
 
+	/**
+	 * Look up breached passwords V2
+	 * @pangea.description Determine if a password has been exposed in a security breach using a 5 character prefix of the password hash.
+	 * @pangea.operationId user_intel_post_v2_password_breached
+	 * @param request
+	 * @return UserPasswordBreachedBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * String[] hashPrefixes = {"5baa6"};
+	 * 
+	 * UserPasswordBreachedBulkRequest request = new UserPasswordBreachedBulkRequest
+	 * 	.Builder(HashType.SHA256, hashPrefixes)
+	 * 	.build();
+	 * 
+	 * UserPasswordBreachedBulkResponse response = client.breachedBulk(request);
+	 * }
+	 */
 	public UserPasswordBreachedBulkResponse breachedBulk(UserPasswordBreachedBulkRequest request)
 		throws PangeaException, PangeaAPIException {
 		return post("/v2/password/breached", request, UserPasswordBreachedBulkResponse.class);
@@ -94,9 +133,9 @@ public class UserIntelClient extends BaseClient {
 			// If hash is present in raw data, it's because it was breached
 			return PasswordStatus.BREACHED;
 		} else if (rawData.size() >= 1000) {
-			// If it's not present, should check if I have all breached hash
-			// Server will return a maximum of 1000 hash, so if breached count is greater than that,
-			// I can't conclude is password is or is not breached
+			// If it's not present, should check if I have all breached hashes
+			// Server will return a maximum of 1000 hashes, so if breached count is greater than that,
+			// I can't conclude a password is or is not breached
 			return PasswordStatus.INCONCLUSIVE;
 		} else {
 			return PasswordStatus.UNBREACHED;

@@ -32,7 +32,7 @@ public class DomainIntelClient extends BaseClient {
 
 	/**
 	 * Reputation
-	 * @pangea.description Retrieve domain reputation for a particular provider
+	 * @pangea.description Retrieve reputation for a domain from a provider, including an optional detailed report.
 	 * @pangea.operationId domain_intel_post_v1_reputation
 	 * @param request
 	 * @return DomainReputationResponse
@@ -56,23 +56,25 @@ public class DomainIntelClient extends BaseClient {
 	}
 
 	/**
-	 * Reputation
-	 * @pangea.description Retrieve domain list reputation for a particular provider
-	 * @pangea.operationId FIXME:
+	 * Reputation V2
+	 * @pangea.description Retrieve reputations for a list of domains from a provider, including an optional detailed report.
+	 * @pangea.operationId domain_intel_post_v2_reputation
 	 * @param request
 	 * @return DomainReputationBulkResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * DomainReputationRequest request = new DomainReputationBulkRequest
-	 * 	.Builder("737updatesboeing.com") FIXME:
+	 * String[] domains = {"737updatesboeing.com"};
+	 * 
+	 * DomainReputationBulkRequest request = new DomainReputationBulkRequest
+	 * 	.Builder(domains)
 	 * 	.provider("domaintools")
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
 	 *
-	 * DomainReputationResponse response = client.reputationBulk(request);
+	 * DomainReputationBulkResponse response = client.reputationBulk(request);
 	 * }
 	 */
 	public DomainReputationBulkResponse reputationBulk(DomainReputationBulkRequest request)

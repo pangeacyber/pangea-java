@@ -53,17 +53,19 @@ public class URLIntelClient extends BaseClient {
 	}
 
 	/**
-	 * Reputation
-	 * @pangea.description Retrieve a reputation score for a URL list from a provider, including an optional detailed report.
-	 * @pangea.operationId FIXME:
+	 * Reputation V2
+	 * @pangea.description Retrieve a reputation scores for a list of URLs from a provider, including an optional detailed report.
+	 * @pangea.operationId url_intel_post_v2_reputation
 	 * @param request
 	 * @return URLReputationBulkResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
+	 * String[] urls = {"http://113.235.101.11:54384"};
+	 * 
 	 * URLReputationBulkRequest request = new URLReputationBulkRequest
-	 * 	.Builder("http://113.235.101.11:54384") FIXME:
+	 * 	.Builder(urls)
 	 * 	.provider("crowdstrike")
 	 * 	.verbose(true)
 	 * 	.raw(true)

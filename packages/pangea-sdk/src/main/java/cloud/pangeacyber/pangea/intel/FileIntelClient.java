@@ -46,7 +46,7 @@ public class FileIntelClient extends BaseClient {
 	 * {@code
 	 * FileHashReputationRequest request = new FileHashReputationRequest
 	 * 	.Builder(
-	 * 		"142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+	 * 		"179e2b8a4162372cd9344b81793cbf74a9513a002eda3324e6331243f3137a63",
 	 * 		"sha256")
 	 * 	.provider("reversinglabs")
 	 * 	.verbose(false)
@@ -62,25 +62,25 @@ public class FileIntelClient extends BaseClient {
 	}
 
 	/**
-	 * Reputation
-	 * @pangea.description Retrieve a reputation score for a file hash list from a provider, including an optional detailed report.
-	 * @pangea.operationId FIXME:
+	 * Reputation V2
+	 * @pangea.description Retrieve reputation scores for a set of file hashes from a provider, including an optional detailed report.
+	 * @pangea.operationId file_intel_post_v2_reputation
 	 * @param request
 	 * @return FileReputationBulkResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * FileHashReputationRequest request = new FileHashReputationBulkRequest
-	 * 	.Builder(
-	 * 		"142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e", FIXME:
-	 * 		"sha256")
+	 * String[] hashes = {"179e2b8a4162372cd9344b81793cbf74a9513a002eda3324e6331243f3137a63"};
+	 * 
+	 * FileHashReputationBulkRequest request = new FileHashReputationBulkRequest
+	 * 	.Builder(hashes, "sha256")
 	 * 	.provider("reversinglabs")
 	 * 	.verbose(false)
 	 * 	.raw(true)
 	 * 	.build();
 	 *
-	 * FileReputationResponse response = client.reputation(request);
+	 * FileReputationBulkResponse response = client.reputationBulk(request);
 	 * }
 	 */
 	public FileReputationBulkResponse reputationBulk(FileHashReputationBulkRequest request)

@@ -25,7 +25,7 @@ public class App
                 new IPReputationRequest.Builder("93.231.182.110").provider("cymru").verbose(true).raw(true).build()
             );
         } catch (Exception e){
-            System.out.println("Fail to perfom request: " + e);
+            System.out.println("Request failed: " + e);
             System.exit(1);
         }
 

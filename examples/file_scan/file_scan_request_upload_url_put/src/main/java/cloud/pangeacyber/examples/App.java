@@ -32,10 +32,7 @@ public class App {
         Config cfg = null;
         try {
             cfg = Config.fromEnvironment(FileScanClient.serviceName);
-            // To work in sync it's need to set up queuedRetryEnabled to true and set up a
-            // proper timeout
-            // If timeout it's so little service won't end up and will return an
-            // AcceptedRequestException anyway
+           	// To enable sync mode, set queuedRetryEnabled to true and set a timeout
             cfg.setQueuedRetryEnabled(true);
             cfg.setPollResultTimeout(120 * 1000);
         } catch (ConfigException e) {
@@ -45,11 +42,11 @@ public class App {
 
         FileScanClient client = new FileScanClient.Builder(cfg).build();
 
-        // Here we create a file that will give us a malicious result as example
         // This should be your own file to scan
 		File file = new File(TESTFILE_PATH);
 
-        // If use TransferMethod.PUT_URL it's not needed file params
+      	// Only the TransferMethod is needed when using TransferMethod.PUT_URL,
+      	// in addition to the standard parameters
 
         // request an upload url
         FileScanUploadURLRequest request = new FileScanUploadURLRequest.Builder()
@@ -61,7 +58,7 @@ public class App {
 
 		AcceptedResponse acceptedResponse = client.requestUploadURL(request);
 
-        // extract upload url and upload details that should be posted with the file
+        // extract upload url for posting the file
 		String url = acceptedResponse.getResult().getAcceptedStatus().getUploadURL();
         System.out.printf("Got presigned url: %s\n", url);
 
@@ -77,11 +74,9 @@ public class App {
 		int maxRetry = 12;
 		for (int retry = 0; retry < maxRetry; retry++) {
 			try {
-                // wait some time to get result ready and poll it
-				// Sleep 10 seconds until result is (should) be ready
 				Thread.sleep(10 * 1000);
 
-				// Poll result, this could raise another AcceptedRequestException if result is not ready
+                // Poll for results, multiple polling attempts may be required
 				response = client.pollResult(acceptedResponse.getRequestId(), FileScanResponse.class);
 
 				FileScanData data = response.getResult().getData();

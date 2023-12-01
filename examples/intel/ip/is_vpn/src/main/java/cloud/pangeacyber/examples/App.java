@@ -25,7 +25,7 @@ public class App
                 new IPVPNRequest.Builder("2.56.189.74").provider("digitalelement").verbose(true).raw(true).build()
             );
         } catch (Exception e){
-            System.out.println("Fail to perfom request: " + e);
+            System.out.println("Request failed: " + e);
             System.exit(1);
         }
 

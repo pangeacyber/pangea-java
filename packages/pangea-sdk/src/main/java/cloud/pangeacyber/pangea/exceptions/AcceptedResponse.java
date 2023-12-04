@@ -4,4 +4,4 @@ import cloud.pangeacyber.pangea.Response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ResponseAccepted extends Response<AcceptedResult> {}
+public class AcceptedResponse extends Response<AcceptedResult> {}

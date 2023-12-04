@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.3.0] - 2023-11-28
+
+# Added
+
+- Authn unlock user support
+- Redact multiconfig support
+- File Scan post-url and put-url support
+
+
+## [3.2.0] - 2023-11-15
+
+# Added
+
+- Support for audit /v2/log and /v2/log_async endpoints
+
+
+## [3.1.0] - 2023-11-09
+
+# Added
+
+- Presigned URL upload support on FileScan service
+- Folder settings support in Vault service
+
 ## [3.0.0] - 2023-10-23
 
 # Added 
@@ -217,7 +241,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Domain Intel client
 - Redact client
 
-[unreleased]: https://github.com/pangeacyber/pangea-java/compare/v2.3.0...main
+[unreleased]: https://github.com/pangeacyber/pangea-java/compare/v3.3.0...main
+[3.3.0]: https://github.com/pangeacyber/pangea-java/compare/v3.2.0...v3.3.0
+[3.2.0]: https://github.com/pangeacyber/pangea-java/compare/v3.1.0...v3.2.0
+[3.1.0]: https://github.com/pangeacyber/pangea-java/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/pangeacyber/pangea-java/compare/v2.3.0...v3.0.0
 [2.2.0]: https://github.com/pangeacyber/pangea-java/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/pangeacyber/pangea-java/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/pangeacyber/pangea-java/compare/v2.0.0...v2.1.0

@@ -6,17 +6,23 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.FileData;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.TransferMethod;
+import cloud.pangeacyber.pangea.Utils;
 import cloud.pangeacyber.pangea.exceptions.AcceptedRequestException;
+import cloud.pangeacyber.pangea.exceptions.AcceptedResponse;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.file_scan.models.FileParams;
 import cloud.pangeacyber.pangea.file_scan.models.FileScanData;
 import cloud.pangeacyber.pangea.file_scan.requests.FileScanRequest;
+import cloud.pangeacyber.pangea.file_scan.requests.FileScanUploadURLRequest;
 import cloud.pangeacyber.pangea.file_scan.responses.FileScanResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -175,6 +181,93 @@ public class ITFileScanTest {
 
 				// Poll result, this could raise another AcceptedRequestException if result is not ready
 				response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
+				assertTrue(response.isOk());
+
+				FileScanData data = response.getResult().getData();
+				assertEquals("benign", data.getVerdict());
+				assertNull(response.getResult().getParameters());
+				assertNotNull(response.getResult().getRawData());
+				break;
+			} catch (PangeaAPIException e) {
+				assertTrue(retry < maxRetry - 1);
+			}
+		}
+	}
+
+	@Test
+	public void testFileScan_SplitUpload_Post()
+		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+		File file = new File(TESTFILE_PATH);
+		FileParams fileParams = Utils.getFileUploadParams(file);
+		FileScanUploadURLRequest request = new FileScanUploadURLRequest.Builder()
+			.provider("reversinglabs")
+			.raw(true)
+			.verbose(false)
+			.fileParams(fileParams)
+			.build();
+
+		AcceptedResponse acceptedResponse = client.requestUploadURL(request);
+
+		String url = acceptedResponse.getResult().getAcceptedStatus().getUploadURL();
+		Map<String, Object> details = acceptedResponse.getResult().getAcceptedStatus().getUploadDetails();
+
+		FileData fileData = new FileData(file, "file", details);
+
+		FileUploader fileUploader = new FileUploader.Builder().build();
+		fileUploader.uploadFile(url, TransferMethod.POST_URL, fileData);
+
+		FileScanResponse response;
+		int maxRetry = 12;
+		for (int retry = 0; retry < maxRetry; retry++) {
+			try {
+				// Sleep 10 seconds until result is (should) be ready
+				Thread.sleep(10 * 1000);
+
+				// Poll result, this could raise another AcceptedRequestException if result is not ready
+				response = client.pollResult(acceptedResponse.getRequestId(), FileScanResponse.class);
+				assertTrue(response.isOk());
+
+				FileScanData data = response.getResult().getData();
+				assertEquals("benign", data.getVerdict());
+				assertNull(response.getResult().getParameters());
+				assertNotNull(response.getResult().getRawData());
+				break;
+			} catch (PangeaAPIException e) {
+				assertTrue(retry < maxRetry - 1);
+			}
+		}
+	}
+
+	@Test
+	public void testFileScan_SplitUpload_Put()
+		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+		File file = new File(TESTFILE_PATH);
+		FileScanUploadURLRequest request = new FileScanUploadURLRequest.Builder()
+			.provider("reversinglabs")
+			.raw(true)
+			.verbose(false)
+			.transferMethod(TransferMethod.PUT_URL)
+			.build();
+
+		AcceptedResponse acceptedResponse = client.requestUploadURL(request);
+
+		String url = acceptedResponse.getResult().getAcceptedStatus().getUploadURL();
+		Map<String, Object> details = acceptedResponse.getResult().getAcceptedStatus().getUploadDetails();
+
+		FileData fileData = new FileData(file, "file", details);
+
+		FileUploader fileUploader = new FileUploader.Builder().build();
+		fileUploader.uploadFile(url, TransferMethod.PUT_URL, fileData);
+
+		FileScanResponse response;
+		int maxRetry = 12;
+		for (int retry = 0; retry < maxRetry; retry++) {
+			try {
+				// Sleep 10 seconds until result is (should) be ready
+				Thread.sleep(10 * 1000);
+
+				// Poll result, this could raise another AcceptedRequestException if result is not ready
+				response = client.pollResult(acceptedResponse.getRequestId(), FileScanResponse.class);
 				assertTrue(response.isOk());
 
 				FileScanData data = response.getResult().getData();

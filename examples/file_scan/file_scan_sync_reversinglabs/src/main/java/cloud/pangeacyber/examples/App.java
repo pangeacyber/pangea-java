@@ -20,10 +20,7 @@ public class App {
         Config cfg = null;
         try {
             cfg = Config.fromEnvironment(FileScanClient.serviceName);
-            // To work in sync it's need to set up queuedRetryEnabled to true and set up a
-            // proper timeout
-            // If timeout it's so little service won't end up and will return an
-            // AcceptedRequestException anyway
+           	// To enable sync mode, set queuedRetryEnabled to true and set a timeout
             cfg.setQueuedRetryEnabled(true);
             cfg.setPollResultTimeout(120 * 1000);
         } catch (ConfigException e) {
@@ -34,7 +31,6 @@ public class App {
         FileScanClient client = new FileScanClient.Builder(cfg).build();
         FileScanResponse response = null;
         try {
-            // Here we create a file that will give us a malicious result as example
             // This should be your own file to scan
             File file = new File(TESTFILE_PATH);
 

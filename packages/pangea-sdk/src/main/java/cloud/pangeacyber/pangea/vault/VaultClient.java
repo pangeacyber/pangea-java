@@ -324,7 +324,7 @@ public class VaultClient extends BaseClient {
 	/**
 	 * Symmetric generate
 	 * @pangea.description Generate a symmetric key.
-	 * @pangea.operationId vault_post_v1_key_generate 1
+	 * @pangea.operationId vault_post_v1_key_generate 2
 	 * @param request - request parameters to send to /key/generate endpoint
 	 * @return SymmetricGenerateResponse
 	 * @throws PangeaException
@@ -332,7 +332,7 @@ public class VaultClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.SymmetricGenerateRequestBuilder(
-	 * 	SymmetricAlgorithm.AES,
+	 * 	SymmetricAlgorithm.AES128_CFB,
 	 * 	KeyPurpose.ENCRYPTION,
 	 * 	"keyname"
 	 * ).build();
@@ -347,7 +347,7 @@ public class VaultClient extends BaseClient {
 	/**
 	 * Asymmetric generate
 	 * @pangea.description Generate an asymmetric key.
-	 * @pangea.operationId vault_post_v1_key_generate 2
+	 * @pangea.operationId vault_post_v1_key_generate 1
 	 * @param request - request parameters to send to /key/generate endpoint
 	 * @return AsymmetricGenerateResponse
 	 * @throws PangeaException

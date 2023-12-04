@@ -208,8 +208,8 @@ public class ITFileScanTest {
 
 		AcceptedResponse acceptedResponse = client.requestUploadURL(request);
 
-		String url = acceptedResponse.getResult().getAcceptedStatus().getUploadURL();
-		Map<String, Object> details = acceptedResponse.getResult().getAcceptedStatus().getUploadDetails();
+		String url = acceptedResponse.getResult().getPostURL();
+		Map<String, Object> details = acceptedResponse.getResult().getPostFormData();
 
 		FileData fileData = new FileData(file, "file", details);
 
@@ -251,10 +251,9 @@ public class ITFileScanTest {
 
 		AcceptedResponse acceptedResponse = client.requestUploadURL(request);
 
-		String url = acceptedResponse.getResult().getAcceptedStatus().getUploadURL();
-		Map<String, Object> details = acceptedResponse.getResult().getAcceptedStatus().getUploadDetails();
+		String url = acceptedResponse.getResult().getPutURL();
 
-		FileData fileData = new FileData(file, "file", details);
+		FileData fileData = new FileData(file, "file");
 
 		FileUploader fileUploader = new FileUploader.Builder().build();
 		fileUploader.uploadFile(url, TransferMethod.PUT_URL, fileData);

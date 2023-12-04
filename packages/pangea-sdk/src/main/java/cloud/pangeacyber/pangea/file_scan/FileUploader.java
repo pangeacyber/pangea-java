@@ -33,10 +33,7 @@ public class FileUploader extends BaseClient {
 			throw new PangeaException(String.format("%s not supported. Use scan() instead", transferMethod), null);
 		}
 
-		if (
-			(transferMethod == TransferMethod.DIRECT || transferMethod == TransferMethod.POST_URL) &&
-			fileData.getDetails() == null
-		) {
+		if ((transferMethod == TransferMethod.POST_URL) && fileData.getDetails() == null) {
 			throw new PangeaException(
 				String.format("Should set FileParams in order to use %s transfer method", transferMethod),
 				null

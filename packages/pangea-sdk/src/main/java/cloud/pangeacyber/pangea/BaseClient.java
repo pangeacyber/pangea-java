@@ -222,10 +222,7 @@ public abstract class BaseClient {
 
 		final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
-		if (
-			fileData.getDetails() != null &&
-			(transferMethod == TransferMethod.POST_URL || transferMethod == TransferMethod.DIRECT)
-		) {
+		if (fileData.getDetails() != null && transferMethod == TransferMethod.POST_URL) {
 			for (Map.Entry<String, Object> entry : fileData.getDetails().entrySet()) {
 				if (entry.getValue() instanceof String) {
 					final StringBody requestBody = new StringBody(
@@ -340,7 +337,7 @@ public abstract class BaseClient {
 		URI url = config.getServiceUrl(serviceName, path);
 		InternalHttpResponse response;
 
-		if (request.getTransferMethod() == TransferMethod.DIRECT) {
+		if (request.getTransferMethod() == TransferMethod.POST_URL) {
 			response = fullPostPresignedURL(url, request, fileData, responseClass);
 		} else {
 			response = postSingle(url, request, fileData);
@@ -354,11 +351,7 @@ public abstract class BaseClient {
 
 	private AcceptedResponse pollPresignedURL(AcceptedResponse response) throws PangeaAPIException, PangeaException {
 		AcceptedResult acceptedResult = response.getResult();
-		if (
-			acceptedResult != null &&
-			acceptedResult.getAcceptedStatus() != null &&
-			acceptedResult.getAcceptedStatus().getUploadURL() != null
-		) {
+		if (acceptedResult != null && acceptedResult.hasUploadURL()) {
 			return response;
 		}
 
@@ -370,14 +363,7 @@ public abstract class BaseClient {
 		AcceptedRequestException loopException = null;
 		AcceptedResponse loopResp = response;
 
-		while (
-			(
-				acceptedResult == null ||
-				acceptedResult.getAcceptedStatus() == null ||
-				acceptedResult.getAcceptedStatus().getUploadURL() == null
-			) &&
-			!reachedTimeout(start)
-		) {
+		while ((acceptedResult == null || !acceptedResult.hasUploadURL()) && !reachedTimeout(start)) {
 			this.logger.debug(
 					String.format(
 						"{\"service\": \"%s\", \"action\": \"poll presigned URL\", \"step\": \"%d\"}",
@@ -480,8 +466,8 @@ public abstract class BaseClient {
 		AcceptedResponse responseAccepted = checkResponse(response, AcceptedResponse.class, url.toString());
 		responseAccepted = this.pollPresignedURL(responseAccepted);
 
-		String presignedURL = responseAccepted.getResult().getAcceptedStatus().getUploadURL();
-		fileData.setDetails(responseAccepted.getResult().getAcceptedStatus().getUploadDetails());
+		String presignedURL = responseAccepted.getResult().getPostURL();
+		fileData.setDetails(responseAccepted.getResult().getPostFormData());
 
 		uploadPresignedURL(presignedURL, TransferMethod.POST_URL, fileData);
 		return response;

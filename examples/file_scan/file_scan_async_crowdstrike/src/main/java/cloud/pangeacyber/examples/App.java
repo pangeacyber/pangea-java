@@ -21,9 +21,9 @@ public class App {
         Config cfg = null;
         try {
             cfg = Config.fromEnvironment(FileScanClient.serviceName);
-            // To work in async it's need to set up queuedRetryEnabled to false
-            // When we call .scan() it will return an AcceptedRequestException inmediatly if
-            // server return a 202 response
+            // To enable async mode, set queuedRetryEnabled to false
+            // When .Scan() is called it will return an AcceptedRequestException immediately
+            // when the server returns a 202 response
             cfg.setQueuedRetryEnabled(false);
         } catch (ConfigException e) {
             System.out.println(e);
@@ -35,7 +35,6 @@ public class App {
         AcceptedRequestException exception = null;
         try {
             System.out.println("File Scan request...");
-            // Here we create a file that will give us a malicious result as example
             // This should be your own file to scan
             File file = new File(TESTFILE_PATH);
             response = client.scan(
@@ -61,8 +60,7 @@ public class App {
 
         System.out.println("File Scan poll result...");
         try {
-            // Poll result, this could raise another AcceptedRequestException if result is
-            // not ready
+            // Poll for results, multiple polling attempts may be required
             response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
 
             System.out.println("File Scan poll result success.");

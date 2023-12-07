@@ -24,10 +24,11 @@ public class App
         UserIntelClient client = new UserIntelClient.Builder(cfg).build();
         UserPasswordBreachedResponse response = null;
         // Set the password you would like to check
+        // Observe proper safety with passwords, do not check them into source control etc.
         String password = "mypassword";
-        // Calculate its hash, it could be sha256 or sha1
+        // Calculate its hash, it could be sha256, sha512 or sha1
         String hash = Utils.hashSHA256(password);
-        // get the hash prefix, right know it should be just 5 characters
+        // get the hash prefix, just the first 5 characters
         String hashPrefix = Utils.getHashPrefix(hash, 5);
 
         try {
@@ -46,7 +47,7 @@ public class App
         System.out.println("Request success");
         System.out.println("User password found in breach?: " + response.getResult().getData().getFoundInBreach());
 
-        // This auxiliary function analyze service provider raw data to search for full hash in their registers
+        // isPasswordBreached is a helper function that can simplify searching the response's raw data for the full hash
         PasswordStatus status = UserIntelClient.isPasswordBreached(response, hash);
         if(status == PasswordStatus.BREACHED){
           System.out.println(String.format("Password '%s' has been breached", password));

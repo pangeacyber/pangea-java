@@ -64,8 +64,8 @@ public class App {
 		AcceptedResponse acceptedResponse = client.requestUploadURL(request);
 
         // extract upload url and upload details that should be posted with the file
-		String url = acceptedResponse.getResult().getAcceptedStatus().getUploadURL();
-		Map<String, Object> details = acceptedResponse.getResult().getAcceptedStatus().getUploadDetails();
+		String url = acceptedResponse.getResult().getPostURL();
+		Map<String, Object> details = acceptedResponse.getResult().getPostFormData();
         System.out.printf("Got presigned url: %s\n", url);
 
 		FileData fileData = new FileData(file, "file", details);

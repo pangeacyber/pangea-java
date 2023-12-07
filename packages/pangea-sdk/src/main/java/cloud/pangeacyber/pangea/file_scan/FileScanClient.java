@@ -20,15 +20,15 @@ import java.io.File;
 final class FileScanFullRequest extends FileScanRequest {
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("transfer_size")
+	@JsonProperty("size")
 	Integer size;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("transfer_crc32c")
+	@JsonProperty("crc32c")
 	String crc32c;
 
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("transfer_sha256")
+	@JsonProperty("sha256")
 	String sha256;
 
 	public FileScanFullRequest(FileScanRequest request, FileParams params) {
@@ -119,7 +119,7 @@ public class FileScanClient extends BaseClient {
 			throw new PangeaException(String.format("%s not supported. Use GetUploadURL() instead", tm), null);
 		}
 
-		if (tm == TransferMethod.DIRECT || tm == TransferMethod.POST_URL) {
+		if (tm == TransferMethod.POST_URL) {
 			FileParams fileParams = Utils.getFileUploadParams(file);
 			fullRequest = new FileScanFullRequest(request, fileParams);
 			name = "file";
@@ -143,7 +143,7 @@ public class FileScanClient extends BaseClient {
 			throw new PangeaException(String.format("%s not supported. Use scan() instead", tm), null);
 		}
 
-		if ((tm == TransferMethod.DIRECT || tm == TransferMethod.POST_URL) && request.getFileParams() == null) {
+		if (tm == TransferMethod.POST_URL && request.getFileParams() == null) {
 			throw new PangeaException(
 				String.format("Should set FileParams in order to use %s transfer method", tm),
 				null

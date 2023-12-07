@@ -65,6 +65,5 @@ public class UserUpdateRequest extends BaseRequest {
 			this.unlock = unlock;
 			return this;
 		}
-
 	}
 }

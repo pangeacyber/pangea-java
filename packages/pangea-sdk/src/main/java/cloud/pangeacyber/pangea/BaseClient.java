@@ -638,6 +638,10 @@ public abstract class BaseClient {
 				)
 			);
 
+		if (httpResponse.getResponse().getStatusLine().getStatusCode() == 503) {
+			throw new ServiceTemporarilyUnavailable(httpResponse.getBody());
+		}
+
 		ResponseHeader header = parseHeader(httpResponse.getBody());
 
 		if (header.isOk()) {

@@ -14,4 +14,8 @@ public class PangeaException extends Exception {
 	public Throwable getCause() {
 		return cause;
 	}
+
+	public Throwable getCasue() {
+		return cause;
+	}
 }

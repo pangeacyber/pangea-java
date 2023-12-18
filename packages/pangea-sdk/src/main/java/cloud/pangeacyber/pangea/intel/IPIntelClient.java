@@ -51,6 +51,33 @@ public class IPIntelClient extends BaseClient {
 	}
 
 	/**
+	 * Geolocate V2
+	 * @pangea.description Retrieve location information associated with an IP address.
+	 * @pangea.operationId ip_intel_post_v2_geolocate
+	 * @param request
+	 * @return IPGeolocateBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * String[] ips = {"93.231.182.110"};
+	 * 
+	 * IPGeolocateBulkRequest request = new IPGeolocateBulkRequest
+	 * 	.Builder(ips)
+	 * 	.provider("digitalelement")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 * 
+	 * IPGeolocateBulkResponse response = client.geolocateBulk(request);
+	 * }
+	 */
+	public IPGeolocateBulkResponse geolocateBulk(IPGeolocateBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/geolocate", request, IPGeolocateBulkResponse.class);
+	}
+
+	/**
 	 * Domain
 	 * @pangea.description Retrieve the domain name associated with an IP address.
 	 * @pangea.operationId ip_intel_post_v1_domain
@@ -75,6 +102,32 @@ public class IPIntelClient extends BaseClient {
 	}
 
 	/**
+	 * Domain V2
+	 * @pangea.description Retrieve the domain names associated with a list of IP addresses.
+	 * @pangea.operationId ip_intel_post_v2_domain
+	 * @param request
+	 * @return IPDomainBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * String[] ips = {"93.231.182.110"};
+	 * 
+	 * IPDomainBulkRequest request = new IPDomainBulkRequest
+	 * 	.Builder(ips)
+	 * 	.provider("digitalelement")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 * 
+	 * IPDomainBulkResponse response = client.getDomainBulk(request);
+	 * }
+	 */
+	public IPDomainBulkResponse getDomainBulk(IPDomainBulkRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v2/domain", request, IPDomainBulkResponse.class);
+	}
+
+	/**
 	 * VPN
 	 * @pangea.description Determine if an IP address originates from a VPN.
 	 * @pangea.operationId ip_intel_post_v1_vpn
@@ -85,7 +138,7 @@ public class IPIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * IPVPNRequest request = new IPVPNRequest
-	 * 	.Builder("93.231.182.110")
+	 * 	.Builder("2.56.189.74")
 	 * 	.provider("digitalelement")
 	 * 	.verbose(true)
 	 * 	.raw(true)
@@ -96,6 +149,32 @@ public class IPIntelClient extends BaseClient {
 	 */
 	public IPVPNResponse isVPN(IPVPNRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/vpn", request, IPVPNResponse.class);
+	}
+
+	/**
+	 * VPN V2
+	 * @pangea.description Determine if an IP address originates from a VPN.
+	 * @pangea.operationId ip_intel_post_v2_vpn
+	 * @param request
+	 * @return IPVPNBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * String[] ips = {"2.56.189.74"};
+	 * 
+	 * IPVPNBulkRequest request = new IPVPNBulkRequest
+	 * 	.Builder(ips)
+	 * 	.provider("digitalelement")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 * 
+	 * IPVPNBulkResponse response = client.isVPNBulk(request);
+	 * }
+	 */
+	public IPVPNBulkResponse isVPNBulk(IPVPNBulkRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v2/vpn", request, IPVPNBulkResponse.class);
 	}
 
 	/**
@@ -123,6 +202,32 @@ public class IPIntelClient extends BaseClient {
 	}
 
 	/**
+	 * Proxy V2
+	 * @pangea.description Determine if an IP address originates from a proxy.
+	 * @pangea.operationId ip_intel_post_v2_proxy
+	 * @param request
+	 * @return IPProxyBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * String[] ips = {"34.201.32.172"};
+	 * 
+	 * IPProxyBulkRequest request = new IPProxyBulkRequest
+	 * 	.Builder(ips)
+	 * 	.provider("digitalelement")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 * 
+	 * IPProxyBulkResponse response = client.isProxyBulk(request);
+	 * }
+	 */
+	public IPProxyBulkResponse isProxyBulk(IPProxyBulkRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v2/proxy", request, IPProxyBulkResponse.class);
+	}
+
+	/**
 	 * Reputation
 	 * @pangea.description Retrieve a reputation score for an IP address from a provider, including an optional detailed report.
 	 * @pangea.operationId ip_intel_post_v1_reputation
@@ -133,7 +238,7 @@ public class IPIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * IPReputationRequest request = new IPReputationRequest
-	 * 	.Builder("93.231.182.110")
+	 * 	.Builder("190.28.74.251")
 	 * 	.provider("crowdstrike")
 	 * 	.verbose(true)
 	 * 	.raw(true)
@@ -144,5 +249,32 @@ public class IPIntelClient extends BaseClient {
 	 */
 	public IPReputationResponse reputation(IPReputationRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/reputation", request, IPReputationResponse.class);
+	}
+
+	/**
+	 * Reputation V2
+	 * @pangea.description Retrieve reputation scores for a list of IP address from a provider, including an optional detailed report.
+	 * @pangea.operationId ip_intel_post_v2_reputation
+	 * @param request
+	 * @return IpReputationBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * String[] ips = {"190.28.74.251"};
+	 * 
+	 * IPReputationBulkRequest request = new IPReputationBulkRequest
+	 * 	.Builder(ips)
+	 * 	.provider("crowdstrike")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 *
+	 * IPReputationBulkResponse response = client.reputationBulk(request);
+	 * }
+	 */
+	public IPReputationBulkResponse reputationBulk(IPReputationBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/reputation", request, IPReputationBulkResponse.class);
 	}
 }

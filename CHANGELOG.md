@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.5.0] - 2023-12-18
+
+# Added
+
+- File Intel /v2/reputation support
+- IP Intel /v2/reputation, /v2/domain, /v2/proxy, v2/vpn and /v2/geolocate support
+- URL Intel /v2/reputation support
+- Domain Intel /v2/reputation support
+- User Intel /v2/user/breached and /v2/password/breached support
+
+
 ## [3.4.0] - 2023-12-07
 
 # Changed 
@@ -256,7 +267,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Domain Intel client
 - Redact client
 
-[unreleased]: https://github.com/pangeacyber/pangea-java/compare/v3.4.0...main
+[unreleased]: https://github.com/pangeacyber/pangea-java/compare/v3.5.0...main
+[3.5.0]: https://github.com/pangeacyber/pangea-java/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/pangeacyber/pangea-java/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/pangeacyber/pangea-java/compare/v3.2.0...v3.3.0
 [3.2.0]: https://github.com/pangeacyber/pangea-java/compare/v3.1.0...v3.2.0

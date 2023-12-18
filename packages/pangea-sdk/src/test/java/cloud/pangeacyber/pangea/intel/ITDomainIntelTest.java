@@ -12,6 +12,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
+import cloud.pangeacyber.pangea.intel.models.DomainReputationBulkData;
 import cloud.pangeacyber.pangea.intel.models.DomainWhoIsData;
 import cloud.pangeacyber.pangea.intel.models.IntelReputationData;
 import cloud.pangeacyber.pangea.intel.requests.*;
@@ -22,7 +23,7 @@ import org.junit.Test;
 public class ITDomainIntelTest {
 
 	DomainIntelClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	TestEnvironment environment = TestEnvironment.DEVELOP;
 
 	@Before
 	public void setUp() throws ConfigException {
@@ -147,6 +148,21 @@ public class ITDomainIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testDomainReputationBulk() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		String[] domainList = { "pemewizubidob.cafij.co.za", "redbomb.com.tr", "kmbk8.hicp.net" };
+		DomainReputationBulkResponse response = client.reputationBulk(
+			new DomainReputationBulkRequest.Builder(domainList).provider("crowdstrike").verbose(true).raw(true).build()
+		);
+		assertTrue(response.isOk());
+
+		DomainReputationBulkData data = response.getResult().getData();
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+		assertEquals(3, data.size());
 	}
 
 	// @Test

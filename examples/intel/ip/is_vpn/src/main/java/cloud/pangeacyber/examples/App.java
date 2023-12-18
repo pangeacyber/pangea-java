@@ -2,12 +2,23 @@ package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.intel.IPIntelClient;
+import cloud.pangeacyber.pangea.intel.models.IPVPNData;
 import cloud.pangeacyber.pangea.intel.requests.IPVPNRequest;
 import cloud.pangeacyber.pangea.intel.responses.IPVPNResponse;
+
 import cloud.pangeacyber.pangea.Config;
 
 public class App
 {
+
+    private static void printData(String ip, IPVPNData data) {
+        if(data.isVPN()){
+            System.out.printf("\t IP %s is a VPN\n", ip);
+        } else {
+            System.out.printf("\t IP %s is not a VPN\n", ip);
+        }
+    }
+
     public static void main( String[] args )
     {
         Config cfg = null;
@@ -20,17 +31,17 @@ public class App
 
         IPIntelClient client = new IPIntelClient.Builder(cfg).build();
         IPVPNResponse response = null;
+        String ip = "2.56.189.74";
         try {
             response = client.isVPN(
-                new IPVPNRequest.Builder("2.56.189.74").provider("digitalelement").verbose(true).raw(true).build()
+                new IPVPNRequest.Builder(ip).provider("digitalelement").verbose(true).raw(true).build()
             );
         } catch (Exception e){
             System.out.println("Request failed: " + e);
             System.exit(1);
         }
 
-        System.out.println("VPN check success");
-        System.out.println("Is VPN?: " + response.getResult().getData().isVPN());
-        System.out.println("VPN raw data: " + response.getResult().getRawData());
+        System.out.println("Result:");
+        printData(ip, response.getResult().getData());
     }
 }

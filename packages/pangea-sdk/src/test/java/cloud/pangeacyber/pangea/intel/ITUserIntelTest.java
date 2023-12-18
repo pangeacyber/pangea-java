@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.intel;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -10,11 +11,17 @@ import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.intel.models.HashType;
+import cloud.pangeacyber.pangea.intel.models.UserBreachedBulkData;
 import cloud.pangeacyber.pangea.intel.models.UserBreachedData;
+import cloud.pangeacyber.pangea.intel.models.UserPasswordBreachedBulkData;
 import cloud.pangeacyber.pangea.intel.models.UserPasswordBreachedData;
+import cloud.pangeacyber.pangea.intel.requests.UserBreachedBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.UserBreachedRequest;
+import cloud.pangeacyber.pangea.intel.requests.UserPasswordBreachedBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.UserPasswordBreachedRequest;
+import cloud.pangeacyber.pangea.intel.responses.UserBreachedBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.UserBreachedResponse;
+import cloud.pangeacyber.pangea.intel.responses.UserPasswordBreachedBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.UserPasswordBreachedResponse;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +29,7 @@ import org.junit.Test;
 public class ITUserIntelTest {
 
 	UserIntelClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	TestEnvironment environment = TestEnvironment.DEVELOP;
 
 	@Before
 	public void setUp() throws ConfigException {
@@ -90,6 +97,20 @@ public class ITUserIntelTest {
 	}
 
 	@Test
+	public void testUserBreached_ByPhoneNumbersBulk() throws PangeaException, PangeaException, PangeaAPIException {
+		// Default provider, not verbose by default, not raw by default;
+		UserBreachedBulkResponse response = client.breachedBulk(
+			new UserBreachedBulkRequest.Builder().phoneNumbers(new String[] { "8005550123", "8005550124" }).build()
+		);
+		assertTrue(response.isOk());
+
+		UserBreachedBulkData data = response.getResult().getData();
+		assertNull(response.getResult().getParameters());
+		assertNull(response.getResult().getRawData());
+		assertEquals(2, data.size());
+	}
+
+	@Test
 	public void testUserBreached_ByEmail() throws PangeaException, PangeaException, PangeaAPIException {
 		// provider, not verbose by default, not raw by default;
 		UserBreachedResponse response = client.breached(
@@ -102,6 +123,22 @@ public class ITUserIntelTest {
 		assertTrue(data.getBreachCount() > 0);
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testUserBreached_ByEmailBulk() throws PangeaException, PangeaException, PangeaAPIException {
+		// Default provider, not verbose by default, not raw by default;
+		UserBreachedBulkResponse response = client.breachedBulk(
+			new UserBreachedBulkRequest.Builder()
+				.emails(new String[] { "test@example.com", "noreply@example.com" })
+				.build()
+		);
+		assertTrue(response.isOk());
+
+		UserBreachedBulkData data = response.getResult().getData();
+		assertNull(response.getResult().getParameters());
+		assertNull(response.getResult().getRawData());
+		assertEquals(2, data.size());
 	}
 
 	@Test
@@ -120,6 +157,20 @@ public class ITUserIntelTest {
 	}
 
 	@Test
+	public void testUserBreached_ByUsernamesBulk() throws PangeaException, PangeaException, PangeaAPIException {
+		// Default provider, not verbose by default, not raw by default;
+		UserBreachedBulkResponse response = client.breachedBulk(
+			new UserBreachedBulkRequest.Builder().usernames(new String[] { "shortpatrick", "user1" }).build()
+		);
+		assertTrue(response.isOk());
+
+		UserBreachedBulkData data = response.getResult().getData();
+		assertNull(response.getResult().getParameters());
+		assertNull(response.getResult().getRawData());
+		assertEquals(2, data.size());
+	}
+
+	@Test
 	public void testUserBreached_ByIP() throws PangeaException, PangeaException, PangeaAPIException {
 		// provider, not verbose by default, not raw by default;
 		UserBreachedResponse response = client.breached(
@@ -132,6 +183,20 @@ public class ITUserIntelTest {
 		assertTrue(data.getBreachCount() > 0);
 		assertNull(response.getResult().getParameters());
 		assertNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testUserBreached_ByIPBulk() throws PangeaException, PangeaException, PangeaAPIException {
+		// Default provider, not verbose by default, not raw by default;
+		UserBreachedBulkResponse response = client.breachedBulk(
+			new UserBreachedBulkRequest.Builder().ips(new String[] { "192.168.140.37", "1.1.1.1" }).build()
+		);
+		assertTrue(response.isOk());
+
+		UserBreachedBulkData data = response.getResult().getData();
+		assertNull(response.getResult().getParameters());
+		assertNull(response.getResult().getRawData());
+		assertEquals(2, data.size());
 	}
 
 	@Test
@@ -192,5 +257,19 @@ public class ITUserIntelTest {
 		assertTrue(data.getBreachCount() > 0);
 		assertNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testUserPasswordBreached_Bulk() throws PangeaException, PangeaException, PangeaAPIException {
+		// Default provider, not verbose by default, not raw by default;
+		UserPasswordBreachedBulkResponse response = client.breachedBulk(
+			new UserPasswordBreachedBulkRequest.Builder(HashType.SHA256, new String[] { "5baa6", "5baa7" }).build()
+		);
+		assertTrue(response.isOk());
+
+		UserPasswordBreachedBulkData data = response.getResult().getData();
+		assertNull(response.getResult().getParameters());
+		assertNull(response.getResult().getRawData());
+		assertEquals(2, data.size());
 	}
 }

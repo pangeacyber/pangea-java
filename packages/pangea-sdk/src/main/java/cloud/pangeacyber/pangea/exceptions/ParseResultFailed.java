@@ -11,4 +11,12 @@ public class ParseResultFailed extends PangeaException {
 		super(message, cause);
 		this.header = header;
 	}
+
+	public ResponseHeader getHeader() {
+		return header;
+	}
+
+	public String getBody() {
+		return body;
+	}
 }

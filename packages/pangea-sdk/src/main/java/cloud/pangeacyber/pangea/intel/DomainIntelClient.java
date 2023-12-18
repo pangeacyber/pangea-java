@@ -4,8 +4,10 @@ import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.intel.requests.DomainReputationBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.DomainReputationRequest;
 import cloud.pangeacyber.pangea.intel.requests.DomainWhoIsRequest;
+import cloud.pangeacyber.pangea.intel.responses.DomainReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.DomainReputationResponse;
 import cloud.pangeacyber.pangea.intel.responses.DomainWhoIsResponse;
 
@@ -30,7 +32,7 @@ public class DomainIntelClient extends BaseClient {
 
 	/**
 	 * Reputation
-	 * @pangea.description Retrieve domain reputation for a particular provider
+	 * @pangea.description Retrieve reputation for a domain from a provider, including an optional detailed report.
 	 * @pangea.operationId domain_intel_post_v1_reputation
 	 * @param request
 	 * @return DomainReputationResponse
@@ -51,6 +53,33 @@ public class DomainIntelClient extends BaseClient {
 	public DomainReputationResponse reputation(DomainReputationRequest request)
 		throws PangeaException, PangeaAPIException {
 		return post("/v1/reputation", request, DomainReputationResponse.class);
+	}
+
+	/**
+	 * Reputation V2
+	 * @pangea.description Retrieve reputations for a list of domains from a provider, including an optional detailed report.
+	 * @pangea.operationId domain_intel_post_v2_reputation
+	 * @param request
+	 * @return DomainReputationBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * String[] domains = {"737updatesboeing.com"};
+	 * 
+	 * DomainReputationBulkRequest request = new DomainReputationBulkRequest
+	 * 	.Builder(domains)
+	 * 	.provider("domaintools")
+	 * 	.verbose(true)
+	 * 	.raw(true)
+	 * 	.build();
+	 *
+	 * DomainReputationBulkResponse response = client.reputationBulk(request);
+	 * }
+	 */
+	public DomainReputationBulkResponse reputationBulk(DomainReputationBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/reputation", request, DomainReputationBulkResponse.class);
 	}
 
 	/**

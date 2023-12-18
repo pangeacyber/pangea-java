@@ -4,6 +4,7 @@ import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.intel.requests.FileHashReputationBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.FileHashReputationRequest;
 import cloud.pangeacyber.pangea.intel.responses.*;
 import java.io.BufferedInputStream;
@@ -45,7 +46,7 @@ public class FileIntelClient extends BaseClient {
 	 * {@code
 	 * FileHashReputationRequest request = new FileHashReputationRequest
 	 * 	.Builder(
-	 * 		"142b638c6a60b60c7f9928da4fb85a5a8e1422a9ffdc9ee49e17e56ccca9cf6e",
+	 * 		"179e2b8a4162372cd9344b81793cbf74a9513a002eda3324e6331243f3137a63",
 	 * 		"sha256")
 	 * 	.provider("reversinglabs")
 	 * 	.verbose(false)
@@ -58,6 +59,33 @@ public class FileIntelClient extends BaseClient {
 	public FileReputationResponse reputation(FileHashReputationRequest request)
 		throws PangeaException, PangeaAPIException {
 		return post("/v1/reputation", request, FileReputationResponse.class);
+	}
+
+	/**
+	 * Reputation V2
+	 * @pangea.description Retrieve reputation scores for a set of file hashes from a provider, including an optional detailed report.
+	 * @pangea.operationId file_intel_post_v2_reputation
+	 * @param request
+	 * @return FileReputationBulkResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * String[] hashes = {"179e2b8a4162372cd9344b81793cbf74a9513a002eda3324e6331243f3137a63"};
+	 * 
+	 * FileHashReputationBulkRequest request = new FileHashReputationBulkRequest
+	 * 	.Builder(hashes, "sha256")
+	 * 	.provider("reversinglabs")
+	 * 	.verbose(false)
+	 * 	.raw(true)
+	 * 	.build();
+	 *
+	 * FileReputationBulkResponse response = client.reputationBulk(request);
+	 * }
+	 */
+	public FileReputationBulkResponse reputationBulk(FileHashReputationBulkRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v2/reputation", request, FileReputationBulkResponse.class);
 	}
 
 	public static String calculateSHA256fromFile(String filepath) throws PangeaException {

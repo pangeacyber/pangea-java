@@ -13,7 +13,9 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
 import cloud.pangeacyber.pangea.intel.models.IntelReputationData;
+import cloud.pangeacyber.pangea.intel.models.URLReputationBulkData;
 import cloud.pangeacyber.pangea.intel.requests.*;
+import cloud.pangeacyber.pangea.intel.responses.URLReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.URLReputationResponse;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +23,7 @@ import org.junit.Test;
 public class ITURLIntelTest {
 
 	URLIntelClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	TestEnvironment environment = TestEnvironment.DEVELOP;
 
 	@Before
 	public void setUp() throws ConfigException {
@@ -152,6 +154,26 @@ public class ITURLIntelTest {
 		assertEquals("malicious", data.getVerdict());
 		assertNotNull(response.getResult().getParameters());
 		assertNotNull(response.getResult().getRawData());
+	}
+
+	@Test
+	public void testUrlReputationMaliciousBulk() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		String[] urlList = {
+			"http://113.235.101.11:54384",
+			"http://45.14.49.109:54819",
+			"https://chcial.ru/uplcv?utm_term%3Dcost%2Bto%2Brezone%2Bland",
+		};
+		URLReputationBulkResponse response = client.reputationBulk(
+			new URLReputationBulkRequest.Builder(urlList).provider("crowdstrike").verbose(true).raw(true).build()
+		);
+
+		assertTrue(response.isOk());
+
+		URLReputationBulkData data = response.getResult().getData();
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+		assertEquals(3, data.size());
 	}
 
 	@Test

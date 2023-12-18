@@ -63,7 +63,7 @@ public class URLIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * String[] urls = {"http://113.235.101.11:54384"};
-	 * 
+	 *
 	 * URLReputationBulkRequest request = new URLReputationBulkRequest
 	 * 	.Builder(urls)
 	 * 	.provider("crowdstrike")

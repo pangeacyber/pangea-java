@@ -61,14 +61,14 @@ public class IPIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * String[] ips = {"93.231.182.110"};
-	 * 
+	 *
 	 * IPGeolocateBulkRequest request = new IPGeolocateBulkRequest
 	 * 	.Builder(ips)
 	 * 	.provider("digitalelement")
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * IPGeolocateBulkResponse response = client.geolocateBulk(request);
 	 * }
 	 */
@@ -112,14 +112,14 @@ public class IPIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * String[] ips = {"93.231.182.110"};
-	 * 
+	 *
 	 * IPDomainBulkRequest request = new IPDomainBulkRequest
 	 * 	.Builder(ips)
 	 * 	.provider("digitalelement")
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * IPDomainBulkResponse response = client.getDomainBulk(request);
 	 * }
 	 */
@@ -162,14 +162,14 @@ public class IPIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * String[] ips = {"2.56.189.74"};
-	 * 
+	 *
 	 * IPVPNBulkRequest request = new IPVPNBulkRequest
 	 * 	.Builder(ips)
 	 * 	.provider("digitalelement")
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * IPVPNBulkResponse response = client.isVPNBulk(request);
 	 * }
 	 */
@@ -212,14 +212,14 @@ public class IPIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * String[] ips = {"34.201.32.172"};
-	 * 
+	 *
 	 * IPProxyBulkRequest request = new IPProxyBulkRequest
 	 * 	.Builder(ips)
 	 * 	.provider("digitalelement")
 	 * 	.verbose(true)
 	 * 	.raw(true)
 	 * 	.build();
-	 * 
+	 *
 	 * IPProxyBulkResponse response = client.isProxyBulk(request);
 	 * }
 	 */
@@ -262,7 +262,7 @@ public class IPIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * String[] ips = {"190.28.74.251"};
-	 * 
+	 *
 	 * IPReputationBulkRequest request = new IPReputationBulkRequest
 	 * 	.Builder(ips)
 	 * 	.provider("crowdstrike")

@@ -42,7 +42,7 @@ public class UserIntelClient extends BaseClient {
 	 * 	.Builder()
 	 * 	.phoneNumber("8005550123")
 	 * 	.build();
-	 * 
+	 *
 	 *	UserBreachedResponse response = client.breached(request);
 	 * }
 	 */
@@ -61,12 +61,12 @@ public class UserIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * String[] phoneNumbers = {"8005550123"};
-	 * 
+	 *
 	 * UserBreachedBulkRequest request = new UserBreachedBulkRequest
 	 * 	.Builder()
 	 * 	.phoneNumbers(phoneNumbers)
 	 * 	.build();
-	 * 
+	 *
 	 * UserBreachedBulkResponse response = client.breachedBulk(request);
 	 * }
 	 */
@@ -88,7 +88,7 @@ public class UserIntelClient extends BaseClient {
 	 * UserPasswordBreachedRequest request = new UserPasswordBreachedRequest
 	 * 	.Builder(HashType.SHA256, "5baa6")
 	 * 	.build();
-	 * 
+	 *
 	 *	UserPasswordBreachedResponse response = client.breached(request);
 	 * }
 	 */
@@ -108,11 +108,11 @@ public class UserIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * String[] hashPrefixes = {"5baa6"};
-	 * 
+	 *
 	 * UserPasswordBreachedBulkRequest request = new UserPasswordBreachedBulkRequest
 	 * 	.Builder(HashType.SHA256, hashPrefixes)
 	 * 	.build();
-	 * 
+	 *
 	 * UserPasswordBreachedBulkResponse response = client.breachedBulk(request);
 	 * }
 	 */

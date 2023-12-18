@@ -66,7 +66,7 @@ public class DomainIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * String[] domains = {"737updatesboeing.com"};
-	 * 
+	 *
 	 * DomainReputationBulkRequest request = new DomainReputationBulkRequest
 	 * 	.Builder(domains)
 	 * 	.provider("domaintools")

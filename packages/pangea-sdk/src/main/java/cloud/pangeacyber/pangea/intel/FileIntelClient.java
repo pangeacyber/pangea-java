@@ -72,7 +72,7 @@ public class FileIntelClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * String[] hashes = {"179e2b8a4162372cd9344b81793cbf74a9513a002eda3324e6331243f3137a63"};
-	 * 
+	 *
 	 * FileHashReputationBulkRequest request = new FileHashReputationBulkRequest
 	 * 	.Builder(hashes, "sha256")
 	 * 	.provider("reversinglabs")

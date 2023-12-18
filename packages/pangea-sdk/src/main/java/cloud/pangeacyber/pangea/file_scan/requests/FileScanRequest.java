@@ -20,6 +20,10 @@ public class FileScanRequest extends BaseRequest {
 	@JsonProperty("raw")
 	protected Boolean raw;
 
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("source_url")
+	protected String sourceURL;
+
 	protected FileScanRequest(FileScanRequest request) {
 		this.provider = request.getProvider();
 		this.verbose = request.getVerbose();
@@ -41,7 +45,8 @@ public class FileScanRequest extends BaseRequest {
 		String provider;
 		Boolean verbose;
 		Boolean raw;
-		TransferMethod transferMethod = TransferMethod.DIRECT;
+		String sourceURL;
+		TransferMethod transferMethod = TransferMethod.POST_URL;
 
 		public Builder() {}
 
@@ -64,6 +69,11 @@ public class FileScanRequest extends BaseRequest {
 			return this;
 		}
 
+		public Builder sourceURL(String sourceURL) {
+			this.sourceURL = sourceURL;
+			return this;
+		}
+
 		public Builder transferMethod(TransferMethod transferMethod) {
 			this.transferMethod = transferMethod;
 			return this;
@@ -80,5 +90,9 @@ public class FileScanRequest extends BaseRequest {
 
 	public Boolean getRaw() {
 		return raw;
+	}
+
+	public String getSourceURL() {
+		return sourceURL;
 	}
 }

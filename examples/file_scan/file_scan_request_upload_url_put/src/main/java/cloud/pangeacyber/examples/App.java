@@ -58,8 +58,8 @@ public class App {
 
 		AcceptedResponse acceptedResponse = client.requestUploadURL(request);
 
-        // extract upload url for posting the file
-		String url = acceptedResponse.getResult().getAcceptedStatus().getUploadURL();
+        //  extract upload url for posting the file
+		String url = acceptedResponse.getResult().getPutURL();
         System.out.printf("Got presigned url: %s\n", url);
 
 		FileData fileData = new FileData(file, "file");

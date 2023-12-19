@@ -43,8 +43,8 @@ public class App
 
 
         String domain = System.getenv("PANGEA_DOMAIN");
-        Config audit_cfg = new Config.Builder(auditToken, domain).customUserAgent("test").build();
-        AuditClient audit = new AuditClient.Builder(audit_cfg).build();
+        Config auditCfg = new Config.Builder(auditToken, domain).customUserAgent("test").build();
+        AuditClient audit = new AuditClient.Builder(auditCfg).build();
         StandardEvent event1 = new StandardEvent.Builder("Sign up")
                         .actor("java-sdk")
                         .build();

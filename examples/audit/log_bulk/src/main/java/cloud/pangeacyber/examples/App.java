@@ -33,7 +33,7 @@ public class App
 
         LogBulkResponse response = null;
         try {
-            response = client.logBulk(new IEvent[]{event1, event2}, new LogConfig.Builder().build());
+            response = client.logBulk(new IEvent[]{event1, event2}, new LogConfig.Builder().verbose(true).build());
         } catch (Exception e){
             System.out.println("Fail to perfom log: " + e);
             System.exit(1);

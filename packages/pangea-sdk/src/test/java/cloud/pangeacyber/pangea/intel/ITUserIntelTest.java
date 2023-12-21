@@ -29,7 +29,7 @@ import org.junit.Test;
 public class ITUserIntelTest {
 
 	UserIntelClient client;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	TestEnvironment environment = TestEnvironment.LIVE;
 
 	@Before
 	public void setUp() throws ConfigException {

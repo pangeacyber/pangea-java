@@ -157,9 +157,7 @@ public class ITVaultTest {
 	}
 
 	private void jwtAsymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
-		String payload = """
-            {'message': 'message to sign', 'data': 'Some extra data'}
-            """;
+		String payload = "{'message': 'message to sign', 'data': 'Some extra data'}";
 
 		// Sign 1
 		JWTSignResponse signResponse1 = client.jwtSign(id, payload);
@@ -205,9 +203,7 @@ public class ITVaultTest {
 	}
 
 	private void jwtSymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
-		String payload = """
-            {'message': 'message to sign', 'data': 'Some extra data'}
-            """;
+		String payload = "{'message': 'message to sign', 'data': 'Some extra data'}";
 
 		// Sign 1
 		JWTSignResponse signResponse1 = client.jwtSign(id, payload);

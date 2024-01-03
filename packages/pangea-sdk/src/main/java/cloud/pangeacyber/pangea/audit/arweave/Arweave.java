@@ -49,36 +49,30 @@ public class Arweave {
 		String sizes = list.stream().map(n -> String.format("\"%d\"", n)).collect(Collectors.joining(","));
 
 		String query =
-			"""
-            {
-            transactions(
-                tags: [
-                        {
-                            name: \"tree_size\"
-                            values: [{tree_sizes}]
-                        },
-                        {
-                            name: \"tree_name\"
-                            values: [\"{tree_name}\"]
-                        }
-                    ]
-                ) {
-                    edges {
-                        node {
-                            id
-                            tags {
-                                name
-                                value
-                            }
-                        }
-                    }
-                }
-            }
-            """.replace(
-					"{tree_sizes}",
-					sizes
-				)
-				.replace("{tree_name}", this.treeName);
+			"{" +
+			"transactions(" +
+			"    tags: [" +
+			"            {" +
+			"                name: \"tree_size\"" +
+			"                values: [{tree_sizes}]" +
+			"            }," +
+			"            {" +
+			"                name: \"tree_name\"" +
+			"                values: [\"{tree_name}\"]" +
+			"            }" +
+			"        ]" +
+			"    ) {" +
+			"        edges {" +
+			"            node {" +
+			"                id" +
+			"                tags {" +
+			"                    name" +
+			"                    value" +
+			"                }" +
+			"            }" +
+			"        }" +
+			"    }" +
+			"}".replace("{tree_sizes}", sizes).replace("{tree_name}", this.treeName);
 
 		return query;
 	}

@@ -73,12 +73,12 @@ public class LogSigner {
 
 	public String getPublicKey() throws SignerException {
 		// Wrap public key in ASN.1 format so we can use X509EncodedKeySpec to read it
-		var pubKeyInfo = new SubjectPublicKeyInfo(
+		SubjectPublicKeyInfo pubKeyInfo = new SubjectPublicKeyInfo(
 			new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
 			this.publicKey.getEncoded()
 		);
 		try {
-			var x509KeySpec = new X509EncodedKeySpec(pubKeyInfo.getEncoded());
+			X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(pubKeyInfo.getEncoded());
 			String key = new String(Base64.getEncoder().encode(x509KeySpec.getEncoded()));
 			return "-----BEGIN PUBLIC KEY-----\n" + key + "\n-----END PUBLIC KEY-----\n";
 		} catch (Exception e) {

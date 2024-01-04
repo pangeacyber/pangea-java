@@ -2,10 +2,11 @@ package cloud.pangeacyber.pangea;
 
 import cloud.pangeacyber.pangea.exceptions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
@@ -263,6 +264,26 @@ public abstract class BaseClient {
 		return doPost(path, request, null, responseClass, postConfig);
 	}
 
+    /**
+     * Perform a HTTP POST request.
+     *
+     * @param <Req> Request body type.
+     * @param <ResponseType> Response body type.
+     * @param path Request URL path.
+     * @param request Request body.
+     * @param responseTypeRef Value type reference to the response body type.
+     * @return Response body.
+     * @throws PangeaException
+     * @throws PangeaAPIException
+     */
+	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
+		String path,
+		Req request,
+		TypeReference<ResponseType> responseTypeRef
+	) throws PangeaException, PangeaAPIException {
+		return doPost(path, request, null, responseTypeRef, new PostConfig.Builder().build());
+	}
+
 	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
 		String path,
 		Req request,
@@ -330,6 +351,27 @@ public abstract class BaseClient {
 		Class<ResponseType> responseClass,
 		PostConfig postConfig
 	) throws PangeaException, PangeaAPIException {
+        return doPost(
+            path,
+            request,
+            fileData,
+            new TypeReference<ResponseType>() {
+                @Override
+                public Type getType() {
+                    return responseClass;
+                }
+            },
+            postConfig
+        );
+    }
+
+	private <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType doPost(
+		String path,
+		Req request,
+		FileData fileData,
+		TypeReference<ResponseType> responseTypeRef,
+		PostConfig postConfig
+	) throws PangeaException, PangeaAPIException {
 		if (configID != null && !configID.isEmpty() && request.getConfigID() == null) {
 			request.setConfigID(this.configID);
 		}
@@ -338,7 +380,7 @@ public abstract class BaseClient {
 		InternalHttpResponse response;
 
 		if (request.getTransferMethod() == TransferMethod.POST_URL) {
-			response = fullPostPresignedURL(url, request, fileData, responseClass);
+			response = fullPostPresignedURL(url, request, fileData);
 		} else {
 			response = postSingle(url, request, fileData);
 		}
@@ -346,7 +388,7 @@ public abstract class BaseClient {
 		if (postConfig.getPollResult() == true) {
 			response = this.handleQueued(response);
 		}
-		return checkResponse(response, responseClass, url.toString());
+		return checkResponse(response, responseTypeRef, url.toString());
 	}
 
 	private AcceptedResponse pollPresignedURL(AcceptedResponse response) throws PangeaAPIException, PangeaException {
@@ -459,8 +501,7 @@ public abstract class BaseClient {
 	private <Req extends BaseRequest, ResponseType extends Response<?>> InternalHttpResponse fullPostPresignedURL(
 		URI url,
 		Req request,
-		FileData fileData,
-		Class<ResponseType> responseClass
+		FileData fileData
 	) throws PangeaException, PangeaAPIException {
 		InternalHttpResponse response = postSingle(url, request, null);
 		AcceptedResponse responseAccepted = checkResponse(response, AcceptedResponse.class, url.toString());
@@ -603,12 +644,27 @@ public abstract class BaseClient {
 
 	private <ResponseType extends Response<?>> ResponseType parseResponse(
 		InternalHttpResponse httpResponse,
-		Class<ResponseType> responseClass
+        Class<ResponseType> responseClass
+	) throws PangeaException {
+		return parseResponse(
+            httpResponse,
+            new TypeReference<ResponseType>() {
+                @Override
+                public Type getType() {
+                    return responseClass;
+                }
+            }
+        );
+	}
+
+	private <ResponseType extends Response<?>> ResponseType parseResponse(
+		InternalHttpResponse httpResponse,
+		TypeReference<ResponseType> responseTypeRef
 	) throws PangeaException {
 		ResponseType resultResponse;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			resultResponse = mapper.readValue(httpResponse.getBody(), responseClass);
+			resultResponse = mapper.readValue(httpResponse.getBody(), responseTypeRef);
 		} catch (Exception e) {
 			this.logger.error(
 					String.format(
@@ -630,13 +686,30 @@ public abstract class BaseClient {
 		Class<ResponseType> responseClass,
 		String url
 	) throws PangeaException, PangeaAPIException {
+        return checkResponse(
+            httpResponse,
+            new TypeReference<ResponseType>() {
+                @Override
+                public Type getType() {
+                    return responseClass;
+                }
+            },
+            url
+        );
+    }
+
+	private <ResponseType extends Response<?>> ResponseType checkResponse(
+		InternalHttpResponse httpResponse,
+		TypeReference<ResponseType> responseTypeRef,
+		String url
+	) throws PangeaException, PangeaAPIException {
 		this.logger.debug(
-				String.format(
-					"{\"service\": \"%s\", \"action\": \"check response\", \"response\": %s}",
-					serviceName,
-					httpResponse.getBody()
-				)
-			);
+            String.format(
+                "{\"service\": \"%s\", \"action\": \"check response\", \"response\": %s}",
+                serviceName,
+                httpResponse.getBody()
+            )
+        );
 
 		if (httpResponse.getResponse().getStatusLine().getStatusCode() == 503) {
 			throw new ServiceTemporarilyUnavailable(httpResponse.getBody());
@@ -645,7 +718,7 @@ public abstract class BaseClient {
 		ResponseHeader header = parseHeader(httpResponse.getBody());
 
 		if (header.isOk()) {
-			return parseResponse(httpResponse, responseClass);
+			return parseResponse(httpResponse, responseTypeRef);
 		}
 
 		// Process error
@@ -655,8 +728,11 @@ public abstract class BaseClient {
 		response = parseResponse(httpResponse, ResponseError.class);
 
 		if (ResponseStatus.ACCEPTED.equals(status)) {
-			AcceptedResponse responseAccepted = null;
-			responseAccepted = parseResponse(httpResponse, AcceptedResponse.class);
+			AcceptedResponse responseAccepted = parseResponse(httpResponse, AcceptedResponse.class);
+            var responseClass = new ObjectMapper()
+                .getTypeFactory()
+                .constructType(responseTypeRef)
+                .getRawClass();
 			if (responseClass == AcceptedResponse.class) {
 				return (ResponseType) responseAccepted;
 			}

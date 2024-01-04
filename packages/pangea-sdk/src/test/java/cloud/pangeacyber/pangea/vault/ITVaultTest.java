@@ -19,11 +19,17 @@ import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.responses.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ITVaultTest {
 
@@ -91,7 +97,7 @@ public class ITVaultTest {
 		);
 		assertEquals(dataB64, decryptResponseDefault.getResult().getPlainText());
 
-		// Add faliures cases. Wrong ID, wrong version, etc
+		// Add failure cases. Wrong ID, wrong version, etc
 
 		// Suspend key
 		StateChangeResponse stateChangeResponse = client.stateChange(id, 1, ItemVersionState.DEACTIVATED);
@@ -414,4 +420,47 @@ public class ITVaultTest {
 			assertTrue(false);
 		}
 	}
+
+    @Test
+	public void testEncryptStructured() throws JsonProcessingException, JsonMappingException, PangeaException, PangeaAPIException {
+        // Test data.
+        String payload = """
+            { "field1": ["1", "2", "true", "false"], "field2": "data" }
+        """;
+        var data = new ObjectMapper().readValue(payload, new TypeReference<Map<String, Object>>() {});
+
+        // Generate an encryption key.
+        var generateRequest = new SymmetricGenerateRequest.Builder(
+            SymmetricAlgorithm.AES256_CFB,
+            KeyPurpose.ENCRYPTION,
+            getName()
+        ).build();
+        var generateResp = client.symmetricGenerate(generateRequest);
+        var key = generateResp.getResult().getId();
+        assertNotNull(key);
+
+        // Encrypt.
+        var request = new EncryptStructuredRequest.Builder<String, Object, Map<String, Object>>(
+            key,
+            data,
+            "$.field1[2:4]"
+        ).build();
+        var encrypted = client.encryptStructured(request);
+        assertNotNull(encrypted);
+        assertEquals(key, encrypted.getResult().getId());
+        assertEquals(4, ((ArrayList<String>)encrypted.getResult().getStructuredData().get("field1")).size());
+        assertEquals("data", encrypted.getResult().getStructuredData().get("field2"));
+
+        // Decrypt what we encrypted.
+        request = new EncryptStructuredRequest.Builder<String, Object, Map<String, Object>>(
+            key,
+            encrypted.getResult().getStructuredData(),
+            "$.field1[2:4]"
+        ).build();
+        var decrypted = client.decryptStructured(request);
+        assertNotNull(decrypted);
+        assertEquals(key, decrypted.getResult().getId());
+        assertEquals(4, ((ArrayList<String>)decrypted.getResult().getStructuredData().get("field1")).size());
+        assertEquals("data", decrypted.getResult().getStructuredData().get("field2"));
+    }
 }

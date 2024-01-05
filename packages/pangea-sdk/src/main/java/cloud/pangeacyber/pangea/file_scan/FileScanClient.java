@@ -116,7 +116,7 @@ public class FileScanClient extends BaseClient {
 		String name;
 
 		if (tm == TransferMethod.PUT_URL) {
-			throw new PangeaException(String.format("%s not supported. Use GetUploadURL() instead", tm), null);
+			throw new PangeaException(String.format("%s not supported. Use requestUploadURL() instead", tm), null);
 		}
 
 		if (tm == TransferMethod.POST_URL) {

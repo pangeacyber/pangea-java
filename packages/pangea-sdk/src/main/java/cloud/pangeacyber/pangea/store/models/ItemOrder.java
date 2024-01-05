@@ -1,17 +1,14 @@
-package cloud.pangeacyber.pangea;
+package cloud.pangeacyber.pangea.store.models;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TransferMethod {
-	SOURCE_URL("source_url"),
-	MULTIPART("multipart"),
-	POST_URL("post-url"),
-	PUT_URL("put-url"),
-	DEST_URL("dest-url");
+public enum ItemOrder {
+	ASC("asc"),
+	DESC("desc");
 
 	private final String text;
 
-	TransferMethod(String text) {
+	ItemOrder(String text) {
 		this.text = text;
 	}
 

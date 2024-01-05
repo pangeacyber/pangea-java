@@ -3,3 +3,5 @@ target/
 .env
 pangea_sdk_logs.json
 *.exe
+*.zip
+*.tar

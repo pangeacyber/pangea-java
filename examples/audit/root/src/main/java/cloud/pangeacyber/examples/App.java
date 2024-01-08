@@ -22,7 +22,7 @@ public class App
         try {
             response = client.getRoot();
         } catch (Exception e){
-            System.out.println("Fail to perfom root request: " + e);
+            System.out.println("Failed to perform root request: " + e);
             System.exit(1);
         }
 

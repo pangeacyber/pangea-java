@@ -28,7 +28,7 @@ public class App
         try {
             response = client.log(event, new LogConfig.Builder().build());
         } catch (Exception e){
-            System.out.println("Fail to perfom log: " + e);
+            System.out.println("Failed to perform log: " + e);
             System.exit(1);
         }
 

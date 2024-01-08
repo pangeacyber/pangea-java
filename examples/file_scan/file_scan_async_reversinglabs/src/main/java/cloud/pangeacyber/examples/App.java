@@ -53,7 +53,7 @@ public class App {
             System.out.println("AcceptedRequestException as expected");
             exception = e;
         }  catch (Exception e) {
-            System.out.println("Fail to perfom request: " + e);
+            System.out.println("Failed to perform request: " + e);
             System.exit(1);
         }
 
@@ -74,7 +74,7 @@ public class App {
         } catch (AcceptedRequestException e) {
             System.out.println("Poll result failed: " + e.toString());
         } catch (Exception e) {
-            System.out.println("Fail to perfom request: " + e);
+            System.out.println("Failed to perform request: " + e);
             System.exit(1);
         }
     }

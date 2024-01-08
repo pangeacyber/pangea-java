@@ -29,7 +29,7 @@ public class App
         try {
             response = client.redactStructured(new RedactStructuredRequest.Builder(data).build());
         } catch (Exception e){
-            System.out.println("Fail to perfom redact: " + e);
+            System.out.println("Failed to perform redact: " + e);
             System.exit(1);
         }
 

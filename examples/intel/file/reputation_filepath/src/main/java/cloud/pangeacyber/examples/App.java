@@ -37,7 +37,7 @@ public class App
             // Calculate SHA256 hash
             hash = DigestUtils.sha256Hex(inputStream);
         } catch (Exception e){
-            System.out.println("Fail to calculate file hash: " + e);
+            System.out.println("Failed to calculate file hash: " + e);
             System.exit(1);
         }
 
@@ -50,7 +50,7 @@ public class App
 				.build()
 		);
         } catch (Exception e){
-            System.out.println("Fail to perfom request: " + e);
+            System.out.println("Failed to perform request: " + e);
             System.exit(1);
         }
 

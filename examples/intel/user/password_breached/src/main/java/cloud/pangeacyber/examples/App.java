@@ -40,7 +40,7 @@ public class App
             .build()
             );
         } catch (Exception e){
-          System.out.println("Fail to perfom request: " + e);
+          System.out.println("Failed to perform request: " + e);
           System.exit(1);
         }
 

@@ -47,7 +47,7 @@ public class App
                 new IPGeolocateBulkRequest.Builder(ips).verbose(true).raw(true).build()
             );
         } catch (Exception e){
-            System.out.println("Fail to perfom request: " + e);
+            System.out.println("Failed to perform request: " + e);
             System.exit(1);
         }
 

@@ -35,7 +35,7 @@ public class App
         try {
             response = client.logBulk(new IEvent[]{event1, event2}, new LogConfig.Builder().verbose(true).build());
         } catch (Exception e){
-            System.out.println("Fail to perfom log: " + e);
+            System.out.println("Failed to perform log: " + e);
             System.exit(1);
         }
 

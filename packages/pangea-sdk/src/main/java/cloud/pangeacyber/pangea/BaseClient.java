@@ -57,7 +57,12 @@ final class InternalHttpResponse {
 		HttpEntity entity = response.getEntity();
 		// Check if the entity is multipart
 		try {
-			if (entity != null && entity.getContentType().getValue().contains("multipart")) {
+			if (
+				entity != null &&
+				entity.getContentType() != null &&
+				entity.getContentType().getValue() != null &&
+				entity.getContentType().getValue().contains("multipart")
+			) {
 				String boundary = getBoundary(entity.getContentType().getValue());
 
 				// Get the input stream from the entity

@@ -50,7 +50,7 @@ public class App
         try {
             searchResponse = client.search(searchRequest, new SearchConfig.Builder().build());
         } catch (Exception e){
-            System.out.println("Fail to perfom log: " + e);
+            System.out.println("Failed to perform log: " + e);
             System.exit(1);
         }
 
@@ -72,7 +72,7 @@ public class App
         try {
             resultsResponse = client.results(resultRequest, new SearchConfig.Builder().build());
         } catch (Exception e){
-            System.out.println("Fail to perfom log: " + e);
+            System.out.println("Failed to perform log: " + e);
             System.exit(1);
         }
 
@@ -92,7 +92,7 @@ public class App
         try {
             resultsResponse = client.results(resultRequest, new SearchConfig.Builder().build());
         } catch (Exception e){
-            System.out.println("Fail to perfom log: " + e);
+            System.out.println("Failed to perform log: " + e);
             System.exit(1);
         }
 

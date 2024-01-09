@@ -34,7 +34,7 @@ public class App
             );
 
         } catch (Exception e){
-            System.out.println("Fail to perfom log: " + e);
+            System.out.println("Failed to perform log: " + e);
             System.exit(1);
         }
 

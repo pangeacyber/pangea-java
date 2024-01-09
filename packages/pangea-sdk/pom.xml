@@ -72,8 +72,8 @@
     </dependency>
     <dependency>
       <groupId>org.bouncycastle</groupId>
-      <artifactId>bcpkix-jdk15on</artifactId>
-      <version>1.70</version>
+      <artifactId>bcpkix-jdk18on</artifactId>
+      <version>1.77</version>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
@@ -170,7 +170,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
+          <version>3.12.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -400,7 +400,7 @@
       <plugin>
         <groupId>com.hubspot.maven.plugins</groupId>
         <artifactId>prettier-maven-plugin</artifactId>
-        <version>0.18</version>
+        <version>0.21</version>
         <configuration>
           <prettierJavaVersion>2.0.0</prettierJavaVersion>
           <printWidth>120</printWidth>

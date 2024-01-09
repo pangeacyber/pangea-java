@@ -41,7 +41,7 @@ To add Pangea Java SDK to your project, you need to add to your project `pom.xml
 
 ## Usage
 
-For samples apps look at [/examples](https://github.com/pangeacyber/pangea-java/tree/main/examples) folder in this repository. There you will find basic samples apps for each services supported on this SDK. Each service folder has a README.md with intructions to install, setup and run.
+For samples apps look at [/examples](https://github.com/pangeacyber/pangea-java/tree/main/examples) folder in this repository. There you will find basic samples apps for each services supported on this SDK. Each service folder has a README.md with instructions to install, setup and run.
 
 
 ## Reporting issues and new features
@@ -71,7 +71,7 @@ If you would like to [send a PR](https://github.com/pangeacyber/pangea-java/pull
 https://www.digitalocean.com/community/tutorials/install-maven-mac-os
 
 
-Download JDK from https://jdk.java.net/19/ and then uncompress and move to your prefered folder
+Download JDK from https://jdk.java.net/19/ and then uncompress and move to your preferred folder
 
 ```
 tar -xvf openjdk-19.0.1_macos-aarch64_bin.tar.gz

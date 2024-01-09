@@ -17,6 +17,7 @@ import cloud.pangeacyber.pangea.store.models.*;
 import cloud.pangeacyber.pangea.store.requests.*;
 import cloud.pangeacyber.pangea.store.responses.*;
 import java.io.File;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -262,7 +263,7 @@ public class ITStoreTest {
 
 		for (AttachedFile attachedFile : respGetArchive.getAttachedFiles()) {
 			assertEquals(attachedFile.getContentType(), "application/octet-stream");
-			attachedFile.save("./download/", "archive.tar");
+			attachedFile.save(Paths.get("./download/", time, "archive.tar"));
 		}
 
 		// Get archive url

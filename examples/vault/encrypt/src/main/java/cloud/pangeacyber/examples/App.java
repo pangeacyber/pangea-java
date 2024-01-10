@@ -42,7 +42,7 @@ public class App
 			String id = generateResp.getResult().getId();
             System.out.println("Key ID: " + id);
 
-            System.out.println("Encrpyt...");
+            System.out.println("Encrypt...");
             String message = "thisisamessagetoencrypt";
             String dataB64 = Utils.stringToStringB64(message);
 
@@ -61,11 +61,9 @@ public class App
             } else {
                 System.out.println("Encrypt/decrypt failed");
             }
-
         } catch (Exception e){
             System.out.println("Error: " + e);
             System.exit(1);
         }
-
     }
 }

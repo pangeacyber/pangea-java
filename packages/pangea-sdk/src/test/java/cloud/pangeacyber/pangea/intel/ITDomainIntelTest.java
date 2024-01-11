@@ -23,7 +23,7 @@ import org.junit.Test;
 public class ITDomainIntelTest {
 
 	DomainIntelClient client;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	TestEnvironment environment = TestEnvironment.LIVE;
 
 	@Before
 	public void setUp() throws ConfigException {

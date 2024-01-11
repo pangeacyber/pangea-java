@@ -264,18 +264,18 @@ public abstract class BaseClient {
 		return doPost(path, request, null, responseClass, postConfig);
 	}
 
-    /**
-     * Perform a HTTP POST request.
-     *
-     * @param <Req> Request body type.
-     * @param <ResponseType> Response body type.
-     * @param path Request URL path.
-     * @param request Request body.
-     * @param responseTypeRef Value type reference to the response body type.
-     * @return Response body.
-     * @throws PangeaException
-     * @throws PangeaAPIException
-     */
+	/**
+	 * Perform a HTTP POST request.
+	 *
+	 * @param <Req> Request body type.
+	 * @param <ResponseType> Response body type.
+	 * @param path Request URL path.
+	 * @param request Request body.
+	 * @param responseTypeRef Value type reference to the response body type.
+	 * @return Response body.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 */
 	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
 		String path,
 		Req request,
@@ -351,19 +351,19 @@ public abstract class BaseClient {
 		Class<ResponseType> responseClass,
 		PostConfig postConfig
 	) throws PangeaException, PangeaAPIException {
-        return doPost(
-            path,
-            request,
-            fileData,
-            new TypeReference<ResponseType>() {
-                @Override
-                public Type getType() {
-                    return responseClass;
-                }
-            },
-            postConfig
-        );
-    }
+		return doPost(
+			path,
+			request,
+			fileData,
+			new TypeReference<ResponseType>() {
+				@Override
+				public Type getType() {
+					return responseClass;
+				}
+			},
+			postConfig
+		);
+	}
 
 	private <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType doPost(
 		String path,
@@ -644,17 +644,17 @@ public abstract class BaseClient {
 
 	private <ResponseType extends Response<?>> ResponseType parseResponse(
 		InternalHttpResponse httpResponse,
-        Class<ResponseType> responseClass
+		Class<ResponseType> responseClass
 	) throws PangeaException {
 		return parseResponse(
-            httpResponse,
-            new TypeReference<ResponseType>() {
-                @Override
-                public Type getType() {
-                    return responseClass;
-                }
-            }
-        );
+			httpResponse,
+			new TypeReference<ResponseType>() {
+				@Override
+				public Type getType() {
+					return responseClass;
+				}
+			}
+		);
 	}
 
 	private <ResponseType extends Response<?>> ResponseType parseResponse(
@@ -686,17 +686,17 @@ public abstract class BaseClient {
 		Class<ResponseType> responseClass,
 		String url
 	) throws PangeaException, PangeaAPIException {
-        return checkResponse(
-            httpResponse,
-            new TypeReference<ResponseType>() {
-                @Override
-                public Type getType() {
-                    return responseClass;
-                }
-            },
-            url
-        );
-    }
+		return checkResponse(
+			httpResponse,
+			new TypeReference<ResponseType>() {
+				@Override
+				public Type getType() {
+					return responseClass;
+				}
+			},
+			url
+		);
+	}
 
 	private <ResponseType extends Response<?>> ResponseType checkResponse(
 		InternalHttpResponse httpResponse,
@@ -704,12 +704,12 @@ public abstract class BaseClient {
 		String url
 	) throws PangeaException, PangeaAPIException {
 		this.logger.debug(
-            String.format(
-                "{\"service\": \"%s\", \"action\": \"check response\", \"response\": %s}",
-                serviceName,
-                httpResponse.getBody()
-            )
-        );
+				String.format(
+					"{\"service\": \"%s\", \"action\": \"check response\", \"response\": %s}",
+					serviceName,
+					httpResponse.getBody()
+				)
+			);
 
 		if (httpResponse.getResponse().getStatusLine().getStatusCode() == 503) {
 			throw new ServiceTemporarilyUnavailable(httpResponse.getBody());
@@ -729,10 +729,7 @@ public abstract class BaseClient {
 
 		if (ResponseStatus.ACCEPTED.equals(status)) {
 			AcceptedResponse responseAccepted = parseResponse(httpResponse, AcceptedResponse.class);
-            var responseClass = new ObjectMapper()
-                .getTypeFactory()
-                .constructType(responseTypeRef)
-                .getRawClass();
+			var responseClass = new ObjectMapper().getTypeFactory().constructType(responseTypeRef).getRawClass();
 			if (responseClass == AcceptedResponse.class) {
 				return (ResponseType) responseAccepted;
 			}

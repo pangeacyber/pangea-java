@@ -1,9 +1,8 @@
 package cloud.pangeacyber.pangea.vault.results;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
 
 /**
  * Result of an encrypt/decrypt structured request.
@@ -12,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EncryptStructuredResult<K, V, T extends Map<K, V>> {
+
 	/** The ID of the item. */
 	@JsonProperty("id")
 	String id;

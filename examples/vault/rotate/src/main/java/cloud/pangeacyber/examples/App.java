@@ -57,6 +57,5 @@ public class App
             System.out.println("Error: " + e);
             System.exit(1);
         }
-
     }
 }

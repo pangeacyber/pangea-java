@@ -57,11 +57,9 @@ public class App
             } else {
                 System.out.println("Signature verification failed");
             }
-
         } catch (Exception e){
             System.out.println("Error: " + e);
             System.exit(1);
         }
-
     }
 }

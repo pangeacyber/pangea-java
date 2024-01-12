@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Structured encrypt support.
+- Vault encrypt structured support.
 
 ## [3.5.0] - 2023-12-18
 

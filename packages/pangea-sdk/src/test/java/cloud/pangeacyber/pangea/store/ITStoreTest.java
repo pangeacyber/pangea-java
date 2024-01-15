@@ -292,7 +292,7 @@ public class ITStoreTest {
 		List<ShareLinkCreateItem> linkList = Arrays.asList(
 			new ShareLinkCreateItem.Builder()
 				.targets(Arrays.asList(folderID))
-				.linkType(LinkType.ALL)
+				.linkType(LinkType.EDITOR)
 				.maxAccessCount(3)
 				.authenticators(authenticators)
 				.build()

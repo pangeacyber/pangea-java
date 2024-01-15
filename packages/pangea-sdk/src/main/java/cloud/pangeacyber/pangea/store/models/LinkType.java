@@ -3,7 +3,7 @@ package cloud.pangeacyber.pangea.store.models;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum LinkType {
-	ALL("all"),
+	EDITOR("editor"),
 	UPLOAD("upload"),
 	DOWNLOAD("download");
 

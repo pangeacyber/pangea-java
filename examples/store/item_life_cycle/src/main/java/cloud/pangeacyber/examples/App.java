@@ -156,7 +156,7 @@ public class App {
             // Create share link
             System.out.println("\nCreating a share link...");
 
-            // It's needed to create an authenticator list with the allowed authenticator
+            // It's necessary to create an authenticator list with the allowed authenticator
             // method to access the link
             List<Authenticator> authenticators = Arrays.asList(
                     new Authenticator(AuthenticatorType.PASSWORD, "somepassword"));

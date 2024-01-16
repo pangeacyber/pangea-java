@@ -38,7 +38,7 @@ public class App {
             System.out.println("Requesting upload URL with put-url transfer method...");
             String name = time + "_file_split_put_url";
 
-            //
+            // Request Upload URL with put-url transfer method
             AcceptedResponse acceptedResponse = client.requestUploadURL(
                     new PutRequest.Builder().name(name).transferMethod(TransferMethod.PUT_URL).build());
 
@@ -58,7 +58,7 @@ public class App {
 
             PutResponse response;
             int maxRetry = 12, retry;
-            // After uploading the file, it's needed to poll the result from Store service
+            // After uploading the file, it's necessary to poll the result from Store service
             for (retry = 0; retry < maxRetry; retry++) {
                 try {
                     System.out.printf("Polling result. Retry: %d\n", retry);

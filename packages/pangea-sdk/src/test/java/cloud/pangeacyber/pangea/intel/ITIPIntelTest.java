@@ -40,7 +40,7 @@ import org.junit.Test;
 public class ITIPIntelTest {
 
 	IPIntelClient client;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	TestEnvironment environment = TestEnvironment.LIVE;
 
 	@Before
 	public void setUp() throws ConfigException {

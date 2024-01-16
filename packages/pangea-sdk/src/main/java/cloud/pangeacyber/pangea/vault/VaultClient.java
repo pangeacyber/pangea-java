@@ -8,13 +8,11 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.responses.*;
-
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.Map;
 
 final class JWKGetRequest extends BaseRequest {
 
@@ -656,23 +654,21 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-     * var request = new EncryptStructuredRequest.Builder<SomeModel>(
-     *     key,
-     *     data,
-     *     "$.field1[2:4]"
-     * ).build();
-     * var encrypted = client.encryptStructured(request);
+	 * var request = new EncryptStructuredRequest.Builder<SomeModel>(
+	 *     key,
+	 *     data,
+	 *     "$.field1[2:4]"
+	 * ).build();
+	 * var encrypted = client.encryptStructured(request);
 	 * }
 	 */
-	public <K, V, T extends Map<K, V>> EncryptStructuredResponse<K, V, T> encryptStructured(EncryptStructuredRequest<K, V, T> request) throws PangeaException, PangeaAPIException {
-		return post(
-            "/v1/key/encrypt/structured",
-            request,
-            new TypeReference<EncryptStructuredResponse<K, V, T>>() {}
-        );
+	public <K, V, T extends Map<K, V>> EncryptStructuredResponse<K, V, T> encryptStructured(
+		EncryptStructuredRequest<K, V, T> request
+	) throws PangeaException, PangeaAPIException {
+		return post("/v1/key/encrypt/structured", request, new TypeReference<EncryptStructuredResponse<K, V, T>>() {});
 	}
 
-    /**
+	/**
 	 * Decrypt structured
 	 * @pangea.description Decrypt parts of a JSON object.
 	 * @pangea.operationId vault_post_v1_key_decrypt_structured
@@ -682,19 +678,17 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-     * var request = new EncryptStructuredRequest.Builder<SomeModel>(
-     *     key,
-     *     data,
-     *     "$.field1[2:4]"
-     * ).build();
-     * var encrypted = client.decryptStructured(request);
+	 * var request = new EncryptStructuredRequest.Builder<SomeModel>(
+	 *     key,
+	 *     data,
+	 *     "$.field1[2:4]"
+	 * ).build();
+	 * var encrypted = client.decryptStructured(request);
 	 * }
 	 */
-	public <K, V, T extends Map<K, V>> EncryptStructuredResponse<K, V, T> decryptStructured(EncryptStructuredRequest<K, V, T> request) throws PangeaException, PangeaAPIException {
-		return post(
-            "/v1/key/decrypt/structured",
-            request,
-            new TypeReference<EncryptStructuredResponse<K, V, T>>() {}
-        );
+	public <K, V, T extends Map<K, V>> EncryptStructuredResponse<K, V, T> decryptStructured(
+		EncryptStructuredRequest<K, V, T> request
+	) throws PangeaException, PangeaAPIException {
+		return post("/v1/key/decrypt/structured", request, new TypeReference<EncryptStructuredResponse<K, V, T>>() {});
 	}
 }

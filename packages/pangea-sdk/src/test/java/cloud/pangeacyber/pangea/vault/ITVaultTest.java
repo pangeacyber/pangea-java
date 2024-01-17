@@ -247,22 +247,33 @@ public class ITVaultTest {
 
 	@Test
 	public void testAESEncryptingLifeCycle() throws PangeaException, PangeaAPIException {
-		String name = getName();
-		try {
-			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.Builder(
-				SymmetricAlgorithm.AES,
-				KeyPurpose.ENCRYPTION,
-				name
-			)
-				.build();
+		SymmetricAlgorithm[] algorithms = new SymmetricAlgorithm[] {
+			SymmetricAlgorithm.AES128_CBC,
+			SymmetricAlgorithm.AES256_CBC,
+			SymmetricAlgorithm.AES128_CFB,
+			SymmetricAlgorithm.AES256_CFB,
+			SymmetricAlgorithm.AES256_GCM,
+		};
 
-			SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
-			assertNotNull(generateResp.getResult().getId());
-			assertEquals(Integer.valueOf(1), generateResp.getResult().getVersion());
-			encryptingCycle(generateResp.getResult().getId());
-		} catch (PangeaAPIException e) {
-			System.out.println(e.toString());
-			assertTrue(false);
+		for (SymmetricAlgorithm algorithm : algorithms) {
+			String name = getName();
+			try {
+				SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.Builder(
+					algorithm,
+					KeyPurpose.ENCRYPTION,
+					name
+				)
+					.build();
+
+				SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
+				assertNotNull(generateResp.getResult().getId());
+				assertEquals(Integer.valueOf(1), generateResp.getResult().getVersion());
+				encryptingCycle(generateResp.getResult().getId());
+			} catch (PangeaAPIException e) {
+				System.out.printf("Failed testAESEncryptingLifeCycle with algorithm %s.\n", algorithm);
+				System.out.println(e.toString());
+				assertTrue(false);
+			}
 		}
 	}
 
@@ -292,41 +303,65 @@ public class ITVaultTest {
 	@Test
 	public void testJWTasymES256SigningLifeCycle() throws PangeaException, PangeaAPIException {
 		KeyPurpose purpose = KeyPurpose.JWT;
-		AsymmetricAlgorithm algorithm = AsymmetricAlgorithm.ES256;
-		String name = getName();
-		try {
-			AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.Builder(algorithm, purpose, name)
-				.build();
+		AsymmetricAlgorithm[] algorithms = new AsymmetricAlgorithm[] {
+			AsymmetricAlgorithm.ES256,
+			AsymmetricAlgorithm.ES384,
+			AsymmetricAlgorithm.ES512,
+		};
 
-			// Generate
-			AsymmetricGenerateResponse generateResp = client.asymmetricGenerate(generateRequest);
-			assertNotNull(generateResp.getResult().getEncodedPublicKey());
-			assertNotNull(generateResp.getResult().getId());
-			assertEquals(Integer.valueOf(1), generateResp.getResult().getVersion());
-			jwtAsymSigningCycle(generateResp.getResult().getId());
-		} catch (PangeaAPIException e) {
-			System.out.println(e.toString());
-			assertTrue(false);
+		for (AsymmetricAlgorithm algorithm : algorithms) {
+			String name = getName();
+			try {
+				AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.Builder(
+					algorithm,
+					purpose,
+					name
+				)
+					.build();
+
+				// Generate
+				AsymmetricGenerateResponse generateResp = client.asymmetricGenerate(generateRequest);
+				assertNotNull(generateResp.getResult().getEncodedPublicKey());
+				assertNotNull(generateResp.getResult().getId());
+				assertEquals(Integer.valueOf(1), generateResp.getResult().getVersion());
+				jwtAsymSigningCycle(generateResp.getResult().getId());
+			} catch (PangeaAPIException e) {
+				System.out.printf("Failed testJWTasymES256SigningLifeCycle with algorithm %s.\n", algorithm);
+				System.out.println(e.toString());
+				assertTrue(false);
+			}
 		}
 	}
 
 	@Test
 	public void testJWTsymHS256SigningLifeCycle() throws PangeaException, PangeaAPIException {
 		KeyPurpose purpose = KeyPurpose.JWT;
-		SymmetricAlgorithm algorithm = SymmetricAlgorithm.HS256;
-		String name = getName();
-		try {
-			SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.Builder(algorithm, purpose, name)
-				.build();
+		SymmetricAlgorithm[] algorithms = new SymmetricAlgorithm[] {
+			SymmetricAlgorithm.HS256,
+			SymmetricAlgorithm.HS384,
+			SymmetricAlgorithm.HS512,
+		};
 
-			// Generate
-			SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
-			assertNotNull(generateResp.getResult().getId());
-			assertEquals(Integer.valueOf(1), generateResp.getResult().getVersion());
-			jwtSymSigningCycle(generateResp.getResult().getId());
-		} catch (PangeaAPIException e) {
-			System.out.println(e.toString());
-			assertTrue(false);
+		for (SymmetricAlgorithm algorithm : algorithms) {
+			String name = getName();
+			try {
+				SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.Builder(
+					algorithm,
+					purpose,
+					name
+				)
+					.build();
+
+				// Generate
+				SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
+				assertNotNull(generateResp.getResult().getId());
+				assertEquals(Integer.valueOf(1), generateResp.getResult().getVersion());
+				jwtSymSigningCycle(generateResp.getResult().getId());
+			} catch (PangeaAPIException e) {
+				System.out.printf("Failed testJWTsymHS256SigningLifeCycle with algorithm %s.\n", algorithm);
+				System.out.println(e.toString());
+				assertTrue(false);
+			}
 		}
 	}
 

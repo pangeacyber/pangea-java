@@ -1,12 +1,7 @@
-<p>
-  <br />
-  <a href="https://pangea.cloud?utm_source=github&utm_medium=java-sdk" target="_blank" rel="noopener noreferrer">
-    <img src="https://pangea-marketing.s3.us-west-2.amazonaws.com/pangea-color.svg" alt="Pangea Logo" height="40" />
-  </a>
-  <br />
-</p>
+<a href="https://pangea.cloud?utm_source=github&utm_medium=java-sdk" target="_blank" rel="noopener noreferrer">
+  <img src="https://pangea-marketing.s3.us-west-2.amazonaws.com/pangea-color.svg" alt="Pangea Logo" height="40" />
+</a>
 
-<p>
 <br />
 
 [![documentation](https://img.shields.io/badge/documentation-pangea-blue?style=for-the-badge&labelColor=551B76)][Documentation]

@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>cloud.pangeacyber.examples</groupId>
-  <artifactId>log</artifactId>
+  <artifactId>log_bulk_async</artifactId>
   <version>2.0.0</version>
 
-  <name>log</name>
+  <name>log_bulk_async</name>
   <url>http://pangea.cloud</url>
 
   <properties>

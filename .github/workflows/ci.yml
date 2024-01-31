@@ -31,6 +31,9 @@ jobs:
       examples-matrix: ${{ steps.examples-matrix.outputs.examples-matrix }}
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+
       - name: Calculate `examples-matrix` output
         id: examples-matrix
         working-directory: ./examples

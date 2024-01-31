@@ -24,6 +24,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    outputs:
+      examples-matrix: ${{ steps.examples-matrix.outputs.examples-matrix }}
+
+    steps:
+      - name: Calculate `examples-matrix` output
+        id: examples-matrix
+        working-directory: ./examples
+        run: find . -type f -name 'pom.xml' -printf '%h\n' | cut -c 3- | sort -u | jq -cRs '"examples-matrix=" + (split("\n") | tostring)' >> "$GITHUB_OUTPUT"
+
   prefetch:
     runs-on: ubuntu-latest
     steps:
@@ -37,62 +49,11 @@ jobs:
           java-version: 21
 
   examples:
-    needs: [prefetch]
+    needs: [setup, prefetch]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        example:
-          - audit/audit_multiconfig
-          - audit/log
-          - audit/log_bulk
-          - audit/log_bulk_async
-          - audit/log_bulk_async_with_vault
-          - audit/log_n_sign
-          - audit/log_verbose
-          - audit/root
-          - audit/search
-          - authn/invite_actions
-          - authn/user_actions
-          - embargo/ip_check
-          - embargo/iso_check
-          - file_scan/file_scan_async_crowdstrike
-          - file_scan/file_scan_async_reversinglabs
-          - file_scan/file_scan_request_upload_url_post
-          - file_scan/file_scan_request_upload_url_put
-          - file_scan/file_scan_sync_crowdstrike
-          - file_scan/file_scan_sync_reversinglabs
-          - intel/defang/defang
-          - intel/domain/reputation
-          - intel/domain/reputation_bulk
-          - intel/domain/whois
-          - intel/file/reputation
-          - intel/file/reputation_bulk
-          - intel/file/reputation_filepath
-          - intel/ip/geolocate
-          - intel/ip/geolocate_bulk
-          - intel/ip/get_domain
-          - intel/ip/get_domain_bulk
-          - intel/ip/is_proxy
-          - intel/ip/is_proxy_bulk
-          - intel/ip/is_vpn
-          - intel/ip/is_vpn_bulk
-          - intel/ip/reputation_bulk
-          - intel/ip/reputation_crowdstrike
-          - intel/ip/reputation_cymru
-          - intel/url/reputation
-          - intel/user/password_breached
-          - intel/user/user_breached_by_email
-          - intel/user/user_breached_by_ip
-          - intel/user/user_breached_by_phone
-          - intel/user/user_breached_by_username
-          - redact/redact_multiconfig
-          - redact/structured
-          - redact/text
-          - vault/encrypt
-          - vault/encrypt_structured
-          - vault/get
-          - vault/rotate
-          - vault/sign
+        example: ${{ fromJSON(needs.setup.outputs.examples-matrix) }}
         java-version: [17, 21]
     defaults:
       run:

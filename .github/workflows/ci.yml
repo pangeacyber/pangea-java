@@ -37,7 +37,10 @@ jobs:
       - name: Calculate `examples-matrix` output
         id: examples-matrix
         working-directory: ./examples
-        run: find . -type f -name 'pom.xml' -printf '%h\n' | cut -c 3- | sort -u | jq -cRs '"examples-matrix=" + (split("\n") | tostring)' >> "$GITHUB_OUTPUT"
+        run: |
+          find . -type f -name 'pom.xml' -printf '%h\n'
+          find . -type f -name 'pom.xml' -printf '%h\n' | cut -c 3- | sort -u | jq -cRs '"examples-matrix=" + (split("\n") | tostring)'
+          find . -type f -name 'pom.xml' -printf '%h\n' | cut -c 3- | sort -u | jq -cRs '"examples-matrix=" + (split("\n") | tostring)' >> "$GITHUB_OUTPUT"
 
   prefetch:
     runs-on: ubuntu-latest

@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>cloud.pangeacyber.examples</groupId>
-  <artifactId>log</artifactId>
+  <artifactId>audit_multiconfig</artifactId>
   <version>2.0.0</version>
 
-  <name>log</name>
+  <name>audit_multiconfig</name>
   <url>http://pangea.cloud</url>
 
   <properties>

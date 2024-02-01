@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.audit.models.*;
 import cloud.pangeacyber.pangea.audit.requests.*;
@@ -16,13 +17,14 @@ import cloud.pangeacyber.pangea.exceptions.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ITAuditTest {
 
 	Config cfgGeneral;
 	AuditClient clientGeneral, clientGeneralNoQueue, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient, customSchemaClient, localSignCustomSchemaClient;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	static TestEnvironment environment;
 	CustomEvent customEvent;
 
 	private static final String ACTOR = "java-sdk";
@@ -36,8 +38,13 @@ public class ITAuditTest {
 	private static final String LONG_FIELD =
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia, orci eget commodo commodo non.";
 
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		environment = Helper.loadTestEnvironment("audit", TestEnvironment.LIVE);
+	}
+
 	@Before
-	public void setUp() throws ConfigException {
+	public void setUp() throws Exception {
 		Config vaultCfg = Config.fromVaultIntegrationEnvironment(environment);
 		this.cfgGeneral = Config.fromIntegrationEnvironment(environment);
 		Config cfgGeneralNoQueue = Config.fromIntegrationEnvironment(environment);

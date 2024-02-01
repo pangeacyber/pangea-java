@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -35,15 +36,21 @@ import cloud.pangeacyber.pangea.intel.responses.IPReputationResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPVPNBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPVPNResponse;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ITIPIntelTest {
 
 	IPIntelClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	static TestEnvironment environment;
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		environment = Helper.loadTestEnvironment("ip-intel", TestEnvironment.LIVE);
+	}
 
 	@Before
-	public void setUp() throws ConfigException {
+	public void setUp() throws Exception {
 		client = new IPIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
 

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.authn.models.*;
 import cloud.pangeacyber.pangea.authn.requests.*;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -28,7 +30,7 @@ public class ITAuthNTest {
 
 	AuthNClient client;
 	Config cfg;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	static TestEnvironment environment;
 	private static Random random = new Random();
 	private static final String randomValue = Integer.toString(random.nextInt(10000000));
 	private static final String emailTest = String.format("user.email+test%s@pangea.cloud", randomValue);
@@ -43,8 +45,13 @@ public class ITAuthNTest {
 	private final String cbURI = "https://someurl.com/callbacklink";
 	String time;
 
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		environment = Helper.loadTestEnvironment("authn", TestEnvironment.LIVE);
+	}
+
 	@Before
-	public void setUp() throws ConfigException {
+	public void setUp() throws Exception {
 		this.cfg = Config.fromIntegrationEnvironment(environment);
 		client = new AuthNClient.Builder(cfg).build();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");

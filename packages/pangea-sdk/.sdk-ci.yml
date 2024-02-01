@@ -4,7 +4,51 @@ variables:
 
 .java-sdk-base:
   before_script:
+    - export PANGEA_INTEGRATION_TOKEN_LVE="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_INTEGRATION_DOMAIN_LVE="$(eval echo \$PANGEA_INTEGRATION_DOMAIN_LVE_AWS)"
     - cd packages/pangea-sdk
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+
+.java-sdk-test-base:
+  stage: integration_tests
+  variables:
+  # Set each service test environment
+    SERVICE_AUDIT_ENV: LVE
+    SERVICE_AUTHN_ENV: LVE
+    SERVICE_EMBARGO_ENV: LVE
+    SERVICE_FILE_SCAN_ENV: LVE
+    SERVICE_IP_INTEL_ENV: LVE
+    SERVICE_DOMAIN_INTEL_ENV: LVE
+    SERVICE_URL_INTEL_ENV: LVE
+    SERVICE_FILE_INTEL_ENV: LVE
+    SERVICE_USER_INTEL_ENV: LVE
+    SERVICE_REDACT_ENV: LVE
+    SERVICE_VAULT_ENV: LVE
+
+  before_script:
+    - echo $ENV
+    - echo $CLOUD
+  # Update environment variables
+  # Domain
+    - export PANGEA_INTEGRATION_DOMAIN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_DOMAIN_${ENV}_${CLOUD})"
+  # Tokens
+    - export PANGEA_INTEGRATION_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_TOKEN_${ENV}_${CLOUD})"
+    - export PANGEA_INTEGRATION_VAULT_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_VAULT_TOKEN_${ENV}_${CLOUD})"
+    - export PANGEA_INTEGRATION_CUSTOM_SCHEMA_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_CUSTOM_SCHEMA_TOKEN_${ENV}_${CLOUD})"
+    - export PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_${ENV}_${CLOUD})"
+  # Config IDs
+    - export PANGEA_AUDIT_CONFIG_ID_1_${ENV}="$(eval echo \$PANGEA_AUDIT_CONFIG_ID_1_${ENV}_${CLOUD})"
+    - export PANGEA_AUDIT_CONFIG_ID_2_${ENV}="$(eval echo \$PANGEA_AUDIT_CONFIG_ID_2_${ENV}_${CLOUD})"
+    - export PANGEA_REDACT_CONFIG_ID_1_${ENV}="$(eval echo \$PANGEA_REDACT_CONFIG_ID_1_${ENV}_${CLOUD})"
+    - export PANGEA_REDACT_CONFIG_ID_2_${ENV}="$(eval echo \$PANGEA_REDACT_CONFIG_ID_2_${ENV}_${CLOUD})"
+
+    - cd packages/pangea-sdk/
+
+  parallel:
+    matrix:
+      - CLOUD: [AWS, GCP]
+
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
 
@@ -17,19 +61,101 @@ variables:
         - packages/pangea-sdk/**/*
       when: on_success
 
-building_sdk:
+building-sdk:
   extends: .java-sdk-base
   stage: build
   script:
     - mvn $MAVEN_CLI_OPTS compile
 
-testing_sdk:
+java-sdk-unit-test:
   extends: .java-sdk-base
-  stage: test
+  stage: unit_tests
   script:
-    - mvn $MAVEN_CLI_OPTS test
+    - mvn test -Dtest="cloud.pangeacyber.pangea.*Test"
 
-publishing_sdk:
+java-sdk-it-audit:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_AUDIT_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITAuditTest
+
+java-sdk-it-authn:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_AUTHN_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITAuthNTest
+
+java-sdk-it-embargo:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_EMBARGO_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITEmbargoTest
+
+java-sdk-it-file-scan:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_FILE_SCAN_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITFileScanTest
+  rules:
+    - if: '$CLOUD == "GCP"'
+      allow_failure: true
+    - if: '$CLOUD != "GCP"'
+      allow_failure: false
+
+java-sdk-it-domain-intel:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_DOMAIN_INTEL_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITDomainIntelTest
+
+java-sdk-it-file-intel:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_FILE_INTEL_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITFileIntelTest
+
+java-sdk-it-ip-intel:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_IP_INTEL_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITIPIntelTest
+
+java-sdk-it-url-intel:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_URL_INTEL_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITURLIntelTest
+
+java-sdk-it-user-intel:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_USER_INTEL_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITUserIntelTest
+
+java-sdk-it-redact:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_REDACT_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITRedactTest
+
+java-sdk-it-vault:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: ${SERVICE_VAULT_ENV}
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=ITVaultTest
+
+publishing-sdk:
   extends: .java-sdk-publish
   stage: publish
   script:

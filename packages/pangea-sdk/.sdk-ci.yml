@@ -155,6 +155,25 @@ java-sdk-it-vault:
   script:
     - mvn $MAVEN_CLI_OPTS test -Dtest=ITVaultTest
 
+.java-sdk-staging-tests:
+  extends: .java-sdk-test-base
+  variables:
+    ENV: STG
+  # Set each service test environment
+    SERVICE_AUDIT_ENV: STG
+    SERVICE_AUTHN_ENV: STG
+    SERVICE_EMBARGO_ENV: STG
+    SERVICE_FILE_SCAN_ENV: STG
+    SERVICE_IP_INTEL_ENV: STG
+    SERVICE_DOMAIN_INTEL_ENV: STG
+    SERVICE_URL_INTEL_ENV: STG
+    SERVICE_FILE_INTEL_ENV: STG
+    SERVICE_USER_INTEL_ENV: STG
+    SERVICE_REDACT_ENV: STG
+    SERVICE_VAULT_ENV: STG
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+
 publishing-sdk:
   extends: .java-sdk-publish
   stage: publish

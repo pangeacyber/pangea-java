@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.Utils;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
@@ -28,18 +29,24 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ITVaultTest {
 
 	VaultClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	static TestEnvironment environment;
 	String time;
 	Random random;
 	final String actor = "JavaSDKTest";
 
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		environment = Helper.loadTestEnvironment("vault", TestEnvironment.LIVE);
+	}
+
 	@Before
-	public void setUp() throws ConfigException {
+	public void setUp() throws Exception {
 		client = new VaultClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 		time = dtf.format(LocalDateTime.now());

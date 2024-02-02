@@ -1,7 +1,8 @@
-package cloud.pangeacyber.pangea.audit;
+package cloud.pangeacyber.pangea;
 
 import static org.junit.Assert.assertEquals;
 
+import cloud.pangeacyber.pangea.audit.LogSigner;
 import cloud.pangeacyber.pangea.audit.models.EventVerification;
 import cloud.pangeacyber.pangea.audit.utils.Verifier;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;

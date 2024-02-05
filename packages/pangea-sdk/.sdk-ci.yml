@@ -29,6 +29,7 @@ java-sdk-integration-tests:
   before_script:
     - echo $ENV
     - echo $CLOUD
+    - echo $TEST
   # Update environment variables
   # Domain
     - export PANGEA_INTEGRATION_DOMAIN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_DOMAIN_${ENV}_${CLOUD})"
@@ -45,6 +46,7 @@ java-sdk-integration-tests:
 
     - cd packages/pangea-sdk/
 
+  parallel:
     matrix:
       - CLOUD: [AWS, GCP]
         ENV: ${SERVICE_AUDIT_ENV}

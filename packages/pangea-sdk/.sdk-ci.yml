@@ -84,6 +84,8 @@ java-sdk-integration-tests:
   rules:
     - if: '$CLOUD == "GCP" && $TEST == "ITFileScanTest"'
       allow_failure: true
+    - if: '$CLOUD == "GCP" && $TEST != "ITFileScanTest"'
+      allow_failure: false
     - if: '$CLOUD != "GCP"'
       allow_failure: false
   script:

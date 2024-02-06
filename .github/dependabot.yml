@@ -6,6 +6,6 @@ updates:
       interval: daily
 
   - package-ecosystem: maven
-    directory: /examples
+    directory: /
     schedule:
       interval: daily

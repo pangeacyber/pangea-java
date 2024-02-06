@@ -3,16 +3,11 @@ package cloud.pangeacyber.examples;
 import cloud.pangeacyber.pangea.vault.VaultClient;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.vault.requests.*;
-import cloud.pangeacyber.pangea.vault.models.*;
 import cloud.pangeacyber.pangea.vault.responses.*;
 
 import cloud.pangeacyber.pangea.audit.AuditClient;
-import cloud.pangeacyber.pangea.audit.requests.*;
 import cloud.pangeacyber.pangea.audit.models.*;
 import cloud.pangeacyber.pangea.audit.responses.*;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import cloud.pangeacyber.pangea.Config;
 
@@ -30,7 +25,7 @@ public class App
 
         VaultClient vaultClient = new VaultClient.Builder(cfg).build();
         GetResponse getResponse = null;
-        String auditTokenId = System.getenv("PANGEA_AUDIT_TOKEN_ID");
+        String auditTokenId = System.getenv("PANGEA_AUDIT_TOKEN_VAULT_ID");
         if (auditTokenId == null || auditTokenId.isEmpty()) {
             System.out.println("Missing PANGEA_AUDIT_TOKEN_ID");
             System.exit(1);

@@ -53,12 +53,8 @@ examples:
           - vault/encrypt_structured
           - vault/rotate
           - vault/sign
-
-          # Depends on a `PANGEA_AUDIT_TOKEN_VAULT_ID` which isn't in CI.
-          # - audit/log_bulk_async_with_vault
-
-          # Depends on a `PANGEA_AUDIT_TOKEN_ID` which isn't in CI.
-          # - vault/get
+          - audit/log_bulk_async_with_vault
+          - vault/get
   image: maven:3.9.6-eclipse-temurin-${JAVA_VERSION}
   before_script:
     - export PANGEA_AUDIT_CONFIG_ID="$(eval echo \$PANGEA_AUDIT_CONFIG_ID_1_LVE_AWS)"

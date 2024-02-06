@@ -10,7 +10,7 @@ variables:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
 
-.java-sdk-test-base:
+java-sdk-integration-tests:
   stage: integration_tests
   variables:
   # Set each service test environment
@@ -29,6 +29,7 @@ variables:
   before_script:
     - echo $ENV
     - echo $CLOUD
+    - echo $TEST
   # Update environment variables
   # Domain
     - export PANGEA_INTEGRATION_DOMAIN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_DOMAIN_${ENV}_${CLOUD})"
@@ -48,9 +49,47 @@ variables:
   parallel:
     matrix:
       - CLOUD: [AWS, GCP]
-
+        ENV: ${SERVICE_AUDIT_ENV}
+        TEST: ITAuditTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_AUTHN_ENV}
+        TEST: ITAuthNTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_EMBARGO_ENV}
+        TEST: ITEmbargoTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_DOMAIN_INTEL_ENV}
+        TEST: ITDomainIntelTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_IP_INTEL_ENV}
+        TEST: ITIPIntelTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_URL_INTEL_ENV}
+        TEST: ITURLIntelTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_USER_INTEL_ENV}
+        TEST: ITUserIntelTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_FILE_INTEL_ENV}
+        TEST: ITFileIntelTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_FILE_SCAN_ENV}
+        TEST: ITFileScanTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_REDACT_ENV}
+        TEST: ITRedactTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_VAULT_ENV}
+        TEST: ITVaultTest
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: '$CLOUD == "GCP" && $TEST == "ITFileScanTest"'
+      allow_failure: true
+    - if: '$CLOUD == "GCP" && $TEST != "ITFileScanTest"'
+      allow_failure: false
+    - if: '$CLOUD != "GCP"'
+      allow_failure: false
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=${TEST}
 
 .java-sdk-publish:
   before_script:
@@ -67,112 +106,11 @@ building-sdk:
   script:
     - mvn $MAVEN_CLI_OPTS compile
 
-java-sdk-unit-test:
+java-sdk-unit-tests:
   extends: .java-sdk-base
   stage: unit_tests
   script:
     - mvn test -Dtest="cloud.pangeacyber.pangea.*Test"
-
-java-sdk-it-audit:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_AUDIT_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITAuditTest
-
-java-sdk-it-authn:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_AUTHN_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITAuthNTest
-
-java-sdk-it-embargo:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_EMBARGO_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITEmbargoTest
-
-java-sdk-it-file-scan:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_FILE_SCAN_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITFileScanTest
-  rules:
-    - if: '$CLOUD == "GCP"'
-      allow_failure: true
-    - if: '$CLOUD != "GCP"'
-      allow_failure: false
-
-java-sdk-it-domain-intel:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_DOMAIN_INTEL_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITDomainIntelTest
-
-java-sdk-it-file-intel:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_FILE_INTEL_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITFileIntelTest
-
-java-sdk-it-ip-intel:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_IP_INTEL_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITIPIntelTest
-
-java-sdk-it-url-intel:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_URL_INTEL_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITURLIntelTest
-
-java-sdk-it-user-intel:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_USER_INTEL_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITUserIntelTest
-
-java-sdk-it-redact:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_REDACT_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITRedactTest
-
-java-sdk-it-vault:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: ${SERVICE_VAULT_ENV}
-  script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=ITVaultTest
-
-.java-sdk-staging-tests:
-  extends: .java-sdk-test-base
-  variables:
-    ENV: STG
-  # Set each service test environment
-    SERVICE_AUDIT_ENV: STG
-    SERVICE_AUTHN_ENV: STG
-    SERVICE_EMBARGO_ENV: STG
-    SERVICE_FILE_SCAN_ENV: STG
-    SERVICE_IP_INTEL_ENV: STG
-    SERVICE_DOMAIN_INTEL_ENV: STG
-    SERVICE_URL_INTEL_ENV: STG
-    SERVICE_FILE_INTEL_ENV: STG
-    SERVICE_USER_INTEL_ENV: STG
-    SERVICE_REDACT_ENV: STG
-    SERVICE_VAULT_ENV: STG
-  script:
-    - mvn $MAVEN_CLI_OPTS test
 
 publishing-sdk:
   extends: .java-sdk-publish

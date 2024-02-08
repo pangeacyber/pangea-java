@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - kenany/GEA-12317
 
   pull_request:
     types:
@@ -22,6 +23,10 @@ permissions:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
+
+env:
+  PANGEA_INTEGRATION_DOMAIN_LVE: placeholder
+  PANGEA_INTEGRATION_TOKEN_LVE: placeholder
 
 jobs:
   setup:
@@ -53,6 +58,30 @@ jobs:
         with:
           distribution: microsoft
           java-version: 21
+
+  test-unit:
+    needs: [prefetch]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [17, 21]
+    defaults:
+      run:
+        working-directory: ./packages/pangea-sdk
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+
+      - name: Setup Java
+        uses: actions/setup-java@v4.0.0
+        with:
+          distribution: microsoft
+          java-version: ${{ matrix.java-version }}
+          cache: maven
+          cache-dependency-path: ./packages/pangea-sdk/pom.xml
+
+      - name: Unit test
+        run: mvn test -B -e -Dtest="cloud.pangeacyber.pangea.*Test"
 
   examples:
     needs: [setup, prefetch]

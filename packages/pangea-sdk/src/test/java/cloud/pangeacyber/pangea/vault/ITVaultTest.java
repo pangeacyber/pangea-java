@@ -280,6 +280,7 @@ public class ITVaultTest {
 				failed = true;
 			}
 		}
+		assertFalse(failed);
 	}
 
 	@Test

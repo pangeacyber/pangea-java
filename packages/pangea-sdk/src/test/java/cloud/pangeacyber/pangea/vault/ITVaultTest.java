@@ -253,6 +253,121 @@ public class ITVaultTest {
 	}
 
 	@Test
+	public void testSymmetricEncryptionGenerate() throws PangeaException, PangeaAPIException {
+		SymmetricAlgorithm[] algorithms = new SymmetricAlgorithm[] {
+			SymmetricAlgorithm.AES128_CBC,
+			SymmetricAlgorithm.AES256_CBC,
+			SymmetricAlgorithm.AES128_CFB,
+			SymmetricAlgorithm.AES256_CFB,
+			SymmetricAlgorithm.AES256_GCM,
+		};
+		boolean failed = false;
+		KeyPurpose purpose = KeyPurpose.ENCRYPTION;
+
+		for (SymmetricAlgorithm algorithm : algorithms) {
+			String name = getName();
+			try {
+				SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.Builder(
+					algorithm,
+					purpose,
+					name
+				)
+					.build();
+
+				SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
+			} catch (PangeaAPIException e) {
+				System.out.printf("Failed to generate %s %s\n%s\n\n", algorithms, purpose, e.toString());
+				failed = true;
+			}
+		}
+		assertFalse(failed);
+	}
+
+	@Test
+	public void testAsymmetricSigningGenerate() throws PangeaException, PangeaAPIException {
+		AsymmetricAlgorithm[] algorithms = new AsymmetricAlgorithm[] {
+			AsymmetricAlgorithm.ED25519,
+			AsymmetricAlgorithm.RSA2048_PKCS1V15_SHA256,
+			AsymmetricAlgorithm.ES256K,
+			AsymmetricAlgorithm.RSA2048_PSS_SHA256,
+			AsymmetricAlgorithm.RSA3072_PSS_SHA256,
+			AsymmetricAlgorithm.RSA4096_PSS_SHA256,
+			AsymmetricAlgorithm.RSA4096_PSS_SHA512,
+			AsymmetricAlgorithm.Ed25519_DILITHIUM2_BETA,
+			AsymmetricAlgorithm.Ed448_DILITHIUM3_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_128F_SHAKE256_SIMPLE_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_128F_SHAKE256_ROBUST_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_192F_SHAKE256_SIMPLE_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_192F_SHAKE256_ROBUST_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_256F_SHAKE256_SIMPLE_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_256F_SHAKE256_ROBUST_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_128F_SHA256_SIMPLE_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_128F_SHA256_ROBUST_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_192F_SHA256_SIMPLE_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_192F_SHA256_ROBUST_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_256F_SHA256_SIMPLE_BETA,
+			AsymmetricAlgorithm.SPHINCSPLUS_256F_SHA256_ROBUST_BETA,
+			AsymmetricAlgorithm.FALCON_1024_BETA,
+		};
+		boolean failed = false;
+		KeyPurpose purpose = KeyPurpose.SIGNING;
+
+		for (AsymmetricAlgorithm algorithm : algorithms) {
+			String name = getName();
+			try {
+				AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.Builder(
+					algorithm,
+					purpose,
+					name
+				)
+					.build();
+
+				// Generate
+				AsymmetricGenerateResponse generateResp = client.asymmetricGenerate(generateRequest);
+			} catch (PangeaAPIException e) {
+				System.out.printf("Failed to generate %s %s\n%s\n\n", algorithms, purpose, e.toString());
+				failed = true;
+			}
+		}
+		assertFalse(failed);
+	}
+
+	@Test
+	public void testAsymmetricEncryptionGenerate() throws PangeaException, PangeaAPIException {
+		AsymmetricAlgorithm[] algorithms = new AsymmetricAlgorithm[] {
+			AsymmetricAlgorithm.RSA2048_OAEP_SHA1,
+			AsymmetricAlgorithm.RSA2048_OAEP_SHA512,
+			AsymmetricAlgorithm.RSA3072_OAEP_SHA1,
+			AsymmetricAlgorithm.RSA3072_OAEP_SHA256,
+			AsymmetricAlgorithm.RSA3072_OAEP_SHA512,
+			AsymmetricAlgorithm.RSA4096_OAEP_SHA1,
+			AsymmetricAlgorithm.RSA4096_OAEP_SHA256,
+			AsymmetricAlgorithm.RSA4096_OAEP_SHA512,
+		};
+		boolean failed = false;
+		KeyPurpose purpose = KeyPurpose.ENCRYPTION;
+
+		for (AsymmetricAlgorithm algorithm : algorithms) {
+			String name = getName();
+			try {
+				AsymmetricGenerateRequest generateRequest = new AsymmetricGenerateRequest.Builder(
+					algorithm,
+					purpose,
+					name
+				)
+					.build();
+
+				// Generate
+				AsymmetricGenerateResponse generateResp = client.asymmetricGenerate(generateRequest);
+			} catch (PangeaAPIException e) {
+				System.out.printf("Failed to generate %s %s\n%s\n\n", algorithms, purpose, e.toString());
+				failed = true;
+			}
+		}
+		assertFalse(failed);
+	}
+
+	@Test
 	public void testAESEncryptingLifeCycle() throws PangeaException, PangeaAPIException {
 		SymmetricAlgorithm[] algorithms = new SymmetricAlgorithm[] {
 			SymmetricAlgorithm.AES128_CBC,

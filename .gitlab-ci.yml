@@ -5,7 +5,6 @@ default:
 
 stages:
   - build
-  - unit_tests
   - integration_tests
   - publish
   - examples

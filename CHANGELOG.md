@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Now targets Java 17 and 21.
 - Rewrote `README.md`.
 
 ### Added 

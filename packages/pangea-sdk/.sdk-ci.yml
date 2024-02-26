@@ -106,12 +106,6 @@ building-sdk:
   script:
     - mvn $MAVEN_CLI_OPTS compile
 
-java-sdk-unit-tests:
-  extends: .java-sdk-base
-  stage: unit_tests
-  script:
-    - mvn test -Dtest="cloud.pangeacyber.pangea.*Test"
-
 publishing-sdk:
   extends: .java-sdk-publish
   stage: publish

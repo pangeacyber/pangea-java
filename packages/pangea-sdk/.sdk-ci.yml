@@ -110,4 +110,4 @@ publishing-sdk:
   extends: .java-sdk-publish
   stage: publish
   script:
-    - mvn $MAVEN_CLI_OPTS deploy
+    - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true

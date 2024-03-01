@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.FileData;
+import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.TransferMethod;
 import cloud.pangeacyber.pangea.Utils;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -34,10 +36,15 @@ public class ITFileScanTest {
 	final String TESTFILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/testfile.pdf";
 
 	FileScanClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	static TestEnvironment environment;
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		environment = Helper.loadTestEnvironment("file-scan", TestEnvironment.LIVE);
+	}
 
 	@Before
-	public void setUp() throws ConfigException {
+	public void setUp() throws Exception {
 		client = new FileScanClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
 

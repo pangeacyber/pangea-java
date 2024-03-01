@@ -43,7 +43,7 @@ public class JsonDoclet implements Doclet {
             props.put(e.getKind().toString(), e.toString());
             props.put("fullBody", docCommentTree.getFullBody().toString());
 
-            if (e.getKind() == ElementKind.METHOD) {
+            if (e.getKind() == ElementKind.CONSTRUCTOR || e.getKind() == ElementKind.METHOD) {
                 types = getTypesFromMethod(e.toString());
             }
 
@@ -53,7 +53,10 @@ public class JsonDoclet implements Doclet {
 
                 switch (t.getKind()) {
                     case PARAM:
-                        paramTags.add(processParamDocComment(t.toString()));
+                        var paramTag = processParamDocComment(t.toString());
+						if (paramTag != null) {
+							paramTags.add(paramTag);
+						}
                         break;
                     case RETURN:
                       HashMap<String, Object> returnComment = processDocComment(t.toString());
@@ -191,6 +194,11 @@ public class JsonDoclet implements Doclet {
 
         String[] splitComment = comment.split(" ");
         String[] textArr = Arrays.copyOfRange(splitComment, 2, splitComment.length);
+
+		// HACK: do nothing with type params.
+		if (splitComment[1].startsWith("<") && splitComment[1].endsWith(">")) {
+			return null;
+		}
 
         param.put("name", splitComment[1]);
         param.put("text", String.join(" ", textArr));

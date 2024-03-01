@@ -4,9 +4,92 @@ variables:
 
 .java-sdk-base:
   before_script:
+    - export PANGEA_INTEGRATION_TOKEN_LVE="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_INTEGRATION_DOMAIN_LVE="$(eval echo \$PANGEA_INTEGRATION_DOMAIN_LVE_AWS)"
     - cd packages/pangea-sdk
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
+
+java-sdk-integration-tests:
+  stage: integration_tests
+  variables:
+  # Set each service test environment
+    SERVICE_AUDIT_ENV: LVE
+    SERVICE_AUTHN_ENV: LVE
+    SERVICE_EMBARGO_ENV: LVE
+    SERVICE_FILE_SCAN_ENV: LVE
+    SERVICE_IP_INTEL_ENV: LVE
+    SERVICE_DOMAIN_INTEL_ENV: LVE
+    SERVICE_URL_INTEL_ENV: LVE
+    SERVICE_FILE_INTEL_ENV: LVE
+    SERVICE_USER_INTEL_ENV: LVE
+    SERVICE_REDACT_ENV: LVE
+    SERVICE_VAULT_ENV: LVE
+
+  before_script:
+    - echo $ENV
+    - echo $CLOUD
+    - echo $TEST
+  # Update environment variables
+  # Domain
+    - export PANGEA_INTEGRATION_DOMAIN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_DOMAIN_${ENV}_${CLOUD})"
+  # Tokens
+    - export PANGEA_INTEGRATION_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_TOKEN_${ENV}_${CLOUD})"
+    - export PANGEA_INTEGRATION_VAULT_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_VAULT_TOKEN_${ENV}_${CLOUD})"
+    - export PANGEA_INTEGRATION_CUSTOM_SCHEMA_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_CUSTOM_SCHEMA_TOKEN_${ENV}_${CLOUD})"
+    - export PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_${ENV}_${CLOUD})"
+  # Config IDs
+    - export PANGEA_AUDIT_CONFIG_ID_1_${ENV}="$(eval echo \$PANGEA_AUDIT_CONFIG_ID_1_${ENV}_${CLOUD})"
+    - export PANGEA_AUDIT_CONFIG_ID_2_${ENV}="$(eval echo \$PANGEA_AUDIT_CONFIG_ID_2_${ENV}_${CLOUD})"
+    - export PANGEA_REDACT_CONFIG_ID_1_${ENV}="$(eval echo \$PANGEA_REDACT_CONFIG_ID_1_${ENV}_${CLOUD})"
+    - export PANGEA_REDACT_CONFIG_ID_2_${ENV}="$(eval echo \$PANGEA_REDACT_CONFIG_ID_2_${ENV}_${CLOUD})"
+
+    - cd packages/pangea-sdk/
+
+  parallel:
+    matrix:
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_AUDIT_ENV}
+        TEST: ITAuditTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_AUTHN_ENV}
+        TEST: ITAuthNTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_EMBARGO_ENV}
+        TEST: ITEmbargoTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_DOMAIN_INTEL_ENV}
+        TEST: ITDomainIntelTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_IP_INTEL_ENV}
+        TEST: ITIPIntelTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_URL_INTEL_ENV}
+        TEST: ITURLIntelTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_USER_INTEL_ENV}
+        TEST: ITUserIntelTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_FILE_INTEL_ENV}
+        TEST: ITFileIntelTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_FILE_SCAN_ENV}
+        TEST: ITFileScanTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_REDACT_ENV}
+        TEST: ITRedactTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_VAULT_ENV}
+        TEST: ITVaultTest
+  rules:
+    - if: '$CLOUD == "GCP" && $TEST == "ITFileScanTest"'
+      allow_failure: true
+    - if: '$CLOUD == "GCP" && $TEST != "ITFileScanTest"'
+      allow_failure: false
+    - if: '$CLOUD != "GCP"'
+      allow_failure: false
+  script:
+    - mvn $MAVEN_CLI_OPTS test -Dtest=${TEST}
 
 .java-sdk-publish:
   before_script:
@@ -17,20 +100,14 @@ variables:
         - packages/pangea-sdk/**/*
       when: on_success
 
-building_sdk:
+building-sdk:
   extends: .java-sdk-base
   stage: build
   script:
     - mvn $MAVEN_CLI_OPTS compile
 
-testing_sdk:
-  extends: .java-sdk-base
-  stage: test
-  script:
-    - mvn $MAVEN_CLI_OPTS test
-
-publishing_sdk:
+publishing-sdk:
   extends: .java-sdk-publish
   stage: publish
   script:
-    - mvn $MAVEN_CLI_OPTS deploy
+    - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true

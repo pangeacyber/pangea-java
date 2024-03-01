@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -24,15 +25,21 @@ import cloud.pangeacyber.pangea.intel.responses.UserBreachedResponse;
 import cloud.pangeacyber.pangea.intel.responses.UserPasswordBreachedBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.UserPasswordBreachedResponse;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ITUserIntelTest {
 
 	UserIntelClient client;
-	TestEnvironment environment = TestEnvironment.LIVE;
+	static TestEnvironment environment;
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		environment = Helper.loadTestEnvironment("user-intel", TestEnvironment.LIVE);
+	}
 
 	@Before
-	public void setUp() throws ConfigException {
+	public void setUp() throws Exception {
 		client = new UserIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
 

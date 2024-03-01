@@ -1,12 +1,14 @@
 default:
-  image: maven:3-openjdk-18
+  image: maven:3-openjdk-18@sha256:f22971fa3103b6a5145741dd80cc1660490bef93deb6400276c96dadf5bfd75f
   tags:
-    - pangea-internal-x86
+    - pangea-internal
 
 stages:
   - build
-  - test
+  - integration_tests
   - publish
+  - examples
 
 include:
   - /packages/pangea-sdk/.sdk-ci.yml
+  - /examples/.examples-ci.yml

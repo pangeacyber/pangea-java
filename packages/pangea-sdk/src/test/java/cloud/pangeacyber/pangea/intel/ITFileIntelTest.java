@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -20,15 +21,21 @@ import cloud.pangeacyber.pangea.intel.requests.FileHashReputationRequest;
 import cloud.pangeacyber.pangea.intel.responses.FileReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.FileReputationResponse;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ITFileIntelTest {
 
 	FileIntelClient client;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	static TestEnvironment environment;
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		environment = Helper.loadTestEnvironment("file-intel", TestEnvironment.LIVE);
+	}
 
 	@Before
-	public void setUp() throws ConfigException {
+	public void setUp() throws Exception {
 		client = new FileIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
 

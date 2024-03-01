@@ -1,0 +1,81 @@
+examples:
+  stage: examples
+  parallel:
+    matrix:
+      - JAVA_VERSION: [21]
+        EXAMPLE:
+          - audit/audit_multiconfig
+          - audit/log
+          - audit/log_bulk
+          - audit/log_bulk_async
+          - audit/log_n_sign
+          - audit/log_verbose
+          - audit/root
+          - audit/search
+          - authn/invite_actions
+          - authn/user_actions
+          - embargo/ip_check
+          - embargo/iso_check
+          - file_scan/file_scan_async_crowdstrike
+          - file_scan/file_scan_async_reversinglabs
+          - file_scan/file_scan_request_upload_url_post
+          - file_scan/file_scan_request_upload_url_put
+          - file_scan/file_scan_sync_crowdstrike
+          - file_scan/file_scan_sync_reversinglabs
+          - intel/defang/defang
+          - intel/domain/reputation
+          - intel/domain/reputation_bulk
+          - intel/domain/whois
+          - intel/file/reputation
+          - intel/file/reputation_bulk
+          - intel/file/reputation_filepath
+          - intel/ip/geolocate
+          - intel/ip/geolocate_bulk
+          - intel/ip/get_domain
+          - intel/ip/get_domain_bulk
+          - intel/ip/is_proxy
+          - intel/ip/is_proxy_bulk
+          - intel/ip/is_vpn
+          - intel/ip/is_vpn_bulk
+          - intel/ip/reputation_bulk
+          - intel/ip/reputation_crowdstrike
+          - intel/ip/reputation_cymru
+          - intel/url/reputation
+          - intel/user/password_breached
+          - intel/user/user_breached_by_email
+          - intel/user/user_breached_by_ip
+          - intel/user/user_breached_by_phone
+          - intel/user/user_breached_by_username
+          - redact/redact_multiconfig
+          - redact/structured
+          - redact/text
+          - vault/encrypt
+          - vault/encrypt_structured
+          - vault/rotate
+          - vault/sign
+          - audit/log_bulk_async_with_vault
+          - vault/get
+  image: maven:3.9.6-eclipse-temurin-${JAVA_VERSION}
+  before_script:
+    - export PANGEA_AUDIT_CONFIG_ID="$(eval echo \$PANGEA_AUDIT_CONFIG_ID_1_LVE_AWS)"
+    - export PANGEA_AUDIT_CUSTOM_SCHEMA_TOKEN="$(eval echo \$PANGEA_INTEGRATION_CUSTOM_SCHEMA_TOKEN_LVE_AWS)"
+    - export PANGEA_AUDIT_MULTICONFIG_TOKEN="$(eval echo \$PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_LVE_AWS)"
+    - export PANGEA_AUDIT_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_AUTHN_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_DOMAIN_INTEL_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_DOMAIN="$(eval echo \$PANGEA_INTEGRATION_DOMAIN_LVE_AWS)"
+    - export PANGEA_EMBARGO_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_FILE_INTEL_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_FILE_SCAN_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_INTEL_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_IP_INTEL_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_REDACT_CONFIG_ID="$(eval echo \$PANGEA_REDACT_CONFIG_ID_1_LVE_AWS)"
+    - export PANGEA_REDACT_MULTICONFIG_TOKEN="$(eval echo \$PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_LVE_AWS)"
+    - export PANGEA_REDACT_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_URL_INTEL_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_USER_INTEL_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+    - export PANGEA_VAULT_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
+  script:
+    - cd examples/${EXAMPLE}
+    - mvn -B compile
+    - mvn -B exec:java -Dexec.mainClass=cloud.pangeacyber.examples.App

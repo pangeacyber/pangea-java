@@ -26,7 +26,6 @@ public class App
 	);
 	private static final Profile profileInitial = new Profile();
 	private static final Profile profileUpdate = new Profile();
-	private static String userID = ""; // Will be set once user is created
 
     public static void main( String[] args )
     {
@@ -52,7 +51,7 @@ public class App
                 new UserInviteRequest.Builder(
                     userEmail,
                     emailInviteKeep,
-                    "https://www.usgs.gov/faqs/what-was-pangea",
+                    "https://someurl.com/callbacklink",
                     "somestate")
                     .build()
             );
@@ -65,7 +64,7 @@ public class App
                 new UserInviteRequest.Builder(
                     userEmail,
                     emailInviteDelete,
-                    "https://www.usgs.gov/faqs/what-was-pangea",
+                    "https://someurl.com/callbacklink",
                     "somestate"
                     ).build()
                     );
@@ -89,12 +88,10 @@ public class App
                 new UserInviteListRequest.Builder().build()
             );
             System.out.println(String.format("There is %d invites.", inviteListResp1.getResult().getCount()));
-
 		} catch (PangeaAPIException | PangeaException e) {
             System.out.println("Something went wrong.");
 			System.out.println(e.toString());
 			System.exit(1);
 		}
-
     }
 }

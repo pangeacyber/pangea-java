@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -18,15 +19,21 @@ import cloud.pangeacyber.pangea.intel.models.IntelReputationData;
 import cloud.pangeacyber.pangea.intel.requests.*;
 import cloud.pangeacyber.pangea.intel.responses.*;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ITDomainIntelTest {
 
 	DomainIntelClient client;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	static TestEnvironment environment;
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		environment = Helper.loadTestEnvironment("domain-intel", TestEnvironment.LIVE);
+	}
 
 	@Before
-	public void setUp() throws ConfigException {
+	public void setUp() throws Exception {
 		client = new DomainIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
 
@@ -165,20 +172,20 @@ public class ITDomainIntelTest {
 		assertEquals(3, data.size());
 	}
 
-	// @Test
-	// public void testDomainWhoIs() throws PangeaException, PangeaAPIException {
-	// 	// Provider, verbose, raw
-	// 	DomainWhoIsResponse response = client.whoIs(
-	// 		new DomainWhoIsRequest.Builder("737updatesboeing.com").provider("whoisxml").verbose(true).raw(true).build()
-	// 	);
-	// 	assertTrue(response.isOk());
+	@Test
+	public void testDomainWhoIs() throws PangeaException, PangeaAPIException {
+		// Provider, verbose, raw
+		DomainWhoIsResponse response = client.whoIs(
+			new DomainWhoIsRequest.Builder("737updatesboeing.com").provider("whoisxml").verbose(true).raw(true).build()
+		);
+		assertTrue(response.isOk());
 
-	// 	DomainWhoIsData data = response.getResult().getData();
-	// 	assertNotNull(data.getDomainName());
-	// 	assertNotNull(data.getDomainAvailability());
-	// 	assertNotNull(response.getResult().getParameters());
-	// 	assertNotNull(response.getResult().getRawData());
-	// }
+		DomainWhoIsData data = response.getResult().getData();
+		assertNotNull(data.getDomainName());
+		assertNotNull(data.getDomainAvailability());
+		assertNotNull(response.getResult().getParameters());
+		assertNotNull(response.getResult().getRawData());
+	}
 
 	@Test
 	public void testDomainReputationNotFound() throws PangeaException, PangeaAPIException {

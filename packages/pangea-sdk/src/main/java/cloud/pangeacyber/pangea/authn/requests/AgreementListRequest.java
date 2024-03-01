@@ -59,6 +59,7 @@ public class AgreementListRequest extends BaseRequest {
 		/**
 		 * @deprecated Use setFilter(FilterAgreementList filter) instead
 		 */
+		@Deprecated
 		public Builder setFilter(Map<String, String> filter) {
 			this.filter = new Filter();
 			this.filter.putAll(filter);

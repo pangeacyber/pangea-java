@@ -442,6 +442,11 @@ public class AuditClient extends BaseClient {
 		return rootPost(treeSize);
 	}
 
+	// FIXME: Docs
+	public DownloadResponse DownloadResults(DownloadRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/download_results", request, DownloadResponse.class);
+	}
+
 	private void processSearchResult(ResultsOutput result, SearchConfig config)
 		throws PangeaException, PangeaAPIException {
 		if (config == null) {

@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.fileupload.MultipartStream;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.CookieSpecs;
@@ -407,8 +408,27 @@ public abstract class BaseClient {
 		} catch (IOException e) {
 			throw new PangeaException("Failed to read file", e);
 		}
-		// TODO: Read filename from content type once it's sent
-		return new AttachedFile("download.file", entity.getContentType().getValue(), buffer.toByteArray());
+
+		String filename = null;
+		// FIXME: Read filename from content disposition first when implemented in backend
+		// Header contentDisposition = response.getFirstHeader("Content-Disposition");
+		// if (contentDisposition != null) {
+		// 	String contentDispositionValue = contentDisposition.getValue();
+		// }
+
+		if (filename == null) {
+			filename = getFilenameFromURL(url);
+		}
+		if (filename == null) {
+			filename = "default_filename";
+		}
+
+		return new AttachedFile(filename, entity.getContentType().getValue(), buffer.toByteArray());
+	}
+
+	private String getFilenameFromURL(String url) {
+		String[] parts = url.split("/");
+		return parts[parts.length - 1].split("\\?")[0];
 	}
 
 	private InternalHttpResponse doGet(String path) throws PangeaException {

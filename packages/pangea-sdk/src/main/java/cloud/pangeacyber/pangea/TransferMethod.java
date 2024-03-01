@@ -6,7 +6,8 @@ public enum TransferMethod {
 	SOURCE_URL("source_url"),
 	MULTIPART("multipart"),
 	POST_URL("post-url"),
-	PUT_URL("put-url");
+	PUT_URL("put-url"),
+	DEST_URL("dest-url");
 
 	private final String text;
 

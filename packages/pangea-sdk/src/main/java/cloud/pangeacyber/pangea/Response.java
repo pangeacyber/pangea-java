@@ -4,6 +4,7 @@ import cloud.pangeacyber.pangea.exceptions.AcceptedResult;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import org.apache.http.client.methods.CloseableHttpResponse;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,6 +18,9 @@ public class Response<Result> extends ResponseHeader {
 
 	@JsonIgnore
 	AcceptedResult acceptedResult;
+
+	@JsonIgnore
+	List<AttachedFile> attachedFiles;
 
 	@JsonIgnore
 	String body = "";
@@ -34,6 +38,7 @@ public class Response<Result> extends ResponseHeader {
 	protected void setHttpResponse(InternalHttpResponse httpResponse) {
 		this.httpResponse = httpResponse.getResponse();
 		this.body = httpResponse.getBody();
+		this.attachedFiles = httpResponse.getAttachedFiles();
 	}
 
 	public String getBody() {
@@ -50,5 +55,9 @@ public class Response<Result> extends ResponseHeader {
 		this.result = null;
 		this.body = response.getBody();
 		this.httpResponse = response.getHttpResponse();
+	}
+
+	public List<AttachedFile> getAttachedFiles() {
+		return attachedFiles;
 	}
 }

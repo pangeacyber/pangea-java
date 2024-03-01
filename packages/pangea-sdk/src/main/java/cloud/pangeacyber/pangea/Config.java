@@ -16,6 +16,7 @@ public final class Config {
 	/**
 	 * @deprecated set configID in service builder.
 	 */
+	@Deprecated
 	String configID;
 
 	// Set to true to use plain http
@@ -251,6 +252,7 @@ public final class Config {
 		/**
 		 * @deprecated set configID in service builder.
 		 */
+		@Deprecated
 		public Builder configID(String configID) {
 			this.configID = configID;
 			return this;

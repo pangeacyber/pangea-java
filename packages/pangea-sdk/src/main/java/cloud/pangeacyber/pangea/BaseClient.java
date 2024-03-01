@@ -4,14 +4,19 @@ import cloud.pangeacyber.pangea.exceptions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import org.apache.commons.fileupload.MultipartStream;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.CookieSpecs;
@@ -44,10 +49,79 @@ final class InternalHttpResponse {
 
 	CloseableHttpResponse response;
 	String body;
+	List<AttachedFile> attachedFiles = new LinkedList<>();
 
 	public InternalHttpResponse(CloseableHttpResponse response) throws PangeaException {
 		this.response = response;
-		this.body = readBody(response);
+		HttpEntity entity = response.getEntity();
+		// Check if the entity is multipart
+		try {
+			if (
+				entity != null &&
+				entity.getContentType() != null &&
+				entity.getContentType().getValue() != null &&
+				entity.getContentType().getValue().contains("multipart")
+			) {
+				String boundary = getBoundary(entity.getContentType().getValue());
+
+				// Get the input stream from the entity
+				try (InputStream inputStream = entity.getContent()) {
+					// Create a MultipartStream
+					MultipartStream multipartStream = new MultipartStream(inputStream, boundary.getBytes(), 4096, null);
+
+					int partNumber = 0;
+
+					// Iterate through each part
+					boolean nextPart = multipartStream.skipPreamble();
+					while (nextPart) {
+						String header = multipartStream.readHeaders();
+
+						// Process part data
+						ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+						multipartStream.readBodyData(buffer);
+						byte[] partData = buffer.toByteArray();
+
+						if (partNumber == 0) {
+							this.body = new String(partData);
+						} else {
+							String filename = getHeaderField(header, "filename=", "defaultFilename");
+							String contentType = getHeaderField(header, "Content-Type:", "");
+							AttachedFile attachedFile = new AttachedFile(filename, contentType, partData);
+							this.attachedFiles.add(attachedFile);
+						}
+
+						// Move to the next part
+						nextPart = multipartStream.readBoundary();
+						partNumber++;
+					}
+				}
+			} else {
+				this.body = readBody(response);
+			}
+		} catch (Exception e) {
+			throw new PangeaException(String.format("Failed to parse http response: %s", e.toString()), e);
+		}
+	}
+
+	private String getBoundary(String contentType) throws PangeaException {
+		String boundary = getHeaderField(contentType, "boundary=", null);
+		if (boundary != null) {
+			return boundary;
+		}
+		throw new PangeaException(
+			String.format("Could not parse boundary from Content-Type header: %s", contentType),
+			null
+		);
+	}
+
+	private String getHeaderField(String header, String field, String defaultValue) {
+		if (!header.contains(field)) {
+			return defaultValue;
+		}
+
+		String[] parts = header.split(field);
+		String namePart = parts.length > 1 ? parts[1] : parts[0];
+		return namePart.split("\n")[0].trim().split(" ")[0].replace("\"", "").replace("\r", "");
 	}
 
 	private String readBody(CloseableHttpResponse response) throws PangeaException {
@@ -60,7 +134,6 @@ final class InternalHttpResponse {
 		try {
 			body = EntityUtils.toString(entity, StandardCharsets.UTF_8);
 		} catch (Exception e) {
-			System.out.println(e.toString());
 			throw new PangeaException("Failed to read response body", e);
 		}
 		return body;
@@ -72,6 +145,10 @@ final class InternalHttpResponse {
 
 	public String getBody() {
 		return body;
+	}
+
+	public List<AttachedFile> getAttachedFiles() {
+		return attachedFiles;
 	}
 }
 
@@ -310,6 +387,30 @@ public abstract class BaseClient {
 		return checkResponse(response, responseClass, path);
 	}
 
+	public AttachedFile downloadFile(String url) throws PangeaException {
+		HttpGet httpGet = new HttpGet(url);
+		CloseableHttpResponse response;
+		try {
+			response = httpClient.execute(httpGet);
+		} catch (IOException e) {
+			throw new PangeaException("Failed to download file", e);
+		}
+
+		HttpEntity entity = response.getEntity();
+		if (entity == null) {
+			throw new PangeaException("Failed to download file", null);
+		}
+
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		try {
+			entity.writeTo(buffer);
+		} catch (IOException e) {
+			throw new PangeaException("Failed to read file", e);
+		}
+		// TODO: Read filename from content type once it's sent
+		return new AttachedFile("download.file", entity.getContentType().getValue(), buffer.toByteArray());
+	}
+
 	private InternalHttpResponse doGet(String path) throws PangeaException {
 		URI uri = config.getServiceUrl(serviceName, path);
 		try {
@@ -379,7 +480,10 @@ public abstract class BaseClient {
 		URI url = config.getServiceUrl(serviceName, path);
 		InternalHttpResponse response;
 
-		if (request.getTransferMethod() == TransferMethod.POST_URL) {
+		if (
+			request.getTransferMethod() == TransferMethod.POST_URL ||
+			(fileData != null && request.getTransferMethod() == null)
+		) {
 			response = fullPostPresignedURL(url, request, fileData);
 		} else {
 			response = postSingle(url, request, fileData);
@@ -476,7 +580,6 @@ public abstract class BaseClient {
 		try {
 			psURLresponse = executeRequest(request);
 		} catch (Exception e) {
-			System.out.println(e.toString());
 			throw new PresignedURLException("Failed to upload to presigned URL", e, null);
 		}
 

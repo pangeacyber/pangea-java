@@ -63,6 +63,7 @@ public class CommonSessionListRequest extends BaseRequest {
 		/**
 		 * @deprecated Use setFilter(FilterSessionList filter) instead
 		 */
+		@Deprecated
 		public B setFilter(Filter filter) {
 			this.filter = new Filter();
 			this.filter.putAll(filter);

@@ -13,6 +13,7 @@ import cloud.pangeacyber.pangea.store.requests.*;
 import cloud.pangeacyber.pangea.store.responses.*;
 import java.io.File;
 
+/// TODO: Docs
 public class StoreClient extends BaseClient {
 
 	public static final String serviceName = "store";
@@ -115,4 +116,10 @@ public class StoreClient extends BaseClient {
 		throws PangeaException, PangeaAPIException {
 		return post("/v1beta/share/link/delete", request, ShareLinkDeleteResponse.class);
 	}
+
+	public ShareLinkSendResponse shareLinkSend(ShareLinkSendRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/share/link/send", request, ShareLinkSendResponse.class);
+	}
+
 }

@@ -137,4 +137,20 @@ public class ShareLinkCreateItem {
 			return new ShareLinkCreateItem(this);
 		}
 	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public String getNotifyEmail() {
+		return notifyEmail;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
 }

@@ -70,7 +70,7 @@ public class Utils {
 				size += bytesRead;
 				crc32c.update(buffer, 0, bytesRead);
 			}
-			crc = Hexdump.toHexString(crc32c.getValue(), 8);
+			crc = Hexdump.toHexString(crc32c.getValue(), 8).toLowerCase();
 		} catch (IOException e) {
 			throw new PangeaException(String.format("Failed to read file: %s", file.getAbsolutePath()), e);
 		}

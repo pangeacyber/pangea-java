@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import cloud.pangeacyber.pangea.AttachedFile;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.FileData;
+import cloud.pangeacyber.pangea.FileUploader;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.TransferMethod;
 import cloud.pangeacyber.pangea.Utils;
@@ -124,7 +125,7 @@ public class ITShareTest {
 
 		FileData fileData = new FileData(file, "file", details);
 
-		ShareFileUploader fileUploader = new ShareFileUploader.Builder().build();
+		FileUploader fileUploader = new FileUploader.Builder().build();
 		fileUploader.uploadFile(url, TransferMethod.POST_URL, fileData);
 
 		PutResponse response;
@@ -156,7 +157,7 @@ public class ITShareTest {
 		File file = new File(TESTFILE_PATH);
 		FileData fileData = new FileData(file, "file");
 
-		ShareFileUploader fileUploader = new ShareFileUploader.Builder().build();
+		FileUploader fileUploader = new FileUploader.Builder().build();
 		fileUploader.uploadFile(url, TransferMethod.PUT_URL, fileData);
 
 		PutResponse response;

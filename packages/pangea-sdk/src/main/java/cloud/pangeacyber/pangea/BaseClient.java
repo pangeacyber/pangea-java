@@ -30,6 +30,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
@@ -291,17 +292,21 @@ public abstract class BaseClient {
 		return httpPost;
 	}
 
-	protected HttpUriRequest buildRequestPresignedURL(URI url, TransferMethod transferMethod, FileData fileData) {
-		HttpEntityEnclosingRequestBase httpRequest;
-		if (transferMethod == TransferMethod.PUT_URL) {
-			httpRequest = new HttpPut(url);
-		} else {
-			httpRequest = new HttpPost(url);
-		}
+	protected HttpEntityEnclosingRequestBase buildPresignedURLPutRequest(URI url, FileData fileData)
+		throws UnsupportedEncodingException {
+		HttpPut httpPut = new HttpPut(url);
+		FileEntity fileEntity = new FileEntity(fileData.getFile(), ContentType.APPLICATION_OCTET_STREAM);
+		httpPut.setEntity(fileEntity);
+		return httpPut;
+	}
 
+	protected HttpEntityEnclosingRequestBase buildPresignedURLPostRequest(URI url, FileData fileData)
+		throws UnsupportedEncodingException {
+		HttpEntityEnclosingRequestBase httpRequest;
+		httpRequest = new HttpPost(url);
 		final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
-		if (fileData.getDetails() != null && transferMethod == TransferMethod.POST_URL) {
+		if (fileData.getDetails() != null) {
 			for (Map.Entry<String, Object> entry : fileData.getDetails().entrySet()) {
 				if (entry.getValue() instanceof String) {
 					final StringBody requestBody = new StringBody(
@@ -318,6 +323,15 @@ public abstract class BaseClient {
 		final HttpEntity entity = builder.build();
 		httpRequest.setEntity(entity);
 		return httpRequest;
+	}
+
+	protected HttpUriRequest buildRequestPresignedURL(URI url, TransferMethod transferMethod, FileData fileData)
+		throws UnsupportedEncodingException {
+		if (transferMethod == TransferMethod.POST_URL) {
+			return buildPresignedURLPostRequest(url, fileData);
+		} else {
+			return buildPresignedURLPutRequest(url, fileData);
+		}
 	}
 
 	protected void fillHeaders(HttpRequestBase request) {
@@ -578,7 +592,7 @@ public abstract class BaseClient {
 	}
 
 	protected void uploadPresignedURL(String url, TransferMethod transferMethod, FileData fileData)
-		throws PresignedURLException {
+		throws PresignedURLException, PangeaException {
 		URI uri;
 		try {
 			uri = URI.create(url);
@@ -586,7 +600,13 @@ public abstract class BaseClient {
 			throw new PresignedURLException(String.format("Failed to read presigned URL: %s", url), e, null);
 		}
 
-		HttpUriRequest request = buildRequestPresignedURL(uri, transferMethod, fileData);
+		HttpUriRequest request;
+		try {
+			request = buildRequestPresignedURL(uri, transferMethod, fileData);
+		} catch (UnsupportedEncodingException e) {
+			throw new PangeaException("Failed to encode file when put/post to presigned URL", e);
+		}
+
 		this.logger.debug(
 				String.format(
 					"{\"service\": \"%s\", \"action\": \"upload presigned url\", \"url\": \"%s\", \"transfer method\": \"%s\"}",

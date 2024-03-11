@@ -1,16 +1,13 @@
-package cloud.pangeacyber.pangea.share;
+package cloud.pangeacyber.pangea;
 
-import cloud.pangeacyber.pangea.BaseClient;
-import cloud.pangeacyber.pangea.FileData;
-import cloud.pangeacyber.pangea.TransferMethod;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.PresignedURLException;
 
-public class ShareFileUploader extends BaseClient {
+public class FileUploader extends BaseClient {
 
-	public static String serviceName = "ShareFileUploader";
+	public static String serviceName = "FileUploader";
 
-	public ShareFileUploader(Builder builder) {
+	public FileUploader(Builder builder) {
 		super(builder, serviceName);
 	}
 
@@ -18,8 +15,8 @@ public class ShareFileUploader extends BaseClient {
 
 		public Builder() {}
 
-		public ShareFileUploader build() {
-			return new ShareFileUploader(this);
+		public FileUploader build() {
+			return new FileUploader(this);
 		}
 	}
 
@@ -31,7 +28,7 @@ public class ShareFileUploader extends BaseClient {
 
 		if (transferMethod == TransferMethod.MULTIPART) {
 			throw new PangeaException(
-				String.format("%s not supported. Use ShareClient.put() instead", transferMethod),
+				String.format("%s not supported. Use service client instead", transferMethod),
 				null
 			);
 		}

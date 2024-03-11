@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Audit /download_results endpoint support
 
+### Fixed
+
+- Put to presigned url. It should just put file in raw, not in form format.
+
 
 ## [3.7.0] - 2024-02-26
 

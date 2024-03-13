@@ -34,6 +34,10 @@ public class AttachedFile {
 	}
 
 	public void save(Path path) throws PangeaException {
+		if (path == null) {
+			throw new PangeaException("path param is null", null);
+		}
+
 		try {
 			path = AttachedFile.findAvailableFile(path);
 		} catch (IOException e) {}

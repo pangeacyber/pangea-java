@@ -68,6 +68,24 @@ OS name: "mac os x", version: "13.0.1", arch: "aarch64", family: "mac"
 $ mvn clean && mvn compile
 ```
 
+## Publishing
+
+Publishing pangea-sdk to Maven Central is handled via a private GitLab CI
+pipeline. This pipeline is triggered when a Git tag is pushed to the repository.
+Git tags should be formatted as `vX.Y.Z`, where `vX.Y.Z` is the version number
+to publish.
+
+1. Update `<version>` in `packages/pangea-sdk/pom.xml`.
+2. Update the `Version` value in `packages/pangea-sdk/src/main/java/cloud/pangeacyber/pangea/Version.java`.
+3. Update the release notes in `CHANGELOG.md`.
+4. Author a commit with these changes and land it on `main`.
+5. `git tag -m v1.0.0 v1.0.0 0000000`. Replace `v1.0.0` with the new version
+  number and `0000000` with the commit SHA from the previous step.
+6. `git push --tags origin main`.
+
+From here the GitLab CI pipeline will pick up the pushed Git tag and publish
+the package to Maven Central.
+
 ## Contributors
 
 - Andrés Tournour (andres.tournour@gmail.com). Code.

@@ -5,3 +5,4 @@ pangea_sdk_logs.json
 *.exe
 *.zip
 *.tar
+*.gz

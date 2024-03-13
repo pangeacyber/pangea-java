@@ -151,6 +151,9 @@ public class Arweave {
 
 	private PublishedRoot doGetRoot(String nodeID) {
 		HttpResponse<String> httpResponse = doGet(getTransactionURL(nodeID));
+		if (httpResponse == null) {
+			return null;
+		}
 		String body = httpResponse.body();
 		ObjectMapper mapper = new ObjectMapper();
 		PublishedRoot root;

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import cloud.pangeacyber.pangea.AttachedFile;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
@@ -14,6 +15,7 @@ import cloud.pangeacyber.pangea.audit.responses.*;
 import cloud.pangeacyber.pangea.audit.results.LogBulkResult;
 import cloud.pangeacyber.pangea.audit.results.RootResult;
 import cloud.pangeacyber.pangea.exceptions.*;
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.junit.Before;
@@ -1072,5 +1074,30 @@ public class ITAuditTest {
 		assertNotNull(response.getStatus());
 		assertNotNull(response.getResponseTime());
 		assertNotNull(response.getRequestTime());
+	}
+
+	@Test
+	public void testDownloadSearch() throws PangeaAPIException, PangeaException {
+		int maxResults = 10;
+		SearchRequest request = new SearchRequest.Builder("message:sign-test-local")
+			.maxResults(maxResults)
+			.start("21d")
+			.build();
+
+		SearchConfig config = new SearchConfig.Builder().build();
+
+		SearchResponse response = clientGeneral.search(request, config);
+		assertTrue(response.isOk());
+		assertNotNull(response.getResult().getId());
+		assertTrue(response.getResult().getCount() <= maxResults);
+
+		DownloadResponse downloadResp = clientGeneral.DownloadResults(
+			new DownloadRequest.Builder(response.getResult().getId()).format(DownloadFormat.CSV).build()
+		);
+		assertTrue(downloadResp.isOk());
+		assertNotNull(downloadResp.getResult().getDestURL());
+
+		AttachedFile file = clientGeneral.downloadFile(downloadResp.getResult().getDestURL());
+		file.save(Path.of("./", file.getFilename()));
 	}
 }

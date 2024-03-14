@@ -24,7 +24,7 @@ pushd "$PARENT_PATH/.."
 POM_VERSION=$(grep -Eo "<version>.+<\/version>" packages/pangea-sdk/pom.xml | head -1)
 
 if [[ ! "$POM_VERSION" == *"$GIT_TAG"* ]]; then
-    echo "Git tag version '$GIT_TAG' does not match csproj file version '$POM_VERSION'."
+    echo "Git tag version '$GIT_TAG' does not match pom.xml file version '$POM_VERSION'."
     exit 1
 fi
 

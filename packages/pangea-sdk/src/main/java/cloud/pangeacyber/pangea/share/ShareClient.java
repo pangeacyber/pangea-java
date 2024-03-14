@@ -69,6 +69,8 @@ public class ShareClient extends BaseClient {
 			request.setCRC32c(fileParams.getCRC32C());
 			request.setSHA256(fileParams.getSHA256());
 			request.setSize(fileParams.getSize());
+		} else if (Utils.getFileSize(file) == 0) {
+			request.setSize(0);
 		}
 
 		FileData fileData = new FileData(file, "file");

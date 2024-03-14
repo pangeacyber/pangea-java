@@ -32,6 +32,7 @@ public class ITShareTest {
 	ShareClient client;
 	TestEnvironment environment = TestEnvironment.DEVELOP;
 	final String TESTFILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/testfile.pdf";
+	final String ZERO_BYTES_FILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/zerobytes.txt";
 	private String FOLDER_DELETE;
 	private String FOLDER_FILES;
 	private final Metadata metadata = new Metadata();
@@ -88,6 +89,58 @@ public class ITShareTest {
 		);
 
 		assertTrue(respPut.isOk());
+		String id = respPut.getResult().getObject().getID();
+		assertNotNull(id);
+
+		// Get multipart
+		GetResponse respGet = client.get(
+			new GetRequest.Builder().id(id).transferMethod(TransferMethod.MULTIPART).build()
+		);
+
+		assertTrue(respGet.isOk());
+		assertNull(respGet.getResult().getDestUrl());
+		assertEquals(respGet.getAttachedFiles().size(), 1);
+		AttachedFile attachedFile = respGet.getAttachedFiles().get(0);
+		attachedFile.save(Paths.get("./download/", attachedFile.getFilename()));
+
+		// Get dest-url
+		respGet = client.get(new GetRequest.Builder().id(id).transferMethod(TransferMethod.DEST_URL).build());
+
+		assertTrue(respGet.isOk());
+		assertEquals(respGet.getAttachedFiles().size(), 0);
+		assertNotNull(respGet.getResult().getDestUrl());
+	}
+
+	@Test
+	public void testPut_ZeroBytes_TransferMethod_PostURL() throws PangeaException, PangeaAPIException {
+		File file = new File(ZERO_BYTES_FILE_PATH);
+		String name = time + "_file_post_url";
+		PutResponse respPut = client.put(
+			new PutRequest.Builder().name(name).transferMethod(TransferMethod.POST_URL).build(),
+			file
+		);
+
+		assertTrue(respPut.isOk());
+		String id = respPut.getResult().getObject().getID();
+		assertNotNull(id);
+
+		// Get multipart
+		GetResponse respGet = client.get(
+			new GetRequest.Builder().id(id).transferMethod(TransferMethod.MULTIPART).build()
+		);
+
+		assertTrue(respGet.isOk());
+		assertNull(respGet.getResult().getDestUrl());
+		assertEquals(respGet.getAttachedFiles().size(), 1);
+		AttachedFile attachedFile = respGet.getAttachedFiles().get(0);
+		attachedFile.save(Paths.get("./download/", attachedFile.getFilename()));
+
+		// Get dest-url
+		respGet = client.get(new GetRequest.Builder().id(id).transferMethod(TransferMethod.DEST_URL).build());
+
+		assertTrue(respGet.isOk());
+		assertEquals(respGet.getAttachedFiles().size(), 0);
+		assertNull(respGet.getResult().getDestUrl());
 	}
 
 	@Test
@@ -101,6 +154,61 @@ public class ITShareTest {
 		);
 
 		assertTrue(respPut.isOk());
+
+		String id = respPut.getResult().getObject().getID();
+		assertNotNull(id);
+
+		// Get multipart
+		GetResponse respGet = client.get(
+			new GetRequest.Builder().id(id).transferMethod(TransferMethod.MULTIPART).build()
+		);
+
+		assertTrue(respGet.isOk());
+		assertNull(respGet.getResult().getDestUrl());
+		assertEquals(respGet.getAttachedFiles().size(), 1);
+		AttachedFile attachedFile = respGet.getAttachedFiles().get(0);
+		attachedFile.save(Paths.get("./download/", attachedFile.getFilename()));
+
+		// Get dest-url
+		respGet = client.get(new GetRequest.Builder().id(id).transferMethod(TransferMethod.DEST_URL).build());
+
+		assertTrue(respGet.isOk());
+		assertEquals(respGet.getAttachedFiles().size(), 0);
+		assertNotNull(respGet.getResult().getDestUrl());
+	}
+
+	@Test
+	public void testPut_ZeroBytes_TransferMethod_Multipart() throws PangeaException, PangeaAPIException {
+		File file = new File(ZERO_BYTES_FILE_PATH);
+		String name = time + "_file_multipart";
+
+		PutResponse respPut = client.put(
+			new PutRequest.Builder().name(name).transferMethod(TransferMethod.MULTIPART).build(),
+			file
+		);
+
+		assertTrue(respPut.isOk());
+
+		String id = respPut.getResult().getObject().getID();
+		assertNotNull(id);
+
+		// Get multipart
+		GetResponse respGet = client.get(
+			new GetRequest.Builder().id(id).transferMethod(TransferMethod.MULTIPART).build()
+		);
+
+		assertTrue(respGet.isOk());
+		assertNull(respGet.getResult().getDestUrl());
+		assertEquals(respGet.getAttachedFiles().size(), 1);
+		AttachedFile attachedFile = respGet.getAttachedFiles().get(0);
+		attachedFile.save(Paths.get("./download/", attachedFile.getFilename()));
+
+		// Get dest-url
+		respGet = client.get(new GetRequest.Builder().id(id).transferMethod(TransferMethod.DEST_URL).build());
+
+		assertTrue(respGet.isOk());
+		assertEquals(respGet.getAttachedFiles().size(), 0);
+		assertNull(respGet.getResult().getDestUrl());
 	}
 
 	@Test
@@ -264,6 +372,8 @@ public class ITShareTest {
 
 		for (AttachedFile attachedFile : respGetArchive.getAttachedFiles()) {
 			assertEquals(attachedFile.getContentType(), "application/octet-stream");
+			attachedFile.save(Paths.get("./download/", time, "archive.tar"));
+			// Test double save. Should save it anyway creating a new "_1" postfix file
 			attachedFile.save(Paths.get("./download/", time, "archive.tar"));
 		}
 

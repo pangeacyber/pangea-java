@@ -83,6 +83,21 @@ public class Utils {
 		return new FileParams(size, sha256, crc);
 	}
 
+	public static int getFileSize(File file) throws PangeaException {
+		int size = 0;
+		byte[] buffer = new byte[8192]; // Buffer size can be adjusted
+		int bytesRead;
+
+		try (InputStream inputStream = new FileInputStream(file)) {
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				size += bytesRead;
+			}
+		} catch (IOException e) {
+			throw new PangeaException(String.format("Failed to read file: %s", file.getAbsolutePath()), e);
+		}
+		return size;
+	}
+
 	public static FileParams getFileUploadParams(String filepath) throws PangeaException {
 		File file = null;
 		try {

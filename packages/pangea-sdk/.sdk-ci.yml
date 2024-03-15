@@ -85,8 +85,7 @@ java-sdk-integration-tests:
       - CLOUD: [AWS, GCP]
         ENV: ${SERVICE_SHARE_ENV}
         TEST: ITShareTest
-  rules:
-      allow_failure: false
+  allow_failure: false
   script:
     - mvn $MAVEN_CLI_OPTS test -Dtest=${TEST}
 

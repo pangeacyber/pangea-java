@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DownloadResult {
-
+	/**
+	 * URL where search results can be downloaded.
+	 */
 	@JsonProperty("dest_url")
 	String destURL;
 

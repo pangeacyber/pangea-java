@@ -79,6 +79,15 @@ try {
 }
 ```
 
+<a name="beta-releases"></a>
+
+## Beta releases
+
+Pre-release versions may be available with the `beta` denotation in the version
+number. These releases serve to preview beta services and APIs. Per Semantic
+Versioning, they are considered unstable and do not carry the same compatibility
+guarantees as stable releases.
+
 
 
    [Documentation]: https://pangea.cloud/docs/sdk/java/

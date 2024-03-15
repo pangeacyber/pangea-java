@@ -6,6 +6,7 @@ import cloud.pangeacyber.pangea.AttachedFile;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.FileData;
 import cloud.pangeacyber.pangea.FileUploader;
+import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.TransferMethod;
 import cloud.pangeacyber.pangea.Utils;
@@ -25,12 +26,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ITShareTest {
 
 	ShareClient client;
-	TestEnvironment environment = TestEnvironment.DEVELOP;
+	static TestEnvironment environment;
 	final String TESTFILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/testfile.pdf";
 	final String ZERO_BYTES_FILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/zerobytes.txt";
 	private String FOLDER_DELETE;
@@ -40,6 +42,11 @@ public class ITShareTest {
 	private final Tags tags = new Tags();
 	private final Tags addTags = new Tags();
 	String time;
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		environment = Helper.loadTestEnvironment("share", TestEnvironment.LIVE);
+	}
 
 	@Before
 	public void setUp() throws ConfigException {

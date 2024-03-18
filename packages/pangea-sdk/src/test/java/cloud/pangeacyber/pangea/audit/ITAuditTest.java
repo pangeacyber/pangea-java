@@ -1091,7 +1091,7 @@ public class ITAuditTest {
 		assertNotNull(response.getResult().getId());
 		assertTrue(response.getResult().getCount() <= maxResults);
 
-		DownloadResponse downloadResp = clientGeneral.DownloadResults(
+		var downloadResp = clientGeneral.downloadResults(
 			new DownloadRequest.Builder(response.getResult().getId()).format(DownloadFormat.CSV).build()
 		);
 		assertTrue(downloadResp.isOk());

@@ -2,7 +2,7 @@ variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode --errors"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
-.java-sdk-base:
+.sdk-base:
   before_script:
     - export PANGEA_INTEGRATION_TOKEN_LVE="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
     - export PANGEA_INTEGRATION_DOMAIN_LVE="$(eval echo \$PANGEA_INTEGRATION_DOMAIN_LVE_AWS)"
@@ -10,7 +10,7 @@ variables:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
 
-java-sdk-integration-tests:
+sdk-integration-tests:
   stage: integration_tests
   variables:
   # Set each service test environment
@@ -30,15 +30,15 @@ java-sdk-integration-tests:
     - echo $ENV
     - echo $CLOUD
     - echo $TEST
-  # Update environment variables
-  # Domain
+    # Update environment variables
+    # Domain
     - export PANGEA_INTEGRATION_DOMAIN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_DOMAIN_${ENV}_${CLOUD})"
-  # Tokens
+    # Tokens
     - export PANGEA_INTEGRATION_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_TOKEN_${ENV}_${CLOUD})"
     - export PANGEA_INTEGRATION_VAULT_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_VAULT_TOKEN_${ENV}_${CLOUD})"
     - export PANGEA_INTEGRATION_CUSTOM_SCHEMA_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_CUSTOM_SCHEMA_TOKEN_${ENV}_${CLOUD})"
     - export PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_${ENV}="$(eval echo \$PANGEA_INTEGRATION_MULTI_CONFIG_TOKEN_${ENV}_${CLOUD})"
-  # Config IDs
+    # Config IDs
     - export PANGEA_AUDIT_CONFIG_ID_1_${ENV}="$(eval echo \$PANGEA_AUDIT_CONFIG_ID_1_${ENV}_${CLOUD})"
     - export PANGEA_AUDIT_CONFIG_ID_2_${ENV}="$(eval echo \$PANGEA_AUDIT_CONFIG_ID_2_${ENV}_${CLOUD})"
     - export PANGEA_REDACT_CONFIG_ID_1_${ENV}="$(eval echo \$PANGEA_REDACT_CONFIG_ID_1_${ENV}_${CLOUD})"
@@ -82,32 +82,26 @@ java-sdk-integration-tests:
         ENV: ${SERVICE_VAULT_ENV}
         TEST: ITVaultTest
   rules:
-    - if: '$CLOUD == "GCP" && $TEST == "ITFileScanTest"'
+    - if: $CI_COMMIT_BRANCH && '$CLOUD == "GCP" && $TEST == "ITFileScanTest"'
       allow_failure: true
-    - if: '$CLOUD == "GCP" && $TEST != "ITFileScanTest"'
+    - if: $CI_COMMIT_BRANCH && '$CLOUD == "GCP" && $TEST != "ITFileScanTest"'
       allow_failure: false
-    - if: '$CLOUD != "GCP"'
+    - if: $CI_COMMIT_BRANCH && '$CLOUD != "GCP"'
       allow_failure: false
   script:
     - mvn $MAVEN_CLI_OPTS test -Dtest=${TEST}
 
-.java-sdk-publish:
-  before_script:
-    - cd packages/pangea-sdk
-  rules:
-    - if: $CI_COMMIT_BRANCH == "release"
-      changes:
-        - packages/pangea-sdk/**/*
-      when: on_success
-
 building-sdk:
-  extends: .java-sdk-base
+  extends: .sdk-base
   stage: build
   script:
     - mvn $MAVEN_CLI_OPTS compile
 
 publishing-sdk:
-  extends: .java-sdk-publish
+  extends: .sdk-base
   stage: publish
   script:
+    - bash ../../dev/validate_tag.sh $CI_COMMIT_TAG
     - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true
+  rules:
+    - if: $CI_COMMIT_TAG

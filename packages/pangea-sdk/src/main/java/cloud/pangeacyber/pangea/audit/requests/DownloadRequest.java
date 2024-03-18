@@ -7,10 +7,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DownloadRequest extends BaseRequest {
-
+	/**
+	 * ID returned by the search API.
+	 */
 	@JsonProperty("result_id")
 	String resultID;
 
+	/**
+	 * Format for the records.
+	 */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("format")
 	DownloadFormat format;

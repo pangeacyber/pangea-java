@@ -85,3 +85,5 @@ examples:
     - cd examples/${EXAMPLE}
     - mvn -B compile
     - mvn -B exec:java -Dexec.mainClass=cloud.pangeacyber.examples.App
+  rules:
+    - if: $CI_COMMIT_BRANCH

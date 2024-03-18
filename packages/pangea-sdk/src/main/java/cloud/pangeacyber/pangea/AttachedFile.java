@@ -50,7 +50,6 @@ public class AttachedFile {
 		try {
 			Files.write(path, this.fileContent);
 		} catch (IOException e) {
-			System.out.println(e.toString());
 			throw new PangeaException("Failed to write file", e);
 		}
 	}

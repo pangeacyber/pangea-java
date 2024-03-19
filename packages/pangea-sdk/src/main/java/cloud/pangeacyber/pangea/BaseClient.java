@@ -123,7 +123,7 @@ final class InternalHttpResponse {
 		String[] parts = header.split(field);
 		String namePart = parts.length > 1 ? parts[1] : parts[0];
 		String value = namePart.split("\n")[0].trim().split(" ")[0].replace("\"", "").replace("\r", "");
-		if (value.length() == 0) {
+		if (value.isEmpty()) {
 			return defaultValue;
 		}
 		return value;

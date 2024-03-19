@@ -83,7 +83,7 @@ public class Utils {
 		return new FileParams(size, sha256, crc);
 	}
 
-	public static long getFileSize(File file) throws PangeaException {
+	public static long getFileSize(File file) {
 		return file.length();
 	}
 

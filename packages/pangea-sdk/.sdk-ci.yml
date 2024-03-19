@@ -25,6 +25,7 @@ sdk-integration-tests:
     SERVICE_USER_INTEL_ENV: LVE
     SERVICE_REDACT_ENV: LVE
     SERVICE_VAULT_ENV: LVE
+    SERVICE_AUTHZ_ENV: DEV
 
   before_script:
     - echo $ENV
@@ -81,6 +82,9 @@ sdk-integration-tests:
       - CLOUD: [AWS, GCP]
         ENV: ${SERVICE_VAULT_ENV}
         TEST: ITVaultTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_AUTHZ_ENV}
+        TEST: ITAuthZTest
   rules:
     - if: $CI_COMMIT_BRANCH && '$CLOUD == "GCP" && $TEST == "ITFileScanTest"'
       allow_failure: true

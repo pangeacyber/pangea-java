@@ -7,3 +7,4 @@ pangea_sdk_logs.json
 *.tar
 *.gz
 *.csv
+packages/pangea-sdk/download/

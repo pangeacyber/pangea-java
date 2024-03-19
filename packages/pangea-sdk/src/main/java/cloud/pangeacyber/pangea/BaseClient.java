@@ -128,7 +128,11 @@ final class InternalHttpResponse {
 
 		String[] parts = header.split(field);
 		String namePart = parts.length > 1 ? parts[1] : parts[0];
-		return namePart.split("\n")[0].trim().split(" ")[0].replace("\"", "").replace("\r", "");
+		String value = namePart.split("\n")[0].trim().split(" ")[0].replace("\"", "").replace("\r", "");
+		if (value.isEmpty()) {
+			return defaultValue;
+		}
+		return value;
 	}
 
 	private String readBody(HttpResponse response) throws PangeaException {
@@ -751,6 +755,10 @@ public abstract class BaseClient {
 	) throws PangeaException, PangeaAPIException {
 		InternalHttpResponse response = postSingle(url, request, null);
 		AcceptedResponse responseAccepted = checkResponse(response, AcceptedResponse.class, url.toString());
+		if (responseAccepted.isOk()) {
+			return response;
+		}
+
 		responseAccepted = this.pollPresignedURL(responseAccepted);
 
 		String presignedURL = responseAccepted.getResult().getPostURL();

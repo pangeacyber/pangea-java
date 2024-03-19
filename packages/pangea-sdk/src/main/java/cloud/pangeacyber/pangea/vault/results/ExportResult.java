@@ -72,7 +72,7 @@ public final class ExportResult {
 	/**
 	 * Salt used to derivate the symmetric key when `encryption_type` is `kem`,
 	 * encrypted with the public key provided in `asymmetric_key`.
-     */
+	 */
 	@JsonProperty("encrypted_salt")
 	private String encryptedSalt;
 

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DownloadRequest extends BaseRequest {
+
 	/**
 	 * ID returned by the search API.
 	 */

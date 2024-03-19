@@ -83,6 +83,10 @@ public class Utils {
 		return new FileParams(size, sha256, crc);
 	}
 
+	public static long getFileSize(File file) {
+		return file.length();
+	}
+
 	public static FileParams getFileUploadParams(String filepath) throws PangeaException {
 		File file = null;
 		try {

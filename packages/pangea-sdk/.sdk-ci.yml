@@ -25,6 +25,7 @@ sdk-integration-tests:
     SERVICE_USER_INTEL_ENV: LVE
     SERVICE_REDACT_ENV: LVE
     SERVICE_VAULT_ENV: LVE
+    SERVICE_SHARE_ENV: LVE
 
   before_script:
     - echo $ENV
@@ -81,13 +82,12 @@ sdk-integration-tests:
       - CLOUD: [AWS, GCP]
         ENV: ${SERVICE_VAULT_ENV}
         TEST: ITVaultTest
+      - CLOUD: [AWS, GCP]
+        ENV: ${SERVICE_SHARE_ENV}
+        TEST: ITShareTest
+  allow_failure: false
   rules:
-    - if: $CI_COMMIT_BRANCH && '$CLOUD == "GCP" && $TEST == "ITFileScanTest"'
-      allow_failure: true
-    - if: $CI_COMMIT_BRANCH && '$CLOUD == "GCP" && $TEST != "ITFileScanTest"'
-      allow_failure: false
-    - if: $CI_COMMIT_BRANCH && '$CLOUD != "GCP"'
-      allow_failure: false
+    - if: $CI_COMMIT_BRANCH
   script:
     - mvn $MAVEN_CLI_OPTS test -Dtest=${TEST}
 

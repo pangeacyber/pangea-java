@@ -442,8 +442,24 @@ public class AuditClient extends BaseClient {
 		return rootPost(treeSize);
 	}
 
-	// FIXME: Docs
-	public DownloadResponse DownloadResults(DownloadRequest request) throws PangeaException, PangeaAPIException {
+	/**
+	 * Download search results
+	 * @pangea.description Get all search results as a compressed (gzip) CSV file.
+	 * @pangea.operationId audit_post_v1_download_results
+	 * @param request Request parameters.
+	 * @return URL where search results can be downloaded.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * var response = client.downloadResults(
+	 *     new DownloadRequest.Builder("pas_[...]")
+	 *         .format(DownloadFormat.CSV)
+	 *         .build()
+	 * );
+	 * }
+	 */
+	public DownloadResponse downloadResults(DownloadRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/download_results", request, DownloadResponse.class);
 	}
 

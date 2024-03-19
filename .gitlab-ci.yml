@@ -10,5 +10,5 @@ stages:
   - examples
 
 include:
-  - /packages/pangea-sdk/.sdk-ci.yml
   - /examples/.examples-ci.yml
+  - /packages/pangea-sdk/.sdk-ci.yml

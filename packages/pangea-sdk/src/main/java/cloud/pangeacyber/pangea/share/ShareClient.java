@@ -15,6 +15,7 @@ import java.io.File;
 
 /** Secure Share client. */
 public class ShareClient extends BaseClient {
+
 	/** Service name. */
 	public static final String serviceName = "share";
 
@@ -29,6 +30,7 @@ public class ShareClient extends BaseClient {
 
 	/** Secure Share client builder. */
 	public static class Builder extends BaseClient.Builder<Builder> {
+
 		/**
 		 * Constructor.
 		 *

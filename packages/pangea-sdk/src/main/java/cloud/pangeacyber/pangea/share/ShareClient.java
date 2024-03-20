@@ -49,7 +49,8 @@ public class ShareClient extends BaseClient {
 	/**
 	 * Delete
 	 * @pangea.description Delete object by ID or path. If both are supplied,
-	 * the path must match that of the object represented by the ID. Beta API.
+	 * the path must match that of the object represented by the ID.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_delete
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -66,7 +67,8 @@ public class ShareClient extends BaseClient {
 	/**
 	 * Create a folder
 	 * @pangea.description Create a folder, either by name or path and
-	 * parent_id. Beta API.
+	 * parent_id.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_folder_create
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -86,7 +88,7 @@ public class ShareClient extends BaseClient {
 	 * Get an object
 	 * @pangea.description Get object. If both ID and path are supplied, the
 	 * call will fail if the target object doesn't match both properties.
-	 * Beta API.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_folder_create
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -107,7 +109,8 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * Get archive
-	 * @pangea.description Get an archive file of multiple objects. Beta API.
+	 * @pangea.description Get an archive file of multiple objects.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_get_archive
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -128,7 +131,8 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * Update a file
-	 * @pangea.description Update a file. Beta API.
+	 * @pangea.description Update a file.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_update
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -150,7 +154,8 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * List
-	 * @pangea.description List or filter/search records. Beta API.
+	 * @pangea.description List or filter/search records.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_list
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -168,7 +173,8 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * Upload a file
-	 * @pangea.description Upload a file. Beta API.
+	 * @pangea.description Upload a file.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_put
 	 * @param request Request parameters.
 	 * @param file File to upload.
@@ -207,7 +213,8 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * Request upload URL
-	 * @pangea.description Request an upload URL. Beta API.
+	 * @pangea.description Request an upload URL.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_put 2
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -247,7 +254,8 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * Create share links
-	 * @pangea.description Create a share link. Beta API.
+	 * @pangea.description Create a share link.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_share_link_create
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -277,7 +285,8 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * Get share link
-	 * @pangea.description Get a share link. Beta API.
+	 * @pangea.description Get a share link.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_share_link_get
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -293,7 +302,8 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * List share links
-	 * @pangea.description Look up share links by filter options. Beta API.
+	 * @pangea.description Look up share links by filter options.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_share_link_list
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -310,7 +320,8 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * Delete share links
-	 * @pangea.description Delete share links. Beta API.
+	 * @pangea.description Delete share links.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_share_link_delete
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -329,7 +340,8 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * Send share links
-	 * @pangea.description Send share links. Beta API.
+	 * @pangea.description Send share links.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId share_post_v1beta_share_link_send
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.

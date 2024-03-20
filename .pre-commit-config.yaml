@@ -4,12 +4,13 @@ repos:
     hooks:
       - id: check-json
       - id: end-of-file-fixer
-      -
-        id: trailing-whitespace
+      - id: trailing-whitespace
         exclude: .md
       - id: check-merge-conflict
       - id: debug-statements
       - id: detect-aws-credentials
+        args:
+          - --allow-missing-credentials
       - id: check-executables-have-shebangs
       - id: check-shebang-scripts-are-executable
       - id: no-commit-to-branch

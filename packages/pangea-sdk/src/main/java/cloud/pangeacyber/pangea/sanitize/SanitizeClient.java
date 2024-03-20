@@ -15,6 +15,7 @@ import java.io.File;
 
 /** Sanitize client. */
 public class SanitizeClient extends BaseClient {
+
 	/** Service name. */
 	public static String serviceName = "sanitize";
 
@@ -29,6 +30,7 @@ public class SanitizeClient extends BaseClient {
 
 	/** Sanitize client builder. */
 	public static class Builder extends BaseClient.Builder<Builder> {
+
 		/**
 		 * Constructor.
 		 *
@@ -46,7 +48,8 @@ public class SanitizeClient extends BaseClient {
 
 	/**
 	 * Sanitize
-	 * @pangea.description Apply file sanitization actions according to specified rules. Beta API.
+	 * @pangea.description Apply file sanitization actions according to specified rules.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId sanitize_post_v1beta_sanitize
 	 * @param request Request parameters.
 	 * @param file File to sanitize.
@@ -86,7 +89,8 @@ public class SanitizeClient extends BaseClient {
 
 	/**
 	 * Sanitize via presigned URL
-	 * @pangea.description Apply file sanitization actions according to specified rules via a presigned URL. Beta API.
+	 * @pangea.description Apply file sanitization actions according to specified rules via a presigned URL.
+	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
 	 * @pangea.operationId sanitize_post_v1beta_sanitize 2
 	 * @param request Request parameters.
 	 * @return A presigned URL.
@@ -99,7 +103,7 @@ public class SanitizeClient extends BaseClient {
 	 *     .uploadedFileName("uploaded_file")
 	 *     .build();
 	 * var presignedUrl = client.requestUploadURL(request);
-     *
+	 *
 	 * // Upload file to `acceptedResponse.getResult().getPutURL()`.
 	 *
 	 * // Poll for Sanitize's result.

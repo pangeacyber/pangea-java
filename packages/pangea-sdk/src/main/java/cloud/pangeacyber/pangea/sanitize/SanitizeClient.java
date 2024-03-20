@@ -13,25 +13,55 @@ import cloud.pangeacyber.pangea.sanitize.requests.*;
 import cloud.pangeacyber.pangea.sanitize.responses.SanitizeResponse;
 import java.io.File;
 
+/** Sanitize client. */
 public class SanitizeClient extends BaseClient {
-
+	/** Service name. */
 	public static String serviceName = "sanitize";
 
+	/**
+	 * Create a new Sanitize client using the given builder.
+	 *
+	 * @param builder Sanitize client builder.
+	 */
 	public SanitizeClient(Builder builder) {
 		super(builder, serviceName);
 	}
 
+	/** Sanitize client builder. */
 	public static class Builder extends BaseClient.Builder<Builder> {
-
+		/**
+		 * Constructor.
+		 *
+		 * @param config Configuration.
+		 */
 		public Builder(Config config) {
 			super(config);
 		}
 
+		/** Build a Sanitize client. */
 		public SanitizeClient build() {
 			return new SanitizeClient(this);
 		}
 	}
 
+	/**
+	 * Sanitize
+	 * @pangea.description Apply file sanitization actions according to specified rules. Beta API.
+	 * @pangea.operationId sanitize_post_v1beta_sanitize
+	 * @param request Request parameters.
+	 * @param file File to sanitize.
+	 * @return The sanitized file and information on the sanitization that was performed.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * var file = new File("/path/to/file.pdf");
+	 * var response = client.sanitize(
+	 *     new SanitizeRequest.Builder().uploadedFileName("uploaded_file").build(),
+	 *     file
+	 * );
+	 * }
+	 */
 	public SanitizeResponse sanitize(SanitizeRequest request, File file) throws PangeaException, PangeaAPIException {
 		TransferMethod tm = request.getTransferMethod();
 		String name;
@@ -54,6 +84,28 @@ public class SanitizeClient extends BaseClient {
 		return post("/v1beta/sanitize", request, fileData, SanitizeResponse.class);
 	}
 
+	/**
+	 * Sanitize via presigned URL
+	 * @pangea.description Apply file sanitization actions according to specified rules via a presigned URL. Beta API.
+	 * @pangea.operationId sanitize_post_v1beta_sanitize 2
+	 * @param request Request parameters.
+	 * @return A presigned URL.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * var request = new SanitizeRequest.Builder()
+	 *     .transferMethod(TransferMethod.PUT_URL)
+	 *     .uploadedFileName("uploaded_file")
+	 *     .build();
+	 * var presignedUrl = client.requestUploadURL(request);
+     *
+	 * // Upload file to `acceptedResponse.getResult().getPutURL()`.
+	 *
+	 * // Poll for Sanitize's result.
+	 * var response = client.pollResult(presignedUrl.getRequestId(), SanitizeResponse.class);
+	 * }
+	 */
 	public AcceptedResponse requestUploadURL(SanitizeRequest request) throws PangeaException, PangeaAPIException {
 		TransferMethod tm = request.getTransferMethod();
 		if (tm == null) {

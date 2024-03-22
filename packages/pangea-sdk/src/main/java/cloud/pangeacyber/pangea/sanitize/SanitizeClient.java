@@ -47,9 +47,9 @@ public class SanitizeClient extends BaseClient {
 	}
 
 	/**
-	 * Sanitize
+	 * Sanitize (Beta)
 	 * @pangea.description Apply file sanitization actions according to specified rules.
-	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
+	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
 	 * @pangea.operationId sanitize_post_v1beta_sanitize
 	 * @param request Request parameters.
 	 * @param file File to sanitize.
@@ -88,9 +88,9 @@ public class SanitizeClient extends BaseClient {
 	}
 
 	/**
-	 * Sanitize via presigned URL
+	 * Sanitize via presigned URL (Beta)
 	 * @pangea.description Apply file sanitization actions according to specified rules via a presigned URL.
-	 * <a href="https://pangea.cloud/docs/sdk/java/#beta-releases"><strong>Beta API</strong></a>.
+	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
 	 * @pangea.operationId sanitize_post_v1beta_sanitize 2
 	 * @param request Request parameters.
 	 * @return A presigned URL.

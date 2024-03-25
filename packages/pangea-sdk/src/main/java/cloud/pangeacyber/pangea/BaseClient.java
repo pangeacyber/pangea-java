@@ -17,7 +17,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.fileupload.MultipartStream;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.CookieSpecs;
@@ -123,7 +122,11 @@ final class InternalHttpResponse {
 
 		String[] parts = header.split(field);
 		String namePart = parts.length > 1 ? parts[1] : parts[0];
-		return namePart.split("\n")[0].trim().split(" ")[0].replace("\"", "").replace("\r", "");
+		String value = namePart.split("\n")[0].trim().split(" ")[0].replace("\"", "").replace("\r", "");
+		if (value.isEmpty()) {
+			return defaultValue;
+		}
+		return value;
 	}
 
 	private String readBody(CloseableHttpResponse response) throws PangeaException {
@@ -648,6 +651,10 @@ public abstract class BaseClient {
 	) throws PangeaException, PangeaAPIException {
 		InternalHttpResponse response = postSingle(url, request, null);
 		AcceptedResponse responseAccepted = checkResponse(response, AcceptedResponse.class, url.toString());
+		if (responseAccepted.isOk()) {
+			return response;
+		}
+
 		responseAccepted = this.pollPresignedURL(responseAccepted);
 
 		String presignedURL = responseAccepted.getResult().getPostURL();

@@ -13,6 +13,8 @@ A Java SDK for integrating with Pangea services. Supports Java 21.
 
 ## Installation
 
+#### GA releases
+
 Via Gradle:
 
 ```gradle
@@ -25,14 +27,40 @@ Via Maven:
 <dependency>
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>3.6.0</version>
+  <version>3.7.0</version>
+</dependency>
+```
+
+<a name="beta-releases"></a>
+
+#### Beta releases
+
+Pre-release versions may be available with the `beta` denotation in the version
+number. These releases serve to preview beta services and APIs. Per Semantic
+Versioning, they are considered unstable and do not carry the same compatibility
+guarantees as stable releases. [Beta changelog][]
+
+Via Gradle:
+
+```gradle
+implementation 'cloud.pangea:pangea-sdk:3.8.0-beta-2'
+```
+
+Via Maven:
+
+```xml
+<dependency>
+  <groupId>cloud.pangea</groupId>
+  <artifactId>pangea-sdk</artifactId>
+  <version>3.8.0-beta-2</version>
 </dependency>
 ```
 
 ## Usage
 
 - [Documentation][]
-- [Examples][]
+- [GA Examples][]
+- [Beta Examples][]
 
 General usage would be to create a token for a service through the
 [Pangea Console][] and then construct an API client for that respective service.
@@ -91,7 +119,8 @@ guarantees as stable releases.
 
 
    [Documentation]: https://pangea.cloud/docs/sdk/java/
-   [Examples]: https://github.com/pangeacyber/pangea-java/tree/main/examples
+   [GA Examples]: https://github.com/pangeacyber/pangea-java/tree/main/examples
+   [Beta Examples]: https://github.com/pangeacyber/pangea-java/tree/beta/examples
    [Pangea Console]: https://console.pangea.cloud/
    [Slack]: https://pangea.cloud/join-slack/
    [Secure Audit Log]: https://pangea.cloud/docs/audit

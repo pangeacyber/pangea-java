@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- AuthZ service support.
+
 ## 3.8.0-beta-2 - 2024-03-20
 
 ### Added
@@ -30,7 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 
 - Vault service. Post quantum signing algorithms support
-- AuthZ service support
 
 ### Changed
 

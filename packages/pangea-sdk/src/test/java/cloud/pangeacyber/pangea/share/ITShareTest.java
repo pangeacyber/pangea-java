@@ -34,6 +34,7 @@ public class ITShareTest {
 	ShareClient client;
 	static TestEnvironment environment;
 	final String TESTFILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/testfile.pdf";
+	final String TESTFILE_PATH_18MB = "./src/test/java/cloud/pangeacyber/pangea/testdata/interactive3.pdf";
 	final String ZERO_BYTES_FILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/zerobytes.txt";
 	private String FOLDER_DELETE;
 	private String FOLDER_FILES;
@@ -92,6 +93,38 @@ public class ITShareTest {
 		String name = time + "_file_post_url";
 		PutResponse respPut = client.put(
 			new PutRequest.Builder().name(name).transferMethod(TransferMethod.POST_URL).build(),
+			file
+		);
+
+		assertTrue(respPut.isOk());
+		String id = respPut.getResult().getObject().getID();
+		assertNotNull(id);
+
+		// Get multipart
+		GetResponse respGet = client.get(
+			new GetRequest.Builder().id(id).transferMethod(TransferMethod.MULTIPART).build()
+		);
+
+		assertTrue(respGet.isOk());
+		assertNull(respGet.getResult().getDestUrl());
+		assertEquals(respGet.getAttachedFiles().size(), 1);
+		AttachedFile attachedFile = respGet.getAttachedFiles().get(0);
+		attachedFile.save(Paths.get("./download/", attachedFile.getFilename()));
+
+		// Get dest-url
+		respGet = client.get(new GetRequest.Builder().id(id).transferMethod(TransferMethod.DEST_URL).build());
+
+		assertTrue(respGet.isOk());
+		assertEquals(respGet.getAttachedFiles().size(), 0);
+		assertNotNull(respGet.getResult().getDestUrl());
+	}
+
+	@Test
+	public void testPut_PathAnd18MB_TransferMethod_PostURL() throws PangeaException, PangeaAPIException {
+		File file = new File(TESTFILE_PATH_18MB);
+		String path = "/sdk/tests/java/" + time + "_file_post_url";
+		PutResponse respPut = client.put(
+			new PutRequest.Builder().path(path).transferMethod(TransferMethod.POST_URL).build(),
 			file
 		);
 

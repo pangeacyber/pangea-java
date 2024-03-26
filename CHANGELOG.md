@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Audit /download_results endpoint support
 - Support for Secure Audit Log's log stream API.
 - Support for Secure Audit Log's export API.
+- AuthZ service support.
 
 ### Fixed
 

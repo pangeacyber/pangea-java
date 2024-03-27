@@ -30,13 +30,13 @@ public class App {
 		// Mock data.
 		var dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 		var time = dtf.format(OffsetDateTime.now());
-		var folder = "/sdk_examples/" + time;
+		var folder = String.format("/sdk_examples/%s", time);
 
 		try {
 			// Create a folder.
 			var folderCreateResponse = client.folderCreate(new FolderCreateRequest.Builder().path(folder).build());
 			var folderId = folderCreateResponse.getResult().getObject().getID();
-			System.out.println("Created folder with ID '" + folderId + "'.");
+			System.out.printf("Created folder with ID '%s'.\n", folderId);
 
 			// Upload a file to the folder.
 			var file = new File("./sample.txt");
@@ -45,7 +45,7 @@ public class App {
 				file
 			);
 			var fileId = putResponse.getResult().getObject().getID();
-			System.out.println("Uploaded file with ID '" + fileId + "'.");
+			System.out.printf("Uploaded file with ID '%s'.\n", fileId);
 
 			// Create a share link for the file.
 			var authenticators = Arrays.asList(
@@ -60,17 +60,15 @@ public class App {
 			);
 			var shareResponse = client.shareLinkCreate(new ShareLinkCreateRequest.Builder().links(links).build());
 			var shareLink = shareResponse.getResult().getShareLinkObjects().get(0).getLink();
-			System.out.println("Created share link: <" + shareLink + ">");
+			System.out.printf("Created share link: <%s>.\n", shareLink);
 
 			// Later on, if desired, the folder can be deleted.
 			client.delete(new DeleteRequest.Builder().id(folderId).force(true).build());
-		}
-		catch (PangeaException error) {
+		} catch (PangeaException error) {
 			System.err.println("Operation error.");
 			System.err.println(error);
 			System.exit(1);
-		}
-		catch (PangeaAPIException error) {
+		} catch (PangeaAPIException error) {
 			System.err.println("API error.");
 			System.err.println(error);
 			System.exit(1);

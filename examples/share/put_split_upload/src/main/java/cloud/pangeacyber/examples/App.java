@@ -1,7 +1,6 @@
 package cloud.pangeacyber.examples;
 
 import cloud.pangeacyber.pangea.share.ShareClient;
-import cloud.pangeacyber.pangea.share.ShareFileUploader;
 import cloud.pangeacyber.pangea.share.requests.*;
 import cloud.pangeacyber.pangea.share.responses.*;
 import cloud.pangeacyber.pangea.exceptions.AcceptedRequestException;
@@ -10,6 +9,7 @@ import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.FileData;
 import cloud.pangeacyber.pangea.TransferMethod;
+import cloud.pangeacyber.pangea.FileUploader;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,9 +49,9 @@ public class App {
             File file = new File(filepath);
             FileData fileData = new FileData(file, "file");
 
-            // Create a ShareFileUploader. It will be used to post the file to the upload
-            // url
-            ShareFileUploader fileUploader = new ShareFileUploader.Builder().build();
+            // Create a FileUploader. It will be used to post the file to the
+			// upload URL.
+            var fileUploader = new FileUploader.Builder().build();
 
             System.out.println("Uploading file...");
             fileUploader.uploadFile(url, TransferMethod.PUT_URL, fileData);

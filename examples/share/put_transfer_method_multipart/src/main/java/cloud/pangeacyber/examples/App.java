@@ -41,7 +41,7 @@ public class App {
             System.out.printf("File upload success. Item ID: %s\n", respPut.getResult().getObject().getID());
 
         } catch (Exception e) {
-            System.out.println("Failed to perform share request: " + e);
+            System.out.println("Failed to perform Share request: " + e);
             System.exit(1);
         }
 

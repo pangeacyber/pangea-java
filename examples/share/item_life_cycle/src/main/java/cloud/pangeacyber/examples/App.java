@@ -207,11 +207,9 @@ public class App {
 
             ListResponse respList = client.list(new ListRequest.Builder().filter(filterList).build());
             System.out.printf("Got %d file(s)\n", respList.getResult().getCount());
-
         } catch (Exception e) {
-            System.out.println("Failed to perform share request: " + e);
+            System.out.println("Failed to perform Share request: " + e);
             System.exit(1);
         }
-
     }
 }

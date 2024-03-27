@@ -50,7 +50,12 @@ examples:
           - redact/redact_multiconfig
           - redact/structured
           - redact/text
-          - share
+          - share/folder_create_and_delete
+          - share/folder_file_link
+          - share/item_life_cycle
+          - share/put_split_upload
+          - share/put_transfer_method_multipart
+          - share/put_transfer_method_post_url
           - vault/encrypt
           - vault/encrypt_structured
           - vault/rotate

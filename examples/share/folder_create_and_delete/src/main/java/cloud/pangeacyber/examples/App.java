@@ -40,7 +40,7 @@ public class App {
             System.out.printf("Deleted %d item(s)\n", respDelete.getResult().getCount());
 
         } catch (Exception e) {
-            System.out.println("Failed to perform share request: " + e);
+            System.out.println("Failed to perform Share request: " + e);
             System.exit(1);
         }
 

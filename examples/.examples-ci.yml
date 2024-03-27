@@ -50,17 +50,13 @@ examples:
           - redact/redact_multiconfig
           - redact/structured
           - redact/text
+          - share
           - vault/encrypt
           - vault/encrypt_structured
           - vault/rotate
           - vault/sign
           - audit/log_bulk_async_with_vault
           - vault/get
-          # - share/folder_create_and_delete
-          # - share/item_life_cycle
-          # - share/put_split_upload
-          # - share/put_transfer_method_multipart
-          # - share/put_transfer_method_post_url
 
   image: maven:3.9.6-eclipse-temurin-${JAVA_VERSION}
   before_script:

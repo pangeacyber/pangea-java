@@ -55,7 +55,7 @@ public class ITSanitizeTest {
 	}
 
 	@Test
-	public void testSanitizeAndShare() throws PangeaException, PangeaException, PangeaAPIException, IOException {
+	public void testSanitizeAndShare() throws PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
 			new SanitizeRequest.Builder()
@@ -97,7 +97,7 @@ public class ITSanitizeTest {
 	}
 
 	@Test
-	public void testSanitizeNoShare() throws PangeaException, PangeaException, PangeaAPIException, IOException {
+	public void testSanitizeNoShare() throws PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
 			new SanitizeRequest.Builder()
@@ -142,7 +142,7 @@ public class ITSanitizeTest {
 	}
 
 	@Test
-	public void testSanitizeAllDefaults() throws PangeaException, PangeaException, PangeaAPIException, IOException {
+	public void testSanitizeAllDefaults() throws PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
 			new SanitizeRequest.Builder().uploadedFileName("uploaded_file").build(),
@@ -164,7 +164,7 @@ public class ITSanitizeTest {
 	}
 
 	@Test
-	public void testSanitizeMultipart() throws PangeaException, PangeaException, PangeaAPIException, IOException {
+	public void testSanitizeMultipart() throws PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
 			new SanitizeRequest.Builder()
@@ -207,7 +207,7 @@ public class ITSanitizeTest {
 
 	@Test
 	public void testSanitize_PollResult()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+		throws PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
 		client = new SanitizeClient.Builder(cfg).build();
@@ -279,7 +279,7 @@ public class ITSanitizeTest {
 
 	@Test
 	public void testSanitize_SplitUpload_Post()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+		throws PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
 		File file = new File(TESTFILE_PATH);
 		FileParams fileParams = Utils.getFileUploadParams(file);
 		SanitizeRequest request = new SanitizeRequest.Builder()
@@ -353,7 +353,7 @@ public class ITSanitizeTest {
 
 	@Test
 	public void testSanitize_SplitUpload_Put()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+		throws PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
 		File file = new File(TESTFILE_PATH);
 		FileParams fileParams = Utils.getFileUploadParams(file);
 		SanitizeRequest request = new SanitizeRequest.Builder()

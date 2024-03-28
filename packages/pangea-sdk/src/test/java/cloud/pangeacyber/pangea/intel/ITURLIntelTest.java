@@ -38,7 +38,7 @@ public class ITURLIntelTest {
 	}
 
 	@Test
-	public void testUrlReputationMalicious_1() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUrlReputationMalicious_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		URLReputationResponse response = client.reputation(
 			new URLReputationRequest.Builder("http://113.235.101.11:54384").build()

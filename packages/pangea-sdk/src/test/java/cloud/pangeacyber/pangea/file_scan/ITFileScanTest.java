@@ -50,7 +50,7 @@ public class ITFileScanTest {
 
 	@Test
 	public void testFileScan_Scan_crowdstrike()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException {
+		throws PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		FileScanResponse response = client.scan(
 			new FileScanRequest.Builder().provider("crowdstrike").raw(true).verbose(false).build(),
@@ -65,7 +65,7 @@ public class ITFileScanTest {
 	}
 
 	@Test
-	public void testFileScan_Scan_multipart() throws PangeaException, PangeaException, PangeaAPIException, IOException {
+	public void testFileScan_Scan_multipart() throws PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		FileScanResponse response = client.scan(
 			new FileScanRequest.Builder().transferMethod(TransferMethod.MULTIPART).raw(true).verbose(false).build(),
@@ -81,7 +81,7 @@ public class ITFileScanTest {
 
 	@Test(expected = AcceptedRequestException.class)
 	public void testFileScan_ScanAsync_crowdstrike()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException {
+		throws PangeaException, PangeaAPIException, IOException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
 		client = new FileScanClient.Builder(cfg).build();
@@ -92,7 +92,7 @@ public class ITFileScanTest {
 
 	@Test
 	public void testFileScan_ScanAsyncPollResult_crowdstrike()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+		throws PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
 		client = new FileScanClient.Builder(cfg).build();
@@ -134,7 +134,7 @@ public class ITFileScanTest {
 
 	@Test
 	public void testFileScan_Scan_reversinglabs()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException {
+		throws PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		FileScanResponse response = client.scan(
 			new FileScanRequest.Builder().provider("reversinglabs").raw(true).verbose(false).build(),
@@ -150,7 +150,7 @@ public class ITFileScanTest {
 
 	@Test(expected = AcceptedRequestException.class)
 	public void testFileScan_ScanAsync_reversinglabs()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException {
+		throws PangeaException, PangeaAPIException, IOException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
 		client = new FileScanClient.Builder(cfg).build();
@@ -161,7 +161,7 @@ public class ITFileScanTest {
 
 	@Test
 	public void testFileScan_ScanAsyncPollResult_reversinglabs()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+		throws PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
 		client = new FileScanClient.Builder(cfg).build();
@@ -203,7 +203,7 @@ public class ITFileScanTest {
 
 	@Test
 	public void testFileScan_SplitUpload_Post()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+		throws PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
 		File file = new File(TESTFILE_PATH);
 		FileParams fileParams = Utils.getFileUploadParams(file);
 		FileScanUploadURLRequest request = new FileScanUploadURLRequest.Builder()
@@ -247,7 +247,7 @@ public class ITFileScanTest {
 
 	@Test
 	public void testFileScan_SplitUpload_Put()
-		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+		throws PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
 		File file = new File(TESTFILE_PATH);
 		FileScanUploadURLRequest request = new FileScanUploadURLRequest.Builder()
 			.provider("reversinglabs")

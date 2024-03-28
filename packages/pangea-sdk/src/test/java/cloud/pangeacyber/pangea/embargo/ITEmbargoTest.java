@@ -36,7 +36,7 @@ public class ITEmbargoTest {
 	}
 
 	@Test
-	public void testISOCheckSanctionedCountry() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testISOCheckSanctionedCountry() throws PangeaException, PangeaAPIException {
 		ISOCheckResponse response = client.isoCheck("CU");
 		assertTrue(response.isOk());
 

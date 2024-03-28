@@ -44,7 +44,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_1() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		UserBreachedResponse response = client.breached(
 			new UserBreachedRequest.Builder().phoneNumber("8005550123").build()
@@ -59,7 +59,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_2() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_2() throws PangeaException, PangeaAPIException {
 		// provider, not verbose by default, not raw by default;
 		UserBreachedResponse response = client.breached(
 			new UserBreachedRequest.Builder().phoneNumber("8005550123").provider("spycloud").build()
@@ -74,7 +74,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_3() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_3() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose true, not raw by default;
 		UserBreachedResponse response = client.breached(
 			new UserBreachedRequest.Builder().phoneNumber("8005550123").verbose(true).build()
@@ -89,7 +89,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_4() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_4() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, raw true;
 		UserBreachedResponse response = client.breached(
 			new UserBreachedRequest.Builder().phoneNumber("8005550123").raw(true).build()
@@ -104,7 +104,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_ByPhoneNumbersBulk() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_ByPhoneNumbersBulk() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		UserBreachedBulkResponse response = client.breachedBulk(
 			new UserBreachedBulkRequest.Builder().phoneNumbers(new String[] { "8005550123", "8005550124" }).build()
@@ -118,7 +118,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_ByEmail() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_ByEmail() throws PangeaException, PangeaAPIException {
 		// provider, not verbose by default, not raw by default;
 		UserBreachedResponse response = client.breached(
 			new UserBreachedRequest.Builder().email("test@example.com").provider("spycloud").build()
@@ -133,7 +133,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_ByEmailBulk() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_ByEmailBulk() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		UserBreachedBulkResponse response = client.breachedBulk(
 			new UserBreachedBulkRequest.Builder()
@@ -149,7 +149,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_ByUsername() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_ByUsername() throws PangeaException, PangeaAPIException {
 		// provider, not verbose by default, not raw by default;
 		UserBreachedResponse response = client.breached(
 			new UserBreachedRequest.Builder().username("shortpatrick").provider("spycloud").build()
@@ -164,7 +164,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_ByUsernamesBulk() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_ByUsernamesBulk() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		UserBreachedBulkResponse response = client.breachedBulk(
 			new UserBreachedBulkRequest.Builder().usernames(new String[] { "shortpatrick", "user1" }).build()
@@ -178,7 +178,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_ByIP() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_ByIP() throws PangeaException, PangeaAPIException {
 		// provider, not verbose by default, not raw by default;
 		UserBreachedResponse response = client.breached(
 			new UserBreachedRequest.Builder().ip("192.168.140.37").provider("spycloud").build()
@@ -193,7 +193,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserBreached_ByIPBulk() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserBreached_ByIPBulk() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		UserBreachedBulkResponse response = client.breachedBulk(
 			new UserBreachedBulkRequest.Builder().ips(new String[] { "192.168.140.37", "1.1.1.1" }).build()
@@ -207,7 +207,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserPasswordBreached_1() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserPasswordBreached_1() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		UserPasswordBreachedResponse response = client.breached(
 			new UserPasswordBreachedRequest.Builder(HashType.SHA256, "5baa6").build()
@@ -222,7 +222,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserPasswordBreached_2() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserPasswordBreached_2() throws PangeaException, PangeaAPIException {
 		// provider, not verbose by default, not raw by default;
 		UserPasswordBreachedResponse response = client.breached(
 			new UserPasswordBreachedRequest.Builder(HashType.SHA256, "5baa6").provider("spycloud").build()
@@ -237,7 +237,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserPasswordBreached_3() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserPasswordBreached_3() throws PangeaException, PangeaAPIException {
 		// Default provider, verbose true, not raw by default;
 		UserPasswordBreachedResponse response = client.breached(
 			new UserPasswordBreachedRequest.Builder(HashType.SHA256, "5baa6").verbose(true).build()
@@ -252,7 +252,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserPasswordBreached_4() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserPasswordBreached_4() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, raw true;
 		UserPasswordBreachedResponse response = client.breached(
 			new UserPasswordBreachedRequest.Builder(HashType.SHA256, "5baa6").raw(true).build()
@@ -267,7 +267,7 @@ public class ITUserIntelTest {
 	}
 
 	@Test
-	public void testUserPasswordBreached_Bulk() throws PangeaException, PangeaException, PangeaAPIException {
+	public void testUserPasswordBreached_Bulk() throws PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		UserPasswordBreachedBulkResponse response = client.breachedBulk(
 			new UserPasswordBreachedBulkRequest.Builder(HashType.SHA256, new String[] { "5baa6", "5baa7" }).build()

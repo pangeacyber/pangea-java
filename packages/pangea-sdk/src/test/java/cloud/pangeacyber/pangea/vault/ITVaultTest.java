@@ -61,7 +61,7 @@ public class ITVaultTest {
 		return String.format("%s_%s_%s_%s", this.time, actor, callerName, getRandomID());
 	}
 
-	private void encryptingCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
+	private void encryptingCycle(String id) throws PangeaException, PangeaAPIException {
 		String message = "thisisamessagetoencrypt";
 		String dataB64 = Utils.stringToStringB64(message);
 
@@ -115,7 +115,7 @@ public class ITVaultTest {
 		assertEquals(dataB64, decryptResponseAfterSuspend.getResult().getPlainText());
 	}
 
-	private void asymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
+	private void asymSigningCycle(String id) throws PangeaException, PangeaAPIException {
 		String message = "thisisamessagetosign";
 		String data = Utils.stringToStringB64(message);
 
@@ -167,7 +167,7 @@ public class ITVaultTest {
 		assertTrue(verifyResponseAfterSuspend.getResult().isValidSignature());
 	}
 
-	private void jwtAsymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
+	private void jwtAsymSigningCycle(String id) throws PangeaException, PangeaAPIException {
 		String payload = """
             {'message': 'message to sign', 'data': 'Some extra data'}
             """;
@@ -215,7 +215,7 @@ public class ITVaultTest {
 		assertTrue(verifyResponseAfterSuspend.getResult().isValidSignature());
 	}
 
-	private void jwtSymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
+	private void jwtSymSigningCycle(String id) throws PangeaException, PangeaAPIException {
 		String payload = """
             {'message': 'message to sign', 'data': 'Some extra data'}
             """;

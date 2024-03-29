@@ -56,7 +56,7 @@ public class App {
 					.setSubject(user)
 					.build()
 			);
-			checkResponse.getResult().isAllowed();
+			System.out.printf("Is editor? %s.\n", checkResponse.getResult().isAllowed());
 			// ⇒ false
 
 			// They're not an editor, but they are a reader.
@@ -67,7 +67,7 @@ public class App {
 					.setSubject(user)
 					.build()
 			);
-			checkResponse.getResult().isAllowed();
+			System.out.printf("Is reader? %s.\n", checkResponse.getResult().isAllowed());
 			// ⇒ true
 
 			// Delete the tuple.

@@ -45,8 +45,16 @@ public class App {
 			filter.resourceNamespace().set("folder");
 			filter.resourceID().set(folderId);
 			var listResponse = client.tupleList(new TupleListRequest.Builder().setFilter(filter).build());
-			listResponse.getResult().getTuples();
-			// ⇒ Tuple[1]
+			System.out.println("Tuples:");
+			for (var tupleResult : listResponse.getResult().getTuples()) {
+				System.out.printf(
+					"- subject '%s' has relation '%s' with resource '%s'.\n",
+					tupleResult.getSubject().getId(),
+					tupleResult.getRelation(),
+					tupleResult.getResource().getId()
+				);
+			}
+			System.out.println();
 
 			// Check if the user is an editor of the folder.
 			var checkResponse = client.check(

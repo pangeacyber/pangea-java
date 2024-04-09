@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -461,6 +462,33 @@ public class AuditClient extends BaseClient {
 	 */
 	public DownloadResponse downloadResults(DownloadRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/download_results", request, DownloadResponse.class);
+	}
+
+	/**
+	 * Log streaming endpoint
+	 * @pangea.description This API allows 3rd party vendors (like Auth0) to
+	 * stream events to this endpoint where the structure of the payload varies
+	 * across different vendors.
+	 * @pangea.operationId audit_post_v1_log_stream
+	 * @param data Event data. The exact schema of this will vary by vendor.
+	 * @return A Pangea response.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * // Extend `BaseRequest` and model what the streaming data looks like.
+	 * public final class LogStreamRequest extends BaseRequest {
+	 * 	@JsonProperty("logs")
+	 * 	private List<LogStreamEvent> logs;
+	 * }
+	 *
+	 * // Then later on, log it like so:
+	 * final var input = new LogStreamRequest();
+	 * final var response = await client.logStream(input);
+	 * }
+	 */
+	public Response<Void> logStream(BaseRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/log_stream", request, new TypeReference<Response<Void>>() {});
 	}
 
 	private void processSearchResult(ResultsOutput result, SearchConfig config)

@@ -1115,6 +1115,10 @@ public class ITAuditTest {
 		logStreamEventData.setType("some_type");
 		logStreamEventData.setUserAgent("AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0");
 		logStreamEventData.setUserID("test user ID");
+		logStreamEventData.setConnection("Username-Password-Authentication");
+		logStreamEventData.setConnectionID("some ID");
+		logStreamEventData.setStrategy("auth0");
+		logStreamEventData.setStrategyType("database");
 
 		final var logStreamEvent = new LogStreamEvent();
 		logStreamEvent.setLogID("some log ID");

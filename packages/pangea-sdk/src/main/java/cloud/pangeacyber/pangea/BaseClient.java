@@ -1,10 +1,10 @@
 package cloud.pangeacyber.pangea;
 
 import cloud.pangeacyber.pangea.exceptions.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,9 +15,12 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import org.apache.commons.fileupload.MultipartStream;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -160,7 +163,8 @@ public abstract class BaseClient {
 	private static final ObjectMapper objectMapper = JsonMapper
 		.builder()
 		.findAndAddModules()
-		.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+		.defaultTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
+		.withConfigOverride(Instant.class, cfg -> cfg.setFormat(JsonFormat.Value.forPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSX")))
 		.build();
 	protected Config config;
 	protected Logger logger;

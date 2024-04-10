@@ -1,8 +1,11 @@
 package cloud.pangeacyber.pangea.audit;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 
+@JsonInclude(Include.NON_NULL)
 public final class LogStreamEventData {
 
 	@JsonProperty("date")

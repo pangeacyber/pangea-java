@@ -17,7 +17,7 @@ import cloud.pangeacyber.pangea.audit.results.LogBulkResult;
 import cloud.pangeacyber.pangea.audit.results.RootResult;
 import cloud.pangeacyber.pangea.exceptions.*;
 import java.nio.file.Path;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -1109,7 +1109,7 @@ public class ITAuditTest {
 		// Sample data.
 		final var logStreamEventData = new LogStreamEventData();
 		logStreamEventData.setClientID("test client ID");
-		logStreamEventData.setDate(OffsetDateTime.now());
+		logStreamEventData.setDate(Instant.now());
 		logStreamEventData.setDescription("Create a log stream");
 		logStreamEventData.setIP("127.0.0.1");
 		logStreamEventData.setType("some_type");

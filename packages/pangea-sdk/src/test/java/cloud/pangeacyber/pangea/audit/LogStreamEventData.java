@@ -1,12 +1,12 @@
 package cloud.pangeacyber.pangea.audit;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 public final class LogStreamEventData {
 
 	@JsonProperty("date")
-	private OffsetDateTime date;
+	private Instant date;
 
 	@JsonProperty("type")
 	private String type;
@@ -38,11 +38,11 @@ public final class LogStreamEventData {
 	@JsonProperty("strategy_type")
 	private String strategyType;
 
-	public OffsetDateTime getDate() {
+	public Instant getDate() {
 		return date;
 	}
 
-	public void setDate(OffsetDateTime value) {
+	public void setDate(Instant value) {
 		this.date = value;
 	}
 

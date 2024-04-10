@@ -4,6 +4,7 @@ import cloud.pangeacyber.pangea.exceptions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.fileupload.MultipartStream;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.CookieSpecs;
@@ -156,6 +156,7 @@ final class InternalHttpResponse {
 
 public abstract class BaseClient {
 
+	private static final ObjectMapper objectMapper = JsonMapper.builder().findAndAddModules().build();
 	protected Config config;
 	protected Logger logger;
 	CloseableHttpClient httpClient;
@@ -664,11 +665,10 @@ public abstract class BaseClient {
 
 	private <Req extends BaseRequest> InternalHttpResponse postSingle(URI url, Req request, FileData fileData)
 		throws PangeaException, PangeaAPIException {
-		ObjectMapper mapper = new ObjectMapper();
 		String body;
 
 		try {
-			body = mapper.writeValueAsString(request);
+			body = objectMapper.writeValueAsString(request);
 		} catch (JsonProcessingException e) {
 			throw new PangeaException("Failed to write request", e);
 		}
@@ -775,10 +775,9 @@ public abstract class BaseClient {
 	}
 
 	private ResponseHeader parseHeader(String body) throws PangeaException {
-		ObjectMapper mapper = new ObjectMapper();
 		ResponseHeader header;
 		try {
-			header = mapper.readValue(body, ResponseHeader.class);
+			header = objectMapper.readValue(body, ResponseHeader.class);
 		} catch (Exception e) {
 			throw new PangeaException("Failed to parse response header", e);
 		}
@@ -805,9 +804,8 @@ public abstract class BaseClient {
 		TypeReference<ResponseType> responseTypeRef
 	) throws PangeaException {
 		ResponseType resultResponse;
-		ObjectMapper mapper = new ObjectMapper();
 		try {
-			resultResponse = mapper.readValue(httpResponse.getBody(), responseTypeRef);
+			resultResponse = objectMapper.readValue(httpResponse.getBody(), responseTypeRef);
 		} catch (Exception e) {
 			this.logger.error(
 					String.format(
@@ -872,7 +870,7 @@ public abstract class BaseClient {
 
 		if (ResponseStatus.ACCEPTED.equals(status)) {
 			AcceptedResponse responseAccepted = parseResponse(httpResponse, AcceptedResponse.class);
-			var responseClass = new ObjectMapper().getTypeFactory().constructType(responseTypeRef).getRawClass();
+			var responseClass = objectMapper.getTypeFactory().constructType(responseTypeRef).getRawClass();
 			if (responseClass == AcceptedResponse.class) {
 				return (ResponseType) responseAccepted;
 			}

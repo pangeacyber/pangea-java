@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import cloud.pangeacyber.pangea.AttachedFile;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
+import cloud.pangeacyber.pangea.ResponseStatus;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.audit.models.*;
 import cloud.pangeacyber.pangea.audit.requests.*;
@@ -16,7 +17,9 @@ import cloud.pangeacyber.pangea.audit.results.LogBulkResult;
 import cloud.pangeacyber.pangea.audit.results.RootResult;
 import cloud.pangeacyber.pangea.exceptions.*;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -1099,5 +1102,42 @@ public class ITAuditTest {
 
 		AttachedFile file = clientGeneral.downloadFile(downloadResp.getResult().getDestURL());
 		file.save(Path.of("./", file.getFilename()));
+	}
+
+	@Test
+	public void testLogStream() throws ConfigException, PangeaAPIException, PangeaException {
+		// Sample data.
+		final var logStreamEventData = new LogStreamEventData();
+		logStreamEventData.setClientID("test client ID");
+		logStreamEventData.setDate(Instant.now());
+		logStreamEventData.setDescription("Create a log stream");
+		logStreamEventData.setIP("127.0.0.1");
+		logStreamEventData.setType("some_type");
+		logStreamEventData.setUserAgent("AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0");
+		logStreamEventData.setUserID("test user ID");
+		logStreamEventData.setConnection("Username-Password-Authentication");
+		logStreamEventData.setConnectionID("some ID");
+		logStreamEventData.setStrategy("auth0");
+		logStreamEventData.setStrategyType("database");
+
+		final var logStreamEvent = new LogStreamEvent();
+		logStreamEvent.setLogID("some log ID");
+		logStreamEvent.setData(logStreamEventData);
+
+		final var input = new LogStreamRequest();
+		input.setLogs(List.of(logStreamEvent));
+
+		// Client setup.
+		final var config = new Config.Builder(
+			Config.getMultiConfigTestToken(environment),
+			Config.getTestDomain(environment)
+		)
+			.build();
+		final var configId = Config.getConfigID(environment, "audit", 3);
+		final var client = new AuditClient.Builder(config).withConfigID(configId).build();
+
+		// Test log stream.
+		final var response = client.logStream(input);
+		assertEquals(ResponseStatus.SUCCESS.toString(), response.getStatus());
 	}
 }

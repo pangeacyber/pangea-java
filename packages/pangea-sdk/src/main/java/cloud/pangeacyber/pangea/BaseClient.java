@@ -164,7 +164,10 @@ public abstract class BaseClient {
 		.builder()
 		.findAndAddModules()
 		.defaultTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
-		.withConfigOverride(Instant.class, cfg -> cfg.setFormat(JsonFormat.Value.forPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSX")))
+		.withConfigOverride(
+			Instant.class,
+			cfg -> cfg.setFormat(JsonFormat.Value.forPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSSX"))
+		)
 		.build();
 	protected Config config;
 	protected Logger logger;

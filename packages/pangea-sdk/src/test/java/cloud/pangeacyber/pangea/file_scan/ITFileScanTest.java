@@ -49,8 +49,7 @@ public class ITFileScanTest {
 	}
 
 	@Test
-	public void testFileScan_Scan_crowdstrike()
-		throws PangeaException, PangeaAPIException, IOException {
+	public void testFileScan_Scan_crowdstrike() throws PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		FileScanResponse response = client.scan(
 			new FileScanRequest.Builder().provider("crowdstrike").raw(true).verbose(false).build(),
@@ -133,8 +132,7 @@ public class ITFileScanTest {
 	}
 
 	@Test
-	public void testFileScan_Scan_reversinglabs()
-		throws PangeaException, PangeaAPIException, IOException {
+	public void testFileScan_Scan_reversinglabs() throws PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		FileScanResponse response = client.scan(
 			new FileScanRequest.Builder().provider("reversinglabs").raw(true).verbose(false).build(),

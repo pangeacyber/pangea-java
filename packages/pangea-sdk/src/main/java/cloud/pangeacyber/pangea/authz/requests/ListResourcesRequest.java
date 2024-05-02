@@ -5,18 +5,18 @@ import cloud.pangeacyber.pangea.authz.models.Subject;
 
 public class ListResourcesRequest extends BaseRequest {
 
-	private String namespace;
+	private String type;
 	private String action;
 	private Subject subject;
 
 	private ListResourcesRequest(Builder builder) {
-		this.namespace = builder.namespace;
+		this.type = builder.type;
 		this.action = builder.action;
 		this.subject = builder.subject;
 	}
 
-	public String getNamespace() {
-		return namespace;
+	public String getType() {
+		return type;
 	}
 
 	public String getAction() {
@@ -29,12 +29,12 @@ public class ListResourcesRequest extends BaseRequest {
 
 	public static class Builder {
 
-		private String namespace;
+		private String type;
 		private String action;
 		private Subject subject;
 
-		public Builder(String namespace, String action, Subject subject) {
-			this.namespace = namespace;
+		public Builder(String type, String action, Subject subject) {
+			this.type = type;
 			this.action = action;
 			this.subject = subject;
 		}

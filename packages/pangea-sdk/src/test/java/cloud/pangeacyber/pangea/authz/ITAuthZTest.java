@@ -43,8 +43,8 @@ public class ITAuthZTest {
 	String user1;
 	String user2;
 
-	String namespace_folder;
-	String namespace_user;
+	String type_folder;
+	String type_user;
 	String relation_owner;
 	String relation_editor;
 	String relation_reader;
@@ -65,8 +65,8 @@ public class ITAuthZTest {
 		user1 = "user_1_" + time;
 		user2 = "user_2_" + time;
 
-		namespace_folder = "folder";
-		namespace_user = "user";
+		type_folder = "folder";
+		type_user = "user";
 		relation_owner = "owner";
 		relation_editor = "editor";
 		relation_reader = "reader";
@@ -75,10 +75,10 @@ public class ITAuthZTest {
 	@Test
 	public void testIntegration() throws PangeaException, PangeaAPIException {
 		// Create tuples
-		Resource resource1 = new Resource.Builder(namespace_folder).setId(folder1).build();
-		Resource resource2 = new Resource.Builder(namespace_folder).setId(folder2).build();
-		Subject subject1 = new Subject.Builder(namespace_user).setId(user1).build();
-		Subject subject2 = new Subject.Builder(namespace_user).setId(user2).build();
+		Resource resource1 = new Resource.Builder(type_folder).setId(folder1).build();
+		Resource resource2 = new Resource.Builder(type_folder).setId(folder2).build();
+		Subject subject1 = new Subject.Builder(type_user).setId(user1).build();
+		Subject subject2 = new Subject.Builder(type_user).setId(user2).build();
 
 		Tuple tuple1 = new Tuple(resource1, relation_reader, subject1);
 		Tuple tuple2 = new Tuple(resource1, relation_editor, subject2);
@@ -93,7 +93,7 @@ public class ITAuthZTest {
 
 		// Tuple list with resource
 		FilterTupleList filter = new FilterTupleList();
-		filter.resourceNamespace().set(namespace_folder);
+		filter.resourceType().set(type_folder);
 		filter.resourceID().set(folder1);
 
 		TupleListResponse listResp = client.tupleList(new TupleListRequest.Builder().setFilter(filter).build());
@@ -103,7 +103,7 @@ public class ITAuthZTest {
 
 		// Tuple list with subject
 		filter = new FilterTupleList();
-		filter.subjectNamespace().set(namespace_user);
+		filter.subjectType().set(type_user);
 		filter.subjectID().set(user1);
 
 		listResp = client.tupleList(new TupleListRequest.Builder().setFilter(filter).build());
@@ -148,7 +148,7 @@ public class ITAuthZTest {
 
 		// List resources
 		ListResourcesResponse listResourcesResp = client.listResources(
-			new ListResourcesRequest.Builder(namespace_folder, relation_editor, subject2).build()
+			new ListResourcesRequest.Builder(type_folder, relation_editor, subject2).build()
 		);
 
 		assertNotNull(listResourcesResp.getResult());

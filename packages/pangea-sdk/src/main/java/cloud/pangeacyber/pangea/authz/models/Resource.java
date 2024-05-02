@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Resource {
 
-	@JsonProperty("namespace")
-	private String namespace;
+	@JsonProperty("type")
+	private String type;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("id")
@@ -18,12 +18,12 @@ public class Resource {
 	public Resource() {}
 
 	private Resource(Builder builder) {
-		this.namespace = builder.namespace;
+		this.type = builder.type;
 		this.id = builder.id;
 	}
 
-	public String getNamespace() {
-		return namespace;
+	public String getType() {
+		return type;
 	}
 
 	public String getId() {
@@ -32,11 +32,11 @@ public class Resource {
 
 	public static class Builder {
 
-		private String namespace;
+		private String type;
 		private String id;
 
-		public Builder(String namespace) {
-			this.namespace = namespace;
+		public Builder(String type) {
+			this.type = type;
 		}
 
 		public Resource build() {

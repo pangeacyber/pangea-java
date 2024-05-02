@@ -38,7 +38,7 @@ public class AuthZClient extends BaseClient {
 	 * fail if there is no schema or the tuples do not validate against the
 	 * schema.
 	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId tuple_create_post_v1beta_tuple_create
+	 * @pangea.operationId tuple_create_post_v1_tuple_create
 	 * @param request {@link TupleCreateRequest} containing the list of tuples to be created.
 	 * @return A {@link TupleCreateResponse} with an empty result.
 	 * @throws PangeaException If a general Pangea-related exception occurs.
@@ -59,7 +59,7 @@ public class AuthZClient extends BaseClient {
 	 * }
 	 */
 	public TupleCreateResponse tupleCreate(TupleCreateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/tuple/create", request, TupleCreateResponse.class);
+		return post("/v1/tuple/create", request, TupleCreateResponse.class);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class AuthZClient extends BaseClient {
 	 * filter is given in terms of a tuple. Fill out the fields that you want to
 	 * filter. If the filter is empty it will return all the tuples.
 	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId tuple_list_post_v1beta_tuple_list
+	 * @pangea.operationId tuple_list_post_v1_tuple_list
 	 * @param request The {@link TupleListRequest} containing the filter criteria.
 	 * @return A {@link TupleListResponse} with the list of tuples and additional information.
 	 * @throws PangeaException If a general Pangea-related exception occurs.
@@ -76,20 +76,20 @@ public class AuthZClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * var filter = new FilterTupleList();
-	 * filter.resourceNamespace().set("user");
+	 * filter.resourceType().set("user");
 	 * filter.resourceID().set("user_1");
 	 * var response = client.tupleList(new TupleListRequest.Builder().setFilter(filter).build());
 	 * }
 	 */
 	public TupleListResponse tupleList(TupleListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/tuple/list", request, TupleListResponse.class);
+		return post("/v1/tuple/list", request, TupleListResponse.class);
 	}
 
 	/**
 	 * Delete tuples (Beta)
 	 * @pangea.description Delete tuples in the AuthZ Service.
 	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId tuple_delete_post_v1beta_tuple_delete
+	 * @pangea.operationId tuple_delete_post_v1_tuple_delete
 	 * @param request The {@link TupleDeleteRequest} containing the tuples to be deleted.
 	 * @return A {@link TupleDeleteResponse} with information about the deleted tuples.
 	 * @throws PangeaException If a general Pangea-related exception occurs.
@@ -110,7 +110,7 @@ public class AuthZClient extends BaseClient {
 	 * }
 	 */
 	public TupleDeleteResponse tupleDelete(TupleDeleteRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/tuple/delete", request, TupleDeleteResponse.class);
+		return post("/v1/tuple/delete", request, TupleDeleteResponse.class);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class AuthZClient extends BaseClient {
 	 * @pangea.description Check if a subject has permission to perform an
 	 * action on the resource.
 	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId check_post_v1beta_check
+	 * @pangea.operationId check_post_v1_check
 	 * @param request The {@link CheckRequest} containing details for the authorization check.
 	 * @return A {@link CheckResponse} indicating whether the action is allowed or not.
 	 * @throws PangeaException If a general Pangea-related exception occurs.
@@ -135,34 +135,33 @@ public class AuthZClient extends BaseClient {
 	 * }
 	 */
 	public CheckResponse check(CheckRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/check", request, CheckResponse.class);
+		return post("/v1/check", request, CheckResponse.class);
 	}
 
 	/**
 	 * List resources (Beta)
-	 * @pangea.description Given a namespace, action, and subject, list all the
-	 * resources in the namespace that the subject has access to the action
-	 * with.
+	 * @pangea.description Given a type, action, and subject, list all the
+	 * resources of the type that the subject has access to the action with.
 	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId list_resources_post_v1beta_list_resources
+	 * @pangea.operationId list_resources_post_v1_list_resources
 	 * @param request The {@link ListResourcesRequest} containing criteria for listing resources.
 	 * @return A {@link ListResourcesResponse} with the IDs of resources that match the criteria.
 	 * @throws PangeaException If a general Pangea-related exception occurs.
 	 * @throws PangeaAPIException If an API error occurs during the resource listing process.
 	 * @pangea.code
 	 * {@code
-     * var response = client.listResources(
-     *     new ListResourcesRequest.Builder(
-     *         "folder",
-     *         "edit",
-     *         new Subject.Builder("user").setId("user_1").build()
-     *     ).build()
-     * );
+	 * var response = client.listResources(
+	 *     new ListResourcesRequest.Builder(
+	 *         "folder",
+	 *         "edit",
+	 *         new Subject.Builder("user").setId("user_1").build()
+	 *     ).build()
+	 * );
 	 * }
 	 */
 	public ListResourcesResponse listResources(ListResourcesRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1beta/list-resources", request, ListResourcesResponse.class);
+		return post("/v1/list-resources", request, ListResourcesResponse.class);
 	}
 
 	/**
@@ -170,22 +169,22 @@ public class AuthZClient extends BaseClient {
 	 * @pangea.description Given a resource and an action, return the list of
 	 * subjects who have access to the action for the given resource.
 	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId list_subjects_post_v1beta_list_subjects
+	 * @pangea.operationId list_subjects_post_v1_list_subjects
 	 * @param request The {@link ListSubjectsRequest} containing criteria for listing subjects.
 	 * @return A {@link ListSubjectsResponse} with the subjects that match the criteria.
 	 * @throws PangeaException If a general Pangea-related exception occurs.
 	 * @throws PangeaAPIException If an API error occurs during the subject listing process.
 	 * @pangea.code
 	 * {@code
-     * var response = client.listSubjects(
-     *     new ListSubjectsRequest.Builder(
-     *         new Resource.Builder("folder").setId("folder_1").build(),
-     *         "update"
-     *     ).build()
-     * );
+	 * var response = client.listSubjects(
+	 *     new ListSubjectsRequest.Builder(
+	 *         new Resource.Builder("folder").setId("folder_1").build(),
+	 *         "update"
+	 *     ).build()
+	 * );
 	 * }
 	 */
 	public ListSubjectsResponse listSubjects(ListSubjectsRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/list-subjects", request, ListSubjectsResponse.class);
+		return post("/v1/list-subjects", request, ListSubjectsResponse.class);
 	}
 }

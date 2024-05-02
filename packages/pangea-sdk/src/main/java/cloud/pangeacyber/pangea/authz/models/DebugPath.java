@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DebugPath {
 
-	@JsonProperty("namespace")
-	private String namespace;
+	@JsonProperty("type")
+	private String type;
 
 	@JsonProperty("id")
 	private String id;
@@ -16,8 +16,8 @@ public class DebugPath {
 	// Empty constructor for Jackson deserialization
 	public DebugPath() {}
 
-	public String getNamespace() {
-		return namespace;
+	public String getType() {
+		return type;
 	}
 
 	public String getId() {

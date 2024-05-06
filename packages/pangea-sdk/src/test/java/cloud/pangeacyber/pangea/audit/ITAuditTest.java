@@ -1144,39 +1144,39 @@ public class ITAuditTest {
 	}
 
 	@Test
-	public void testExportDownload() throws PangeaAPIException, PangeaException {
-		var exportResponse = clientGeneral.export(ExportRequest.builder().start("1d").verbose(true).build());
+	public void testExportDownload() throws PangeaAPIException, PangeaException, InterruptedException {
+		final var exportResponse = clientGeneral.export(ExportRequest.builder().start("1d").verbose(false).build());
 		assertEquals(ResponseStatus.ACCEPTED.toString(), exportResponse.getStatus());
 
-		// Note that the export can easily take dozens of minutes, if not
-		// longer, so we don't actually wait for the results on CI. Instead we
-		// just poll it once and then attempt the download, even when we know it
-		// isn't ready yet, just to verify that the core of the functions are
-		// working.
-		try {
-			clientGeneral.pollResult(exportResponse.getRequestId(), new TypeReference<Response<Void>>() {});
-		} catch (PangeaAPIException error) {
-			assertEquals(ResponseStatus.ACCEPTED.toString(), error.getResponse().getStatus());
-		}
-
-		try {
-			var downloadRequest = new DownloadRequest.Builder().requestId(exportResponse.getRequestId()).build();
-			clientGeneral.downloadResults(downloadRequest);
-		} catch (PangeaAPIException error) {
-			var status = error.getResponse().getStatus();
-
-			// NOT_FOUND is possible if this test runs while an export is
-			// already in progress, since the request ID from the current run
-			// does not match the original request ID that started the export in
-			// a previous run.
-			if (
-				status.equalsIgnoreCase(ResponseStatus.ACCEPTED.toString()) &&
-				status.equalsIgnoreCase(ResponseStatus.NOT_FOUND.toString())
-			) {
-				throw error;
+		final var maxRetries = 10;
+		for (var retry = 0; retry < maxRetries; retry++) {
+			try {
+				final var pollResult = clientGeneral.pollResult(
+					exportResponse.getRequestId(),
+					new TypeReference<Response<Void>>() {}
+				);
+				if (pollResult.isOk()) {
+					break;
+				}
+			} catch (PangeaAPIException error) {
+				final var status = error.getResponse().getStatus();
+				if (
+					status.equalsIgnoreCase(ResponseStatus.ACCEPTED.toString()) ||
+					status.equalsIgnoreCase(ResponseStatus.NOT_FOUND.toString())
+				) {
+					// Continue.
+				} else {
+					throw error;
+				}
 			}
-		} catch (Exception error) {
-			throw error;
+
+			assertTrue(retry < maxRetries - 1);
+			Thread.sleep(3 * 1000);
 		}
+
+		final var downloadRequest = new DownloadRequest.Builder().requestId(exportResponse.getRequestId()).build();
+		final var downloadResponse = clientGeneral.downloadResults(downloadRequest);
+		assertEquals(ResponseStatus.SUCCESS.toString(), downloadResponse.getStatus());
+		assertNotNull(downloadResponse.getResult().getDestURL());
 	}
 }

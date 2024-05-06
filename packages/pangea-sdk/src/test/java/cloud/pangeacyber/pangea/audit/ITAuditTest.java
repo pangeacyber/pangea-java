@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import cloud.pangeacyber.pangea.AttachedFile;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
+import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.ResponseStatus;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.audit.models.*;
@@ -16,6 +17,7 @@ import cloud.pangeacyber.pangea.audit.responses.*;
 import cloud.pangeacyber.pangea.audit.results.LogBulkResult;
 import cloud.pangeacyber.pangea.audit.results.RootResult;
 import cloud.pangeacyber.pangea.exceptions.*;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.LinkedHashMap;
@@ -1139,5 +1141,42 @@ public class ITAuditTest {
 		// Test log stream.
 		final var response = client.logStream(input);
 		assertEquals(ResponseStatus.SUCCESS.toString(), response.getStatus());
+	}
+
+	@Test
+	public void testExportDownload() throws PangeaAPIException, PangeaException, InterruptedException {
+		final var exportResponse = clientGeneral.export(ExportRequest.builder().start("1d").verbose(false).build());
+		assertEquals(ResponseStatus.ACCEPTED.toString(), exportResponse.getStatus());
+
+		final var maxRetries = 10;
+		for (var retry = 0; retry < maxRetries; retry++) {
+			try {
+				final var pollResult = clientGeneral.pollResult(
+					exportResponse.getRequestId(),
+					new TypeReference<Response<Void>>() {}
+				);
+				if (pollResult.isOk()) {
+					break;
+				}
+			} catch (PangeaAPIException error) {
+				final var status = error.getResponse().getStatus();
+				if (
+					status.equalsIgnoreCase(ResponseStatus.ACCEPTED.toString()) ||
+					status.equalsIgnoreCase(ResponseStatus.NOT_FOUND.toString())
+				) {
+					// Continue.
+				} else {
+					throw error;
+				}
+			}
+
+			assertTrue(retry < maxRetries - 1);
+			Thread.sleep(3 * 1000);
+		}
+
+		final var downloadRequest = new DownloadRequest.Builder().requestId(exportResponse.getRequestId()).build();
+		final var downloadResponse = clientGeneral.downloadResults(downloadRequest);
+		assertEquals(ResponseStatus.SUCCESS.toString(), downloadResponse.getStatus());
+		assertNotNull(downloadResponse.getResult().getDestURL());
 	}
 }

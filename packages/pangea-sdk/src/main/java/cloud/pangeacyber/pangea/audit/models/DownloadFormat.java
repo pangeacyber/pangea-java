@@ -3,14 +3,10 @@ package cloud.pangeacyber.pangea.audit.models;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum DownloadFormat {
-	/**
-	 * JSON.
-	 */
+	/** JSON. */
 	JSON("json"),
 
-	/**
-	 * CSV.
-	 */
+	/** CSV. */
 	CSV("csv");
 
 	private final String text;

@@ -360,15 +360,6 @@ public abstract class BaseClient {
 		return;
 	}
 
-	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
-		String path,
-		Req request,
-		Class<ResponseType> responseClass,
-		PostConfig postConfig
-	) throws PangeaException, PangeaAPIException {
-		return doPost(path, request, null, responseClass, postConfig);
-	}
-
 	/**
 	 * Perform a HTTP POST request.
 	 *
@@ -386,7 +377,7 @@ public abstract class BaseClient {
 		Req request,
 		TypeReference<ResponseType> responseTypeRef
 	) throws PangeaException, PangeaAPIException {
-		return doPost(path, request, null, responseTypeRef, new PostConfig.Builder().build());
+		return post(path, request, responseTypeRef, new PostConfig.Builder().build());
 	}
 
 	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
@@ -394,7 +385,38 @@ public abstract class BaseClient {
 		Req request,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
-		return doPost(path, request, null, responseClass, new PostConfig.Builder().build());
+		return post(path, request, responseClass, new PostConfig.Builder().build());
+	}
+
+	/**
+	 * Perform a HTTP POST request.
+	 *
+	 * @param <Req> Request body type.
+	 * @param <ResponseType> Response body type.
+	 * @param path Request URL path.
+	 * @param request Request body.
+	 * @param responseTypeRef Value type reference to the response body type.
+	 * @param postConfig Additional configuration.
+	 * @return Response body.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 */
+	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
+		String path,
+		Req request,
+		TypeReference<ResponseType> responseTypeRef,
+		PostConfig postConfig
+	) throws PangeaException, PangeaAPIException {
+		return doPost(path, request, null, responseTypeRef, postConfig);
+	}
+
+	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
+		String path,
+		Req request,
+		Class<ResponseType> responseClass,
+		PostConfig postConfig
+	) throws PangeaException, PangeaAPIException {
+		return doPost(path, request, null, responseClass, postConfig);
 	}
 
 	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
@@ -406,11 +428,36 @@ public abstract class BaseClient {
 		return doPost(path, request, fileData, responseClass, new PostConfig.Builder().build());
 	}
 
+	/**
+	 * Perform a HTTP GET request.
+	 *
+	 * @param <ResponseType> Response body type.
+	 * @param path Request URL path.
+	 * @param responseTypeRef Value type reference to the response body type.
+	 * @return Response body.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 */
 	protected <ResponseType extends Response<?>> ResponseType get(
 		String path,
-		boolean checkResponse,
-		Class<ResponseType> responseClass
+		TypeReference<ResponseType> responseTypeRef
 	) throws PangeaException, PangeaAPIException {
+		InternalHttpResponse response = doGet(path);
+		return checkResponse(response, responseTypeRef, path);
+	}
+
+	/**
+	 * Perform a HTTP GET request.
+	 *
+	 * @param <ResponseType> Response body type.
+	 * @param path Request URL path.
+	 * @param responseClass Class reference to the response body type.
+	 * @return Response body.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 */
+	protected <ResponseType extends Response<?>> ResponseType get(String path, Class<ResponseType> responseClass)
+		throws PangeaException, PangeaAPIException {
 		InternalHttpResponse response = doGet(path);
 		return checkResponse(response, responseClass, path);
 	}
@@ -486,10 +533,18 @@ public abstract class BaseClient {
 
 	public <ResponseType extends Response<?>> ResponseType pollResult(
 		String requestId,
+		TypeReference<ResponseType> responseTypeRef
+	) throws PangeaException, PangeaAPIException {
+		String path = pollResultPath(requestId);
+		return get(path, responseTypeRef);
+	}
+
+	public <ResponseType extends Response<?>> ResponseType pollResult(
+		String requestId,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
 		String path = pollResultPath(requestId);
-		return get(path, true, responseClass);
+		return get(path, responseClass);
 	}
 
 	private <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType doPost(

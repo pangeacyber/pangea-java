@@ -461,6 +461,10 @@ public class AuditClient extends BaseClient {
 	 * }
 	 */
 	public DownloadResponse downloadResults(DownloadRequest request) throws PangeaException, PangeaAPIException {
+		if (request.getRequestID() == null && request.getResultID() == null) {
+			throw new IllegalArgumentException("must pass a request ID or a result ID");
+		}
+
 		return post("/v1/download_results", request, DownloadResponse.class);
 	}
 
@@ -637,5 +641,31 @@ public class AuditClient extends BaseClient {
 	public ResultsResponse results(ResultRequest request, SearchConfig config)
 		throws PangeaException, PangeaAPIException {
 		return resultPost(request, config);
+	}
+
+	/**
+	 * Export from the audit log
+	 * @pangea.description Bulk export of data from the Secure Audit Log, with
+	 * optional filtering.
+	 * @pangea.operationId audit_post_v1_export
+	 * @param request Request parameters.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * var response = client.export(ExportRequest.builder().verbose(true).build());
+	 * }
+	 */
+	public Response<Void> export(ExportRequest request) throws PangeaException, PangeaAPIException {
+		try {
+			return post(
+				"/v1/export",
+				request,
+				new TypeReference<Response<Void>>() {},
+				new PostConfig.Builder().pollResult(false).build()
+			);
+		} catch (AcceptedRequestException e) {
+			return new Response<Void>(e.getResponse(), e.getAcceptedResult());
+		}
 	}
 }

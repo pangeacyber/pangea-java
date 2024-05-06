@@ -1145,7 +1145,7 @@ public class ITAuditTest {
 
 	@Test
 	public void testExportDownload() throws PangeaAPIException, PangeaException {
-		var exportResponse = clientGeneral.export(ExportRequest.builder().end(Instant.now()).verbose(true).build());
+		var exportResponse = clientGeneral.export(ExportRequest.builder().start("1d").verbose(true).build());
 		assertEquals(ResponseStatus.ACCEPTED.toString(), exportResponse.getStatus());
 
 		// Note that the export can easily take dozens of minutes, if not

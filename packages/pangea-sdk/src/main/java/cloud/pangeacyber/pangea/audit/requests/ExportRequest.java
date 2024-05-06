@@ -5,7 +5,6 @@ import cloud.pangeacyber.pangea.audit.models.DownloadFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.time.Instant;
 
 @JsonInclude(Include.NON_NULL)
 public final class ExportRequest extends BaseRequest {
@@ -16,14 +15,14 @@ public final class ExportRequest extends BaseRequest {
 
 	/** The start of the time range to perform the search on. */
 	@JsonProperty("start")
-	private final Instant start;
+	private final String start;
 
 	/**
 	 * The end of the time range to perform the search on. If omitted, then all
 	 * records up to the latest will be searched.
 	 */
 	@JsonProperty("end")
-	private final Instant end;
+	private final String end;
 
 	/** Specify the sort order of the response. */
 	@JsonProperty("order")
@@ -42,8 +41,8 @@ public final class ExportRequest extends BaseRequest {
 
 	private ExportRequest(
 		DownloadFormat format,
-		Instant start,
-		Instant end,
+		String start,
+		String end,
 		String order,
 		String orderBy,
 		boolean verbose
@@ -56,11 +55,11 @@ public final class ExportRequest extends BaseRequest {
 		this.verbose = verbose;
 	}
 
-	public Instant getStart() {
+	public String getStart() {
 		return start;
 	}
 
-	public Instant getEnd() {
+	public String getEnd() {
 		return end;
 	}
 
@@ -85,8 +84,8 @@ public final class ExportRequest extends BaseRequest {
 		private DownloadFormat format = null;
 		private String order = null;
 		private String orderBy = null;
-		private Instant start = null;
-		private Instant end = null;
+		private String start = null;
+		private String end = null;
 		private Boolean verbose = null;
 
 		public Builder() {}
@@ -106,12 +105,12 @@ public final class ExportRequest extends BaseRequest {
 			return this;
 		}
 
-		public Builder start(Instant start) {
+		public Builder start(String start) {
 			this.start = start;
 			return this;
 		}
 
-		public Builder end(Instant end) {
+		public Builder end(String end) {
 			this.end = end;
 			return this;
 		}

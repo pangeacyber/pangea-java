@@ -691,4 +691,38 @@ public class VaultClient extends BaseClient {
 	) throws PangeaException, PangeaAPIException {
 		return post("/v1/key/decrypt/structured", request, new TypeReference<EncryptStructuredResponse<K, V, T>>() {});
 	}
+
+	/**
+	 * Encrypt transform
+	 * @pangea.description Encrypt using a format preserving algorithm (FPE).
+	 * @pangea.operationId vault_post_v1_key_encrypt_transform
+	 * @param request - request to be send to /key/encrypt/transform
+	 * @return EncryptTransformResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * }
+	 */
+	public EncryptTransformResponse encryptTransform(EncryptTransformRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1/key/encrypt/transform", request, EncryptTransformResponse.class);
+	}
+
+	/**
+	 * Decrypt transform
+	 * @pangea.description Decrypt using a format preserving algorithm (FPE).
+	 * @pangea.operationId vault_post_v1_key_decrypt_transform
+	 * @param request - request to be send to /key/decrypt/transform
+	 * @return DecryptTransformResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * }
+	 */
+	public DecryptTransformResponse decryptTransform(DecryptTransformRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1/key/decrypt/transform", request, DecryptTransformResponse.class);
+	}
 }

@@ -474,7 +474,7 @@ public class AuditClient extends BaseClient {
 	 * stream events to this endpoint where the structure of the payload varies
 	 * across different vendors.
 	 * @pangea.operationId audit_post_v1_log_stream
-	 * @param data Event data. The exact schema of this will vary by vendor.
+	 * @param request Event data. The exact schema of this will vary by vendor.
 	 * @return A Pangea response.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.

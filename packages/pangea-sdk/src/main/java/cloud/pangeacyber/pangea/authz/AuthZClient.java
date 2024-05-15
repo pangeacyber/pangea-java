@@ -7,11 +7,7 @@ import cloud.pangeacyber.pangea.authz.responses.*;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
-/**
- * AuthZ API client.
- *
- * Note that this service is in Beta and is subject to change.
- */
+/** AuthZ API client. */
 public class AuthZClient extends BaseClient {
 
 	/** Service name. */
@@ -33,11 +29,10 @@ public class AuthZClient extends BaseClient {
 	}
 
 	/**
-	 * Create tuple (Beta)
+	 * Create tuple
 	 * @pangea.description Create tuples in the AuthZ Service. The request will
 	 * fail if there is no schema or the tuples do not validate against the
 	 * schema.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
 	 * @pangea.operationId tuple_create_post_v1_tuple_create
 	 * @param request {@link TupleCreateRequest} containing the list of tuples to be created.
 	 * @return A {@link TupleCreateResponse} with an empty result.
@@ -63,11 +58,10 @@ public class AuthZClient extends BaseClient {
 	}
 
 	/**
-	 * List tuples (Beta)
+	 * List tuples
 	 * @pangea.description Return a paginated list of filtered tuples. The
 	 * filter is given in terms of a tuple. Fill out the fields that you want to
 	 * filter. If the filter is empty it will return all the tuples.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
 	 * @pangea.operationId tuple_list_post_v1_tuple_list
 	 * @param request The {@link TupleListRequest} containing the filter criteria.
 	 * @return A {@link TupleListResponse} with the list of tuples and additional information.
@@ -86,9 +80,8 @@ public class AuthZClient extends BaseClient {
 	}
 
 	/**
-	 * Delete tuples (Beta)
+	 * Delete tuples
 	 * @pangea.description Delete tuples in the AuthZ Service.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
 	 * @pangea.operationId tuple_delete_post_v1_tuple_delete
 	 * @param request The {@link TupleDeleteRequest} containing the tuples to be deleted.
 	 * @return A {@link TupleDeleteResponse} with information about the deleted tuples.
@@ -114,10 +107,9 @@ public class AuthZClient extends BaseClient {
 	}
 
 	/**
-	 * Check authorization (Beta)
+	 * Check authorization
 	 * @pangea.description Check if a subject has permission to perform an
 	 * action on the resource.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
 	 * @pangea.operationId check_post_v1_check
 	 * @param request The {@link CheckRequest} containing details for the authorization check.
 	 * @return A {@link CheckResponse} indicating whether the action is allowed or not.
@@ -139,10 +131,9 @@ public class AuthZClient extends BaseClient {
 	}
 
 	/**
-	 * List resources (Beta)
+	 * List resources
 	 * @pangea.description Given a type, action, and subject, list all the
 	 * resources of the type that the subject has access to the action with.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
 	 * @pangea.operationId list_resources_post_v1_list_resources
 	 * @param request The {@link ListResourcesRequest} containing criteria for listing resources.
 	 * @return A {@link ListResourcesResponse} with the IDs of resources that match the criteria.
@@ -165,10 +156,9 @@ public class AuthZClient extends BaseClient {
 	}
 
 	/**
-	 * List subjects (Beta)
+	 * List subjects
 	 * @pangea.description Given a resource and an action, return the list of
 	 * subjects who have access to the action for the given resource.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
 	 * @pangea.operationId list_subjects_post_v1_list_subjects
 	 * @param request The {@link ListSubjectsRequest} containing criteria for listing subjects.
 	 * @return A {@link ListSubjectsResponse} with the subjects that match the criteria.

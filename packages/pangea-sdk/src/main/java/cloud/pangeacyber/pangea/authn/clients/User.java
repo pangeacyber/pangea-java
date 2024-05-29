@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 final class UserDeleteByEmailRequest extends BaseRequest {
 
+	/** An email address. */
 	@JsonProperty("email")
 	String email;
 
@@ -24,11 +25,23 @@ final class UserDeleteByEmailRequest extends BaseRequest {
 
 final class UserDeleteByIDRequest extends BaseRequest {
 
+	/** The id of a user or a service. */
 	@JsonProperty("id")
 	String id;
 
 	public UserDeleteByIDRequest(String id) {
 		this.id = id;
+	}
+}
+
+final class UserDeleteByUsernameRequest extends BaseRequest {
+
+	/** A username. */
+	@JsonProperty("username")
+	String username;
+
+	public UserDeleteByUsernameRequest(String username) {
+		this.username = username;
 	}
 }
 
@@ -119,6 +132,23 @@ public class User extends AuthNBaseClient {
 	 */
 	public UserDeleteResponse deleteByID(String id) throws PangeaException, PangeaAPIException {
 		return post("/v2/user/delete", new UserDeleteByIDRequest(id), UserDeleteResponse.class);
+	}
+
+	/**
+	 * Delete User
+	 * @pangea.description Delete a user by username.
+	 * @pangea.operationId authn_post_v2_user_delete 3
+	 * @param username A username.
+	 * @return An empty object.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * client.user().deleteByUsername("foobar");
+	 * }
+	 */
+	public UserDeleteResponse deleteByUsername(String username) throws PangeaException, PangeaAPIException {
+		return post("/v2/user/delete", new UserDeleteByUsernameRequest(username), UserDeleteResponse.class);
 	}
 
 	/**

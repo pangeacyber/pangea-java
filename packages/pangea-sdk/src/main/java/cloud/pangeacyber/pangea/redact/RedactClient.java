@@ -6,8 +6,10 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.redact.requests.RedactStructuredRequest;
 import cloud.pangeacyber.pangea.redact.requests.RedactTextRequest;
+import cloud.pangeacyber.pangea.redact.requests.UnredactRequest;
 import cloud.pangeacyber.pangea.redact.responses.RedactStructuredResponse;
 import cloud.pangeacyber.pangea.redact.responses.RedactTextResponse;
+import cloud.pangeacyber.pangea.redact.responses.UnredactResponse;
 
 public class RedactClient extends BaseClient {
 
@@ -82,5 +84,18 @@ public class RedactClient extends BaseClient {
 	public RedactStructuredResponse redactStructured(RedactStructuredRequest request)
 		throws PangeaException, PangeaAPIException {
 		return post("/v1/redact_structured", request, RedactStructuredResponse.class);
+	}
+
+	/**
+	 * Unredact
+	 * @pangea.description Decrypt or unredact fpe redactions
+	 * @pangea.operationId redact_post_v1_unredact
+	 * @param request unredact request with data and fpe context
+	 * @return UnredactResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 */
+	public UnredactResponse unredact(UnredactRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/unredact", request, UnredactResponse.class);
 	}
 }

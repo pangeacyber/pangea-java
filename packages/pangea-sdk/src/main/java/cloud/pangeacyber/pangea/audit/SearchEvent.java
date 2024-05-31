@@ -45,6 +45,10 @@ public class SearchEvent {
 	@JsonIgnore
 	EventVerification signatureVerification = EventVerification.NOT_VERIFIED;
 
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("fpe_context")
+	String fpeContext;
+
 	protected Map<String, Object> getRawEnvelope() {
 		return rawEnvelope;
 	}
@@ -83,6 +87,10 @@ public class SearchEvent {
 
 	public EventVerification getSignatureVerification() {
 		return signatureVerification;
+	}
+
+	public String getFpeContext() {
+		return fpeContext;
 	}
 
 	public void verifySignature() {

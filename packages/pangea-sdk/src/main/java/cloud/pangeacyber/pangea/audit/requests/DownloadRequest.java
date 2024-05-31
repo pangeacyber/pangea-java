@@ -21,10 +21,15 @@ public class DownloadRequest extends BaseRequest {
 	@JsonProperty("format")
 	DownloadFormat format;
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonProperty("return_context")
+	private Boolean returnContext;
+
 	protected DownloadRequest(Builder builder) {
 		this.requestID = builder.requestID;
 		this.resultID = builder.resultID;
 		this.format = builder.format;
+		this.returnContext = builder.returnContext;
 	}
 
 	public String getRequestID() {
@@ -35,11 +40,16 @@ public class DownloadRequest extends BaseRequest {
 		return resultID;
 	}
 
+	public Boolean getReturnContext() {
+		return this.returnContext;
+	}
+
 	public static class Builder {
 
 		String requestID;
 		String resultID;
 		DownloadFormat format;
+		private Boolean returnContext = null;
 
 		public Builder() {}
 
@@ -61,6 +71,11 @@ public class DownloadRequest extends BaseRequest {
 
 		public Builder format(DownloadFormat format) {
 			this.format = format;
+			return this;
+		}
+
+		public Builder returnContext(Boolean rc) {
+			this.returnContext = rc;
 			return this;
 		}
 

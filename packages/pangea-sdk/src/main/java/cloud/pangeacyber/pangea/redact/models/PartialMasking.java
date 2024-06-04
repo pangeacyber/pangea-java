@@ -29,11 +29,11 @@ public class PartialMasking {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("chars_to_ignore")
-	private List<String> charsToIgnore;
+	private List<Character> charsToIgnore;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("masking_char")
-	private List<String> maskingChar;
+	private List<Character> maskingChar;
 
 	protected PartialMasking(Builder builder) {
 		this.maskingType = builder.maskingType;
@@ -65,11 +65,11 @@ public class PartialMasking {
 		return maskedFromRight;
 	}
 
-	public List<String> getCharsToIgnore() {
+	public List<Character> getCharsToIgnore() {
 		return charsToIgnore;
 	}
 
-	public List<String> getMaskingChar() {
+	public List<Character> getMaskingChar() {
 		return maskingChar;
 	}
 
@@ -80,8 +80,8 @@ public class PartialMasking {
 		private Integer unmaskedFromRight;
 		private Integer maskedFromLeft;
 		private Integer maskedFromRight;
-		private List<String> charsToIgnore;
-		private List<String> maskingChar;
+		private List<Character> charsToIgnore;
+		private List<Character> maskingChar;
 
 		public Builder() {}
 
@@ -114,12 +114,12 @@ public class PartialMasking {
 			return this;
 		}
 
-		public Builder setCharsToIgnore(List<String> charsToIgnore) {
+		public Builder setCharsToIgnore(List<Character> charsToIgnore) {
 			this.charsToIgnore = charsToIgnore;
 			return this;
 		}
 
-		public Builder setMaskingChar(List<String> maskingChar) {
+		public Builder setMaskingChar(List<Character> maskingChar) {
 			this.maskingChar = maskingChar;
 			return this;
 		}

@@ -10,6 +10,8 @@ import cloud.pangeacyber.pangea.redact.requests.UnredactRequest;
 import cloud.pangeacyber.pangea.redact.responses.RedactStructuredResponse;
 import cloud.pangeacyber.pangea.redact.responses.RedactTextResponse;
 import cloud.pangeacyber.pangea.redact.responses.UnredactResponse;
+import cloud.pangeacyber.pangea.vault.responses.EncryptStructuredResponse;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 public class RedactClient extends BaseClient {
 
@@ -90,12 +92,12 @@ public class RedactClient extends BaseClient {
 	 * Unredact
 	 * @pangea.description Decrypt or unredact fpe redactions
 	 * @pangea.operationId redact_post_v1_unredact
-	 * @param request unredact request with data and fpe context
+	 * @param request Unredact request with data and fpe context
 	 * @return UnredactResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 */
-	public UnredactResponse unredact(UnredactRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/unredact", request, UnredactResponse.class);
+	public <T> UnredactResponse<T> unredact(UnredactRequest<T> request) throws PangeaException, PangeaAPIException {
+		return post("/v1/unredact", request, new TypeReference<UnredactResponse<T>>() {});
 	}
 }

@@ -3,20 +3,20 @@ package cloud.pangeacyber.pangea.redact.requests;
 import cloud.pangeacyber.pangea.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UnredactRequest extends BaseRequest {
+public class UnredactRequest<T> extends BaseRequest {
 
 	@JsonProperty("redacted_data")
-	Object redactedData;
+	T redactedData;
 
 	@JsonProperty("fpe_context")
 	String fpeContext;
 
-	protected UnredactRequest(Builder builder) {
+	protected UnredactRequest(Builder<T> builder) {
 		this.redactedData = builder.redactedData;
 		this.fpeContext = builder.fpeContext;
 	}
 
-	public Object getRedactedData() {
+	public T getRedactedData() {
 		return redactedData;
 	}
 
@@ -24,18 +24,18 @@ public class UnredactRequest extends BaseRequest {
 		return fpeContext;
 	}
 
-	public static class Builder {
+	public static class Builder<T> {
 
-		Object redactedData;
+		T redactedData;
 		String fpeContext;
 
-		public Builder(Object redactedData, String fpeContext) {
+		public Builder(T redactedData, String fpeContext) {
 			this.redactedData = redactedData;
 			this.fpeContext = fpeContext;
 		}
 
-		public UnredactRequest build() {
-			return new UnredactRequest(this);
+		public UnredactRequest<T> build() {
+			return new UnredactRequest<T>(this);
 		}
 	}
 }

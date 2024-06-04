@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UnredactResult {
+public class UnredactResult<T> {
 
 	@JsonProperty("data")
-	Object data;
+	T data;
 
-	public Object getData() {
+	public T getData() {
 		return data;
 	}
 }

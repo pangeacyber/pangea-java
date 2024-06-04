@@ -11,7 +11,11 @@ public enum SymmetricAlgorithm {
 	AES256_GCM("AES-GCM-256"),
 	AES128_CBC("AES-CBC-128"),
 	AES256_CBC("AES-CBC-256"),
+
+	/** 128-bit encryption using the FF3-1 algorithm. Beta feature. */
 	AES128_FF3_1("AES-FF3-1-128-BETA"),
+
+	/** 256-bit encryption using the FF3-1 algorithm. Beta feature. */
 	AES256_FF3_1("AES-FF3-1-256-BETA"),
 
 	AES("AES-CFB-128"); // deprecated, use AES128_CFB instead

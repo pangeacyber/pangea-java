@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `fpe_context` field in Audit search events
 - `return_context` support in Audit `/search`, `/results` and `/download` endpoints
+- Support for format-preserving encryption.
 
 ### Removed
 
@@ -40,7 +41,7 @@ Note that Sanitize and Secure Share did not make it into this release.
 
 ## [3.7.0] - 2024-02-26
 
-### Added 
+### Added
 
 - Vault service. Post quantum signing algorithms support
 

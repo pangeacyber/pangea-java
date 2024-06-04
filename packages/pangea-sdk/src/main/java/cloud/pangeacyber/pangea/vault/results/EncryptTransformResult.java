@@ -25,7 +25,11 @@ public class EncryptTransformResult extends BaseRequest {
 	@JsonProperty("cipher_text")
 	private String cipherText;
 
-	/** User-provided tweak, which must be a base64-encoded 7-digit string.*/
+	/**
+	 * User provided tweak string. If not provided, a random string will be
+	 * generated and returned. The user must securely store the tweak source
+	 * which will be needed to decrypt the data.
+	 */
 	@JsonProperty("tweak")
 	private String tweak;
 

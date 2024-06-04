@@ -19,9 +19,12 @@ public class DecryptTransformRequest extends BaseRequest {
 	@JsonProperty("cipher_text")
 	private String cipherText;
 
-	/** User-provided tweak, which must be a base64-encoded 7-digit string. */
+	/**
+	 * User provided tweak string. If not provided, a random string will be
+	 * generated and returned. The user must securely store the tweak source
+	 * which will be needed to decrypt the data.
+	 */
 	@JsonProperty("tweak")
-	@JsonInclude(Include.NON_NULL)
 	private String tweak;
 
 	/** Set of characters to use for format-preserving encryption (FPE). */
@@ -49,19 +52,11 @@ public class DecryptTransformRequest extends BaseRequest {
 		private TransformAlphabet alphabet;
 		private Integer version;
 
-		public Builder(String id, String cipherText) {
+		public Builder(String id, String cipherText, String tweak, TransformAlphabet alphabet) {
 			this.id = id;
 			this.cipherText = cipherText;
-		}
-
-		public Builder tweak(String tweak) {
 			this.tweak = tweak;
-			return this;
-		}
-
-		public Builder alphabet(TransformAlphabet alphabet) {
 			this.alphabet = alphabet;
-			return this;
 		}
 
 		public Builder version(Integer version) {

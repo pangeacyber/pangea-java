@@ -696,12 +696,19 @@ public class VaultClient extends BaseClient {
 	 * Encrypt transform
 	 * @pangea.description Encrypt using a format preserving algorithm (FPE).
 	 * @pangea.operationId vault_post_v1_key_encrypt_transform
-	 * @param request - request to be send to /key/encrypt/transform
-	 * @return EncryptTransformResponse
-	 * @throws PangeaException
-	 * @throws PangeaAPIException
+	 * @param request Request parameters.
+	 * @return Encrypted response.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
 	 * @pangea.code
 	 * {@code
+	 * var encrypted = client.encryptTransform(
+	 * 	new EncryptTransformRequest.Builder(
+	 * 		"pvi_[...]",
+	 * 		"123-4567-8901",
+	 * 		TransformAlphabet.ALPHANUMERIC
+	 * 	).tweak("MTIzMTIzMT==").build()
+	 * );
 	 * }
 	 */
 	public EncryptTransformResponse encryptTransform(EncryptTransformRequest request)
@@ -713,12 +720,20 @@ public class VaultClient extends BaseClient {
 	 * Decrypt transform
 	 * @pangea.description Decrypt using a format preserving algorithm (FPE).
 	 * @pangea.operationId vault_post_v1_key_decrypt_transform
-	 * @param request - request to be send to /key/decrypt/transform
-	 * @return DecryptTransformResponse
-	 * @throws PangeaException
-	 * @throws PangeaAPIException
+	 * @param request Request parameters.
+	 * @return Decrypted response.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
 	 * @pangea.code
 	 * {@code
+	 * var decrypted = client.decryptTransform(
+	 * 	new DecryptTransformRequest.Builder(
+	 * 		"pvi_[...]",
+	 * 		"tZB-UKVP-MzTM",
+	 * 		"MTIzMTIzMT==",
+	 * 		TransformAlphabet.ALPHANUMERIC
+	 * 	).build()
+	 * );
 	 * }
 	 */
 	public DecryptTransformResponse decryptTransform(DecryptTransformRequest request)

@@ -131,10 +131,13 @@ public class ITVaultTest {
 
 		// Decrypt 1
 		DecryptTransformResponse decryptResponse1 = client.decryptTransform(
-			new DecryptTransformRequest.Builder(id, encryptResponse1.getResult().getCipherText())
+			new DecryptTransformRequest.Builder(
+				id,
+				encryptResponse1.getResult().getCipherText(),
+				tweak,
+				TransformAlphabet.ALPHANUMERIC
+			)
 				.version(1)
-				.alphabet(TransformAlphabet.ALPHANUMERIC)
-				.tweak(tweak)
 				.build()
 		);
 		assertEquals(plainText, decryptResponse1.getResult().getPlainText());

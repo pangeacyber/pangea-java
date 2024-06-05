@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.redact.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
+import cloud.pangeacyber.pangea.redact.models.RedactionMethodOverrides;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,12 +27,17 @@ public class RedactTextRequest extends BaseRequest {
 	@JsonProperty("return_result")
 	Boolean returnResult = null;
 
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("redaction_method_overrides")
+	RedactionMethodOverrides redactionMethodOverrides = null;
+
 	protected RedactTextRequest(Builder builder) {
 		this.text = builder.text;
 		this.debug = builder.debug;
 		this.rules = builder.rules;
 		this.rulesets = builder.rulesets;
 		this.returnResult = builder.returnResult;
+		this.redactionMethodOverrides = builder.redactionMethodOverrides;
 	}
 
 	public String getText() {
@@ -61,6 +67,7 @@ public class RedactTextRequest extends BaseRequest {
 		String[] rules = null;
 		String[] rulesets = null;
 		Boolean returnResult = null;
+		RedactionMethodOverrides redactionMethodOverrides = null;
 
 		public Builder(String text) {
 			this.text = text;
@@ -89,5 +96,14 @@ public class RedactTextRequest extends BaseRequest {
 			this.returnResult = returnResult;
 			return this;
 		}
+
+		public Builder setRedactionMethodOverrides(RedactionMethodOverrides rmo) {
+			this.redactionMethodOverrides = rmo;
+			return this;
+		}
+	}
+
+	public RedactionMethodOverrides getRedactionMethodOverrides() {
+		return redactionMethodOverrides;
 	}
 }

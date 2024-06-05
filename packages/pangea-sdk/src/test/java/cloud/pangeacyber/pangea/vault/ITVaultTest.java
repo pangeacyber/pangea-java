@@ -15,6 +15,7 @@ import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
 import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
+import cloud.pangeacyber.pangea.vault.models.TransformAlphabet;
 import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.responses.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -113,6 +114,33 @@ public class ITVaultTest {
 			new DecryptRequest.Builder(id, encryptResponse1.getResult().getCipherText()).version(1).build()
 		);
 		assertEquals(dataB64, decryptResponseAfterSuspend.getResult().getPlainText());
+	}
+
+	private void encryptingCycleFPE(String id) throws PangeaException, PangeaException, PangeaAPIException {
+		String plainText = "123-4567-8901";
+		String tweak = "MTIzMTIzMT==";
+
+		// Encrypt 1
+		EncryptTransformResponse encryptResponse1 = client.encryptTransform(
+			new EncryptTransformRequest.Builder(id, plainText, TransformAlphabet.ALPHANUMERIC).tweak(tweak).build()
+		);
+		assertEquals(id, encryptResponse1.getResult().getId());
+		assertEquals(1, encryptResponse1.getResult().getVersion());
+		assertNotNull(encryptResponse1.getResult().getCipherText());
+		assertEquals(encryptResponse1.getResult().getCipherText().length(), plainText.length());
+
+		// Decrypt 1
+		DecryptTransformResponse decryptResponse1 = client.decryptTransform(
+			new DecryptTransformRequest.Builder(
+				id,
+				encryptResponse1.getResult().getCipherText(),
+				tweak,
+				TransformAlphabet.ALPHANUMERIC
+			)
+				.version(1)
+				.build()
+		);
+		assertEquals(plainText, decryptResponse1.getResult().getPlainText());
 	}
 
 	private void asymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
@@ -392,6 +420,35 @@ public class ITVaultTest {
 				encryptingCycle(generateResp.getResult().getId());
 			} catch (PangeaAPIException e) {
 				System.out.printf("Failed testAESEncryptingLifeCycle with algorithm %s.\n", algorithm);
+				System.out.println(e.toString());
+				assertTrue(false);
+			}
+		}
+	}
+
+	@Test
+	public void testFPEEncryptingLifeCycle() throws PangeaException, PangeaAPIException {
+		SymmetricAlgorithm[] algorithms = new SymmetricAlgorithm[] {
+			SymmetricAlgorithm.AES128_FF3_1,
+			SymmetricAlgorithm.AES256_FF3_1,
+		};
+
+		for (SymmetricAlgorithm algorithm : algorithms) {
+			String name = getName();
+			try {
+				SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.Builder(
+					algorithm,
+					KeyPurpose.FPE,
+					name
+				)
+					.build();
+
+				SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
+				assertNotNull(generateResp.getResult().getId());
+				assertEquals(Integer.valueOf(1), generateResp.getResult().getVersion());
+				encryptingCycleFPE(generateResp.getResult().getId());
+			} catch (PangeaAPIException e) {
+				System.out.printf("Failed testFPEEncryptingLifeCycle with algorithm %s.\n", algorithm);
 				System.out.println(e.toString());
 				assertTrue(false);
 			}

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redact `/unredact` endpoint support
 - `redaction_method_overrides` field support in `/redact` and `redact_structured` endpoints
 - Support for format-preserving encryption.
+- AuthN usernames support.
 
 ### Removed
 

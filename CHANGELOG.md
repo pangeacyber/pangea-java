@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Dependency on org.samba.jcifs.
+
 ### Added
 
 - `itemState` to `vault.requests.UpdateRequest`.

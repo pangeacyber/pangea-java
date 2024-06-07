@@ -56,7 +56,7 @@ examples:
           - vault/sign
           - audit/log_bulk_async_with_vault
           - vault/get
-  image: maven:3.9.6-eclipse-temurin-${JAVA_VERSION}
+  image: maven:3.9.7-eclipse-temurin-${JAVA_VERSION}
   before_script:
     - export PANGEA_AUDIT_CONFIG_ID="$(eval echo \$PANGEA_AUDIT_CONFIG_ID_1_LVE_AWS)"
     - export PANGEA_AUDIT_CUSTOM_SCHEMA_TOKEN="$(eval echo \$PANGEA_INTEGRATION_CUSTOM_SCHEMA_TOKEN_LVE_AWS)"

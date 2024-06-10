@@ -680,4 +680,26 @@ public class ITVaultTest {
 		assertEquals(4, ((ArrayList<String>) decrypted.getResult().getStructuredData().get("field1")).size());
 		assertEquals("data", decrypted.getResult().getStructuredData().get("field2"));
 	}
+
+	@Test
+	public void testExport() throws PangeaException, PangeaAPIException {
+		// Generate an exportable key.
+		final var generateRequest = new AsymmetricGenerateRequest.Builder(
+			AsymmetricAlgorithm.RSA4096_OAEP_SHA512,
+			KeyPurpose.ENCRYPTION,
+			getName()
+		)
+			.exportable(true)
+			.build();
+		final var generated = client.asymmetricGenerate(generateRequest);
+		final var key = generated.getResult().getId();
+		assertNotNull(key);
+
+		final var request = new ExportRequest.Builder(key).build();
+		final var actual = client.export(request);
+		assertNotNull(actual);
+		assertEquals(key, actual.getResult().getId());
+		assertNotNull(actual.getResult().getPublicKey());
+		assertNotNull(actual.getResult().getPrivateKey());
+	}
 }

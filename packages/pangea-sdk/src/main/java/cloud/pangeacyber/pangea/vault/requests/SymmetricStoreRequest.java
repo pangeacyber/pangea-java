@@ -22,12 +22,18 @@ public class SymmetricStoreRequest extends CommonStoreRequest {
 	@JsonProperty("purpose")
 	KeyPurpose purpose = null;
 
+	/** Whether the key is exportable or not. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("exportable")
+	Boolean exportable = null;
+
 	public SymmetricStoreRequest(Builder builder) {
 		super(builder);
 		this.type = builder.type;
 		this.algorithm = builder.algorithm;
 		this.encodedSymmetricKey = builder.encodedSymmetricKey;
 		this.purpose = builder.purpose;
+		this.exportable = builder.exportable;
 	}
 
 	public static class Builder extends CommonBuilder<Builder> {
@@ -36,6 +42,7 @@ public class SymmetricStoreRequest extends CommonStoreRequest {
 		SymmetricAlgorithm algorithm = null;
 		String encodedSymmetricKey;
 		KeyPurpose purpose = null;
+		Boolean exportable = null;
 
 		public Builder(String encodedSymmetricKey, SymmetricAlgorithm algorithm, KeyPurpose purpose, String name) {
 			super(name);
@@ -51,6 +58,11 @@ public class SymmetricStoreRequest extends CommonStoreRequest {
 
 		public Builder purpose(KeyPurpose purpose) {
 			this.purpose = purpose;
+			return this;
+		}
+
+		public Builder exportable(boolean exportable) {
+			this.exportable = exportable;
 			return this;
 		}
 	}

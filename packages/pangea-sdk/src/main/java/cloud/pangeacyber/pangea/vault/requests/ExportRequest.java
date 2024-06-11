@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
+import cloud.pangeacyber.pangea.vault.models.ExportEncryptionAlgorithm;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,9 +25,9 @@ public final class ExportRequest extends BaseRequest {
 	/** The algorithm of the public key. */
 	@JsonProperty("encryption_algorithm")
 	@JsonInclude(Include.NON_NULL)
-	private String encryptionAlgorithm;
+	private ExportEncryptionAlgorithm encryptionAlgorithm;
 
-	private ExportRequest(String id, Integer version, String encryptionKey, String encryptionAlgorithm) {
+	private ExportRequest(String id, Integer version, String encryptionKey, ExportEncryptionAlgorithm encryptionAlgorithm) {
 		this.id = id;
 		this.version = version;
 		this.encryptionKey = encryptionKey;
@@ -38,7 +39,7 @@ public final class ExportRequest extends BaseRequest {
 		private String id;
 		private Integer version;
 		private String encryptionKey;
-		private String encryptionAlgorithm;
+		private ExportEncryptionAlgorithm encryptionAlgorithm;
 
 		public Builder(String id) {
 			this.id = id;
@@ -58,7 +59,7 @@ public final class ExportRequest extends BaseRequest {
 			return this;
 		}
 
-		public Builder encryptionAlgorithm(String encryptionAlgorithm) {
+		public Builder encryptionAlgorithm(ExportEncryptionAlgorithm encryptionAlgorithm) {
 			this.encryptionAlgorithm = encryptionAlgorithm;
 			return this;
 		}

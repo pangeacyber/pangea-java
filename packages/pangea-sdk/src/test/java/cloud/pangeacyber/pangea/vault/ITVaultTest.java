@@ -695,10 +695,33 @@ public class ITVaultTest {
 		final var key = generated.getResult().getId();
 		assertNotNull(key);
 
-		final var request = new ExportRequest.Builder(key).build();
-		final var actual = client.export(request);
+		// Export it.
+		var request = new ExportRequest.Builder(key).build();
+		var actual = client.export(request);
 		assertNotNull(actual);
 		assertEquals(key, actual.getResult().getId());
+		assertNotNull(actual.getResult().getPublicKey());
+		assertNotNull(actual.getResult().getPrivateKey());
+
+		// Store it under a new name, again as exportable.
+		final var storeRequest = new AsymmetricStoreRequest.Builder(
+			actual.getResult().getPrivateKey(),
+			actual.getResult().getPublicKey(),
+			AsymmetricAlgorithm.RSA4096_OAEP_SHA512,
+			KeyPurpose.ENCRYPTION,
+			getName()
+		)
+			.exportable(true)
+			.build();
+		final var stored = client.asymmetricStore(storeRequest);
+		final var storedKey = stored.getResult().getId();
+		assertNotNull(storedKey);
+
+		// Should still be able to export it.
+		request = new ExportRequest.Builder(storedKey).build();
+		actual = client.export(request);
+		assertNotNull(actual);
+		assertEquals(storedKey, actual.getResult().getId());
 		assertNotNull(actual.getResult().getPublicKey());
 		assertNotNull(actual.getResult().getPrivateKey());
 	}

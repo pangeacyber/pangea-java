@@ -5,7 +5,7 @@
 <br />
 
 [![documentation](https://img.shields.io/badge/documentation-pangea-blue?style=for-the-badge&labelColor=551B76)][Documentation]
-[![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)][Slack]
+[![Discourse](https://img.shields.io/badge/Discourse-4A154B?style=for-the-badge&logo=discourse&logoColor=white)][Discourse]
 
 # Pangea Java SDK
 
@@ -111,6 +111,6 @@ try {
    [GA Examples]: https://github.com/pangeacyber/pangea-java/tree/main/examples
    [Beta Examples]: https://github.com/pangeacyber/pangea-java/tree/beta/examples
    [Pangea Console]: https://console.pangea.cloud/
-   [Slack]: https://pangea.cloud/join-slack/
+   [Discourse]: https://l.pangea.cloud/Jd4wlGs
    [Secure Audit Log]: https://pangea.cloud/docs/audit
    [Beta changelog]: https://github.com/pangeacyber/pangea-java/blob/beta/CHANGELOG.md

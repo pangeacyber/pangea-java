@@ -721,13 +721,22 @@ public class ITVaultTest {
 		assertEquals(key, actual.getResult().getId());
 		assertTrue(actual.getResult().isEncrypted());
 		final var decodedPublicKey = (new Base64(true)).decode(actual.getResult().getPublicKey());
-		final var cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-512AndMGF1Padding", new BouncyCastleProvider());
 		assertEquals(
 			generated.getResult().getEncodedPublicKey(),
-			new String(CryptoUtils.asymmetricDecrypt(cipher, keyPair.getPrivate(), decodedPublicKey))
+			new String(
+				CryptoUtils.asymmetricDecrypt(
+					ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512,
+					keyPair.getPrivate(),
+					decodedPublicKey
+				)
+			)
 		);
 		final var decodedPrivateKey = (new Base64(true)).decode(actual.getResult().getPrivateKey());
-		final var decryptedPrivateKey = CryptoUtils.asymmetricDecrypt(cipher, keyPair.getPrivate(), decodedPrivateKey);
+		final var decryptedPrivateKey = CryptoUtils.asymmetricDecrypt(
+			ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512,
+			keyPair.getPrivate(),
+			decodedPrivateKey
+		);
 
 		// Store it under a new name, again as exportable.
 		final var storeRequest = new AsymmetricStoreRequest.Builder(

@@ -27,7 +27,12 @@ public final class ExportRequest extends BaseRequest {
 	@JsonInclude(Include.NON_NULL)
 	private ExportEncryptionAlgorithm encryptionAlgorithm;
 
-	private ExportRequest(String id, Integer version, String encryptionKey, ExportEncryptionAlgorithm encryptionAlgorithm) {
+	private ExportRequest(
+		String id,
+		Integer version,
+		String encryptionKey,
+		ExportEncryptionAlgorithm encryptionAlgorithm
+	) {
 		this.id = id;
 		this.version = version;
 		this.encryptionKey = encryptionKey;

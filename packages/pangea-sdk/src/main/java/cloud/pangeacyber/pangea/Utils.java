@@ -13,7 +13,7 @@ import jcifs.util.MD4;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 
-public class Utils {
+public final class Utils {
 
 	public static String stringToStringB64(String data) {
 		return new String(Base64.encodeBase64(data.getBytes()));

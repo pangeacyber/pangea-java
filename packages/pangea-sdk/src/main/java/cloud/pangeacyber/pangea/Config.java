@@ -37,6 +37,12 @@ public final class Config {
 	// Timeout used to poll results after 202 (in secs)
 	long pollResultTimeout;
 
+	/** Maximum number of allowed retries on server errors. */
+	final int maxRetries;
+
+	/** Retry interval between subsequent requests. */
+	final Duration retryInterval;
+
 	protected Config(Builder builder) {
 		this.domain = builder.domain;
 		this.token = builder.token;
@@ -47,6 +53,8 @@ public final class Config {
 		this.queuedRetryEnabled = builder.queuedRetryEnabled;
 		this.pollResultTimeout = builder.pollResultTimeout;
 		this.configID = builder.configID;
+		this.maxRetries = builder.maxRetries;
+		this.retryInterval = builder.retryInterval;
 	}
 
 	public String getToken() {
@@ -83,6 +91,16 @@ public final class Config {
 
 	public String getConfigID() {
 		return configID;
+	}
+
+	/** @return Maximum number of allowed retries on server errors. */
+	public final int getMaxRetries() {
+		return this.maxRetries;
+	}
+
+	/** @return Retry interval between subsequent requests. */
+	public final Duration getRetryInterval() {
+		return this.retryInterval;
 	}
 
 	URI getServiceUrl(String serviceName, String path) {
@@ -207,6 +225,8 @@ public final class Config {
 		boolean queuedRetryEnabled;
 		long pollResultTimeout;
 		String configID;
+		int maxRetries;
+		Duration retryInterval;
 
 		public Builder(String token, String domain) {
 			this.token = token;
@@ -217,6 +237,8 @@ public final class Config {
 			this.customUserAgent = "";
 			this.queuedRetryEnabled = true;
 			this.pollResultTimeout = 240;
+			this.maxRetries = 3;
+			this.retryInterval = Duration.ofSeconds(5);
 		}
 
 		public Builder queuedRetryEnabled(boolean queuedRetryEnabled) {
@@ -255,6 +277,18 @@ public final class Config {
 		@Deprecated
 		public Builder configID(String configID) {
 			this.configID = configID;
+			return this;
+		}
+
+		/** Set the maximum number of allowed retries on server errors. */
+		public Builder maxRetries(int maxRetries) {
+			this.maxRetries = maxRetries;
+			return this;
+		}
+
+		/** Set the retry interval between subsequent requests. */
+		public Builder retryInterval(Duration retryInterval) {
+			this.retryInterval = retryInterval;
 			return this;
 		}
 

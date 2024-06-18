@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URI;
-import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
@@ -23,10 +22,11 @@ import java.util.Map;
 import java.util.TimeZone;
 import org.apache.commons.fileupload.MultipartStream;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -53,11 +53,11 @@ import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 final class InternalHttpResponse {
 
-	CloseableHttpResponse response;
+	HttpResponse response;
 	String body;
 	List<AttachedFile> attachedFiles = new LinkedList<>();
 
-	public InternalHttpResponse(CloseableHttpResponse response) throws PangeaException {
+	public InternalHttpResponse(HttpResponse response) throws PangeaException {
 		this.response = response;
 		HttpEntity entity = response.getEntity();
 		// Check if the entity is multipart
@@ -130,7 +130,7 @@ final class InternalHttpResponse {
 		return namePart.split("\n")[0].trim().split(" ")[0].replace("\"", "").replace("\r", "");
 	}
 
-	private String readBody(CloseableHttpResponse response) throws PangeaException {
+	private String readBody(HttpResponse response) throws PangeaException {
 		String body = "";
 		HttpEntity entity = response.getEntity();
 		if (entity == null) {
@@ -145,7 +145,7 @@ final class InternalHttpResponse {
 		return body;
 	}
 
-	public CloseableHttpResponse getResponse() {
+	public HttpResponse getResponse() {
 		return response;
 	}
 
@@ -171,8 +171,7 @@ public abstract class BaseClient {
 		.build();
 	protected Config config;
 	protected Logger logger;
-	CloseableHttpClient httpClient;
-	HttpRequest.Builder httpRequestBuilder;
+	private final HttpClient httpClient;
 	String serviceName;
 	Map<String, String> customHeaders = null;
 	String userAgent = "pangea-java/default";
@@ -186,7 +185,7 @@ public abstract class BaseClient {
 		} else {
 			this.logger = buildDefaultLogger();
 		}
-		this.httpClient = buildClient();
+		this.httpClient = builder.httpClient != null ? builder.httpClient : buildClient();
 		this.setUserAgent(config.getCustomUserAgent());
 	}
 
@@ -230,6 +229,7 @@ public abstract class BaseClient {
 		Logger logger;
 		Map<String, String> customHeaders;
 		String customUserAgent;
+		HttpClient httpClient;
 
 		public Builder(Config config) {
 			this.config = config;
@@ -257,6 +257,11 @@ public abstract class BaseClient {
 			this.customHeaders = customHeaders;
 			return self();
 		}
+
+		public B httpClient(final HttpClient httpClient) {
+			this.httpClient = httpClient;
+			return self();
+		}
 	}
 
 	private void setUserAgent(String customUserAgent) {
@@ -279,8 +284,13 @@ public abstract class BaseClient {
 			.setSocketTimeout(timeout)
 			.setCookieSpec(CookieSpecs.STANDARD)
 			.build();
-		CloseableHttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
-		return client;
+		return HttpClientBuilder
+			.create()
+			.setDefaultRequestConfig(config)
+			.setServiceUnavailableRetryStrategy(
+				new ServerErrorRetryStrategy(this.config.getMaxRetries(), this.config.getRetryInterval().toMillis())
+			)
+			.build();
 	}
 
 	protected HttpPost buildPostRequest(URI url, String body) throws UnsupportedEncodingException {
@@ -464,7 +474,7 @@ public abstract class BaseClient {
 
 	public AttachedFile downloadFile(String url) throws PangeaException {
 		HttpGet httpGet = new HttpGet(url);
-		CloseableHttpResponse response;
+		HttpResponse response;
 		try {
 			response = httpClient.execute(httpGet);
 		} catch (IOException e) {

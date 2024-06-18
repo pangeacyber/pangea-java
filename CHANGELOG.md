@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Improvements in verification of Audit consistency proofs
+- Improvements in verification of Audit consistency proofs.
+
+### Changed
+
+- HTTP/503 and HTTP/504 responses are now retried, with a configurable interval
+  and retry count.
 
 ## [3.9.0] - 2024-06-07
 

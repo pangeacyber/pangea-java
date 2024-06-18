@@ -527,8 +527,48 @@ public class AuditClient extends BaseClient {
 					searchEvent.isPublished() ? root.getRootHash() : unpublishedRoot.getRootHash()
 				);
 				searchEvent.verifyConsistency(publishedRoots);
+				if (searchEvent.getConsistencyVerification() == EventVerification.FAILED) {
+					// try to verify the consistency proof obtained from Pangea (just the proof, not the root hash)
+					this.fixConsistencyProof(searchEvent.leafIndex + 1);
+					searchEvent.verifyConsistency(publishedRoots);
+				}
 			}
 		}
+	}
+
+	private void fixConsistencyProof(int treeSize) {
+		// on very rare occasions, the consistency proof in Arweave may be wrong
+		// override it with the proof from pangea (not the root hash, just the proof)
+
+		// on error, do nothing (the proof will fail)
+
+		PublishedRoot arweaveRoot = this.publishedRoots.get(treeSize);
+		if (arweaveRoot == null) return;
+
+		// get the root from Pangea
+		RootResponse resp;
+		try {
+			resp = this.getRoot(treeSize);
+		} catch (PangeaException | PangeaAPIException e) {
+			return;
+		}
+
+		Root pangeaRoot = resp.getResult().getRoot();
+
+		// compare the hash
+		if (!pangeaRoot.getRootHash().equals(arweaveRoot.getRootHash())) return;
+
+		// override proof
+		this.publishedRoots.put(
+				treeSize,
+				new PublishedRoot(
+					pangeaRoot.getSize(),
+					pangeaRoot.getRootHash(),
+					pangeaRoot.getPublishedAt(),
+					pangeaRoot.getConsistencyProof(),
+					"pangea"
+				)
+			);
 	}
 
 	private void updatePublishedRoots(ResultsOutput result) {

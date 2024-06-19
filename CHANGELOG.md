@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Improvements in verification of Audit consistency proofs
 - Vault `/export` support.
 
 ## [3.9.0] - 2024-06-07

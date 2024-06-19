@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.HttpResponse;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response<Result> extends ResponseHeader {
@@ -14,7 +14,7 @@ public class Response<Result> extends ResponseHeader {
 	Result result;
 
 	@JsonIgnore
-	CloseableHttpResponse httpResponse;
+	HttpResponse httpResponse;
 
 	@JsonIgnore
 	AcceptedResult acceptedResult;
@@ -31,7 +31,7 @@ public class Response<Result> extends ResponseHeader {
 		return result;
 	}
 
-	public CloseableHttpResponse getHttpResponse() {
+	public HttpResponse getHttpResponse() {
 		return httpResponse;
 	}
 

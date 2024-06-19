@@ -37,6 +37,11 @@ public class CommonGenerateRequest extends BaseRequest {
 	@JsonProperty("expiration")
 	String expiration = null;
 
+	/** Whether the key is exportable or not. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("exportable")
+	Boolean exportable = null;
+
 	protected CommonGenerateRequest(CommonBuilder<?> builder) {
 		this.name = builder.name;
 		this.folder = builder.folder;
@@ -44,6 +49,7 @@ public class CommonGenerateRequest extends BaseRequest {
 		this.tags = builder.tags;
 		this.rotationFrequency = builder.rotationFrequency;
 		this.expiration = builder.expiration;
+		this.exportable = builder.exportable;
 	}
 
 	public String getName() {
@@ -80,6 +86,7 @@ public class CommonGenerateRequest extends BaseRequest {
 		String rotationFrequency = null;
 		String rotationState = null;
 		String expiration = null;
+		Boolean exportable = null;
 
 		public CommonBuilder(String name) {
 			this.name = name;
@@ -131,6 +138,11 @@ public class CommonGenerateRequest extends BaseRequest {
 
 		public B expiration(String expiration) {
 			this.expiration = expiration;
+			return self();
+		}
+
+		public B exportable(boolean exportable) {
+			this.exportable = exportable;
 			return self();
 		}
 	}

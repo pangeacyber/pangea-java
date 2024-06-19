@@ -25,6 +25,11 @@ public class AsymmetricStoreRequest extends CommonStoreRequest {
 	@JsonProperty("private_key")
 	String encodedPrivateKey = null;
 
+	/** Whether the key is exportable or not. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("exportable")
+	Boolean exportable = null;
+
 	protected AsymmetricStoreRequest(Builder builder) {
 		super(builder);
 		this.type = builder.type;
@@ -32,6 +37,7 @@ public class AsymmetricStoreRequest extends CommonStoreRequest {
 		this.purpose = builder.purpose;
 		this.encodedPrivateKey = builder.encodedPrivateKey;
 		this.encodedPublicKey = builder.encodedPublicKey;
+		this.exportable = builder.exportable;
 	}
 
 	public AsymmetricAlgorithm getAlgorithm() {
@@ -57,6 +63,7 @@ public class AsymmetricStoreRequest extends CommonStoreRequest {
 		KeyPurpose purpose = null;
 		String encodedPublicKey;
 		String encodedPrivateKey = null;
+		Boolean exportable = null;
 
 		public Builder(
 			String encodedPrivateKey,
@@ -79,6 +86,11 @@ public class AsymmetricStoreRequest extends CommonStoreRequest {
 
 		public Builder purpose(KeyPurpose purpose) {
 			this.purpose = purpose;
+			return this;
+		}
+
+		public Builder exportable(boolean exportable) {
+			this.exportable = exportable;
 			return this;
 		}
 	}

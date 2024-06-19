@@ -1,6 +1,5 @@
 package cloud.pangeacyber.pangea.vault.results;
 
-import cloud.pangeacyber.pangea.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Result of a decrypt transform request.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DecryptTransformResult extends BaseRequest {
+public class DecryptTransformResult {
 
 	/** The ID of the item. */
 	@JsonProperty("id")

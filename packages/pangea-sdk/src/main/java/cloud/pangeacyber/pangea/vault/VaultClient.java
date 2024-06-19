@@ -740,4 +740,34 @@ public class VaultClient extends BaseClient {
 		throws PangeaException, PangeaAPIException {
 		return post("/v1/key/decrypt/transform", request, DecryptTransformResponse.class);
 	}
+
+	/**
+	 * Export
+	 * @pangea.description Export a symmetric or asymmetric key.
+	 * @pangea.operationId vault_post_v1_export
+	 * @param request Request parameters.
+	 * @return Exported result.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * // Generate an exportable key.
+	 * final var generateRequest = new AsymmetricGenerateRequest.Builder(
+	 * 	AsymmetricAlgorithm.RSA4096_OAEP_SHA512,
+	 * 	KeyPurpose.ENCRYPTION,
+	 * 	"a-name-for-the-key"
+	 * )
+	 * 	.exportable(true)
+	 * 	.build();
+	 * final var generated = client.asymmetricGenerate(generateRequest);
+	 * final var key = generated.getResult().getId();
+	 *
+	 * // Then it can be exported whenever needed.
+	 * final var request = new ExportRequest.Builder(key).build();
+	 * final var exported = client.export(request);
+	 * }
+	 */
+	public ExportResponse export(ExportRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/export", request, ExportResponse.class);
+	}
 }

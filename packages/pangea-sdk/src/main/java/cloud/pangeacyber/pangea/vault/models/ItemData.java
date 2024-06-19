@@ -67,6 +67,11 @@ public class ItemData {
 	@JsonProperty("purpose")
 	String purpose = null;
 
+	/** Whether the key is exportable or not. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("exportable")
+	Boolean exportable = null;
+
 	public String getId() {
 		return id;
 	}
@@ -125,5 +130,9 @@ public class ItemData {
 
 	public String getPurpose() {
 		return purpose;
+	}
+
+	public Boolean isExportable() {
+		return exportable;
 	}
 }

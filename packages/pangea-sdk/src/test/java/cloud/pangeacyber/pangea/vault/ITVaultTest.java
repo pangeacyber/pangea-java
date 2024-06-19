@@ -6,12 +6,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.CryptoUtils;
 import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.Utils;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
+import cloud.pangeacyber.pangea.vault.models.ExportEncryptionAlgorithm;
 import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
@@ -22,12 +24,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -679,5 +690,74 @@ public class ITVaultTest {
 		assertEquals(key, decrypted.getResult().getId());
 		assertEquals(4, ((ArrayList<String>) decrypted.getResult().getStructuredData().get("field1")).size());
 		assertEquals("data", decrypted.getResult().getStructuredData().get("field2"));
+	}
+
+	@Test
+	public void testExport()
+		throws PangeaException, PangeaAPIException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+		// Generate an exportable key.
+		final var generateRequest = new AsymmetricGenerateRequest.Builder(
+			AsymmetricAlgorithm.ED25519,
+			KeyPurpose.SIGNING,
+			getName()
+		)
+			.exportable(true)
+			.build();
+		final var generated = client.asymmetricGenerate(generateRequest);
+		final var key = generated.getResult().getId();
+		assertNotNull(key);
+
+		// Generate a RSA key pair.
+		final var keyPair = CryptoUtils.generateRsaKeyPair(4096);
+		final var publicKey = CryptoUtils.asymmetricPemExport(keyPair.getPublic());
+
+		// Export it.
+		var request = new ExportRequest.Builder(key)
+			.encryptionAlgorithm(ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512)
+			.encryptionKey(publicKey)
+			.build();
+		var actual = client.export(request);
+		assertNotNull(actual);
+		assertEquals(key, actual.getResult().getId());
+		assertTrue(actual.getResult().isEncrypted());
+		final var decodedPublicKey = (new Base64(true)).decode(actual.getResult().getPublicKey());
+		assertEquals(
+			generated.getResult().getEncodedPublicKey(),
+			new String(
+				CryptoUtils.asymmetricDecrypt(
+					ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512,
+					keyPair.getPrivate(),
+					decodedPublicKey
+				)
+			)
+		);
+		final var decodedPrivateKey = (new Base64(true)).decode(actual.getResult().getPrivateKey());
+		final var decryptedPrivateKey = CryptoUtils.asymmetricDecrypt(
+			ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512,
+			keyPair.getPrivate(),
+			decodedPrivateKey
+		);
+
+		// Store it under a new name, again as exportable.
+		final var storeRequest = new AsymmetricStoreRequest.Builder(
+			new String(decryptedPrivateKey),
+			generated.getResult().getEncodedPublicKey(),
+			AsymmetricAlgorithm.ED25519,
+			KeyPurpose.SIGNING,
+			getName()
+		)
+			.exportable(true)
+			.build();
+		final var stored = client.asymmetricStore(storeRequest);
+		final var storedKey = stored.getResult().getId();
+		assertNotNull(storedKey);
+
+		// Should still be able to export it.
+		request = new ExportRequest.Builder(storedKey).build();
+		actual = client.export(request);
+		assertNotNull(actual);
+		assertEquals(storedKey, actual.getResult().getId());
+		assertNotNull(actual.getResult().getPublicKey());
+		assertNotNull(actual.getResult().getPrivateKey());
 	}
 }

@@ -341,7 +341,7 @@ public class ITAuthNTest {
 			}
 		} catch (PangeaAPIException e) {
 			System.out.println(e.toString());
-			assertTrue(false);
+			throw e;
 		}
 	}
 
@@ -376,9 +376,13 @@ public class ITAuthNTest {
 					System.out.println(e.toString());
 				}
 			}
+
+			// Expire password
+			final var expirePasswordResponse = client.client().password().expire(userID);
+			assertTrue("password expiration was unsuccessful", expirePasswordResponse.isOk());
 		} catch (PangeaAPIException e) {
 			System.out.println(e.toString());
-			assertTrue(false);
+			throw e;
 		}
 	}
 

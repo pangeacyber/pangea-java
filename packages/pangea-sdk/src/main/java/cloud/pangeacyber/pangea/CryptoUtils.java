@@ -21,7 +21,7 @@ public final class CryptoUtils {
 	/**
 	 * Generates a new RSA key pair of the given key size.
 	 *
-	 * @param keysize Key size.
+	 * @param keySize Key size.
 	 * @return RSA key pair.
 	 */
 	public static KeyPair generateRsaKeyPair(int keySize) {

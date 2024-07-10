@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - AuthN user password expiration support.
+- `"state"` and other new properties to `authn.models.Authenticator`.
+
+### Changed
+
+- `isEnable()` in `authn.models.Authenticator` has been renamed to
+  `isEnabled()`. The previous name did not match the name used in the API's
+  response schema and JSON deserialization was not set up correctly, so
+  `isEnable()` was unusable anyways.
 
 ## [3.10.1] - 2024-06-24
 

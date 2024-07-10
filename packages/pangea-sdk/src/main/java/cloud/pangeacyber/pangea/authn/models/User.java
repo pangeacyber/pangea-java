@@ -126,6 +126,7 @@ public class User {
 		return lastLoginCountry;
 	}
 
+	/** A list of authenticators. */
 	public Authenticator[] getAuthenticators() {
 		return authenticators;
 	}

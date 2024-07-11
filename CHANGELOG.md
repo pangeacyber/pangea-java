@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - AuthN user password expiration support.
+- `itemState` to `vault.requests.UpdateRequest`.
 
 ## [3.10.1] - 2024-06-24
 

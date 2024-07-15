@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `itemState` to `vault.requests.UpdateRequest`.
+
 ## [3.11.0] - 2024-07-12
 
 ### Added

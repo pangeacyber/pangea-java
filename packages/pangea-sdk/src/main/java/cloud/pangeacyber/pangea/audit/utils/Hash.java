@@ -2,7 +2,8 @@ package cloud.pangeacyber.pangea.audit.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HexFormat;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class Hash {
@@ -12,8 +13,11 @@ public class Hash {
 	}
 
 	public static byte[] unhexlify(String hex) {
-		HexFormat parser = HexFormat.of();
-		return parser.parseHex(hex);
+		try {
+			return Hex.decodeHex(hex);
+		} catch (DecoderException e) {
+			throw new IllegalArgumentException(e.getMessage());
+		}
 	}
 
 	public static byte[] decode(String hash) {

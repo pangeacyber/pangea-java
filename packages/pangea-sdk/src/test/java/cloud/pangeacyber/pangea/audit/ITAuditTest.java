@@ -368,8 +368,7 @@ public class ITAuditTest {
 		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
-			"""
-{"algorithm":"ED25519","key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			"{\"algorithm\":\"ED25519\",\"key\":\"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n\"}",
 			result.getEventEnvelope().getPublicKey()
 		);
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
@@ -397,8 +396,7 @@ public class ITAuditTest {
 		CustomEvent eventResult = (CustomEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_CUSTOM_SCHEMA_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
-			"""
-{"algorithm":"ED25519","key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			"{\"algorithm\":\"ED25519\",\"key\":\"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n\"}",
 			result.getEventEnvelope().getPublicKey()
 		);
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
@@ -428,8 +426,7 @@ public class ITAuditTest {
 		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
-			"""
-{"ExtraInfo":"LocalKey","algorithm":"ED25519","key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			"{\"ExtraInfo\":\"LocalKey\",\"algorithm\":\"ED25519\",\"key\":\"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n\"}",
 			result.getEventEnvelope().getPublicKey()
 		);
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
@@ -487,8 +484,7 @@ public class ITAuditTest {
 		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
-			"""
-{"algorithm":"ED25519","key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			"{\"algorithm\":\"ED25519\",\"key\":\"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n\"}",
 			result.getEventEnvelope().getPublicKey()
 		);
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());

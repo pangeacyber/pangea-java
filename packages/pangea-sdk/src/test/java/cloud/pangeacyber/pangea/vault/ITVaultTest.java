@@ -1,9 +1,9 @@
 package cloud.pangeacyber.pangea.vault;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.CryptoUtils;
@@ -34,14 +34,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITVaultTest {
 
@@ -51,12 +49,12 @@ public class ITVaultTest {
 	Random random;
 	final String actor = "JavaSDKTest";
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("vault", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		client = new VaultClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
@@ -187,7 +185,8 @@ public class ITVaultTest {
 
 		// TODO: Add failures cases
 
-		// Wrong signature. Use signature of version 1, and try to verify with default version (2)
+		// Wrong signature. Use signature of version 1, and try to verify with
+		// default version (2)
 		VerifyResponse verifyResponseBad = client.verify(id, data, signResponse1.getResult().getSignature());
 		assertFalse(verifyResponseBad.getResult().isValidSignature());
 

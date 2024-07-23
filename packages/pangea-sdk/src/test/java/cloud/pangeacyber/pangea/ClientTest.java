@@ -16,9 +16,9 @@ import org.apache.http.impl.bootstrap.HttpServer;
 import org.apache.http.impl.bootstrap.ServerBootstrap;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 final class TestClient extends BaseClient {
 
@@ -61,7 +61,7 @@ public class ClientTest {
 	private static HttpServer server;
 	private static TestClient client;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws IOException {
 		serverBootstrap = ServerBootstrap.bootstrap().setServerInfo("TEST/1.1");
 		serverBootstrap.registerHandler("*", new MockServerErrorHandler());
@@ -71,7 +71,7 @@ public class ClientTest {
 		client = new TestClient("localhost:" + server.getLocalPort());
 	}
 
-	@After
+	@AfterEach
 	public void shutDown() {
 		if (server != null) {
 			server.shutdown(10, TimeUnit.SECONDS);

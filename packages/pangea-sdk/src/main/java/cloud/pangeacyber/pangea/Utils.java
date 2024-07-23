@@ -42,7 +42,7 @@ public final class Utils {
 		final var md4 = new MD4Digest();
 		md4.update(unicodePasswordBytes, 0, unicodePasswordBytes.length);
 		final var ntlmHash = new byte[md4.getDigestSize()];
-        md4.doFinal(ntlmHash, 0);
+		md4.doFinal(ntlmHash, 0);
 		return Hex.toHexString(ntlmHash).toUpperCase(Locale.ROOT);
 	}
 

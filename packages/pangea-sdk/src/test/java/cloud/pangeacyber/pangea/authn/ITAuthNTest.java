@@ -1,9 +1,9 @@
 package cloud.pangeacyber.pangea.authn;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.MethodName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodName.class)
 public class ITAuthNTest {
 
 	AuthNClient client;
@@ -45,12 +45,12 @@ public class ITAuthNTest {
 	private final String cbURI = "https://someurl.com/callbacklink";
 	String time;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("authn", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		this.cfg = Config.fromIntegrationEnvironment(environment);
 		client = new AuthNClient.Builder(cfg).build();
@@ -227,7 +227,8 @@ public class ITAuthNTest {
 			assertNull(passUpdateResp.getResult());
 
 			// Update profile
-			// Get profile by email. Should be empty because it was created without profile parameter
+			// Get profile by email. Should be empty because it was created
+			// without profile parameter.
 			UserProfileGetResponse profileGetResp = client.user().profile().getByEmail(emailTest);
 			assertTrue(profileGetResp.isOk());
 			assertNotNull(profileGetResp.getResult());
@@ -379,7 +380,7 @@ public class ITAuthNTest {
 
 			// Expire password
 			final var expirePasswordResponse = client.client().password().expire(userID);
-			assertTrue("password expiration was unsuccessful", expirePasswordResponse.isOk());
+			assertTrue(expirePasswordResponse.isOk(), "password expiration was unsuccessful");
 		} catch (PangeaAPIException e) {
 			System.out.println(e.toString());
 			throw e;

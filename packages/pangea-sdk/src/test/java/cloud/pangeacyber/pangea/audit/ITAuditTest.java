@@ -1,9 +1,10 @@
 package cloud.pangeacyber.pangea.audit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.AttachedFile;
 import cloud.pangeacyber.pangea.Config;
@@ -23,9 +24,9 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITAuditTest {
 
@@ -45,12 +46,12 @@ public class ITAuditTest {
 	private static final String LONG_FIELD =
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia, orci eget commodo commodo non.";
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("audit", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		Config vaultCfg = Config.fromVaultIntegrationEnvironment(environment);
 		this.cfgGeneral = Config.fromIntegrationEnvironment(environment);
@@ -868,48 +869,41 @@ public class ITAuditTest {
 		assertEquals(treeSize, root.getSize());
 	}
 
-	@Test(expected = PangeaAPIException.class)
+	@Test
 	public void testRootTreeNotFound() throws PangeaException, PangeaAPIException {
 		int treeSize = 1000000;
-		RootResponse response = clientGeneral.getRoot(treeSize);
+		assertThrows(PangeaAPIException.class, () -> clientGeneral.getRoot(treeSize));
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testRootUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		int treeSize = 1;
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
-		RootResponse response = fakeClient.getRoot(treeSize);
+		assertThrows(UnauthorizedException.class, () -> fakeClient.getRoot(treeSize));
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testLogUnathorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
 		StandardEvent event = new StandardEvent("Test msg");
-		LogResponse response = fakeClient.log(
-			event,
-			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
+		assertThrows(
+			UnauthorizedException.class,
+			() -> fakeClient.log(event, new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build())
 		);
 	}
 
-	// @Test(expected = ValidationException.class)
-	// public void testLogEmptyMessage() throws PangeaException, PangeaAPIException {
-	// 	Event event = new Event("");
-	// 	LogResponse response = client.log(event);
-	// }
-
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testSearchValidationException() throws PangeaAPIException, PangeaException {
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").order("notavalidorder").build();
-
 		SearchConfig config = new SearchConfig.Builder().build();
-		SearchResponse searchResponse = clientGeneral.search(request, config);
+		assertThrows(ValidationException.class, () -> clientGeneral.search(request, config));
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testSearchValidationException2() throws PangeaAPIException, PangeaException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
@@ -917,15 +911,15 @@ public class ITAuditTest {
 
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").build();
 		SearchConfig config = new SearchConfig.Builder().build();
-		SearchResponse searchResponse = fakeClient.search(request, config);
+		assertThrows(UnauthorizedException.class, () -> fakeClient.search(request, config));
 	}
 
-	@Test(expected = SignerException.class)
+	@Test
 	public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
-		LogResponse response = clientGeneral.log(
-			event,
-			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
+		assertThrows(
+			SignerException.class,
+			() -> clientGeneral.log(event, new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build())
 		);
 	}
 
@@ -983,7 +977,7 @@ public class ITAuditTest {
 		assertEquals(result.getSignatureVerification(), EventVerification.NOT_VERIFIED);
 	}
 
-	@Test(expected = PangeaAPIException.class)
+	@Test
 	public void testMultiConfigWithoutConfigID() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
@@ -991,9 +985,9 @@ public class ITAuditTest {
 			.build();
 		AuditClient client = new AuditClient.Builder(cfg).build();
 
-		LogResponse response = client.log(
-			event,
-			new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
+		assertThrows(
+			PangeaAPIException.class,
+			() -> client.log(event, new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build())
 		);
 	}
 

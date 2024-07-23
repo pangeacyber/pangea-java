@@ -1,9 +1,10 @@
 package cloud.pangeacyber.pangea.file_scan;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.FileData;
@@ -24,13 +25,13 @@ import cloud.pangeacyber.pangea.file_scan.responses.FileScanResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.MethodName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodName.class)
 public class ITFileScanTest {
 
 	final String TESTFILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/testfile.pdf";
@@ -38,12 +39,12 @@ public class ITFileScanTest {
 	FileScanClient client;
 	static TestEnvironment environment;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("file-scan", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		client = new FileScanClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
@@ -79,7 +80,7 @@ public class ITFileScanTest {
 		assertNotNull(response.getResult().getRawData());
 	}
 
-	@Test(expected = AcceptedRequestException.class)
+	@Test
 	public void testFileScan_ScanAsync_crowdstrike()
 		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
@@ -87,7 +88,10 @@ public class ITFileScanTest {
 		client = new FileScanClient.Builder(cfg).build();
 
 		File file = new File(TESTFILE_PATH);
-		FileScanResponse response = client.scan(new FileScanRequest.Builder().provider("crowdstrike").build(), file);
+		assertThrows(
+			AcceptedRequestException.class,
+			() -> client.scan(new FileScanRequest.Builder().provider("crowdstrike").build(), file)
+		);
 	}
 
 	@Test
@@ -117,7 +121,8 @@ public class ITFileScanTest {
 				// Sleep 10 seconds until result is (should) be ready
 				Thread.sleep(10 * 1000);
 
-				// Poll result, this could raise another AcceptedRequestException if result is not ready
+				// Poll result, this could raise another AcceptedRequestException if result is
+				// not ready
 				response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
 				assertTrue(response.isOk());
 
@@ -148,7 +153,7 @@ public class ITFileScanTest {
 		assertNotNull(response.getResult().getRawData());
 	}
 
-	@Test(expected = AcceptedRequestException.class)
+	@Test
 	public void testFileScan_ScanAsync_reversinglabs()
 		throws PangeaException, PangeaException, PangeaAPIException, IOException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
@@ -156,7 +161,10 @@ public class ITFileScanTest {
 		client = new FileScanClient.Builder(cfg).build();
 
 		File file = new File(TESTFILE_PATH);
-		FileScanResponse response = client.scan(new FileScanRequest.Builder().provider("reversinglabs").build(), file);
+		assertThrows(
+			AcceptedRequestException.class,
+			() -> client.scan(new FileScanRequest.Builder().provider("reversinglabs").build(), file)
+		);
 	}
 
 	@Test
@@ -186,7 +194,8 @@ public class ITFileScanTest {
 				// Sleep 10 seconds until result is (should) be ready
 				Thread.sleep(10 * 1000);
 
-				// Poll result, this could raise another AcceptedRequestException if result is not ready
+				// Poll result, this could raise another AcceptedRequestException
+				// if result is not ready.
 				response = client.pollResult(exception.getRequestId(), FileScanResponse.class);
 				assertTrue(response.isOk());
 
@@ -230,7 +239,8 @@ public class ITFileScanTest {
 				// Sleep 10 seconds until result is (should) be ready
 				Thread.sleep(10 * 1000);
 
-				// Poll result, this could raise another AcceptedRequestException if result is not ready
+				// Poll result, this could raise another AcceptedRequestException
+				// if result is not ready.
 				response = client.pollResult(acceptedResponse.getRequestId(), FileScanResponse.class);
 				assertTrue(response.isOk());
 
@@ -272,7 +282,8 @@ public class ITFileScanTest {
 				// Sleep 10 seconds until result is (should) be ready
 				Thread.sleep(10 * 1000);
 
-				// Poll result, this could raise another AcceptedRequestException if result is not ready
+				// Poll result, this could raise another AcceptedRequestException
+				// if result is not ready.
 				response = client.pollResult(acceptedResponse.getRequestId(), FileScanResponse.class);
 				assertTrue(response.isOk());
 

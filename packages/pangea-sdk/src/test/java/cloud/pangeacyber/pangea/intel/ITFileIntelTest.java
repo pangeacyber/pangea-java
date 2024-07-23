@@ -1,10 +1,11 @@
 package cloud.pangeacyber.pangea.intel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
@@ -20,21 +21,21 @@ import cloud.pangeacyber.pangea.intel.requests.FileHashReputationBulkRequest;
 import cloud.pangeacyber.pangea.intel.requests.FileHashReputationRequest;
 import cloud.pangeacyber.pangea.intel.responses.FileReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.FileReputationResponse;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITFileIntelTest {
 
 	FileIntelClient client;
 	static TestEnvironment environment;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("file-intel", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		client = new FileIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
@@ -211,98 +212,126 @@ public class ITFileIntelTest {
 		assertNotNull(response.getResult().getRawData());
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyProvider() throws PangeaException, PangeaAPIException {
-		FileReputationResponse response = client.reputation(
-			new FileHashReputationRequest.Builder(
-				"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
-				"sha256"
-			)
-				.provider("")
-				.verbose(true)
-				.raw(true)
-				.build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new FileHashReputationRequest.Builder(
+						"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
+						"sha256"
+					)
+						.provider("")
+						.verbose(true)
+						.raw(true)
+						.build()
+				)
 		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testNotValidProvider() throws PangeaException, PangeaAPIException {
-		FileReputationResponse response = client.reputation(
-			new FileHashReputationRequest.Builder(
-				"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
-				"sha256"
-			)
-				.provider("notvalid")
-				.verbose(true)
-				.raw(true)
-				.build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new FileHashReputationRequest.Builder(
+						"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
+						"sha256"
+					)
+						.provider("notvalid")
+						.verbose(true)
+						.raw(true)
+						.build()
+				)
 		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyHash() throws PangeaException, PangeaAPIException {
-		FileReputationResponse response = client.reputation(
-			new FileHashReputationRequest.Builder("", "sha256")
-				.provider("reversinglabs")
-				.verbose(true)
-				.raw(true)
-				.build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new FileHashReputationRequest.Builder("", "sha256")
+						.provider("reversinglabs")
+						.verbose(true)
+						.raw(true)
+						.build()
+				)
 		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testNotValidHash() throws PangeaException, PangeaAPIException {
-		FileReputationResponse response = client.reputation(
-			new FileHashReputationRequest.Builder("notavalidhash", "sha256")
-				.provider("reversinglabs")
-				.verbose(true)
-				.raw(true)
-				.build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new FileHashReputationRequest.Builder("notavalidhash", "sha256")
+						.provider("reversinglabs")
+						.verbose(true)
+						.raw(true)
+						.build()
+				)
 		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyHashType() throws PangeaException, PangeaAPIException {
-		FileReputationResponse response = client.reputation(
-			new FileHashReputationRequest.Builder(
-				"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
-				"sha256"
-			)
-				.provider("")
-				.verbose(true)
-				.raw(true)
-				.build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new FileHashReputationRequest.Builder(
+						"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
+						"sha256"
+					)
+						.provider("")
+						.verbose(true)
+						.raw(true)
+						.build()
+				)
 		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testNotValidHashType() throws PangeaException, PangeaAPIException {
-		FileReputationResponse response = client.reputation(
-			new FileHashReputationRequest.Builder(
-				"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
-				"notvalid"
-			)
-				.provider("reversinglabs")
-				.verbose(true)
-				.raw(true)
-				.build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new FileHashReputationRequest.Builder(
+						"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
+						"notvalid"
+					)
+						.provider("reversinglabs")
+						.verbose(true)
+						.raw(true)
+						.build()
+				)
 		);
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		FileIntelClient fakeClient = new FileIntelClient.Builder(cfg).build();
-		FileReputationResponse response = fakeClient.reputation(
-			new FileHashReputationRequest.Builder(
-				"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
-				"sha256"
-			)
-				.provider("reversinglabs")
-				.verbose(true)
-				.raw(true)
-				.build()
+		assertThrows(
+			UnauthorizedException.class,
+			() ->
+				fakeClient.reputation(
+					new FileHashReputationRequest.Builder(
+						"322ccbd42b7e4fd3a9d0167ca2fa9f6483d9691364c431625f1df542706",
+						"sha256"
+					)
+						.provider("reversinglabs")
+						.verbose(true)
+						.raw(true)
+						.build()
+				)
 		);
 	}
 
@@ -313,8 +342,11 @@ public class ITFileIntelTest {
 		assertNotEquals(hash, "");
 	}
 
-	@Test(expected = PangeaException.class)
+	@Test
 	public void testSHA256fromFilepathNoFile() throws PangeaException {
-		String hash = FileIntelClient.calculateSHA256fromFile("./not/a/real/path/file.exe");
+		assertThrows(
+			PangeaException.class,
+			() -> FileIntelClient.calculateSHA256fromFile("./not/a/real/path/file.exe")
+		);
 	}
 }

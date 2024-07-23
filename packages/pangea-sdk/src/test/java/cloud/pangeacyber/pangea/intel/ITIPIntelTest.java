@@ -1,10 +1,11 @@
 package cloud.pangeacyber.pangea.intel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
@@ -35,21 +36,21 @@ import cloud.pangeacyber.pangea.intel.responses.IPReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPReputationResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPVPNBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.IPVPNResponse;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITIPIntelTest {
 
 	IPIntelClient client;
 	static TestEnvironment environment;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("ip-intel", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		client = new IPIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
@@ -763,38 +764,58 @@ public class ITIPIntelTest {
 		assertNotNull(response.getResult().getParameters());
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyIP() throws PangeaException, PangeaAPIException {
-		IPReputationResponse response = client.reputation(
-			new IPReputationRequest.Builder("").provider("crowdstrike").verbose(false).raw(false).build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new IPReputationRequest.Builder("").provider("crowdstrike").verbose(false).raw(false).build()
+				)
 		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyProvider() throws PangeaException, PangeaAPIException {
-		IPReputationResponse response = client.reputation(
-			new IPReputationRequest.Builder("93.231.182.110").provider("").verbose(false).raw(false).build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new IPReputationRequest.Builder("93.231.182.110").provider("").verbose(false).raw(false).build()
+				)
 		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyNotValidProvider() throws PangeaException, PangeaAPIException {
-		IPReputationResponse response = client.reputation(
-			new IPReputationRequest.Builder("93.231.182.110")
-				.provider("notavalidprovider")
-				.verbose(false)
-				.raw(false)
-				.build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new IPReputationRequest.Builder("93.231.182.110")
+						.provider("notavalidprovider")
+						.verbose(false)
+						.raw(false)
+						.build()
+				)
 		);
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		IPIntelClient fakeClient = new IPIntelClient.Builder(cfg).build();
-		IPReputationResponse response = fakeClient.reputation(
-			new IPReputationRequest.Builder("93.231.182.110").provider("crowdstrike").verbose(false).raw(false).build()
+		assertThrows(
+			UnauthorizedException.class,
+			() ->
+				fakeClient.reputation(
+					new IPReputationRequest.Builder("93.231.182.110")
+						.provider("crowdstrike")
+						.verbose(false)
+						.raw(false)
+						.build()
+				)
 		);
 	}
 }

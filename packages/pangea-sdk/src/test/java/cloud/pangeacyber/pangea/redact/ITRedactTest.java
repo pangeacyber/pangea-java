@@ -1,9 +1,10 @@
 package cloud.pangeacyber.pangea.redact;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
@@ -20,21 +21,21 @@ import cloud.pangeacyber.pangea.redact.results.RedactStructuredResult;
 import cloud.pangeacyber.pangea.redact.results.RedactTextResult;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITRedactTest {
 
 	RedactClient client;
 	static TestEnvironment environment;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("redact", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		client = new RedactClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
@@ -263,17 +264,18 @@ public class ITRedactTest {
 		assertNotNull(result.getReport());
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testRedactTextUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		RedactClient fakeClient = new RedactClient.Builder(cfg).build();
-		RedactTextResponse response = fakeClient.redactText(
-			new RedactTextRequest.Builder("My name is Jenny Jenny").build()
+		assertThrows(
+			UnauthorizedException.class,
+			() -> fakeClient.redactText(new RedactTextRequest.Builder("My name is Jenny Jenny").build())
 		);
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testRedactStructuredUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
@@ -281,8 +283,9 @@ public class ITRedactTest {
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 		data.put("Name", "Jenny Jenny");
 		data.put("Phone", "This is its number: 415-867-5309");
-		RedactStructuredResponse response = fakeClient.redactStructured(
-			new RedactStructuredRequest.Builder(data).build()
+		assertThrows(
+			UnauthorizedException.class,
+			() -> fakeClient.redactStructured(new RedactStructuredRequest.Builder(data).build())
 		);
 	}
 
@@ -326,15 +329,16 @@ public class ITRedactTest {
 		assertNull(result.getReport());
 	}
 
-	@Test(expected = PangeaAPIException.class)
+	@Test
 	public void testMultiConfigWithoutConfigID() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
 			.build();
 
 		RedactClient clientMultiConfig = new RedactClient.Builder(cfg).build();
 
-		RedactTextResponse response = clientMultiConfig.redactText(
-			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").build()
+		assertThrows(
+			PangeaAPIException.class,
+			() -> clientMultiConfig.redactText(new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").build())
 		);
 	}
 }

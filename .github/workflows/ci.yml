@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java-version: [17, 21]
+        java-version: [11, 17, 21]
     defaults:
       run:
         working-directory: ./packages/pangea-sdk

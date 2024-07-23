@@ -206,9 +206,7 @@ public class ITVaultTest {
 	}
 
 	private void jwtAsymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
-		String payload = """
-            {'message': 'message to sign', 'data': 'Some extra data'}
-            """;
+		String payload = "{'message': 'message to sign', 'data': 'Some extra data'}";
 
 		// Sign 1
 		JWTSignResponse signResponse1 = client.jwtSign(id, payload);
@@ -254,9 +252,7 @@ public class ITVaultTest {
 	}
 
 	private void jwtSymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
-		String payload = """
-            {'message': 'message to sign', 'data': 'Some extra data'}
-            """;
+		String payload = "{'message': 'message to sign', 'data': 'Some extra data'}";
 
 		// Sign 1
 		JWTSignResponse signResponse1 = client.jwtSign(id, payload);
@@ -647,9 +643,7 @@ public class ITVaultTest {
 	public void testEncryptStructured()
 		throws JsonProcessingException, JsonMappingException, PangeaException, PangeaAPIException {
 		// Test data.
-		String payload = """
-            { "field1": ["1", "2", "true", "false"], "field2": "data" }
-        """;
+		String payload = "{ \"field1\": [\"1\", \"2\", \"true\", \"false\"], \"field2\": \"data\" }";
 		var data = new ObjectMapper().readValue(payload, new TypeReference<Map<String, Object>>() {});
 
 		// Generate an encryption key.

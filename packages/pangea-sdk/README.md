@@ -9,7 +9,7 @@
 
 # Pangea Java SDK
 
-A Java SDK for integrating with Pangea services. Supports Java 21.
+A Java SDK for integrating with Pangea services. Supports Java 11, 17, and 21.
 
 ## Installation
 

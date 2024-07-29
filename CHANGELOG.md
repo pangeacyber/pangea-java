@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Value of `TransferMethod.SOURCE_URL`.
+
 ## [3.12.0] - 2024-07-23
 
 ### Added

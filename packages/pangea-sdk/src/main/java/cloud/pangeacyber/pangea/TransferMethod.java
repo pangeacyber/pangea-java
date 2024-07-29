@@ -3,7 +3,7 @@ package cloud.pangeacyber.pangea;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TransferMethod {
-	SOURCE_URL("source_url"),
+	SOURCE_URL("source-url"),
 	MULTIPART("multipart"),
 	POST_URL("post-url"),
 	PUT_URL("put-url"),

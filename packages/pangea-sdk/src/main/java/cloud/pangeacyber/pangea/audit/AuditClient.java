@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -460,7 +461,38 @@ public class AuditClient extends BaseClient {
 	 * }
 	 */
 	public DownloadResponse downloadResults(DownloadRequest request) throws PangeaException, PangeaAPIException {
+		if (request.getRequestID() == null && request.getResultID() == null) {
+			throw new IllegalArgumentException("must pass a request ID or a result ID");
+		}
+
 		return post("/v1/download_results", request, DownloadResponse.class);
+	}
+
+	/**
+	 * Log streaming endpoint
+	 * @pangea.description This API allows 3rd party vendors (like Auth0) to
+	 * stream events to this endpoint where the structure of the payload varies
+	 * across different vendors.
+	 * @pangea.operationId audit_post_v1_log_stream
+	 * @param request Event data. The exact schema of this will vary by vendor.
+	 * @return A Pangea response.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * // Extend `BaseRequest` and model what the streaming data looks like.
+	 * public final class LogStreamRequest extends BaseRequest {
+	 * 	@JsonProperty("logs")
+	 * 	private List<LogStreamEvent> logs;
+	 * }
+	 *
+	 * // Then later on, log it like so:
+	 * final var input = new LogStreamRequest();
+	 * final var response = await client.logStream(input);
+	 * }
+	 */
+	public Response<Void> logStream(BaseRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/log_stream", request, new TypeReference<Response<Void>>() {});
 	}
 
 	private void processSearchResult(ResultsOutput result, SearchConfig config)
@@ -495,8 +527,48 @@ public class AuditClient extends BaseClient {
 					searchEvent.isPublished() ? root.getRootHash() : unpublishedRoot.getRootHash()
 				);
 				searchEvent.verifyConsistency(publishedRoots);
+				if (searchEvent.getConsistencyVerification() == EventVerification.FAILED) {
+					// try to verify the consistency proof obtained from Pangea (just the proof, not the root hash)
+					this.fixConsistencyProof(searchEvent.leafIndex + 1);
+					searchEvent.verifyConsistency(publishedRoots);
+				}
 			}
 		}
+	}
+
+	private void fixConsistencyProof(int treeSize) {
+		// on very rare occasions, the consistency proof in Arweave may be wrong
+		// override it with the proof from pangea (not the root hash, just the proof)
+
+		// on error, do nothing (the proof will fail)
+
+		PublishedRoot arweaveRoot = this.publishedRoots.get(treeSize);
+		if (arweaveRoot == null) return;
+
+		// get the root from Pangea
+		RootResponse resp;
+		try {
+			resp = this.getRoot(treeSize);
+		} catch (PangeaException | PangeaAPIException e) {
+			return;
+		}
+
+		Root pangeaRoot = resp.getResult().getRoot();
+
+		// compare the hash
+		if (!pangeaRoot.getRootHash().equals(arweaveRoot.getRootHash())) return;
+
+		// override proof
+		this.publishedRoots.put(
+				treeSize,
+				new PublishedRoot(
+					pangeaRoot.getSize(),
+					pangeaRoot.getRootHash(),
+					pangeaRoot.getPublishedAt(),
+					pangeaRoot.getConsistencyProof(),
+					"pangea"
+				)
+			);
 	}
 
 	private void updatePublishedRoots(ResultsOutput result) {
@@ -609,5 +681,31 @@ public class AuditClient extends BaseClient {
 	public ResultsResponse results(ResultRequest request, SearchConfig config)
 		throws PangeaException, PangeaAPIException {
 		return resultPost(request, config);
+	}
+
+	/**
+	 * Export from the audit log
+	 * @pangea.description Bulk export of data from the Secure Audit Log, with
+	 * optional filtering.
+	 * @pangea.operationId audit_post_v1_export
+	 * @param request Request parameters.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 * var response = client.export(ExportRequest.builder().verbose(true).build());
+	 * }
+	 */
+	public Response<Void> export(ExportRequest request) throws PangeaException, PangeaAPIException {
+		try {
+			return post(
+				"/v1/export",
+				request,
+				new TypeReference<Response<Void>>() {},
+				new PostConfig.Builder().pollResult(false).build()
+			);
+		} catch (AcceptedRequestException e) {
+			return new Response<Void>(e.getResponse(), e.getAcceptedResult());
+		}
 	}
 }

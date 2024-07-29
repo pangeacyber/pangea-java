@@ -17,8 +17,8 @@ public class UserAuthenticators extends AuthNBaseClient {
 	 * Delete user authenticator
 	 * @pangea.description Delete user authenticator.
 	 * @pangea.operationId authn_post_v2_user_authenticators_delete
-	 * @param request
-	 * @return UserAuthenticatorsDeleteResponse
+	 * @param request Request parameters.
+	 * @return An empty object.
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
@@ -41,8 +41,8 @@ public class UserAuthenticators extends AuthNBaseClient {
 	 * Get user authenticators
 	 * @pangea.description Get user authenticators.
 	 * @pangea.operationId authn_post_v2_user_authenticators_list
-	 * @param request
-	 * @return UserAuthenticatorsListResponse
+	 * @param request Request parameters.
+	 * @return User's authenticators.
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code

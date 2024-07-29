@@ -5,11 +5,11 @@
 <br />
 
 [![documentation](https://img.shields.io/badge/documentation-pangea-blue?style=for-the-badge&labelColor=551B76)][Documentation]
-[![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)][Slack]
+[![Discourse](https://img.shields.io/badge/Discourse-4A154B?style=for-the-badge&logo=discourse&logoColor=white)][Discourse]
 
 # Pangea Java SDK
 
-A Java SDK for integrating with Pangea services. Supports Java 21.
+A Java SDK for integrating with Pangea services. Supports Java 11, 17, and 21.
 
 ## Installation
 
@@ -18,7 +18,7 @@ A Java SDK for integrating with Pangea services. Supports Java 21.
 Via Gradle:
 
 ```gradle
-implementation 'cloud.pangea:pangea-sdk:3.6.0'
+implementation("cloud.pangea:pangea-sdk:3.12.0")
 ```
 
 Via Maven:
@@ -27,7 +27,7 @@ Via Maven:
 <dependency>
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>3.7.0</version>
+  <version>3.12.0</version>
 </dependency>
 ```
 
@@ -43,7 +43,7 @@ guarantees as stable releases. [Beta changelog][]
 Via Gradle:
 
 ```gradle
-implementation 'cloud.pangea:pangea-sdk:3.8.0-beta-2'
+implementation("cloud.pangea:pangea-sdk:3.8.0-beta-3")
 ```
 
 Via Maven:
@@ -52,7 +52,7 @@ Via Maven:
 <dependency>
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>3.8.0-beta-2</version>
+  <version>3.8.0-beta-3</version>
 </dependency>
 ```
 
@@ -107,20 +107,10 @@ try {
 }
 ```
 
-<a name="beta-releases"></a>
-
-## Beta releases
-
-Pre-release versions may be available with the `beta` denotation in the version
-number. These releases serve to preview beta services and APIs. Per Semantic
-Versioning, they are considered unstable and do not carry the same compatibility
-guarantees as stable releases.
-
-
-
    [Documentation]: https://pangea.cloud/docs/sdk/java/
    [GA Examples]: https://github.com/pangeacyber/pangea-java/tree/main/examples
    [Beta Examples]: https://github.com/pangeacyber/pangea-java/tree/beta/examples
    [Pangea Console]: https://console.pangea.cloud/
-   [Slack]: https://pangea.cloud/join-slack/
+   [Discourse]: https://l.pangea.cloud/Jd4wlGs
    [Secure Audit Log]: https://pangea.cloud/docs/audit
+   [Beta changelog]: https://github.com/pangeacyber/pangea-java/blob/beta/CHANGELOG.md

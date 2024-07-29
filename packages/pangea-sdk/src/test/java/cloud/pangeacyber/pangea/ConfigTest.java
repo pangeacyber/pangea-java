@@ -1,11 +1,10 @@
 package cloud.pangeacyber.pangea;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ConfigTest {
 
@@ -13,9 +12,6 @@ public class ConfigTest {
 	final String path = "/path";
 	final String domain = "domain.test";
 	final String token = "faketoken";
-
-	@Before
-	public void setUp() throws ConfigException {}
 
 	@Test
 	public void testConfig() throws ConfigException {

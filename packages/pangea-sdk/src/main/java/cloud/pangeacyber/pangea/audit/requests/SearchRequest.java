@@ -42,6 +42,10 @@ public class SearchRequest extends BaseRequest {
 	@JsonProperty("verbose")
 	private Boolean verbose;
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonProperty("return_context")
+	private Boolean returnContext;
+
 	private SearchRequest(Builder builder) {
 		this.query = builder.query;
 		this.order = builder.order;
@@ -52,6 +56,7 @@ public class SearchRequest extends BaseRequest {
 		this.maxResults = builder.maxResults;
 		this.searchRestriction = builder.searchRestriction;
 		this.verbose = builder.verbose;
+		this.returnContext = builder.returnContext;
 	}
 
 	public String getQuery() {
@@ -94,6 +99,10 @@ public class SearchRequest extends BaseRequest {
 		this.verbose = verbose;
 	}
 
+	public Boolean getReturnContext() {
+		return this.returnContext;
+	}
+
 	public static class Builder {
 
 		private final String query;
@@ -105,6 +114,7 @@ public class SearchRequest extends BaseRequest {
 		private Integer maxResults = null;
 		private SearchRestriction searchRestriction = null;
 		private Boolean verbose = null;
+		private Boolean returnContext = null;
 
 		public Builder(String query) {
 			this.query = query;
@@ -147,6 +157,11 @@ public class SearchRequest extends BaseRequest {
 
 		public Builder verbose(Boolean verbose) {
 			this.verbose = verbose;
+			return this;
+		}
+
+		public Builder returnContext(Boolean rc) {
+			this.returnContext = rc;
 			return this;
 		}
 

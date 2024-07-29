@@ -1,5 +1,5 @@
 default:
-  image: maven:3-openjdk-18@sha256:f22971fa3103b6a5145741dd80cc1660490bef93deb6400276c96dadf5bfd75f
+  image: maven:3.9.8-eclipse-temurin-21@sha256:8446f646d94f73aa2cbd7e5c50b45342d2c7d39e30e3a42fefe0469a6ef27a52
   tags:
     - pangea-internal
 

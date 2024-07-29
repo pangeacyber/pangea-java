@@ -42,7 +42,7 @@ public class App {
 
 			// Find the tuple that was just created.
 			var filter = new FilterTupleList();
-			filter.resourceNamespace().set("folder");
+			filter.resourceType().set("folder");
 			filter.resourceID().set(folderId);
 			var listResponse = client.tupleList(new TupleListRequest.Builder().setFilter(filter).build());
 			System.out.println("Tuples:");

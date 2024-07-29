@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
+import cloud.pangeacyber.pangea.vault.models.ItemState;
 import cloud.pangeacyber.pangea.vault.models.Metadata;
 import cloud.pangeacyber.pangea.vault.models.Tags;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -44,6 +45,11 @@ public class UpdateRequest extends BaseRequest {
 	@JsonProperty("expiration")
 	String expiration = null;
 
+	/** The new state of the item. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("item_state")
+	ItemState itemState = null;
+
 	public UpdateRequest(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
@@ -54,6 +60,7 @@ public class UpdateRequest extends BaseRequest {
 		this.rotationState = builder.rotationState;
 		this.expiration = builder.expiration;
 		this.rotationGracePeriod = builder.rotationGracePeriod;
+		this.itemState = builder.itemState;
 	}
 
 	public String getId() {
@@ -84,6 +91,11 @@ public class UpdateRequest extends BaseRequest {
 		return expiration;
 	}
 
+	/** The new state of the item. */
+	public ItemState getItemState() {
+		return itemState;
+	}
+
 	public static class Builder {
 
 		String id;
@@ -96,6 +108,9 @@ public class UpdateRequest extends BaseRequest {
 		String rotationState = null;
 		String expiration = null;
 		String rotationGracePeriod = null;
+
+		/** The new state of the item. */
+		ItemState itemState = null;
 
 		public Builder(String id) {
 			this.id = id;
@@ -147,6 +162,12 @@ public class UpdateRequest extends BaseRequest {
 
 		public Builder rotationGracePeriod(String rotationGracePeriod) {
 			this.rotationGracePeriod = rotationGracePeriod;
+			return this;
+		}
+
+		/** The new state of the item. */
+		public Builder itemState(ItemState itemState) {
+			this.itemState = itemState;
 			return this;
 		}
 	}

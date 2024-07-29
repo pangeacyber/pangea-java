@@ -2,9 +2,11 @@ package cloud.pangeacyber.pangea.authz.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authz.models.Tuple;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TupleDeleteRequest extends BaseRequest {
 
+	@JsonProperty("tuples")
 	private Tuple[] tuples;
 
 	private TupleDeleteRequest(Builder builder) {

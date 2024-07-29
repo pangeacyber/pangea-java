@@ -28,6 +28,7 @@ public class FileScanRequest extends BaseRequest {
 		this.provider = request.getProvider();
 		this.verbose = request.getVerbose();
 		this.raw = request.getRaw();
+		this.sourceURL = request.getSourceURL();
 		this.setTransferMethod(request.getTransferMethod());
 	}
 
@@ -35,6 +36,7 @@ public class FileScanRequest extends BaseRequest {
 		this.provider = builder.provider;
 		this.verbose = builder.verbose;
 		this.raw = builder.raw;
+		this.sourceURL = builder.sourceURL;
 		this.setTransferMethod(builder.transferMethod);
 	}
 

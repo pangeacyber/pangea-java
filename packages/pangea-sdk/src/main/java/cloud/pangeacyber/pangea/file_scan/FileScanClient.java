@@ -128,7 +128,7 @@ public class FileScanClient extends BaseClient {
 			name = "upload";
 		}
 
-		FileData fileData = new FileData(file, name);
+		FileData fileData = tm != TransferMethod.SOURCE_URL ? new FileData(file, name) : null;
 		return post("/v1/scan", fullRequest, fileData, FileScanResponse.class);
 	}
 

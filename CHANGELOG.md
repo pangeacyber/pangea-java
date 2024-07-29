@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added 
+
+- `attributes` field in `/list-resources` and `/list-subjects` endpoint
+
 ## [3.12.0] - 2024-07-23
 
 ### Added

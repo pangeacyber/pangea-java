@@ -1,14 +1,13 @@
 package cloud.pangeacyber.pangea.intel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
-import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.intel.models.HashType;
@@ -24,21 +23,21 @@ import cloud.pangeacyber.pangea.intel.responses.UserBreachedBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.UserBreachedResponse;
 import cloud.pangeacyber.pangea.intel.responses.UserPasswordBreachedBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.UserPasswordBreachedResponse;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITUserIntelTest {
 
 	UserIntelClient client;
 	static TestEnvironment environment;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("user-intel", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		client = new UserIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}

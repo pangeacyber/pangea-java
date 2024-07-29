@@ -1,27 +1,32 @@
 package cloud.pangeacyber.pangea;
 
 import cloud.pangeacyber.pangea.exceptions.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URI;
-import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import org.apache.commons.fileupload.MultipartStream;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -48,11 +53,11 @@ import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 final class InternalHttpResponse {
 
-	CloseableHttpResponse response;
+	HttpResponse response;
 	String body;
 	List<AttachedFile> attachedFiles = new LinkedList<>();
 
-	public InternalHttpResponse(CloseableHttpResponse response) throws PangeaException {
+	public InternalHttpResponse(HttpResponse response) throws PangeaException {
 		this.response = response;
 		HttpEntity entity = response.getEntity();
 		// Check if the entity is multipart
@@ -129,7 +134,7 @@ final class InternalHttpResponse {
 		return value;
 	}
 
-	private String readBody(CloseableHttpResponse response) throws PangeaException {
+	private String readBody(HttpResponse response) throws PangeaException {
 		String body = "";
 		HttpEntity entity = response.getEntity();
 		if (entity == null) {
@@ -144,7 +149,7 @@ final class InternalHttpResponse {
 		return body;
 	}
 
-	public CloseableHttpResponse getResponse() {
+	public HttpResponse getResponse() {
 		return response;
 	}
 
@@ -159,10 +164,18 @@ final class InternalHttpResponse {
 
 public abstract class BaseClient {
 
+	private static final ObjectMapper objectMapper = JsonMapper
+		.builder()
+		.findAndAddModules()
+		.defaultTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
+		.withConfigOverride(
+			Instant.class,
+			cfg -> cfg.setFormat(JsonFormat.Value.forPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSSX"))
+		)
+		.build();
 	protected Config config;
 	protected Logger logger;
-	CloseableHttpClient httpClient;
-	HttpRequest.Builder httpRequestBuilder;
+	private final HttpClient httpClient;
 	String serviceName;
 	Map<String, String> customHeaders = null;
 	String userAgent = "pangea-java/default";
@@ -176,7 +189,7 @@ public abstract class BaseClient {
 		} else {
 			this.logger = buildDefaultLogger();
 		}
-		this.httpClient = buildClient();
+		this.httpClient = builder.httpClient != null ? builder.httpClient : buildClient();
 		this.setUserAgent(config.getCustomUserAgent());
 	}
 
@@ -220,6 +233,7 @@ public abstract class BaseClient {
 		Logger logger;
 		Map<String, String> customHeaders;
 		String customUserAgent;
+		HttpClient httpClient;
 
 		public Builder(Config config) {
 			this.config = config;
@@ -247,6 +261,11 @@ public abstract class BaseClient {
 			this.customHeaders = customHeaders;
 			return self();
 		}
+
+		public B httpClient(final HttpClient httpClient) {
+			this.httpClient = httpClient;
+			return self();
+		}
 	}
 
 	private void setUserAgent(String customUserAgent) {
@@ -269,8 +288,13 @@ public abstract class BaseClient {
 			.setSocketTimeout(timeout)
 			.setCookieSpec(CookieSpecs.STANDARD)
 			.build();
-		CloseableHttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
-		return client;
+		return HttpClientBuilder
+			.create()
+			.setDefaultRequestConfig(config)
+			.setServiceUnavailableRetryStrategy(
+				new ServerErrorRetryStrategy(this.config.getMaxRetries(), this.config.getRetryInterval().toMillis())
+			)
+			.build();
 	}
 
 	protected HttpPost buildPostRequest(URI url, String body) throws UnsupportedEncodingException {
@@ -350,15 +374,6 @@ public abstract class BaseClient {
 		return;
 	}
 
-	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
-		String path,
-		Req request,
-		Class<ResponseType> responseClass,
-		PostConfig postConfig
-	) throws PangeaException, PangeaAPIException {
-		return doPost(path, request, null, responseClass, postConfig);
-	}
-
 	/**
 	 * Perform a HTTP POST request.
 	 *
@@ -376,7 +391,7 @@ public abstract class BaseClient {
 		Req request,
 		TypeReference<ResponseType> responseTypeRef
 	) throws PangeaException, PangeaAPIException {
-		return doPost(path, request, null, responseTypeRef, new PostConfig.Builder().build());
+		return post(path, request, responseTypeRef, new PostConfig.Builder().build());
 	}
 
 	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
@@ -384,7 +399,38 @@ public abstract class BaseClient {
 		Req request,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
-		return doPost(path, request, null, responseClass, new PostConfig.Builder().build());
+		return post(path, request, responseClass, new PostConfig.Builder().build());
+	}
+
+	/**
+	 * Perform a HTTP POST request.
+	 *
+	 * @param <Req> Request body type.
+	 * @param <ResponseType> Response body type.
+	 * @param path Request URL path.
+	 * @param request Request body.
+	 * @param responseTypeRef Value type reference to the response body type.
+	 * @param postConfig Additional configuration.
+	 * @return Response body.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 */
+	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
+		String path,
+		Req request,
+		TypeReference<ResponseType> responseTypeRef,
+		PostConfig postConfig
+	) throws PangeaException, PangeaAPIException {
+		return doPost(path, request, null, responseTypeRef, postConfig);
+	}
+
+	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
+		String path,
+		Req request,
+		Class<ResponseType> responseClass,
+		PostConfig postConfig
+	) throws PangeaException, PangeaAPIException {
+		return doPost(path, request, null, responseClass, postConfig);
 	}
 
 	protected <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType post(
@@ -396,18 +442,43 @@ public abstract class BaseClient {
 		return doPost(path, request, fileData, responseClass, new PostConfig.Builder().build());
 	}
 
+	/**
+	 * Perform a HTTP GET request.
+	 *
+	 * @param <ResponseType> Response body type.
+	 * @param path Request URL path.
+	 * @param responseTypeRef Value type reference to the response body type.
+	 * @return Response body.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 */
 	protected <ResponseType extends Response<?>> ResponseType get(
 		String path,
-		boolean checkResponse,
-		Class<ResponseType> responseClass
+		TypeReference<ResponseType> responseTypeRef
 	) throws PangeaException, PangeaAPIException {
+		InternalHttpResponse response = doGet(path);
+		return checkResponse(response, responseTypeRef, path);
+	}
+
+	/**
+	 * Perform a HTTP GET request.
+	 *
+	 * @param <ResponseType> Response body type.
+	 * @param path Request URL path.
+	 * @param responseClass Class reference to the response body type.
+	 * @return Response body.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 */
+	protected <ResponseType extends Response<?>> ResponseType get(String path, Class<ResponseType> responseClass)
+		throws PangeaException, PangeaAPIException {
 		InternalHttpResponse response = doGet(path);
 		return checkResponse(response, responseClass, path);
 	}
 
 	public AttachedFile downloadFile(String url) throws PangeaException {
 		HttpGet httpGet = new HttpGet(url);
-		CloseableHttpResponse response;
+		HttpResponse response;
 		try {
 			response = httpClient.execute(httpGet);
 		} catch (IOException e) {
@@ -476,10 +547,18 @@ public abstract class BaseClient {
 
 	public <ResponseType extends Response<?>> ResponseType pollResult(
 		String requestId,
+		TypeReference<ResponseType> responseTypeRef
+	) throws PangeaException, PangeaAPIException {
+		String path = pollResultPath(requestId);
+		return get(path, responseTypeRef);
+	}
+
+	public <ResponseType extends Response<?>> ResponseType pollResult(
+		String requestId,
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
 		String path = pollResultPath(requestId);
-		return get(path, true, responseClass);
+		return get(path, responseClass);
 	}
 
 	private <Req extends BaseRequest, ResponseType extends Response<?>> ResponseType doPost(
@@ -671,11 +750,10 @@ public abstract class BaseClient {
 
 	private <Req extends BaseRequest> InternalHttpResponse postSingle(URI url, Req request, FileData fileData)
 		throws PangeaException, PangeaAPIException {
-		ObjectMapper mapper = new ObjectMapper();
 		String body;
 
 		try {
-			body = mapper.writeValueAsString(request);
+			body = objectMapper.writeValueAsString(request);
 		} catch (JsonProcessingException e) {
 			throw new PangeaException("Failed to write request", e);
 		}
@@ -782,10 +860,9 @@ public abstract class BaseClient {
 	}
 
 	private ResponseHeader parseHeader(String body) throws PangeaException {
-		ObjectMapper mapper = new ObjectMapper();
 		ResponseHeader header;
 		try {
-			header = mapper.readValue(body, ResponseHeader.class);
+			header = objectMapper.readValue(body, ResponseHeader.class);
 		} catch (Exception e) {
 			throw new PangeaException("Failed to parse response header", e);
 		}
@@ -812,9 +889,8 @@ public abstract class BaseClient {
 		TypeReference<ResponseType> responseTypeRef
 	) throws PangeaException {
 		ResponseType resultResponse;
-		ObjectMapper mapper = new ObjectMapper();
 		try {
-			resultResponse = mapper.readValue(httpResponse.getBody(), responseTypeRef);
+			resultResponse = objectMapper.readValue(httpResponse.getBody(), responseTypeRef);
 		} catch (Exception e) {
 			this.logger.error(
 					String.format(
@@ -879,7 +955,7 @@ public abstract class BaseClient {
 
 		if (ResponseStatus.ACCEPTED.equals(status)) {
 			AcceptedResponse responseAccepted = parseResponse(httpResponse, AcceptedResponse.class);
-			var responseClass = new ObjectMapper().getTypeFactory().constructType(responseTypeRef).getRawClass();
+			var responseClass = objectMapper.getTypeFactory().constructType(responseTypeRef).getRawClass();
 			if (responseClass == AcceptedResponse.class) {
 				return (ResponseType) responseAccepted;
 			}

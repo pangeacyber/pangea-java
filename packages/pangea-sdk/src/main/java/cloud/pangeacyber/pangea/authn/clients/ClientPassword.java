@@ -1,11 +1,14 @@
 package cloud.pangeacyber.pangea.authn.clients;
 
 import cloud.pangeacyber.pangea.BaseRequest;
+import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.authn.AuthNClient;
+import cloud.pangeacyber.pangea.authn.models.ExpirePasswordRequest;
 import cloud.pangeacyber.pangea.authn.responses.ClientPasswordChangeResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 final class ClientPasswordChangeRequest extends BaseRequest {
 
@@ -58,5 +61,22 @@ public class ClientPassword extends AuthNBaseClient {
 			ClientPasswordChangeResponse.class
 		);
 		return resp;
+	}
+
+	/**
+	 * Expire a user's password
+	 * @pangea.description Expire a user's password.
+	 * @pangea.operationId authn_post_v2_user_password_expire
+	 * @param id The identity of a user or a service.
+	 * @return An empty object.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * client.client().password().expire("pui_[...]");
+	 * }
+	 */
+	public Response<Void> expire(String id) throws PangeaException, PangeaAPIException {
+		return post("/v2/user/password/expire", new ExpirePasswordRequest(id), new TypeReference<Response<Void>>() {});
 	}
 }

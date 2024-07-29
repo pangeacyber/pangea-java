@@ -691,4 +691,83 @@ public class VaultClient extends BaseClient {
 	) throws PangeaException, PangeaAPIException {
 		return post("/v1/key/decrypt/structured", request, new TypeReference<EncryptStructuredResponse<K, V, T>>() {});
 	}
+
+	/**
+	 * Encrypt transform
+	 * @pangea.description Encrypt using a format preserving algorithm (FPE).
+	 * @pangea.operationId vault_post_v1_key_encrypt_transform
+	 * @param request Request parameters.
+	 * @return Encrypted response.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * var encrypted = client.encryptTransform(
+	 * 	new EncryptTransformRequest.Builder(
+	 * 		"pvi_[...]",
+	 * 		"123-4567-8901",
+	 * 		TransformAlphabet.ALPHANUMERIC
+	 * 	).tweak("MTIzMTIzMT==").build()
+	 * );
+	 * }
+	 */
+	public EncryptTransformResponse encryptTransform(EncryptTransformRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1/key/encrypt/transform", request, EncryptTransformResponse.class);
+	}
+
+	/**
+	 * Decrypt transform
+	 * @pangea.description Decrypt using a format preserving algorithm (FPE).
+	 * @pangea.operationId vault_post_v1_key_decrypt_transform
+	 * @param request Request parameters.
+	 * @return Decrypted response.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * var decrypted = client.decryptTransform(
+	 * 	new DecryptTransformRequest.Builder(
+	 * 		"pvi_[...]",
+	 * 		"tZB-UKVP-MzTM",
+	 * 		"MTIzMTIzMT==",
+	 * 		TransformAlphabet.ALPHANUMERIC
+	 * 	).build()
+	 * );
+	 * }
+	 */
+	public DecryptTransformResponse decryptTransform(DecryptTransformRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1/key/decrypt/transform", request, DecryptTransformResponse.class);
+	}
+
+	/**
+	 * Export
+	 * @pangea.description Export a symmetric or asymmetric key.
+	 * @pangea.operationId vault_post_v1_export
+	 * @param request Request parameters.
+	 * @return Exported result.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * // Generate an exportable key.
+	 * final var generateRequest = new AsymmetricGenerateRequest.Builder(
+	 * 	AsymmetricAlgorithm.RSA4096_OAEP_SHA512,
+	 * 	KeyPurpose.ENCRYPTION,
+	 * 	"a-name-for-the-key"
+	 * )
+	 * 	.exportable(true)
+	 * 	.build();
+	 * final var generated = client.asymmetricGenerate(generateRequest);
+	 * final var key = generated.getResult().getId();
+	 *
+	 * // Then it can be exported whenever needed.
+	 * final var request = new ExportRequest.Builder(key).build();
+	 * final var exported = client.export(request);
+	 * }
+	 */
+	public ExportResponse export(ExportRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/export", request, ExportResponse.class);
+	}
 }

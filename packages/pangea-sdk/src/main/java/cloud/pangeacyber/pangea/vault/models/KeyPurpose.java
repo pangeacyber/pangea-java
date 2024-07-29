@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum KeyPurpose {
 	SIGNING("signing"),
 	ENCRYPTION("encryption"),
-	JWT("jwt");
+	JWT("jwt"),
+
+	/** Format-preserving encryption. */
+	FPE("fpe");
 
 	private final String text;
 

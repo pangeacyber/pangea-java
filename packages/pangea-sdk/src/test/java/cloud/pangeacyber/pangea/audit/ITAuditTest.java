@@ -1,13 +1,16 @@
 package cloud.pangeacyber.pangea.audit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.AttachedFile;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
+import cloud.pangeacyber.pangea.Response;
+import cloud.pangeacyber.pangea.ResponseStatus;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.audit.models.*;
 import cloud.pangeacyber.pangea.audit.requests.*;
@@ -15,12 +18,15 @@ import cloud.pangeacyber.pangea.audit.responses.*;
 import cloud.pangeacyber.pangea.audit.results.LogBulkResult;
 import cloud.pangeacyber.pangea.audit.results.RootResult;
 import cloud.pangeacyber.pangea.exceptions.*;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITAuditTest {
 
@@ -40,12 +46,12 @@ public class ITAuditTest {
 	private static final String LONG_FIELD =
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia, orci eget commodo commodo non.";
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("audit", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		Config vaultCfg = Config.fromVaultIntegrationEnvironment(environment);
 		this.cfgGeneral = Config.fromIntegrationEnvironment(environment);
@@ -362,8 +368,7 @@ public class ITAuditTest {
 		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
-			"""
-{"algorithm":"ED25519","key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			"{\"algorithm\":\"ED25519\",\"key\":\"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n\"}",
 			result.getEventEnvelope().getPublicKey()
 		);
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
@@ -391,8 +396,7 @@ public class ITAuditTest {
 		CustomEvent eventResult = (CustomEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_CUSTOM_SCHEMA_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
-			"""
-{"algorithm":"ED25519","key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			"{\"algorithm\":\"ED25519\",\"key\":\"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n\"}",
 			result.getEventEnvelope().getPublicKey()
 		);
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
@@ -422,8 +426,7 @@ public class ITAuditTest {
 		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
-			"""
-{"ExtraInfo":"LocalKey","algorithm":"ED25519","key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			"{\"ExtraInfo\":\"LocalKey\",\"algorithm\":\"ED25519\",\"key\":\"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n\"}",
 			result.getEventEnvelope().getPublicKey()
 		);
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
@@ -481,8 +484,7 @@ public class ITAuditTest {
 		StandardEvent eventResult = (StandardEvent) result.getEventEnvelope().getEvent();
 		assertEquals(MSG_SIGNED_LOCAL, eventResult.getMessage());
 		assertEquals(
-			"""
-{"algorithm":"ED25519","key":"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n"}""",
+			"{\"algorithm\":\"ED25519\",\"key\":\"-----BEGIN PUBLIC KEY-----\\nMCowBQYDK2VwAyEAlvOyDMpK2DQ16NI8G41yINl01wMHzINBahtDPoh4+mE=\\n-----END PUBLIC KEY-----\\n\"}",
 			result.getEventEnvelope().getPublicKey()
 		);
 		assertEquals(EventVerification.SUCCESS, result.getSignatureVerification());
@@ -863,48 +865,41 @@ public class ITAuditTest {
 		assertEquals(treeSize, root.getSize());
 	}
 
-	@Test(expected = PangeaAPIException.class)
+	@Test
 	public void testRootTreeNotFound() throws PangeaException, PangeaAPIException {
 		int treeSize = 1000000;
-		RootResponse response = clientGeneral.getRoot(treeSize);
+		assertThrows(PangeaAPIException.class, () -> clientGeneral.getRoot(treeSize));
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testRootUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		int treeSize = 1;
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
-		RootResponse response = fakeClient.getRoot(treeSize);
+		assertThrows(UnauthorizedException.class, () -> fakeClient.getRoot(treeSize));
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testLogUnathorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
 		StandardEvent event = new StandardEvent("Test msg");
-		LogResponse response = fakeClient.log(
-			event,
-			new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build()
+		assertThrows(
+			UnauthorizedException.class,
+			() -> fakeClient.log(event, new LogConfig.Builder().verbose(false).signLocal(false).verify(false).build())
 		);
 	}
 
-	// @Test(expected = ValidationException.class)
-	// public void testLogEmptyMessage() throws PangeaException, PangeaAPIException {
-	// 	Event event = new Event("");
-	// 	LogResponse response = client.log(event);
-	// }
-
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testSearchValidationException() throws PangeaAPIException, PangeaException {
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").order("notavalidorder").build();
-
 		SearchConfig config = new SearchConfig.Builder().build();
-		SearchResponse searchResponse = clientGeneral.search(request, config);
+		assertThrows(ValidationException.class, () -> clientGeneral.search(request, config));
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testSearchValidationException2() throws PangeaAPIException, PangeaException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
@@ -912,15 +907,15 @@ public class ITAuditTest {
 
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").build();
 		SearchConfig config = new SearchConfig.Builder().build();
-		SearchResponse searchResponse = fakeClient.search(request, config);
+		assertThrows(UnauthorizedException.class, () -> fakeClient.search(request, config));
 	}
 
-	@Test(expected = SignerException.class)
+	@Test
 	public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
-		LogResponse response = clientGeneral.log(
-			event,
-			new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build()
+		assertThrows(
+			SignerException.class,
+			() -> clientGeneral.log(event, new LogConfig.Builder().verbose(true).signLocal(true).verify(true).build())
 		);
 	}
 
@@ -978,7 +973,7 @@ public class ITAuditTest {
 		assertEquals(result.getSignatureVerification(), EventVerification.NOT_VERIFIED);
 	}
 
-	@Test(expected = PangeaAPIException.class)
+	@Test
 	public void testMultiConfigWithoutConfigID() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
@@ -986,9 +981,9 @@ public class ITAuditTest {
 			.build();
 		AuditClient client = new AuditClient.Builder(cfg).build();
 
-		LogResponse response = client.log(
-			event,
-			new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build()
+		assertThrows(
+			PangeaAPIException.class,
+			() -> client.log(event, new LogConfig.Builder().verbose(true).signLocal(false).verify(true).build())
 		);
 	}
 
@@ -1099,5 +1094,79 @@ public class ITAuditTest {
 
 		AttachedFile file = clientGeneral.downloadFile(downloadResp.getResult().getDestURL());
 		file.save(Path.of("./", file.getFilename()));
+	}
+
+	@Test
+	public void testLogStream() throws ConfigException, PangeaAPIException, PangeaException {
+		// Sample data.
+		final var logStreamEventData = new LogStreamEventData();
+		logStreamEventData.setClientID("test client ID");
+		logStreamEventData.setDate(Instant.now());
+		logStreamEventData.setDescription("Create a log stream");
+		logStreamEventData.setIP("127.0.0.1");
+		logStreamEventData.setType("some_type");
+		logStreamEventData.setUserAgent("AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0");
+		logStreamEventData.setUserID("test user ID");
+		logStreamEventData.setConnection("Username-Password-Authentication");
+		logStreamEventData.setConnectionID("some ID");
+		logStreamEventData.setStrategy("auth0");
+		logStreamEventData.setStrategyType("database");
+
+		final var logStreamEvent = new LogStreamEvent();
+		logStreamEvent.setLogID("some log ID");
+		logStreamEvent.setData(logStreamEventData);
+
+		final var input = new LogStreamRequest();
+		input.setLogs(List.of(logStreamEvent));
+
+		// Client setup.
+		final var config = new Config.Builder(
+			Config.getMultiConfigTestToken(environment),
+			Config.getTestDomain(environment)
+		)
+			.build();
+		final var configId = Config.getConfigID(environment, "audit", 3);
+		final var client = new AuditClient.Builder(config).withConfigID(configId).build();
+
+		// Test log stream.
+		final var response = client.logStream(input);
+		assertEquals(ResponseStatus.SUCCESS.toString(), response.getStatus());
+	}
+
+	@Test
+	public void testExportDownload() throws PangeaAPIException, PangeaException, InterruptedException {
+		final var exportResponse = clientGeneral.export(ExportRequest.builder().start("1d").verbose(false).build());
+		assertEquals(ResponseStatus.ACCEPTED.toString(), exportResponse.getStatus());
+
+		final var maxRetries = 10;
+		for (var retry = 0; retry < maxRetries; retry++) {
+			try {
+				final var pollResult = clientGeneral.pollResult(
+					exportResponse.getRequestId(),
+					new TypeReference<Response<Void>>() {}
+				);
+				if (pollResult.isOk()) {
+					break;
+				}
+			} catch (PangeaAPIException error) {
+				final var status = error.getResponse().getStatus();
+				if (
+					status.equalsIgnoreCase(ResponseStatus.ACCEPTED.toString()) ||
+					status.equalsIgnoreCase(ResponseStatus.NOT_FOUND.toString())
+				) {
+					// Continue.
+				} else {
+					throw error;
+				}
+			}
+
+			assertTrue(retry < maxRetries - 1);
+			Thread.sleep(3 * 1000);
+		}
+
+		final var downloadRequest = new DownloadRequest.Builder().requestId(exportResponse.getRequestId()).build();
+		final var downloadResponse = clientGeneral.downloadResults(downloadRequest);
+		assertEquals(ResponseStatus.SUCCESS.toString(), downloadResponse.getStatus());
+		assertNotNull(downloadResponse.getResult().getDestURL());
 	}
 }

@@ -13,17 +13,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 final class UserProfileGetRequest extends BaseRequest {
 
+	/** An email address. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("email")
 	String email;
 
+	/** The identity of a user or a service. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("id")
 	String id;
 
-	public UserProfileGetRequest(String email, String id) {
+	/** A username. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("username")
+	String username;
+
+	public UserProfileGetRequest(String email, String id, String username) {
 		this.email = email;
 		this.id = id;
+		this.username = username;
 	}
 }
 
@@ -48,7 +56,7 @@ public class UserProfile extends AuthNBaseClient {
 	 * }
 	 */
 	public UserProfileGetResponse getByEmail(String email) throws PangeaException, PangeaAPIException {
-		UserProfileGetRequest request = new UserProfileGetRequest(email, null);
+		UserProfileGetRequest request = new UserProfileGetRequest(email, null, null);
 		return post("/v2/user/profile/get", request, UserProfileGetResponse.class);
 	}
 
@@ -67,8 +75,29 @@ public class UserProfile extends AuthNBaseClient {
 	 * }
 	 */
 	public UserProfileGetResponse getByID(String id) throws PangeaException, PangeaAPIException {
-		UserProfileGetRequest request = new UserProfileGetRequest(null, id);
+		UserProfileGetRequest request = new UserProfileGetRequest(null, id, null);
 		return post("/v2/user/profile/get", request, UserProfileGetResponse.class);
+	}
+
+	/**
+	 * Get user - username
+	 * @pangea.description Get user's information by username.
+	 * @pangea.operationId authn_post_v2_user_profile_get 3
+	 * @param username A username.
+	 * @return User's profile.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * var response = client.user().profile().getByUsername("foobar");
+	 * }
+	 */
+	public UserProfileGetResponse getByUsername(String username) throws PangeaException, PangeaAPIException {
+		return post(
+			"/v2/user/profile/get",
+			new UserProfileGetRequest(null, null, username),
+			UserProfileGetResponse.class
+		);
 	}
 
 	/**

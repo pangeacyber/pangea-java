@@ -1,35 +1,45 @@
 package cloud.pangeacyber.pangea.vault;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.CryptoUtils;
 import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.Utils;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
+import cloud.pangeacyber.pangea.vault.models.ExportEncryptionAlgorithm;
 import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
+import cloud.pangeacyber.pangea.vault.models.TransformAlphabet;
 import cloud.pangeacyber.pangea.vault.requests.*;
 import cloud.pangeacyber.pangea.vault.responses.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import org.apache.commons.codec.binary.Base64;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITVaultTest {
 
@@ -39,12 +49,12 @@ public class ITVaultTest {
 	Random random;
 	final String actor = "JavaSDKTest";
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("vault", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		client = new VaultClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
@@ -115,7 +125,34 @@ public class ITVaultTest {
 		assertEquals(dataB64, decryptResponseAfterSuspend.getResult().getPlainText());
 	}
 
-	private void asymSigningCycle(String id) throws PangeaException, PangeaAPIException {
+	private void encryptingCycleFPE(String id) throws PangeaException, PangeaException, PangeaAPIException {
+		String plainText = "123-4567-8901";
+		String tweak = "MTIzMTIzMT==";
+
+		// Encrypt 1
+		EncryptTransformResponse encryptResponse1 = client.encryptTransform(
+			new EncryptTransformRequest.Builder(id, plainText, TransformAlphabet.ALPHANUMERIC).tweak(tweak).build()
+		);
+		assertEquals(id, encryptResponse1.getResult().getId());
+		assertEquals(1, encryptResponse1.getResult().getVersion());
+		assertNotNull(encryptResponse1.getResult().getCipherText());
+		assertEquals(encryptResponse1.getResult().getCipherText().length(), plainText.length());
+
+		// Decrypt 1
+		DecryptTransformResponse decryptResponse1 = client.decryptTransform(
+			new DecryptTransformRequest.Builder(
+				id,
+				encryptResponse1.getResult().getCipherText(),
+				tweak,
+				TransformAlphabet.ALPHANUMERIC
+			)
+				.version(1)
+				.build()
+		);
+		assertEquals(plainText, decryptResponse1.getResult().getPlainText());
+	}
+
+	private void asymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
 		String message = "thisisamessagetosign";
 		String data = Utils.stringToStringB64(message);
 
@@ -148,7 +185,8 @@ public class ITVaultTest {
 
 		// TODO: Add failures cases
 
-		// Wrong signature. Use signature of version 1, and try to verify with default version (2)
+		// Wrong signature. Use signature of version 1, and try to verify with
+		// default version (2)
 		VerifyResponse verifyResponseBad = client.verify(id, data, signResponse1.getResult().getSignature());
 		assertFalse(verifyResponseBad.getResult().isValidSignature());
 
@@ -167,10 +205,8 @@ public class ITVaultTest {
 		assertTrue(verifyResponseAfterSuspend.getResult().isValidSignature());
 	}
 
-	private void jwtAsymSigningCycle(String id) throws PangeaException, PangeaAPIException {
-		String payload = """
-            {'message': 'message to sign', 'data': 'Some extra data'}
-            """;
+	private void jwtAsymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
+		String payload = "{'message': 'message to sign', 'data': 'Some extra data'}";
 
 		// Sign 1
 		JWTSignResponse signResponse1 = client.jwtSign(id, payload);
@@ -215,10 +251,8 @@ public class ITVaultTest {
 		assertTrue(verifyResponseAfterSuspend.getResult().isValidSignature());
 	}
 
-	private void jwtSymSigningCycle(String id) throws PangeaException, PangeaAPIException {
-		String payload = """
-            {'message': 'message to sign', 'data': 'Some extra data'}
-            """;
+	private void jwtSymSigningCycle(String id) throws PangeaException, PangeaException, PangeaAPIException {
+		String payload = "{'message': 'message to sign', 'data': 'Some extra data'}";
 
 		// Sign 1
 		JWTSignResponse signResponse1 = client.jwtSign(id, payload);
@@ -392,6 +426,35 @@ public class ITVaultTest {
 				encryptingCycle(generateResp.getResult().getId());
 			} catch (PangeaAPIException e) {
 				System.out.printf("Failed testAESEncryptingLifeCycle with algorithm %s.\n", algorithm);
+				System.out.println(e.toString());
+				assertTrue(false);
+			}
+		}
+	}
+
+	@Test
+	public void testFPEEncryptingLifeCycle() throws PangeaException, PangeaAPIException {
+		SymmetricAlgorithm[] algorithms = new SymmetricAlgorithm[] {
+			SymmetricAlgorithm.AES128_FF3_1,
+			SymmetricAlgorithm.AES256_FF3_1,
+		};
+
+		for (SymmetricAlgorithm algorithm : algorithms) {
+			String name = getName();
+			try {
+				SymmetricGenerateRequest generateRequest = new SymmetricGenerateRequest.Builder(
+					algorithm,
+					KeyPurpose.FPE,
+					name
+				)
+					.build();
+
+				SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
+				assertNotNull(generateResp.getResult().getId());
+				assertEquals(Integer.valueOf(1), generateResp.getResult().getVersion());
+				encryptingCycleFPE(generateResp.getResult().getId());
+			} catch (PangeaAPIException e) {
+				System.out.printf("Failed testFPEEncryptingLifeCycle with algorithm %s.\n", algorithm);
 				System.out.println(e.toString());
 				assertTrue(false);
 			}
@@ -580,9 +643,7 @@ public class ITVaultTest {
 	public void testEncryptStructured()
 		throws JsonProcessingException, JsonMappingException, PangeaException, PangeaAPIException {
 		// Test data.
-		String payload = """
-            { "field1": ["1", "2", "true", "false"], "field2": "data" }
-        """;
+		String payload = "{ \"field1\": [\"1\", \"2\", \"true\", \"false\"], \"field2\": \"data\" }";
 		var data = new ObjectMapper().readValue(payload, new TypeReference<Map<String, Object>>() {});
 
 		// Generate an encryption key.
@@ -622,5 +683,74 @@ public class ITVaultTest {
 		assertEquals(key, decrypted.getResult().getId());
 		assertEquals(4, ((ArrayList<String>) decrypted.getResult().getStructuredData().get("field1")).size());
 		assertEquals("data", decrypted.getResult().getStructuredData().get("field2"));
+	}
+
+	@Test
+	public void testExport()
+		throws PangeaException, PangeaAPIException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+		// Generate an exportable key.
+		final var generateRequest = new AsymmetricGenerateRequest.Builder(
+			AsymmetricAlgorithm.ED25519,
+			KeyPurpose.SIGNING,
+			getName()
+		)
+			.exportable(true)
+			.build();
+		final var generated = client.asymmetricGenerate(generateRequest);
+		final var key = generated.getResult().getId();
+		assertNotNull(key);
+
+		// Generate a RSA key pair.
+		final var keyPair = CryptoUtils.generateRsaKeyPair(4096);
+		final var publicKey = CryptoUtils.asymmetricPemExport(keyPair.getPublic());
+
+		// Export it.
+		var request = new ExportRequest.Builder(key)
+			.encryptionAlgorithm(ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512)
+			.encryptionKey(publicKey)
+			.build();
+		var actual = client.export(request);
+		assertNotNull(actual);
+		assertEquals(key, actual.getResult().getId());
+		assertTrue(actual.getResult().isEncrypted());
+		final var decodedPublicKey = (new Base64(true)).decode(actual.getResult().getPublicKey());
+		assertEquals(
+			generated.getResult().getEncodedPublicKey(),
+			new String(
+				CryptoUtils.asymmetricDecrypt(
+					ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512,
+					keyPair.getPrivate(),
+					decodedPublicKey
+				)
+			)
+		);
+		final var decodedPrivateKey = (new Base64(true)).decode(actual.getResult().getPrivateKey());
+		final var decryptedPrivateKey = CryptoUtils.asymmetricDecrypt(
+			ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512,
+			keyPair.getPrivate(),
+			decodedPrivateKey
+		);
+
+		// Store it under a new name, again as exportable.
+		final var storeRequest = new AsymmetricStoreRequest.Builder(
+			new String(decryptedPrivateKey),
+			generated.getResult().getEncodedPublicKey(),
+			AsymmetricAlgorithm.ED25519,
+			KeyPurpose.SIGNING,
+			getName()
+		)
+			.exportable(true)
+			.build();
+		final var stored = client.asymmetricStore(storeRequest);
+		final var storedKey = stored.getResult().getId();
+		assertNotNull(storedKey);
+
+		// Should still be able to export it.
+		request = new ExportRequest.Builder(storedKey).build();
+		actual = client.export(request);
+		assertNotNull(actual);
+		assertEquals(storedKey, actual.getResult().getId());
+		assertNotNull(actual.getResult().getPublicKey());
+		assertNotNull(actual.getResult().getPrivateKey());
 	}
 }

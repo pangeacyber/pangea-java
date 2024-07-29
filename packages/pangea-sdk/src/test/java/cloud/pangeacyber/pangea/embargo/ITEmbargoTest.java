@@ -1,8 +1,8 @@
 package cloud.pangeacyber.pangea.embargo;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
@@ -16,21 +16,21 @@ import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.UnauthorizedException;
 import cloud.pangeacyber.pangea.exceptions.ValidationException;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITEmbargoTest {
 
 	EmbargoClient client;
 	static TestEnvironment environment;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("embargo", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		client = new EmbargoClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
@@ -71,26 +71,16 @@ public class ITEmbargoTest {
 		assertEquals("US - ITAR", sanction.getListName());
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyIP() throws PangeaException, PangeaAPIException {
-		IPCheckResponse response = client.ipCheck("");
+		assertThrows(ValidationException.class, () -> client.ipCheck(""));
 	}
 
-	public void testPrintError() throws PangeaException, PangeaAPIException {
-		try {
-			IPCheckResponse response = client.ipCheck("");
-			assertTrue(false);
-		} catch (PangeaAPIException e) {
-			assertNotNull(e.toString());
-			System.out.println(e.toString());
-		}
-	}
-
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		EmbargoClient fakeClient = new EmbargoClient.Builder(cfg).build();
-		IPCheckResponse response = fakeClient.ipCheck("1.1.1.1");
+		assertThrows(UnauthorizedException.class, () -> fakeClient.ipCheck("1.1.1.1"));
 	}
 }

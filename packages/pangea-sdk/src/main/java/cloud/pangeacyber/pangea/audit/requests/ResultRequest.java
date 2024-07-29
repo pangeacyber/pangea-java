@@ -18,10 +18,15 @@ public class ResultRequest extends BaseRequest {
 	@JsonProperty("offset")
 	private Integer offset;
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonProperty("return_context")
+	private Boolean returnContext;
+
 	private ResultRequest(Builder builder) {
 		this.id = builder.id;
 		this.limit = builder.limit;
 		this.offset = builder.offset;
+		this.returnContext = builder.returnContext;
 	}
 
 	public String getId() {
@@ -36,11 +41,16 @@ public class ResultRequest extends BaseRequest {
 		return offset;
 	}
 
+	public Boolean getReturnContext() {
+		return this.returnContext;
+	}
+
 	public static class Builder {
 
 		private String id;
 		private Integer limit;
 		private Integer offset;
+		private Boolean returnContext = null;
 
 		public Builder(String id) {
 			this.id = id;
@@ -53,6 +63,11 @@ public class ResultRequest extends BaseRequest {
 
 		public Builder offset(Integer offset) {
 			this.offset = offset;
+			return this;
+		}
+
+		public Builder returnContext(Boolean rc) {
+			this.returnContext = rc;
 			return this;
 		}
 

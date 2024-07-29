@@ -1,20 +1,21 @@
 package cloud.pangeacyber.pangea;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import cloud.pangeacyber.pangea.audit.LogSigner;
 import cloud.pangeacyber.pangea.audit.models.EventVerification;
 import cloud.pangeacyber.pangea.audit.utils.Verifier;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.exceptions.SignerException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITSignTest {
 
 	LogSigner signer;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		signer = new LogSigner("./src/test/java/cloud/pangeacyber/pangea/testdata/privkey");
 	}
@@ -42,10 +43,10 @@ public class ITSignTest {
 		assertEquals(EventVerification.SUCCESS, result);
 	}
 
-	@Test(expected = SignerException.class)
+	@Test
 	public void testSignerFileNotFound() throws PangeaException {
 		LogSigner fakeSigner = new LogSigner("./not/arealfile");
 		String msg = "Hello signed world";
-		String signature = fakeSigner.sign(msg);
+		assertThrows(SignerException.class, () -> fakeSigner.sign(msg));
 	}
 }

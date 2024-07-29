@@ -7,13 +7,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.zip.CRC32C;
-import jcifs.util.Hexdump;
-import jcifs.util.MD4;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.bouncycastle.crypto.digests.MD4Digest;
+import org.bouncycastle.util.encoders.Hex;
 
-public class Utils {
+public final class Utils {
 
 	public static String stringToStringB64(String data) {
 		return new String(Base64.encodeBase64(data.getBytes()));
@@ -36,14 +38,12 @@ public class Utils {
 	}
 
 	public static String hashNTLM(String data) {
-		try {
-			byte[] unicodePasswordBytes = data.getBytes("UTF-16LE");
-			MD4 md4 = new jcifs.util.MD4();
-			byte[] ntlmHash = md4.digest(unicodePasswordBytes);
-			return Hexdump.toHexString(ntlmHash, 0, ntlmHash.length * 2);
-		} catch (Exception e) {
-			return "";
-		}
+		byte[] unicodePasswordBytes = data.getBytes(StandardCharsets.UTF_16LE);
+		final var md4 = new MD4Digest();
+		md4.update(unicodePasswordBytes, 0, unicodePasswordBytes.length);
+		final var ntlmHash = new byte[md4.getDigestSize()];
+		md4.doFinal(ntlmHash, 0);
+		return Hex.toHexString(ntlmHash).toUpperCase(Locale.ROOT);
 	}
 
 	public static String hashSHA256fromFilepath(String filepath) throws IOException, FileNotFoundException {
@@ -70,7 +70,7 @@ public class Utils {
 				size += bytesRead;
 				crc32c.update(buffer, 0, bytesRead);
 			}
-			crc = Hexdump.toHexString(crc32c.getValue(), 8).toLowerCase();
+			crc = Long.toHexString(crc32c.getValue()).toLowerCase(Locale.ROOT);
 		} catch (IOException e) {
 			throw new PangeaException(String.format("Failed to read file: %s", file.getAbsolutePath()), e);
 		}

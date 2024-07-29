@@ -1,9 +1,10 @@
 package cloud.pangeacyber.pangea.intel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
@@ -18,21 +19,21 @@ import cloud.pangeacyber.pangea.intel.models.URLReputationBulkData;
 import cloud.pangeacyber.pangea.intel.requests.*;
 import cloud.pangeacyber.pangea.intel.responses.URLReputationBulkResponse;
 import cloud.pangeacyber.pangea.intel.responses.URLReputationResponse;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITURLIntelTest {
 
 	URLIntelClient client;
 	static TestEnvironment environment;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("url-intel", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		client = new URLIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
@@ -205,42 +206,62 @@ public class ITURLIntelTest {
 		assertNotNull(response.getResult().getRawData());
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyURL() throws PangeaException, PangeaAPIException {
-		URLReputationResponse response = client.reputation(
-			new URLReputationRequest.Builder("").provider("crowdstrike").verbose(true).raw(true).build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new URLReputationRequest.Builder("").provider("crowdstrike").verbose(true).raw(true).build()
+				)
 		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyProvider() throws PangeaException, PangeaAPIException {
-		URLReputationResponse response = client.reputation(
-			new URLReputationRequest.Builder("http://113.235.101.11:54384").provider("").verbose(true).raw(true).build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new URLReputationRequest.Builder("http://113.235.101.11:54384")
+						.provider("")
+						.verbose(true)
+						.raw(true)
+						.build()
+				)
 		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyNotValidProvider() throws PangeaException, PangeaAPIException {
-		URLReputationResponse response = client.reputation(
-			new URLReputationRequest.Builder("http://113.235.101.11:54384")
-				.provider("notavalidprovider")
-				.verbose(true)
-				.raw(true)
-				.build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new URLReputationRequest.Builder("http://113.235.101.11:54384")
+						.provider("notavalidprovider")
+						.verbose(true)
+						.raw(true)
+						.build()
+				)
 		);
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		URLIntelClient fakeClient = new URLIntelClient.Builder(cfg).build();
-		URLReputationResponse response = fakeClient.reputation(
-			new URLReputationRequest.Builder("http://113.235.101.11:54384")
-				.provider("crowdstrike")
-				.verbose(true)
-				.raw(true)
-				.build()
+		assertThrows(
+			UnauthorizedException.class,
+			() ->
+				fakeClient.reputation(
+					new URLReputationRequest.Builder("http://113.235.101.11:54384")
+						.provider("crowdstrike")
+						.verbose(true)
+						.raw(true)
+						.build()
+				)
 		);
 	}
 }

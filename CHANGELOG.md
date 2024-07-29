@@ -7,6 +7,88 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.12.0] - 2024-07-23
+
+### Added
+
+- Java 11 support.
+
+### Removed
+
+- Dependency on org.samba.jcifs.
+
+### Added
+
+- `itemState` to `vault.requests.UpdateRequest`.
+
+## [3.11.0] - 2024-07-12
+
+### Added
+
+- AuthN user password expiration support.
+- `"state"` and other new properties to `authn.models.Authenticator`.
+
+### Changed
+
+- `isEnable()` in `authn.models.Authenticator` has been renamed to
+  `isEnabled()`. The previous name did not match the name used in the API's
+  response schema and JSON deserialization was not set up correctly, so
+  `isEnable()` was unusable anyways.
+
+## [3.10.1] - 2024-06-24
+
+### Fixed
+
+- `CryptoUtils.generateRsaKeyPair()` Javadoc parameter name.
+
+## [3.10.0] - 2024-06-20
+
+### Added
+
+- Improvements in verification of Audit consistency proofs
+- Vault `/export` support.
+
+### Changed
+
+- HTTP/503 and HTTP/504 responses are now retried, with a configurable interval
+  and retry count.
+
+## [3.9.0] - 2024-06-07
+
+### Added
+
+- `fpe_context` field in Audit search events
+- `return_context` support in Audit `/search`, `/results` and `/download` endpoints
+- Redact `/unredact` endpoint support
+- `redaction_method_overrides` field support in `/redact` and `redact_structured` endpoints
+- Support for format-preserving encryption.
+- AuthN usernames support.
+
+### Removed
+
+- Beta tags from AuthZ.
+
+## [3.8.1] - 2024-05-10
+
+### Fixed
+
+- `AuditClient.logStream()` Javadoc parameter name.
+
+## [3.8.0] - 2024-05-10
+
+Note that Sanitize and Secure Share did not make it into this release.
+
+### Added
+
+- Audit /download_results endpoint support
+- Support for Secure Audit Log's log stream API.
+- Support for Secure Audit Log's export API.
+- AuthZ service support.
+
+### Fixed
+
+- Put to presigned url. It should just put file in raw, not in form format.
+
 ## 3.8.0-beta-3 - 2024-03-26
 
 ### Added
@@ -30,10 +112,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Put to presigned url. It should just put file in raw, not in form format.
 
-
 ## [3.7.0] - 2024-02-26
 
-### Added 
+### Added
 
 - Vault service. Post quantum signing algorithms support
 

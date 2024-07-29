@@ -1,9 +1,10 @@
 package cloud.pangeacyber.pangea.intel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
@@ -18,21 +19,21 @@ import cloud.pangeacyber.pangea.intel.models.DomainWhoIsData;
 import cloud.pangeacyber.pangea.intel.models.IntelReputationData;
 import cloud.pangeacyber.pangea.intel.requests.*;
 import cloud.pangeacyber.pangea.intel.responses.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ITDomainIntelTest {
 
 	DomainIntelClient client;
 	static TestEnvironment environment;
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUpClass() throws Exception {
 		environment = Helper.loadTestEnvironment("domain-intel", TestEnvironment.LIVE);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		client = new DomainIntelClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
@@ -207,32 +208,41 @@ public class ITDomainIntelTest {
 		assertNotNull(response.getResult().getParameters());
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyIP() throws PangeaException, PangeaAPIException {
-		DomainReputationResponse response = client.reputation(new DomainReputationRequest.Builder("").build());
+		assertThrows(
+			ValidationException.class,
+			() -> client.reputation(new DomainReputationRequest.Builder("").build())
+		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyProvider() throws PangeaException, PangeaAPIException {
-		DomainReputationResponse response = client.reputation(
-			new DomainReputationRequest.Builder("737updatesboeing.com").provider("").build()
+		assertThrows(
+			ValidationException.class,
+			() -> client.reputation(new DomainReputationRequest.Builder("737updatesboeing.com").provider("").build())
 		);
 	}
 
-	@Test(expected = ValidationException.class)
+	@Test
 	public void testEmptyNotValidProvider() throws PangeaException, PangeaAPIException {
-		DomainReputationResponse response = client.reputation(
-			new DomainReputationRequest.Builder("737updatesboeing.com").provider("notavalidprovider").build()
+		assertThrows(
+			ValidationException.class,
+			() ->
+				client.reputation(
+					new DomainReputationRequest.Builder("737updatesboeing.com").provider("notavalidprovider").build()
+				)
 		);
 	}
 
-	@Test(expected = UnauthorizedException.class)
+	@Test
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
 		DomainIntelClient fakeClient = new DomainIntelClient.Builder(cfg).build();
-		DomainReputationResponse response = fakeClient.reputation(
-			new DomainReputationRequest.Builder("737updatesboeing.com").build()
+		assertThrows(
+			UnauthorizedException.class,
+			() -> fakeClient.reputation(new DomainReputationRequest.Builder("737updatesboeing.com").build())
 		);
 	}
 }

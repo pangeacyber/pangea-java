@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `attributes` field in `/list-resources` and `/list-subjects` endpoint
 
+### Fixed
+
+- Value of `TransferMethod.SOURCE_URL`.
+
 ## [3.12.0] - 2024-07-23
 
 ### Added

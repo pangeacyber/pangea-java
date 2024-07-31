@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ShareLinkOrderBy {
 	ID("id"),
-	STORAGE_POOL_ID("storage_pool_id"),
+	BUCKET_ID("bucket_id"),
 	TARGET("target"),
 	LINK_TYPE("link_type"),
 	ACCESS_COUNT("access_count"),

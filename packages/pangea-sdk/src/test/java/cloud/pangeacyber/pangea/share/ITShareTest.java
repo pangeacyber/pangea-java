@@ -68,6 +68,13 @@ public class ITShareTest {
 	}
 
 	@Test
+	public void testBuckets() throws PangeaException, PangeaAPIException {
+		final var response = client.buckets();
+		assertTrue(response.isOk());
+		assertTrue(response.getResult().getBuckets().size() > 0);
+	}
+
+	@Test
 	public void testFolder() throws PangeaException, PangeaAPIException {
 		FolderCreateResponse respCreate = client.folderCreate(
 			new FolderCreateRequest.Builder().path(FOLDER_DELETE).build()

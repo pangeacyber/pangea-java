@@ -16,9 +16,15 @@ public class GetRequest extends BaseRequest {
 	@JsonProperty("path")
 	String path;
 
+	/** The bucket to use, if not the default. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("bucket_id")
+	String bucketId;
+
 	protected GetRequest(Builder builder) {
 		this.id = builder.id;
 		this.path = builder.path;
+		this.bucketId = builder.bucketId;
 		this.setTransferMethod(builder.transferMethod);
 	}
 
@@ -27,6 +33,7 @@ public class GetRequest extends BaseRequest {
 		String id;
 		String path;
 		TransferMethod transferMethod;
+		String bucketId;
 
 		public Builder() {
 			// Empty constructor
@@ -48,6 +55,12 @@ public class GetRequest extends BaseRequest {
 
 		public Builder transferMethod(TransferMethod transferMethod) {
 			this.transferMethod = transferMethod;
+			return this;
+		}
+
+		/** The bucket to use, if not the default. */
+		public Builder bucketId(String bucketId) {
+			this.bucketId = bucketId;
 			return this;
 		}
 	}

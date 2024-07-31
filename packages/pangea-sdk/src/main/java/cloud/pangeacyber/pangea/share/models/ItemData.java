@@ -59,6 +59,11 @@ public class ItemData {
 	@JsonProperty("parent_id")
 	String parentId;
 
+	/** The key in the external bucket that contains this file. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("external_bucket_key")
+	String externalBucketKey;
+
 	public ItemData() {}
 
 	public String getID() {
@@ -115,5 +120,10 @@ public class ItemData {
 
 	public String getParentID() {
 		return parentId;
+	}
+
+	/** The key in the external bucket that contains this file. */
+	public String getExternalBucketKey() {
+		return externalBucketKey;
 	}
 }

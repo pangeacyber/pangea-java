@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.share;
 
 import cloud.pangeacyber.pangea.BaseClient;
+import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.FileData;
 import cloud.pangeacyber.pangea.TransferMethod;
@@ -44,6 +45,22 @@ public class ShareClient extends BaseClient {
 		public ShareClient build() {
 			return new ShareClient(this);
 		}
+	}
+
+	/**
+	 * Buckets (Beta)
+	 * @pangea.description Get information on the accessible buckets.
+	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
+	 * @pangea.operationId share_post_v1beta_buckets
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * final var response = client.buckets();
+	 * }
+	 */
+	public BucketsResponse buckets() throws PangeaException, PangeaAPIException {
+		return post("/v1beta/buckets", new BaseRequest(), BucketsResponse.class);
 	}
 
 	/**

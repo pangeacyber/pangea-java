@@ -65,6 +65,11 @@ public class PutRequest extends BaseRequest {
 	@JsonProperty("tags")
 	Tags tags;
 
+	/** The bucket to use, if not the default. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("bucket_id")
+	String bucketId;
+
 	protected PutRequest(Builder builder) {
 		this.name = builder.name;
 		this.format = builder.format;
@@ -79,6 +84,7 @@ public class PutRequest extends BaseRequest {
 		this.sha512 = builder.sha512;
 		this.size = builder.size;
 		this.tags = builder.tags;
+		this.bucketId = builder.bucketId;
 		this.setTransferMethod(builder.transferMethod);
 	}
 
@@ -97,6 +103,7 @@ public class PutRequest extends BaseRequest {
 		String sha512;
 		Integer size;
 		Tags tags;
+		String bucketId;
 		TransferMethod transferMethod;
 
 		public Builder() {}
@@ -167,6 +174,12 @@ public class PutRequest extends BaseRequest {
 
 		public Builder tags(Tags tags) {
 			this.tags = tags;
+			return this;
+		}
+
+		/** The bucket to use, if not the default. */
+		public Builder bucketId(String bucketId) {
+			this.bucketId = bucketId;
 			return this;
 		}
 

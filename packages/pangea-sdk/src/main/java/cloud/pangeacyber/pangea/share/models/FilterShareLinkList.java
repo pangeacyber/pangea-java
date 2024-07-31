@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class FilterShareLinkList extends Filter {
 
 	private FilterMatch<String> _id;
-	private FilterMatch<String> _storage_pool_id;
 	private FilterMatch<String> _target;
 	private FilterMatch<String> _link_type;
 	private FilterMatch<String> _link;
@@ -22,7 +21,6 @@ public class FilterShareLinkList extends Filter {
 
 	public FilterShareLinkList() {
 		_id = new FilterMatch<String>("id", this);
-		_storage_pool_id = new FilterMatch<String>("storage_pool_id", this);
 		_target = new FilterMatch<String>("target", this);
 		_link_type = new FilterMatch<String>("link_type", this);
 		_link = new FilterMatch<String>("link", this);
@@ -36,10 +34,6 @@ public class FilterShareLinkList extends Filter {
 
 	public FilterMatch<String> id() {
 		return _id;
-	}
-
-	public FilterMatch<String> storage_pool_id() {
-		return _storage_pool_id;
 	}
 
 	public FilterMatch<String> target() {

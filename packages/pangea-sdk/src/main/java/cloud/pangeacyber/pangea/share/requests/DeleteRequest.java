@@ -19,10 +19,16 @@ public class DeleteRequest extends BaseRequest {
 	@JsonProperty("path")
 	String path;
 
+	/** The bucket to use, if not the default. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("bucket_id")
+	String bucketId;
+
 	protected DeleteRequest(Builder builder) {
 		this.id = builder.id;
 		this.force = builder.force;
 		this.path = builder.path;
+		this.bucketId = builder.bucketId;
 	}
 
 	public static class Builder {
@@ -30,6 +36,7 @@ public class DeleteRequest extends BaseRequest {
 		String id;
 		Boolean force;
 		String path;
+		String bucketId;
 
 		public Builder() {
 			// Empty constructor
@@ -51,6 +58,12 @@ public class DeleteRequest extends BaseRequest {
 
 		public Builder path(String path) {
 			this.path = path;
+			return this;
+		}
+
+		/** The bucket to use, if not the default. */
+		public Builder bucketId(String bucketId) {
+			this.bucketId = bucketId;
 			return this;
 		}
 	}

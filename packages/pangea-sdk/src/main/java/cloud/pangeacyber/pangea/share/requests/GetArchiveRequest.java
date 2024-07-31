@@ -10,6 +10,11 @@ import java.util.List;
 
 public class GetArchiveRequest extends BaseRequest {
 
+	/** The bucket to use, if not the default. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("bucket_id")
+	String bucketId;
+
 	@JsonProperty("ids")
 	List<String> ids;
 
@@ -18,6 +23,7 @@ public class GetArchiveRequest extends BaseRequest {
 	ArchiveFormat format;
 
 	protected GetArchiveRequest(Builder builder) {
+		this.bucketId = builder.bucketId;
 		this.ids = builder.ids;
 		this.format = builder.format;
 		this.setTransferMethod(builder.transferMethod);
@@ -25,6 +31,7 @@ public class GetArchiveRequest extends BaseRequest {
 
 	public static class Builder {
 
+		String bucketId;
 		List<String> ids;
 		ArchiveFormat format;
 		TransferMethod transferMethod;
@@ -35,6 +42,12 @@ public class GetArchiveRequest extends BaseRequest {
 
 		public GetArchiveRequest build() {
 			return new GetArchiveRequest(this);
+		}
+
+		/** The bucket to use, if not the default. */
+		public Builder bucketId(String bucketId) {
+			this.bucketId = bucketId;
+			return this;
 		}
 
 		public Builder format(ArchiveFormat format) {

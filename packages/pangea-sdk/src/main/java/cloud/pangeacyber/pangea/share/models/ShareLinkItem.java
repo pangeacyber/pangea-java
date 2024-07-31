@@ -12,8 +12,9 @@ public class ShareLinkItem {
 	@JsonProperty("id")
 	private String id;
 
-	@JsonProperty("storage_pool_id")
-	private String storagePoolId;
+	/** The ID of a share bucket resource. */
+	@JsonProperty("bucket_id")
+	private String bucketId;
 
 	@JsonProperty("targets")
 	private List<String> targets;
@@ -47,8 +48,9 @@ public class ShareLinkItem {
 		return id;
 	}
 
-	public String getStoragePoolID() {
-		return storagePoolId;
+	/** The ID of a share bucket resource. */
+	public String getBucketId() {
+		return bucketId;
 	}
 
 	public List<String> getTargets() {

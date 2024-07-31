@@ -48,6 +48,11 @@ public class UpdateRequest extends BaseRequest {
 	@JsonProperty("updated_at")
 	String updatedAt;
 
+	/** The bucket to use, if not the default. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("bucket_id")
+	String bucketId;
+
 	protected UpdateRequest(Builder builder) {
 		this.id = builder.id;
 		this.path = builder.path;
@@ -59,6 +64,7 @@ public class UpdateRequest extends BaseRequest {
 		this.tags = builder.tags;
 		this.parentId = builder.parentId;
 		this.updatedAt = builder.updatedAt;
+		this.bucketId = builder.bucketId;
 	}
 
 	public static class Builder {
@@ -73,6 +79,7 @@ public class UpdateRequest extends BaseRequest {
 		Tags tags;
 		String parentId;
 		String updatedAt;
+		String bucketId;
 
 		public Builder(String id) {
 			this.id = id;
@@ -124,6 +131,12 @@ public class UpdateRequest extends BaseRequest {
 
 		public Builder updatedAt(String updatedAt) {
 			this.updatedAt = updatedAt;
+			return this;
+		}
+
+		/** The bucket to use, if not the default. */
+		public Builder bucketId(String bucketId) {
+			this.bucketId = bucketId;
 			return this;
 		}
 	}

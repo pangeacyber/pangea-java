@@ -29,12 +29,18 @@ public class FolderCreateRequest extends BaseRequest {
 	@JsonProperty("tags")
 	Tags tags;
 
+	/** The bucket to use, if not the default. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("bucket_id")
+	String bucketId;
+
 	protected FolderCreateRequest(Builder builder) {
 		this.name = builder.name;
 		this.metadata = builder.metadata;
 		this.parentId = builder.parentId;
 		this.path = builder.path;
 		this.tags = builder.tags;
+		this.bucketId = builder.bucketId;
 	}
 
 	public static class Builder {
@@ -44,6 +50,7 @@ public class FolderCreateRequest extends BaseRequest {
 		String parentId;
 		String path;
 		Tags tags;
+		String bucketId;
 
 		public Builder() {
 			// Empty constructor
@@ -75,6 +82,12 @@ public class FolderCreateRequest extends BaseRequest {
 
 		public Builder tags(Tags tags) {
 			this.tags = tags;
+			return this;
+		}
+
+		/** The bucket to use, if not the default. */
+		public Builder bucketId(String bucketId) {
+			this.bucketId = bucketId;
 			return this;
 		}
 	}

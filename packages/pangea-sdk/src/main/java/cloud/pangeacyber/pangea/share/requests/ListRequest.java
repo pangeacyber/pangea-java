@@ -10,6 +10,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ListRequest extends BaseRequest {
 
+	/** The bucket to use, if not the default. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("bucket_id")
+	String bucketId;
+
+	/** If true, include the `external_bucket_key` in results. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("include_external_bucket_key")
+	Boolean includeExternalBucketKey;
+
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("filter")
 	FilterList filter;
@@ -31,6 +41,8 @@ public class ListRequest extends BaseRequest {
 	Integer size;
 
 	protected ListRequest(Builder builder) {
+		this.bucketId = builder.bucketId;
+		this.includeExternalBucketKey = builder.includeExternalBucketKey;
 		this.filter = builder.filter;
 		this.last = builder.last;
 		this.order = builder.order;
@@ -40,6 +52,8 @@ public class ListRequest extends BaseRequest {
 
 	public static class Builder {
 
+		String bucketId;
+		Boolean includeExternalBucketKey;
 		FilterList filter;
 		String last;
 		ItemOrder order;
@@ -48,6 +62,18 @@ public class ListRequest extends BaseRequest {
 
 		public ListRequest build() {
 			return new ListRequest(this);
+		}
+
+		/** The bucket to use, if not the default. */
+		public Builder bucketId(String bucketId) {
+			this.bucketId = bucketId;
+			return this;
+		}
+
+		/** If true, include the `external_bucket_key` in results. */
+		public Builder includeExternalBucketKey(boolean includeExternalBucketKey) {
+			this.includeExternalBucketKey = includeExternalBucketKey;
+			return this;
 		}
 
 		public Builder filter(FilterList filter) {

@@ -11,6 +11,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_NULL)
 public class ShareLinkListRequest extends BaseRequest {
 
+	/** The bucket to use, if not the default. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("bucket_id")
+	String bucketId;
+
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("filter")
 	FilterShareLinkList filter;
@@ -32,6 +37,7 @@ public class ShareLinkListRequest extends BaseRequest {
 	Integer size;
 
 	protected ShareLinkListRequest(Builder builder) {
+		this.bucketId = builder.bucketId;
 		this.filter = builder.filter;
 		this.last = builder.last;
 		this.order = builder.order;
@@ -41,6 +47,7 @@ public class ShareLinkListRequest extends BaseRequest {
 
 	public static class Builder {
 
+		String bucketId;
 		FilterShareLinkList filter;
 		String last;
 		ItemOrder order;
@@ -51,6 +58,12 @@ public class ShareLinkListRequest extends BaseRequest {
 
 		public ShareLinkListRequest build() {
 			return new ShareLinkListRequest(this);
+		}
+
+		/** The bucket to use, if not the default. */
+		public Builder bucketId(String bucketId) {
+			this.bucketId = bucketId;
+			return this;
 		}
 
 		public Builder filter(FilterShareLinkList filter) {

@@ -24,7 +24,7 @@ public class FolderCreateRequest extends BaseRequest {
 	@JsonProperty("parent_id")
 	String parentId;
 
-	/** An case-sensitive path to an object. Contains a sequence of path segments delimited by the the / character. Any path ending in a / character refers to a folder. */
+	/** An case-sensitive path to an object. Contains a sequence of path segments delimited by the / character. Any path ending in a / character refers to a folder. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("path")
 	String path;
@@ -83,7 +83,7 @@ public class FolderCreateRequest extends BaseRequest {
 			return this;
 		}
 
-		/** An case-sensitive path to an object. Contains a sequence of path segments delimited by the the / character. Any path ending in a / character refers to a folder. */
+		/** An case-sensitive path to an object. Contains a sequence of path segments delimited by the / character. Any path ending in a / character refers to a folder. */
 		public Builder path(String path) {
 			this.path = path;
 			return this;

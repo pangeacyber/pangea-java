@@ -2,7 +2,6 @@ package cloud.pangeacyber.pangea.share.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.share.models.ShareLinkCreateItem;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,6 +27,7 @@ public class ShareLinkCreateRequest extends BaseRequest {
 	}
 
 	public static class Builder {
+
 		private List<ShareLinkCreateItem> links;
 		private String bucketId;
 

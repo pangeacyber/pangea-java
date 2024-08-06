@@ -4,7 +4,6 @@ import cloud.pangeacyber.pangea.filters.Filter;
 import cloud.pangeacyber.pangea.filters.FilterEqual;
 import cloud.pangeacyber.pangea.filters.FilterMatch;
 import cloud.pangeacyber.pangea.filters.FilterRange;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -19,7 +18,7 @@ public class FilterList extends Filter {
 	private FilterEqual<String[]> _tags;
 	private FilterMatch<String> _type;
 	private FilterRange<String> _updatedAt;
-	
+
 	public FilterList() {
 		_folder = new FilterEqual<String>("folder", this);
 		_createdAt = new FilterRange<String>("created_at", this);

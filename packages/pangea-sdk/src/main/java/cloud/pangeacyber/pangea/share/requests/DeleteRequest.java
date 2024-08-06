@@ -35,6 +35,7 @@ public class DeleteRequest extends BaseRequest {
 	}
 
 	public static class Builder {
+
 		String id;
 		Boolean force;
 		String path;

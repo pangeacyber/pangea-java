@@ -45,7 +45,7 @@ public class ShareLinkItem {
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("last_accessed_at")
 	private String lastAccessedAt;
-	
+
 	/** A list of authenticators */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("authenticators")

@@ -1,11 +1,9 @@
 package cloud.pangeacyber.pangea.share.results;
 
-import java.util.List;
-
+import cloud.pangeacyber.pangea.share.models.ItemData;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import cloud.pangeacyber.pangea.share.models.ItemData;
+import java.util.List;
 
 public class GetArchiveResult {
 

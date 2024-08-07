@@ -181,7 +181,7 @@ public class ITShareTest {
 		);
 
 		assertTrue(respGet.isOk());
-		assertNull(respGet.getResult().getDestUrl());
+		assertNotNull(respGet.getResult().getDestUrl());
 		assertEquals(respGet.getAttachedFiles().size(), 1);
 		AttachedFile attachedFile = respGet.getAttachedFiles().get(0);
 		attachedFile.save(Paths.get("./download/", attachedFile.getFilename()));
@@ -249,7 +249,7 @@ public class ITShareTest {
 		);
 
 		assertTrue(respGet.isOk());
-		assertNull(respGet.getResult().getDestUrl());
+		assertNotNull(respGet.getResult().getDestUrl());
 		assertEquals(respGet.getAttachedFiles().size(), 1);
 		AttachedFile attachedFile = respGet.getAttachedFiles().get(0);
 		attachedFile.save(Paths.get("./download/", attachedFile.getFilename()));

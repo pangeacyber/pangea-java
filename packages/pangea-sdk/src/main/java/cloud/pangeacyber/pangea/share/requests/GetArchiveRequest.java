@@ -15,9 +15,11 @@ public class GetArchiveRequest extends BaseRequest {
 	@JsonProperty("bucket_id")
 	String bucketId;
 
+	/** The IDs of the objects to include in the archive. Folders include all children. */
 	@JsonProperty("ids")
 	List<String> ids;
 
+	/** The format to use to build the archive. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("format")
 	ArchiveFormat format;
@@ -50,11 +52,13 @@ public class GetArchiveRequest extends BaseRequest {
 			return this;
 		}
 
+		/** The format to use to build the archive. */
 		public Builder format(ArchiveFormat format) {
 			this.format = format;
 			return this;
 		}
 
+		/** The requested transfer method for the file data. */
 		public Builder transferMethod(TransferMethod transferMethod) {
 			this.transferMethod = transferMethod;
 			return this;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ShareLinkGetRequest extends BaseRequest {
 
+	/** The ID of a share link. */
 	@JsonProperty("id")
 	String id;
 

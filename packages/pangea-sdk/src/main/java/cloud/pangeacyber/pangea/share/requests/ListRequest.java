@@ -24,18 +24,22 @@ public class ListRequest extends BaseRequest {
 	@JsonProperty("filter")
 	FilterList filter;
 
+	/** Reflected value from a previous response to obtain the next page of results. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("last")
 	String last;
 
+	/** Order results asc(ending) or desc(ending). */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("order")
 	ItemOrder order;
 
+	/** Which field to order results by. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("order_by")
 	ItemOrderBy orderBy;
 
+	/** Maximum results to include in the response. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("size")
 	Integer size;
@@ -81,21 +85,25 @@ public class ListRequest extends BaseRequest {
 			return this;
 		}
 
+		/** Reflected value from a previous response to obtain the next page of results. */
 		public Builder last(String last) {
 			this.last = last;
 			return this;
 		}
 
+		/** Order results asc(ending) or desc(ending). */
 		public Builder order(ItemOrder order) {
 			this.order = order;
 			return this;
 		}
 
+		/** Which field to order results by. */
 		public Builder orderBy(ItemOrderBy orderBy) {
 			this.orderBy = orderBy;
 			return this;
 		}
 
+		/** Maximum results to include in the response. */
 		public Builder size(Integer size) {
 			this.size = size;
 			return this;

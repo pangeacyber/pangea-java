@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Authenticator {
 
+	/** An authentication mechanism */
 	@JsonProperty("auth_type")
 	private AuthenticatorType authType;
 
+	/** An email address, a phone number or a password to access the link */
 	@JsonProperty("auth_context")
 	private String authContext;
 
@@ -19,10 +21,12 @@ public class Authenticator {
 		this.authContext = authContext;
 	}
 
+	/** An authentication mechanism */
 	public AuthenticatorType getAuthType() {
 		return authType;
 	}
 
+	/** An email address, a phone number or a password to access the link */
 	public String getAuthContext() {
 		return authContext;
 	}

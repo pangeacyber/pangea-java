@@ -11,6 +11,7 @@ public class GetResult {
 	@JsonProperty("object")
 	ItemData object;
 
+	/** A URL where the file can be downloaded from. (transfer_method: dest-url) */
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty("dest_url")
 	String destUrl;
@@ -21,6 +22,7 @@ public class GetResult {
 		return object;
 	}
 
+	/** A URL where the file can be downloaded from. (transfer_method: dest-url) */
 	public String getDestUrl() {
 		return destUrl;
 	}

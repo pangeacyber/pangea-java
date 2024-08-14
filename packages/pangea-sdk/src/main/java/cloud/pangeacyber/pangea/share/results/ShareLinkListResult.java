@@ -8,9 +8,11 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShareLinkListResult {
 
+	/** The total number of share links matched by the list request. */
 	@JsonProperty("count")
 	int count;
 
+	/** Used to fetch the next page of the current listing when provided in a repeated request's last parameter. */
 	@JsonProperty("last")
 	String last;
 
@@ -19,15 +21,17 @@ public class ShareLinkListResult {
 
 	public ShareLinkListResult() {}
 
+	/** The total number of share links matched by the list request. */
 	public int getCount() {
 		return count;
 	}
 
-	public List<ShareLinkItem> getShareLinkObjects() {
-		return shareLinkObjects;
-	}
-
+	/** Used to fetch the next page of the current listing when provided in a repeated request's last parameter. */
 	public String getLast() {
 		return last;
+	}
+
+	public List<ShareLinkItem> getShareLinkObjects() {
+		return shareLinkObjects;
 	}
 }

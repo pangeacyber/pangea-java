@@ -8,9 +8,11 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ListResult {
 
+	/** The total number of objects matched by the list request. */
 	@JsonProperty("count")
 	int count;
 
+	/** Used to fetch the next page of the current listing when provided in a repeated request's last parameter. */
 	@JsonProperty("last")
 	String last;
 
@@ -19,10 +21,12 @@ public class ListResult {
 
 	public ListResult() {}
 
+	/** The total number of objects matched by the list request. */
 	public int getCount() {
 		return count;
 	}
 
+	/** Used to fetch the next page of the current listing when provided in a repeated request's last parameter. */
 	public String getLast() {
 		return last;
 	}

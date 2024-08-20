@@ -21,6 +21,8 @@ public class ConfigTest {
 		assertNotNull(config.getConnectionTimeout());
 		assertNotNull(config.getEnviroment());
 		assertNotNull(config.isInsecure());
+		assertEquals(50, config.getMaxTotalConnections());
+		assertEquals(50, config.getMaxConnectionsPerRoute());
 	}
 
 	@Test

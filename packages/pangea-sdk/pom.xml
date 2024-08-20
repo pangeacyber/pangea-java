@@ -6,7 +6,7 @@
 
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>3.12.0</version>
+  <version>3.13.0</version>
   <packaging>jar</packaging>
 
   <name>cloud.pangea:pangea-sdk</name>

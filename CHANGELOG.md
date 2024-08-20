@@ -7,9 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added 
+### Added
 
 - `attributes` field in `/list-resources` and `/list-subjects` endpoint
+
+### Changed
+
+- The maximum number of total HTTP connections is now configurable via
+  `Config`'s `maxConnectionsPerRoute` (per-route limit) and
+  `maxTotalConnections` (total limit). The default value for both of these is
+  now 50.
 
 ### Fixed
 

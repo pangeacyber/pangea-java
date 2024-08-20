@@ -43,6 +43,12 @@ public final class Config {
 	/** Retry interval between subsequent requests. */
 	final Duration retryInterval;
 
+	/** Maximum number of total HTTP connections. */
+	private final int maxTotalConnections;
+
+	/** Maximum number of HTTP requests per route. */
+	private final int maxConnectionsPerRoute;
+
 	protected Config(Builder builder) {
 		this.domain = builder.domain;
 		this.token = builder.token;
@@ -55,6 +61,8 @@ public final class Config {
 		this.configID = builder.configID;
 		this.maxRetries = builder.maxRetries;
 		this.retryInterval = builder.retryInterval;
+		this.maxTotalConnections = builder.maxTotalConnections;
+		this.maxConnectionsPerRoute = builder.maxConnectionsPerRoute;
 	}
 
 	public String getToken() {
@@ -101,6 +109,16 @@ public final class Config {
 	/** @return Retry interval between subsequent requests. */
 	public final Duration getRetryInterval() {
 		return this.retryInterval;
+	}
+
+	/** @return Maximum number of total HTTP connections. */
+	public final int getMaxTotalConnections() {
+		return this.maxTotalConnections;
+	}
+
+	/** @return Maximum number of HTTP requests per route. */
+	public final int getMaxConnectionsPerRoute() {
+		return this.maxConnectionsPerRoute;
 	}
 
 	URI getServiceUrl(String serviceName, String path) {
@@ -228,6 +246,12 @@ public final class Config {
 		int maxRetries;
 		Duration retryInterval;
 
+		/** Maximum number of total HTTP connections. */
+		int maxTotalConnections = 50;
+
+		/** Maximum number of HTTP requests per route. */
+		int maxConnectionsPerRoute = 50;
+
 		public Builder(String token, String domain) {
 			this.token = token;
 			this.domain = domain;
@@ -289,6 +313,18 @@ public final class Config {
 		/** Set the retry interval between subsequent requests. */
 		public Builder retryInterval(Duration retryInterval) {
 			this.retryInterval = retryInterval;
+			return this;
+		}
+
+		/** Set the maximum number of total HTTP connections. */
+		public Builder maxTotalConnections(int maxTotalConnections) {
+			this.maxTotalConnections = maxTotalConnections;
+			return this;
+		}
+
+		/** Set the maximum number of HTTP requests per route. */
+		public Builder maxConnectionsPerRoute(int maxConnectionsPerRoute) {
+			this.maxConnectionsPerRoute = maxConnectionsPerRoute;
 			return this;
 		}
 

@@ -33,6 +33,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
@@ -40,6 +41,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -258,6 +260,10 @@ public abstract class BaseClient {
 			return self();
 		}
 
+		/**
+		 * HTTP client to use for all requests. If set, this overrides any
+		 * timeouts, retries, and max requests configuration.
+		 */
 		public B httpClient(final HttpClient httpClient) {
 			this.httpClient = httpClient;
 			return self();
@@ -277,6 +283,10 @@ public abstract class BaseClient {
 			timeout = (int) config.connectionTimeout.toMillis();
 		}
 
+		final var connectionManager = new PoolingHttpClientConnectionManager();
+		connectionManager.setMaxTotal(config.getMaxConnectionsPerRoute());
+		connectionManager.setDefaultMaxPerRoute(config.getMaxConnectionsPerRoute());
+
 		RequestConfig config = RequestConfig
 			.custom()
 			.setConnectTimeout(timeout)
@@ -286,6 +296,7 @@ public abstract class BaseClient {
 			.build();
 		return HttpClientBuilder
 			.create()
+			.setConnectionManager(connectionManager)
 			.setDefaultRequestConfig(config)
 			.setServiceUnavailableRetryStrategy(
 				new ServerErrorRetryStrategy(this.config.getMaxRetries(), this.config.getRetryInterval().toMillis())

@@ -1175,7 +1175,6 @@ public class ITAuditTest {
 	@Test
 	public void testMultiThreadStandardEvent() throws PangeaAPIException, PangeaException, InterruptedException {
 		final var taskCount = 200;
-		final var eventsCount = 10;
 		final var threadsCount = 50;
 
 		final var service = Executors.newFixedThreadPool(threadsCount);
@@ -1201,13 +1200,12 @@ public class ITAuditTest {
 		latch.await();
 		final var totalEstimatedTime = System.nanoTime() - totalStartTime;
 		System.out.printf("Finished everything in %d ms.\n", totalEstimatedTime / (1000 * 1000));
-		System.out.printf("Tasks: %d. Threads: %d. Events per task: %d.\n", taskCount, threadsCount, eventsCount);
+		System.out.printf("Tasks: %d. Threads: %d.\n", taskCount, threadsCount);
 	}
 
 	@Test
 	public void testMultiThreadCustomEvent() throws PangeaAPIException, PangeaException, InterruptedException {
 		final var taskCount = 200;
-		final var eventsCount = 10;
 		final var threadsCount = 50;
 
 		final var service = Executors.newFixedThreadPool(threadsCount);
@@ -1215,12 +1213,10 @@ public class ITAuditTest {
 		final var totalStartTime = System.nanoTime();
 		for (var i = 0; i < taskCount; i++) {
 			service.submit(() -> {
-				final var event = new StandardEvent.Builder("Hello, World!").action("Login").actor("Terminal").build();
-
 				final var startTime = System.nanoTime();
 				try {
 					var resp = customSchemaClient.log(
-						event,
+						customEvent,
 						new LogConfig.Builder().verbose(true).verify(true).build()
 					);
 					assertTrue(resp.getResult().getConsistencyVerification() != EventVerification.FAILED);
@@ -1236,6 +1232,6 @@ public class ITAuditTest {
 		latch.await();
 		final var totalEstimatedTime = System.nanoTime() - totalStartTime;
 		System.out.printf("Finished everything in %d ms.\n", totalEstimatedTime / (1000 * 1000));
-		System.out.printf("Tasks: %d. Threads: %d. Events per task: %d.\n", taskCount, threadsCount, eventsCount);
+		System.out.printf("Tasks: %d. Threads: %d.\n", taskCount, threadsCount);
 	}
 }

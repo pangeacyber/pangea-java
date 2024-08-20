@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 final class RootRequest extends BaseRequest {
 
@@ -114,7 +115,7 @@ public class AuditClient extends BaseClient {
 	LogSigner signer;
 	Map<Integer, PublishedRoot> publishedRoots;
 	boolean allowServerRoots = true; // In case of Arweave failure, ask the server for the roots
-	String prevUnpublishedRoot = null;
+	AtomicReference<String> prevUnpublishedRoot = new AtomicReference<>();
 	Map<String, Object> pkInfo = null;
 	String tenantID = null;
 	Class<?> customSchemaClass = null;
@@ -182,23 +183,22 @@ public class AuditClient extends BaseClient {
 		}
 	}
 
-	private LogRequest getLogRequest(LogEvent event, Boolean verbose, boolean verify) {
-		String prevRoot = null;
-		if (verify) {
-			verbose = true;
-			prevRoot = this.prevUnpublishedRoot;
+	private LogRequest getLogRequest(LogEvent event, Boolean verbose, boolean verify, String prevRoot) {
+		if (!verify) {
+			prevRoot = null;
 		}
 		return new LogRequest(event, verbose, prevRoot);
 	}
 
 	private LogResponse doLog(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
 		LogEvent logEvent = getLogEvent(event, config);
+		String prevRoot = this.prevUnpublishedRoot.get();
 		LogResponse response = post(
 			"/v1/log",
-			getLogRequest(logEvent, config.getVerbose(), config.getVerify()),
+			getLogRequest(logEvent, config.getVerbose(), config.getVerify(), prevRoot),
 			LogResponse.class
 		);
-		processLogResult(response.getResult(), config.getVerify());
+		processLogResult(response.getResult(), config.getVerify(), prevRoot);
 		return response;
 	}
 
@@ -211,7 +211,7 @@ public class AuditClient extends BaseClient {
 
 		if (response.getResult() != null) {
 			for (LogResult result : response.getResult().getResults()) {
-				processLogResult(result, config.getVerify());
+				processLogResult(result, config.getVerify(), null);
 			}
 		}
 		return response;
@@ -234,7 +234,7 @@ public class AuditClient extends BaseClient {
 
 		if (response.getResult() != null) {
 			for (LogResult result : response.getResult().getResults()) {
-				processLogResult(result, false);
+				processLogResult(result, false, null);
 			}
 		}
 		return response;
@@ -294,7 +294,8 @@ public class AuditClient extends BaseClient {
 		}
 	}
 
-	private void processLogResult(LogResult result, boolean verify) throws VerificationFailed, PangeaException {
+	private void processLogResult(LogResult result, boolean verify, String prevRoot)
+		throws VerificationFailed, PangeaException {
 		String newUnpublishedRoot = result.getUnpublishedRoot();
 		result.setEventEnvelope(EventEnvelope.fromRaw(result.getRawEnvelope(), (Class<IEvent>) this.customSchemaClass));
 		if (verify) {
@@ -307,16 +308,16 @@ public class AuditClient extends BaseClient {
 						result.getHash(),
 						result.getMembershipProof()
 					);
-				if (result.getConsistencyProof() != null && this.prevUnpublishedRoot != null) {
+				if (result.getConsistencyProof() != null && prevRoot != null) {
 					ConsistencyProof conProof = Verification.decodeConsistencyProof(result.getConsistencyProof());
 					result.consistencyVerification =
-						Verification.verifyConsistencyProof(newUnpublishedRoot, this.prevUnpublishedRoot, conProof);
+						Verification.verifyConsistencyProof(newUnpublishedRoot, prevRoot, conProof);
 				}
 			}
 		}
 
 		if (newUnpublishedRoot != null) {
-			this.prevUnpublishedRoot = newUnpublishedRoot;
+			this.prevUnpublishedRoot.set(newUnpublishedRoot);
 		}
 	}
 

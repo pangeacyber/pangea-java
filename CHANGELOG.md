@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `attributes` field in `/list-resources` and `/list-subjects` endpoint
+- `attributes` field in `/list-resources` and `/list-subjects` endpoint.
 
 ### Changed
 
@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Value of `TransferMethod.SOURCE_URL`.
+- Audit consistency proof verification is now thread-safe.
 
 ## [3.12.0] - 2024-07-23
 

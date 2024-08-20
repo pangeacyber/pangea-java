@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.audit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,6 +25,8 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -1168,5 +1171,70 @@ public class ITAuditTest {
 		final var downloadResponse = clientGeneral.downloadResults(downloadRequest);
 		assertEquals(ResponseStatus.SUCCESS.toString(), downloadResponse.getStatus());
 		assertNotNull(downloadResponse.getResult().getDestURL());
+	}
+
+	@Test
+	public void testMultiThreadStandardEvent() throws PangeaAPIException, PangeaException, InterruptedException {
+		final var taskCount = 200;
+		final var threadsCount = 8;
+
+		final var service = Executors.newFixedThreadPool(threadsCount);
+		final var latch = new CountDownLatch(taskCount);
+		final var totalStartTime = System.nanoTime();
+		for (var i = 0; i < taskCount; i++) {
+			service.submit(() -> {
+				final var event = new StandardEvent.Builder("Hello, World!").action("Login").actor("Terminal").build();
+
+				final var startTime = System.nanoTime();
+				try {
+					var resp = clientGeneral.log(event, new LogConfig.Builder().verbose(true).verify(true).build());
+					assertNotEquals(EventVerification.FAILED, resp.getResult().getConsistencyVerification());
+				} catch (PangeaException | PangeaAPIException e) {
+					e.printStackTrace();
+				} finally {
+					final var estimatedTime = System.nanoTime() - startTime;
+					System.out.printf("Task completed in %d ms.\n", estimatedTime / (1000 * 1000));
+					latch.countDown();
+				}
+			});
+		}
+		latch.await();
+		final var totalEstimatedTime = System.nanoTime() - totalStartTime;
+		System.out.printf("Finished everything in %d ms.\n", totalEstimatedTime / (1000 * 1000));
+		System.out.printf("Tasks: %d. Threads: %d.\n", taskCount, threadsCount);
+		service.shutdown();
+	}
+
+	@Test
+	public void testMultiThreadCustomEvent() throws PangeaAPIException, PangeaException, InterruptedException {
+		final var taskCount = 200;
+		final var threadsCount = 8;
+
+		final var service = Executors.newFixedThreadPool(threadsCount);
+		final var latch = new CountDownLatch(taskCount);
+		final var totalStartTime = System.nanoTime();
+		for (var i = 0; i < taskCount; i++) {
+			service.submit(() -> {
+				final var startTime = System.nanoTime();
+				try {
+					var resp = customSchemaClient.log(
+						customEvent,
+						new LogConfig.Builder().verbose(true).verify(true).build()
+					);
+					assertNotEquals(EventVerification.FAILED, resp.getResult().getConsistencyVerification());
+				} catch (PangeaException | PangeaAPIException e) {
+					e.printStackTrace();
+				} finally {
+					final var estimatedTime = System.nanoTime() - startTime;
+					System.out.printf("Task completed in %d ms.\n", estimatedTime / (1000 * 1000));
+					latch.countDown();
+				}
+			});
+		}
+		latch.await();
+		final var totalEstimatedTime = System.nanoTime() - totalStartTime;
+		System.out.printf("Finished everything in %d ms.\n", totalEstimatedTime / (1000 * 1000));
+		System.out.printf("Tasks: %d. Threads: %d.\n", taskCount, threadsCount);
+		service.shutdown();
 	}
 }

@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -1203,6 +1202,7 @@ public class ITAuditTest {
 		final var totalEstimatedTime = System.nanoTime() - totalStartTime;
 		System.out.printf("Finished everything in %d ms.\n", totalEstimatedTime / (1000 * 1000));
 		System.out.printf("Tasks: %d. Threads: %d.\n", taskCount, threadsCount);
+		service.shutdown();
 	}
 
 	@Test
@@ -1235,5 +1235,6 @@ public class ITAuditTest {
 		final var totalEstimatedTime = System.nanoTime() - totalStartTime;
 		System.out.printf("Finished everything in %d ms.\n", totalEstimatedTime / (1000 * 1000));
 		System.out.printf("Tasks: %d. Threads: %d.\n", taskCount, threadsCount);
+		service.shutdown();
 	}
 }

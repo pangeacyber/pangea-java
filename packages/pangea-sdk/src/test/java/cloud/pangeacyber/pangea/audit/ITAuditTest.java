@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.audit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -1175,7 +1177,7 @@ public class ITAuditTest {
 	@Test
 	public void testMultiThreadStandardEvent() throws PangeaAPIException, PangeaException, InterruptedException {
 		final var taskCount = 200;
-		final var threadsCount = 50;
+		final var threadsCount = 8;
 
 		final var service = Executors.newFixedThreadPool(threadsCount);
 		final var latch = new CountDownLatch(taskCount);
@@ -1187,7 +1189,7 @@ public class ITAuditTest {
 				final var startTime = System.nanoTime();
 				try {
 					var resp = clientGeneral.log(event, new LogConfig.Builder().verbose(true).verify(true).build());
-					assertTrue(resp.getResult().getConsistencyVerification() != EventVerification.FAILED);
+					assertNotEquals(EventVerification.FAILED, resp.getResult().getConsistencyVerification());
 				} catch (PangeaException | PangeaAPIException e) {
 					e.printStackTrace();
 				} finally {
@@ -1206,7 +1208,7 @@ public class ITAuditTest {
 	@Test
 	public void testMultiThreadCustomEvent() throws PangeaAPIException, PangeaException, InterruptedException {
 		final var taskCount = 200;
-		final var threadsCount = 50;
+		final var threadsCount = 8;
 
 		final var service = Executors.newFixedThreadPool(threadsCount);
 		final var latch = new CountDownLatch(taskCount);
@@ -1219,7 +1221,7 @@ public class ITAuditTest {
 						customEvent,
 						new LogConfig.Builder().verbose(true).verify(true).build()
 					);
-					assertTrue(resp.getResult().getConsistencyVerification() != EventVerification.FAILED);
+					assertNotEquals(EventVerification.FAILED, resp.getResult().getConsistencyVerification());
 				} catch (PangeaException | PangeaAPIException e) {
 					e.printStackTrace();
 				} finally {

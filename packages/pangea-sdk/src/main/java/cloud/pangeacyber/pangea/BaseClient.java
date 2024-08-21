@@ -306,7 +306,7 @@ public abstract class BaseClient {
 
 	protected HttpPost buildPostRequest(URI url, String body) throws UnsupportedEncodingException {
 		HttpPost httpPost = new HttpPost(url);
-		httpPost.setEntity(new StringEntity(body));
+		httpPost.setEntity(new StringEntity(body, ContentType.APPLICATION_JSON));
 		fillHeaders(httpPost);
 		return httpPost;
 	}
@@ -315,7 +315,7 @@ public abstract class BaseClient {
 		HttpPost httpPost = new HttpPost(url);
 
 		final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-		final StringBody requestBody = new StringBody(body, ContentType.create("application/json"));
+		final StringBody requestBody = new StringBody(body, ContentType.APPLICATION_JSON);
 		builder.addPart("request", requestBody);
 		builder.addBinaryBody(fileData.getName(), fileData.getFile(), ContentType.APPLICATION_OCTET_STREAM, "file.exe");
 
@@ -345,7 +345,7 @@ public abstract class BaseClient {
 				if (entry.getValue() instanceof String) {
 					final StringBody requestBody = new StringBody(
 						(String) entry.getValue(),
-						ContentType.create("application/json")
+						ContentType.APPLICATION_JSON
 					);
 					String key = entry.getKey();
 					builder.addPart(key, requestBody);

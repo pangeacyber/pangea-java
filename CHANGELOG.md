@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+
+- POST request bodies now have a content type of "application/json" with UTF8
+  encoding.
+
 ## 3.13.0 - 2024-08-20
 
 ### Added

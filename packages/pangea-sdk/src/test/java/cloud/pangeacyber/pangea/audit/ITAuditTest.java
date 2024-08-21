@@ -20,6 +20,7 @@ import cloud.pangeacyber.pangea.audit.results.LogBulkResult;
 import cloud.pangeacyber.pangea.audit.results.RootResult;
 import cloud.pangeacyber.pangea.exceptions.*;
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.LinkedHashMap;
@@ -1236,5 +1237,15 @@ public class ITAuditTest {
 		System.out.printf("Finished everything in %d ms.\n", totalEstimatedTime / (1000 * 1000));
 		System.out.printf("Tasks: %d. Threads: %d.\n", taskCount, threadsCount);
 		service.shutdown();
+	}
+
+	@Test
+	public void testEncoding() throws PangeaAPIException, PangeaException {
+		final var event = new StandardEvent.Builder(
+			new String(new byte[] { 0x00, (byte) 0xE2, (byte) 0x98 }, StandardCharsets.UTF_16)
+		)
+			.build();
+		final var response = clientGeneral.log(event, null);
+		assertTrue(response.isOk());
 	}
 }

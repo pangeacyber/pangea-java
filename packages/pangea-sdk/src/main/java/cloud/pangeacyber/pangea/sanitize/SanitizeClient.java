@@ -47,10 +47,9 @@ public class SanitizeClient extends BaseClient {
 	}
 
 	/**
-	 * Sanitize (Beta)
+	 * Sanitize
 	 * @pangea.description Apply file sanitization actions according to specified rules.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId sanitize_post_v1beta_sanitize
+	 * @pangea.operationId sanitize_post_v1_sanitize
 	 * @param request Request parameters.
 	 * @param file File to sanitize.
 	 * @return The sanitized file and information on the sanitization that was performed.
@@ -84,14 +83,13 @@ public class SanitizeClient extends BaseClient {
 		}
 
 		FileData fileData = new FileData(file, name);
-		return post("/v1beta/sanitize", request, fileData, SanitizeResponse.class);
+		return post("/v1/sanitize", request, fileData, SanitizeResponse.class);
 	}
 
 	/**
-	 * Sanitize via presigned URL (Beta)
+	 * Sanitize via presigned URL
 	 * @pangea.description Apply file sanitization actions according to specified rules via a presigned URL.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId sanitize_post_v1beta_sanitize 2
+	 * @pangea.operationId sanitize_post_v1_sanitize 2
 	 * @param request Request parameters.
 	 * @return A presigned URL.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -129,6 +127,6 @@ public class SanitizeClient extends BaseClient {
 				null
 			);
 		}
-		return requestPresignedURL("/v1beta/sanitize", request);
+		return requestPresignedURL("/v1/sanitize", request);
 	}
 }

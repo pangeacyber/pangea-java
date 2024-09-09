@@ -17,10 +17,21 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.networknt.schema.InputFormat;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion.VersionFlag;
+import com.networknt.schema.ValidationMessage;
+import io.swagger.util.Json;
+import io.swagger.v3.parser.OpenAPIV3Parser;
+import io.swagger.v3.parser.core.models.ParseOptions;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -112,6 +123,12 @@ public class AuditClient extends BaseClient {
 
 	public static final String serviceName = "audit";
 
+	/** Name of the schema for Audit events in the OpenAPI spec. */
+	private static final String AUDIT_EVENT_SCHEMA_NAME = "AuditEvent";
+
+	/** JSON schema factory. */
+	private static final JsonSchemaFactory jsonSchemaFactory = JsonSchemaFactory.getInstance(VersionFlag.V202012);
+
 	LogSigner signer;
 	Map<Integer, PublishedRoot> publishedRoots;
 	boolean allowServerRoots = true; // In case of Arweave failure, ask the server for the roots
@@ -119,6 +136,15 @@ public class AuditClient extends BaseClient {
 	Map<String, Object> pkInfo = null;
 	String tenantID = null;
 	Class<?> customSchemaClass = null;
+
+	/** Cached JSON schema for validating events. */
+	private JsonSchema eventSchema = null;
+
+	/**
+	 * Whether or not to validate events against the OpenAPI schema before
+	 * sending them to Secure Audit Log.
+	 */
+	private boolean schemaValidation = false;
 
 	public AuditClient(Builder builder) {
 		super(builder, serviceName);
@@ -131,6 +157,7 @@ public class AuditClient extends BaseClient {
 		this.pkInfo = builder.pkInfo;
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
 		this.customSchemaClass = builder.customSchemaClass;
+		this.schemaValidation = builder.schemaValidation;
 
 		// FIXME: still support config id in PangeaConfig. Remove this code block when totally deprecated
 		if (builder.configID != null && !builder.configID.isEmpty()) {
@@ -148,6 +175,12 @@ public class AuditClient extends BaseClient {
 		Map<String, Object> pkInfo = null;
 		String configID = null;
 		Class<?> customSchemaClass = StandardEvent.class;
+
+		/**
+		 * Whether or not to validate events against the OpenAPI schema before
+		 * sending them to Secure Audit Log.
+		 */
+		private boolean schemaValidation = false;
 
 		public Builder(Config config) {
 			super(config);
@@ -181,6 +214,96 @@ public class AuditClient extends BaseClient {
 			this.customSchemaClass = customSchemaClass;
 			return this;
 		}
+
+		/**
+		 * Whether or not to validate events against the OpenAPI schema before
+		 * sending them to Secure Audit Log.
+		 */
+		public Builder withSchemaValidation(boolean schemaValidation) {
+			this.schemaValidation = schemaValidation;
+			return this;
+		}
+	}
+
+	/**
+	 * Fetch the OpenAPI spec.
+	 *
+	 * @param request Request body.
+	 * @return OpenAPI spec.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	private String openapi(BaseRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/openapi.json", request);
+	}
+
+	/**
+	 * Validates an event against the schema from the OpenAPI spec.
+	 *
+	 * @throws SchemaValidationException Thrown if the event does not validate against the OpenAPI spec.
+	 * @throws PangeaException Thrown if an error occurs during fetching the OpenAPI spec.
+	 * @throws PangeaAPIException Thrown if fetching the OpenAPI spec returns an error response.
+	 */
+	private void validateEventSchema(LogCommonRequest request, IEvent event)
+		throws PangeaException, PangeaAPIException {
+		validateEventSchema(request, Collections.singleton(event));
+	}
+
+	/**
+	 * Validates events against the schema from the OpenAPI spec.
+	 *
+	 * @throws SchemaValidationException Thrown on the first event that does not validate against the OpenAPI spec.
+	 * @throws PangeaException Thrown if an error occurs during fetching the OpenAPI spec.
+	 * @throws PangeaAPIException Thrown if fetching the OpenAPI spec returns an error response.
+	 */
+	private void validateEventSchema(LogCommonRequest request, Iterable<IEvent> events)
+		throws PangeaException, PangeaAPIException {
+		// Generate event schema if it hasn't been cached yet.
+		if (eventSchema == null) {
+			// Fetch OpenAPI spec.
+			final var rawOpenApiSpec = openapi(request);
+
+			// Parse the spec.
+			final var parseOptions = new ParseOptions();
+			parseOptions.setResolve(false);
+			final var swaggerResult = new OpenAPIV3Parser().readContents(rawOpenApiSpec, null, parseOptions);
+			final var openApiSpec = swaggerResult.getOpenAPI();
+
+			// Get the JSON schema for events.
+			final var schema = openApiSpec.getComponents().getSchemas().get(AUDIT_EVENT_SCHEMA_NAME);
+			JsonNode schemaNode;
+			try {
+				// Serialize with swagger-parser's `ObjectMapper` instead of
+				// `BaseClient`'s so that `null` values are not included as
+				// `NullNode`s, because those will trip up json-schema-validator.
+				schemaNode = objectMapper.readTree(Json.mapper().writeValueAsString(schema));
+			} catch (JsonProcessingException error) {
+				throw new SchemaValidationException("Failed to serialize or deserialize event schema.", error);
+			}
+			eventSchema = jsonSchemaFactory.getSchema(schemaNode);
+		}
+
+		for (var event : events) {
+			Set<ValidationMessage> validationMessages;
+			try {
+				validationMessages =
+					eventSchema.validate(
+						objectMapper.writeValueAsString(event),
+						InputFormat.JSON,
+						executionContext -> executionContext.getExecutionConfig().setFormatAssertionsEnabled(true)
+					);
+			} catch (JsonProcessingException error) {
+				throw new SchemaValidationException("Failed to serialize event.", error);
+			}
+
+			if (!validationMessages.isEmpty()) {
+				// Clear the cached schema on a validation error just in case a
+				// custom schema has changed server-side.
+				eventSchema = null;
+
+				throw new SchemaValidationException(validationMessages);
+			}
+		}
 	}
 
 	private LogRequest getLogRequest(LogEvent event, Boolean verbose, boolean verify, String prevRoot) {
@@ -193,21 +316,26 @@ public class AuditClient extends BaseClient {
 	private LogResponse doLog(IEvent event, LogConfig config) throws PangeaException, PangeaAPIException {
 		LogEvent logEvent = getLogEvent(event, config);
 		String prevRoot = this.prevUnpublishedRoot.get();
-		LogResponse response = post(
-			"/v1/log",
-			getLogRequest(logEvent, config.getVerbose(), config.getVerify(), prevRoot),
-			LogResponse.class
-		);
+		final var logRequest = getLogRequest(logEvent, config.getVerbose(), config.getVerify(), prevRoot);
+
+		if (this.schemaValidation) {
+			this.validateEventSchema(logRequest, event);
+		}
+
+		LogResponse response = post("/v1/log", logRequest, LogResponse.class);
 		processLogResult(response.getResult(), config.getVerify(), prevRoot);
 		return response;
 	}
 
-	private LogBulkResponse doLogBulk(IEvent[] events, LogConfig config) throws PangeaException, PangeaAPIException {
-		LogBulkResponse response = post(
-			"/v2/log",
-			new LogBulkRequest(getLogEvents(events, config), config.getVerbose()),
-			LogBulkResponse.class
-		);
+	private LogBulkResponse doLogBulk(Iterable<IEvent> events, LogConfig config)
+		throws PangeaException, PangeaAPIException {
+		final var logRequest = new LogBulkRequest(getLogEvents(events, config), config.getVerbose());
+
+		if (this.schemaValidation) {
+			this.validateEventSchema(logRequest, events);
+		}
+
+		LogBulkResponse response = post("/v2/log", logRequest, LogBulkResponse.class);
 
 		if (response.getResult() != null) {
 			for (LogResult result : response.getResult().getResults()) {
@@ -217,14 +345,20 @@ public class AuditClient extends BaseClient {
 		return response;
 	}
 
-	private LogBulkResponse doLogBulkAsync(IEvent[] events, LogConfig config)
+	private LogBulkResponse doLogBulkAsync(Iterable<IEvent> events, LogConfig config)
 		throws PangeaException, PangeaAPIException {
+		final var logRequest = new LogBulkRequest(getLogEvents(events, config), config.getVerbose());
+
+		if (this.schemaValidation) {
+			this.validateEventSchema(logRequest, events);
+		}
+
 		LogBulkResponse response;
 		try {
 			response =
 				post(
 					"/v2/log_async",
-					new LogBulkRequest(getLogEvents(events, config), config.getVerbose()),
+					logRequest,
 					LogBulkResponse.class,
 					new PostConfig.Builder().pollResult(false).build()
 				);
@@ -240,11 +374,10 @@ public class AuditClient extends BaseClient {
 		return response;
 	}
 
-	private ArrayList<LogEvent> getLogEvents(IEvent[] events, LogConfig config) throws PangeaException {
-		ArrayList<LogEvent> logEvents = new ArrayList<LogEvent>();
+	private ArrayList<LogEvent> getLogEvents(Iterable<IEvent> events, LogConfig config) throws PangeaException {
+		final var logEvents = new ArrayList<LogEvent>();
 		for (IEvent event : events) {
-			LogEvent logEvent = getLogEvent(event, config);
-			logEvents.add(logEvent);
+			logEvents.add(getLogEvent(event, config));
 		}
 		return logEvents;
 	}
@@ -257,7 +390,7 @@ public class AuditClient extends BaseClient {
 			event.setTenantID(this.tenantID);
 		}
 
-		if (config.getSignLocal() == true) {
+		if (config.getSignLocal()) {
 			if (this.signer == null) {
 				throw new SignerException("Signer not initialized", null);
 			} else {
@@ -375,7 +508,7 @@ public class AuditClient extends BaseClient {
 		if (config == null) {
 			config = new LogConfig.Builder().build();
 		}
-		return doLogBulk(events, config);
+		return doLogBulk(Arrays.asList(events), config);
 	}
 
 	/**
@@ -404,7 +537,7 @@ public class AuditClient extends BaseClient {
 		if (config == null) {
 			config = new LogConfig.Builder().build();
 		}
-		return doLogBulkAsync(events, config);
+		return doLogBulkAsync(Arrays.asList(events), config);
 	}
 
 	private RootResponse rootPost(Integer treeSize) throws PangeaException, PangeaAPIException {

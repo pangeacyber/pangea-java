@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Secure Audit Log events may now be validated against the service's OpenAPI
+  spec before sending them. This feature is disabled by default and can be
+  enabled by calling `withSchemaValidation(true)` when building an
+  `AuditClient`.
+
 ## 3.13.1 - 2024-08-23
 
 ### Fixed

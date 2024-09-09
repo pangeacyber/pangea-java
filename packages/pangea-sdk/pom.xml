@@ -114,6 +114,16 @@
       <artifactId>httpclient</artifactId>
       <version>4.5.14</version>
     </dependency>
+    <dependency>
+      <groupId>io.swagger.parser.v3</groupId>
+      <artifactId>swagger-parser</artifactId>
+      <version>2.1.22</version>
+    </dependency>
+    <dependency>
+      <groupId>com.networknt</groupId>
+      <artifactId>json-schema-validator</artifactId>
+      <version>1.5.1</version>
+    </dependency>
 
     <!-- Testing -->
     <dependency>

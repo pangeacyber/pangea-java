@@ -128,7 +128,7 @@ public final class Config {
 			b.append(domain);
 		} else {
 			b.append(insecure ? "http://" : "https://");
-			if (enviroment != "local") {
+			if (!enviroment.equals("local")) {
 				b.append(serviceName);
 				b.append('.');
 			}

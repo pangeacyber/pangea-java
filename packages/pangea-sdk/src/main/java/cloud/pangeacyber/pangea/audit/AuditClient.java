@@ -249,6 +249,30 @@ public class AuditClient extends BaseClient {
 		validateEventSchema(request, Collections.singleton(event));
 	}
 
+	private JsonSchema initEventSchema(LogCommonRequest request) throws PangeaException, PangeaAPIException {
+		// Fetch OpenAPI spec.
+		final var rawOpenApiSpec = openapi(request);
+
+		// Parse the spec.
+		final var parseOptions = new ParseOptions();
+		parseOptions.setResolve(false);
+		final var swaggerResult = new OpenAPIV3Parser().readContents(rawOpenApiSpec, null, parseOptions);
+		final var openApiSpec = swaggerResult.getOpenAPI();
+
+		// Get the JSON schema for events.
+		final var schema = openApiSpec.getComponents().getSchemas().get(AUDIT_EVENT_SCHEMA_NAME);
+		JsonNode schemaNode;
+		try {
+			// Serialize with swagger-parser's `ObjectMapper` instead of
+			// `BaseClient`'s so that `null` values are not included as
+			// `NullNode`s, because those will trip up json-schema-validator.
+			schemaNode = objectMapper.readTree(Json.mapper().writeValueAsString(schema));
+		} catch (JsonProcessingException error) {
+			throw new SchemaValidationException("Failed to serialize or deserialize event schema.", error);
+		}
+		return jsonSchemaFactory.getSchema(schemaNode);
+	}
+
 	/**
 	 * Validates events against the schema from the OpenAPI spec.
 	 *
@@ -259,35 +283,17 @@ public class AuditClient extends BaseClient {
 	private void validateEventSchema(LogCommonRequest request, Iterable<IEvent> events)
 		throws PangeaException, PangeaAPIException {
 		// Generate event schema if it hasn't been cached yet.
-		if (eventSchema == null) {
-			// Fetch OpenAPI spec.
-			final var rawOpenApiSpec = openapi(request);
-
-			// Parse the spec.
-			final var parseOptions = new ParseOptions();
-			parseOptions.setResolve(false);
-			final var swaggerResult = new OpenAPIV3Parser().readContents(rawOpenApiSpec, null, parseOptions);
-			final var openApiSpec = swaggerResult.getOpenAPI();
-
-			// Get the JSON schema for events.
-			final var schema = openApiSpec.getComponents().getSchemas().get(AUDIT_EVENT_SCHEMA_NAME);
-			JsonNode schemaNode;
-			try {
-				// Serialize with swagger-parser's `ObjectMapper` instead of
-				// `BaseClient`'s so that `null` values are not included as
-				// `NullNode`s, because those will trip up json-schema-validator.
-				schemaNode = objectMapper.readTree(Json.mapper().writeValueAsString(schema));
-			} catch (JsonProcessingException error) {
-				throw new SchemaValidationException("Failed to serialize or deserialize event schema.", error);
-			}
-			eventSchema = jsonSchemaFactory.getSchema(schemaNode);
+		if (this.eventSchema == null) {
+			this.eventSchema = this.initEventSchema(request);
 		}
+		final var localEventSchema = this.eventSchema;
 
+		var index = 0;
 		for (var event : events) {
 			Set<ValidationMessage> validationMessages;
 			try {
 				validationMessages =
-					eventSchema.validate(
+					localEventSchema.validate(
 						objectMapper.writeValueAsString(event),
 						InputFormat.JSON,
 						executionContext -> executionContext.getExecutionConfig().setFormatAssertionsEnabled(true)
@@ -299,10 +305,15 @@ public class AuditClient extends BaseClient {
 			if (!validationMessages.isEmpty()) {
 				// Clear the cached schema on a validation error just in case a
 				// custom schema has changed server-side.
-				eventSchema = null;
+				this.eventSchema = null;
 
-				throw new SchemaValidationException(validationMessages);
+				throw new SchemaValidationException(
+					String.format("Event at index %d did not pass validation.", index),
+					validationMessages
+				);
 			}
+
+			index++;
 		}
 	}
 

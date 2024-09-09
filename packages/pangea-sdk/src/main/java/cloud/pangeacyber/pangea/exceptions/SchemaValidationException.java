@@ -21,6 +21,11 @@ public class SchemaValidationException extends RuntimeException {
 		this.validationMessages = null;
 	}
 
+	public SchemaValidationException(String message, Collection<ValidationMessage> validationMessages) {
+		super(message);
+		this.validationMessages = validationMessages;
+	}
+
 	public SchemaValidationException(Throwable throwable) {
 		super(throwable);
 		this.validationMessages = null;
@@ -34,7 +39,11 @@ public class SchemaValidationException extends RuntimeException {
 	@Override
 	public String getMessage() {
 		return this.validationMessages != null
-			? this.validationMessages.stream().map(ValidationMessage::getMessage).collect(Collectors.joining("\n"))
+			? super.getMessage() +
+			System.lineSeparator() +
+			this.validationMessages.stream()
+				.map(ValidationMessage::getMessage)
+				.collect(Collectors.joining(System.lineSeparator()))
 			: super.getMessage();
 	}
 }

@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.audit;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -1267,9 +1268,12 @@ public class ITAuditTest {
 		assertThrows(SchemaValidationException.class, () -> client.log(invalidEvent, null));
 		assertThrows(SchemaValidationException.class, () -> client.logBulk(invalidEvents, null));
 		assertThrows(SchemaValidationException.class, () -> client.logBulkAsync(invalidEvents, null));
+		assertDoesNotThrow(() -> client.log(new StandardEvent(MSG_NO_SIGNED), null));
 
 		// Also works with custom schemas.
-		final var invalidCustomEvent = new CustomEvent.Builder(sb.toString()).build();
+		final var invalidCustomEvent = new CustomEvent.Builder(sb.toString())
+			.fieldTime("definitely not a date-time")
+			.build();
 		final IEvent[] invalidCustomEvents = { invalidCustomEvent };
 		final var customClient = new AuditClient.Builder(this.customSchemaCfg)
 			.withCustomSchema(CustomEvent.class)
@@ -1278,5 +1282,6 @@ public class ITAuditTest {
 		assertThrows(SchemaValidationException.class, () -> customClient.log(invalidCustomEvent, null));
 		assertThrows(SchemaValidationException.class, () -> customClient.logBulk(invalidCustomEvents, null));
 		assertThrows(SchemaValidationException.class, () -> customClient.logBulkAsync(invalidCustomEvents, null));
+		assertDoesNotThrow(() -> customClient.log(customEvent, null));
 	}
 }

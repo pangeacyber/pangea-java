@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.14.0 - 2024-09-13
+
 ### Added
 
 - Secure Audit Log events may now be validated against the service's OpenAPI

@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.audit;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -35,6 +36,7 @@ import org.junit.jupiter.api.Test;
 public class ITAuditTest {
 
 	Config cfgGeneral;
+	Config customSchemaCfg;
 	AuditClient clientGeneral, clientGeneralNoQueue, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient, customSchemaClient, localSignCustomSchemaClient;
 	static TestEnvironment environment;
 	CustomEvent customEvent;
@@ -61,7 +63,7 @@ public class ITAuditTest {
 		this.cfgGeneral = Config.fromIntegrationEnvironment(environment);
 		Config cfgGeneralNoQueue = Config.fromIntegrationEnvironment(environment);
 		cfgGeneralNoQueue.setQueuedRetryEnabled(false);
-		Config customSchemaCfg = Config.fromCustomSchemaIntegrationEnvironment(environment);
+		this.customSchemaCfg = Config.fromCustomSchemaIntegrationEnvironment(environment);
 		Map<String, Object> pkInfo = new LinkedHashMap<String, Object>();
 		pkInfo.put("ExtraInfo", "LocalKey");
 
@@ -1247,5 +1249,39 @@ public class ITAuditTest {
 			.build();
 		final var response = clientGeneral.log(event, null);
 		assertTrue(response.isOk());
+	}
+
+	@Test
+	void testOpenApiSchemaValidation() {
+		// Create an event with a message long enough to fail validation. It
+		// only requires a length >32766.
+		final var sb = new StringBuilder(32766 + 1);
+		for (var i = 0; i < 32766 + 1; i++) {
+			sb.append('a');
+		}
+		final var invalidEvent = new StandardEvent(sb.toString());
+		final IEvent[] invalidEvents = { invalidEvent };
+
+		// Create a client with schema validation enabled.
+		final var client = new AuditClient.Builder(cfgGeneral).withSchemaValidation(true).build();
+
+		assertThrows(SchemaValidationException.class, () -> client.log(invalidEvent, null));
+		assertThrows(SchemaValidationException.class, () -> client.logBulk(invalidEvents, null));
+		assertThrows(SchemaValidationException.class, () -> client.logBulkAsync(invalidEvents, null));
+		assertDoesNotThrow(() -> client.log(new StandardEvent(MSG_NO_SIGNED), null));
+
+		// Also works with custom schemas.
+		final var invalidCustomEvent = new CustomEvent.Builder(sb.toString())
+			.fieldTime("definitely not a date-time")
+			.build();
+		final IEvent[] invalidCustomEvents = { invalidCustomEvent };
+		final var customClient = new AuditClient.Builder(this.customSchemaCfg)
+			.withCustomSchema(CustomEvent.class)
+			.withSchemaValidation(true)
+			.build();
+		assertThrows(SchemaValidationException.class, () -> customClient.log(invalidCustomEvent, null));
+		assertThrows(SchemaValidationException.class, () -> customClient.logBulk(invalidCustomEvents, null));
+		assertThrows(SchemaValidationException.class, () -> customClient.logBulkAsync(invalidCustomEvents, null));
+		assertDoesNotThrow(() -> customClient.log(customEvent, null));
 	}
 }

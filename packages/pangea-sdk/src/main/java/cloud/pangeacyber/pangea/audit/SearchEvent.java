@@ -74,7 +74,7 @@ public class SearchEvent {
 	}
 
 	public boolean isPublished() {
-		return published == true;
+		return published;
 	}
 
 	public EventVerification getMembershipVerification() {

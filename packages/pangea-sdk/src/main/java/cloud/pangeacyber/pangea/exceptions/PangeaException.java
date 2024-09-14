@@ -1,21 +1,14 @@
 package cloud.pangeacyber.pangea.exceptions;
 
-import java.lang.Exception;
-
 public class PangeaException extends Exception {
 
-	Throwable cause;
-
 	public PangeaException(String message, Throwable cause) {
-		super(message);
-		this.cause = cause;
+		super(message, cause);
 	}
 
-	public Throwable getCause() {
-		return cause;
-	}
-
+	/** @deprecated */
+	@Deprecated
 	public Throwable getCasue() {
-		return cause;
+		return getCause();
 	}
 }

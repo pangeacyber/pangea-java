@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - HTTP/500 and HTTP/502 responses are now retried.
 
+## 3.14.0 - 2024-09-13
+
+### Added
+
+- Secure Audit Log events may now be validated against the service's OpenAPI
+  spec before sending them. This feature is disabled by default and can be
+  enabled by calling `withSchemaValidation(true)` when building an
+  `AuditClient`.
+
 ## 3.13.1 - 2024-08-23
 
 ### Fixed

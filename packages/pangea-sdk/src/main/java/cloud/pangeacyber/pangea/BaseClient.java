@@ -33,7 +33,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
@@ -162,7 +161,7 @@ final class InternalHttpResponse {
 
 public abstract class BaseClient {
 
-	private static final ObjectMapper objectMapper = JsonMapper
+	protected static final ObjectMapper objectMapper = JsonMapper
 		.builder()
 		.findAndAddModules()
 		.defaultTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
@@ -450,6 +449,21 @@ public abstract class BaseClient {
 	}
 
 	/**
+	 * Perform a HTTP POST request and return the request body as a string.
+	 *
+	 * @param <Req> Request body type.
+	 * @param path Request URL path.
+	 * @param request Request body.
+	 * @return Response body as a string.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	protected <Req extends BaseRequest> String post(String path, Req request)
+		throws PangeaException, PangeaAPIException {
+		return this.postSingle(this.config.getServiceUrl(this.serviceName, path), request, null).getBody();
+	}
+
+	/**
 	 * Perform a HTTP GET request.
 	 *
 	 * @param <ResponseType> Response body type.
@@ -612,7 +626,7 @@ public abstract class BaseClient {
 			response = postSingle(url, request, fileData);
 		}
 
-		if (postConfig.getPollResult() == true) {
+		if (postConfig.getPollResult()) {
 			response = this.handleQueued(response);
 		}
 		return checkResponse(response, responseTypeRef, url.toString());

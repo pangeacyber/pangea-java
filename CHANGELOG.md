@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+
+- HTTP/500 and HTTP/502 responses are now retried.
+
 ## 3.14.0 - 2024-09-13
 
 ### Added

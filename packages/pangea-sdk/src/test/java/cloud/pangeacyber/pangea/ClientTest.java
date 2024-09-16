@@ -1,5 +1,7 @@
 package cloud.pangeacyber.pangea;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -79,8 +81,8 @@ public class ClientTest {
 	}
 
 	@Test
-	public void retryServerErrors() throws PangeaException, PangeaAPIException {
+	public void retryServerErrors() {
 		// Should not throw thanks to retries.
-		client.ping();
+		assertDoesNotThrow(() -> client.ping());
 	}
 }

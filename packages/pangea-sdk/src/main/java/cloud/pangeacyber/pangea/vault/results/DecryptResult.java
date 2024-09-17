@@ -2,8 +2,12 @@ package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 public class DecryptResult {
 
 	@JsonProperty("id")
@@ -17,22 +21,4 @@ public class DecryptResult {
 
 	@JsonProperty("algorithm")
 	String algorithm;
-
-	public DecryptResult() {}
-
-	public String getId() {
-		return id;
-	}
-
-	public String getPlainText() {
-		return plainText;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public String getAlgorithm() {
-		return algorithm;
-	}
 }

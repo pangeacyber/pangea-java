@@ -1,79 +1,28 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
-import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@SuperBuilder
+@Value
 public class GetRequest extends BaseRequest {
 
+	/** The item ID. */
+	@NonNull
 	@JsonProperty("id")
 	String id;
 
+	/** The key version(s). */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("version")
-	String version = null;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("verbose")
-	Boolean verbose = null;
-
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("version_state")
-	ItemVersionState versionState = null;
-
-	protected GetRequest(Builder builder) {
-		this.id = builder.id;
-		this.version = builder.version;
-		this.verbose = builder.verbose;
-		this.versionState = builder.versionState;
-	}
-
-	public static class Builder {
-
-		String id;
-		String version = null;
-		Boolean verbose = null;
-		ItemVersionState versionState = null;
-
-		public Builder(String id) {
-			this.id = id;
-		}
-
-		public GetRequest build() {
-			return new GetRequest(this);
-		}
-
-		public Builder version(String version) {
-			this.version = version;
-			return this;
-		}
-
-		public Builder verbose(Boolean verbose) {
-			this.verbose = verbose;
-			return this;
-		}
-
-		public Builder versionState(ItemVersionState versionState) {
-			this.versionState = versionState;
-			return this;
-		}
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public Boolean getVerbose() {
-		return verbose;
-	}
-
-	public ItemVersionState getVersionState() {
-		return versionState;
-	}
+	String version;
 }

@@ -4,68 +4,27 @@ import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@JsonInclude(Include.NON_NULL)
+@SuperBuilder
+@Value
 public class KeyRotateRequest extends CommonRotateRequest {
 
-	@JsonInclude(Include.NON_NULL)
+	/** The public key (in PEM format). */
 	@JsonProperty("public_key")
-	String encodedPublicKey = null;
+	String publicKey;
 
-	@JsonInclude(Include.NON_NULL)
+	/** The private key (in PEM format). */
 	@JsonProperty("private_key")
-	String encodedPrivateKey = null;
+	String privateKey;
 
-	@JsonInclude(Include.NON_NULL)
+	/** The key material. */
 	@JsonProperty("key")
-	String encodedSymmetricKey = null;
-
-	protected KeyRotateRequest(Builder builder) {
-		super(builder);
-		this.encodedPrivateKey = builder.encodedPrivateKey;
-		this.encodedPublicKey = builder.encodedPublicKey;
-		this.encodedSymmetricKey = builder.encodedSymmetricKey;
-	}
-
-	public String getEncodedPublicKey() {
-		return encodedPublicKey;
-	}
-
-	public String getEncodedPrivateKey() {
-		return encodedPrivateKey;
-	}
-
-	public String getEncodedSymmetricKey() {
-		return encodedSymmetricKey;
-	}
-
-	public static class Builder extends CommonBuilder<Builder> {
-
-		String encodedPublicKey = null;
-		String encodedPrivateKey = null;
-		String encodedSymmetricKey = null;
-
-		public Builder(String id, ItemVersionState rotationState) {
-			super(id);
-			this.rotationState = rotationState;
-		}
-
-		public KeyRotateRequest build() {
-			return new KeyRotateRequest(this);
-		}
-
-		public Builder encodedPublicKey(String encodedPublicKey) {
-			this.encodedPublicKey = encodedPublicKey;
-			return this;
-		}
-
-		public Builder encodedPrivateKey(String encodedPrivateKey) {
-			this.encodedPrivateKey = encodedPrivateKey;
-			return this;
-		}
-
-		public Builder encodedSymmetricKey(String encodedSymmetricKey) {
-			this.encodedSymmetricKey = encodedSymmetricKey;
-			return this;
-		}
-	}
+	String key;
 }

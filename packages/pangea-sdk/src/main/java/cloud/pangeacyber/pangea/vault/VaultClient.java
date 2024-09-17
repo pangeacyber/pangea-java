@@ -13,40 +13,49 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.Map;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
 
+@EqualsAndHashCode(callSuper = true)
+@Value
 final class JWKGetRequest extends BaseRequest {
 
+	@NonNull
 	@JsonProperty("id")
 	String id;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("version")
-	String version = null;
-
-	public JWKGetRequest(String id, String version) {
-		this.id = id;
-		this.version = version;
-	}
+	String version;
 }
 
+@EqualsAndHashCode(callSuper = true)
+@JsonInclude(Include.NON_NULL)
+@Value
 final class StateChangeRequest extends BaseRequest {
 
+	/** The item ID. */
+	@NonNull
 	@JsonProperty("id")
 	String id;
 
-	@JsonProperty("version")
-	int version;
-
+	/** The new state of the item version. */
+	@NonNull
 	@JsonProperty("state")
 	ItemVersionState state;
 
-	public StateChangeRequest(String id, int version, ItemVersionState state) {
-		this.id = id;
-		this.version = version;
-		this.state = state;
-	}
+	/** The item version. */
+	@JsonProperty("version")
+	int version;
+
+	/** Period of time for the destruction of a compromised key. */
+	@JsonProperty("destroy_period")
+	String destroyPeriod;
 }
 
+@EqualsAndHashCode(callSuper = true)
+@Value
 final class SignRequest extends BaseRequest {
 
 	@JsonProperty("id")
@@ -58,14 +67,10 @@ final class SignRequest extends BaseRequest {
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("version")
 	Integer version;
-
-	public SignRequest(String id, String message, Integer version) {
-		this.id = id;
-		this.message = message;
-		this.version = version;
-	}
 }
 
+@EqualsAndHashCode(callSuper = true)
+@Value
 final class JWTSignRequest extends BaseRequest {
 
 	@JsonProperty("id")
@@ -73,60 +78,47 @@ final class JWTSignRequest extends BaseRequest {
 
 	@JsonProperty("payload")
 	String payload;
-
-	public JWTSignRequest(String id, String payload) {
-		this.id = id;
-		this.payload = payload;
-	}
 }
 
+@EqualsAndHashCode(callSuper = true)
+@Value
 final class VerifyRequest extends BaseRequest {
 
+	/** The item ID. */
+	@NonNull
 	@JsonProperty("id")
 	String id;
 
+	/** A message to be verified */
+	@NonNull
 	@JsonProperty("message")
 	String message;
 
+	/** The message signature. */
+	@NonNull
 	@JsonProperty("signature")
 	String signature;
 
+	/** The item version. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("version")
-	Integer version = null;
-
-	public VerifyRequest(String id, String message, String signature) {
-		this.id = id;
-		this.message = message;
-		this.signature = signature;
-	}
-
-	public VerifyRequest(String id, String message, String signature, Integer version) {
-		this.id = id;
-		this.message = message;
-		this.signature = signature;
-		this.version = version;
-	}
+	Integer version;
 }
 
+@EqualsAndHashCode(callSuper = true)
+@Value
 final class JWTVerifyRequest extends BaseRequest {
 
 	@JsonProperty("jws")
 	String jws;
-
-	public JWTVerifyRequest(String jws) {
-		this.jws = jws;
-	}
 }
 
+@EqualsAndHashCode(callSuper = true)
+@Value
 final class DeleteRequest extends BaseRequest {
 
 	@JsonProperty("id")
 	String id;
-
-	public DeleteRequest(String id) {
-		this.id = id;
-	}
 }
 
 public class VaultClient extends BaseClient {
@@ -149,29 +141,52 @@ public class VaultClient extends BaseClient {
 	}
 
 	/**
+	 * List
+	 * @pangea.description Retrieve a list of secrets, keys and folders.
+	 * @pangea.operationId vault_post_v2_get_bulk
+	 * @param request Request parameters.
+	 * @return A list of items.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 * @pangea.code
+	 * {@code
+	 * final var filter = new HashMap<String, String>();
+	 * filter.put("folder", "/tmp");
+	 * final var response = client.getBulk(GetBulkRequest.builder().filter(filter).build());
+	 * }
+	 */
+	public ListResponse getBulk(final GetBulkRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v2/get_bulk", request, ListResponse.class);
+	}
+
+	/**
 	 * State change
 	 * @pangea.description Change the state of a specific version of a secret or key.
-	 * @pangea.operationId vault_post_v1_state_change
-	 * @param id - item id to change
-	 * @param version - item version to change
-	 * @param state - state to set to item version
+	 * @pangea.operationId vault_post_v2_state_change
+	 * @param id Item id to change.
+	 * @param state State to set to item version.
+	 * @param version Item version to change.
 	 * @return StateChangeResponse
 	 * @throws PangeaException
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * StateChangeResponse stateChangeResponse = client.stateChange("id", 1, ItemVersionState.DEACTIVATED);
+	 * final var stateChangeResponse = client.stateChange("id", ItemVersionState.DEACTIVATED);
 	 * }
 	 */
-	public StateChangeResponse stateChange(String id, int version, ItemVersionState state)
+	public StateChangeResponse stateChange(String id, ItemVersionState state, int version, String destroyPeriod)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/state/change", new StateChangeRequest(id, version, state), StateChangeResponse.class);
+		return post(
+			"/v2/state/change",
+			new StateChangeRequest(id, state, version, destroyPeriod),
+			StateChangeResponse.class
+		);
 	}
 
 	/**
 	 * Delete
 	 * @pangea.description Delete a secret or key.
-	 * @pangea.operationId vault_post_v1_delete
+	 * @pangea.operationId vault_post_v2_delete
 	 * @param id - item id to delete
 	 * @return DeleteResponse
 	 * @throws PangeaException
@@ -182,13 +197,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public DeleteResponse delete(String id) throws PangeaException, PangeaAPIException {
-		return post("/v1/delete", new DeleteRequest(id), DeleteResponse.class);
+		return post("/v2/delete", new DeleteRequest(id), DeleteResponse.class);
 	}
 
 	/**
 	 * Retrieve
 	 * @pangea.description Retrieve a secret or key, and any associated information.
-	 * @pangea.operationId vault_post_v1_get
+	 * @pangea.operationId vault_post_v2_get
 	 * @param request - request to /get endpoint
 	 * @return GetResponse
 	 * @throws PangeaException
@@ -201,13 +216,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public GetResponse get(GetRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/get", request, GetResponse.class);
+		return post("/v2/get", request, GetResponse.class);
 	}
 
 	/**
 	 * List
 	 * @pangea.description Retrieve a list of secrets, keys and folders, and their associated information.
-	 * @pangea.operationId vault_post_v1_list
+	 * @pangea.operationId vault_post_v2_list
 	 * @param request - request parameters to send to list endpoint
 	 * @return ListResponse
 	 * @throws PangeaException
@@ -220,13 +235,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public ListResponse list(ListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/list", request, ListResponse.class);
+		return post("/v2/list", request, ListResponse.class);
 	}
 
 	/**
 	 * Update
 	 * @pangea.description Update information associated with a secret or key.
-	 * @pangea.operationId vault_post_v1_update
+	 * @pangea.operationId vault_post_v2_update
 	 * @param request - request parameters to send to update endpoint
 	 * @return UpdateResponse
 	 * @throws PangeaException
@@ -241,13 +256,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public UpdateResponse update(UpdateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/update", request, UpdateResponse.class);
+		return post("/v2/update", request, UpdateResponse.class);
 	}
 
 	/**
 	 * Store a secret
 	 * @pangea.description Store a secret in vault service.
-	 * @pangea.operationId vault_post_v1_secret_store 1
+	 * @pangea.operationId vault_post_v2_secret_store 1
 	 * @param request - request parameters to send to /secret/store endpoint
 	 * @return SecretStoreResponse
 	 * @throws PangeaException
@@ -259,13 +274,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public SecretStoreResponse secretStore(SecretStoreRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/secret/store", request, SecretStoreResponse.class);
+		return post("/v2/secret/store", request, SecretStoreResponse.class);
 	}
 
 	/**
 	 * Store a Pangea Token
 	 * @pangea.description Store a pangea token in vault service.
-	 * @pangea.operationId vault_post_v1_secret_store 2
+	 * @pangea.operationId vault_post_v2_secret_store 2
 	 * @param request - request parameters to send to /secret/store endpoint
 	 * @return SecretStoreResponse
 	 * @throws PangeaException
@@ -278,13 +293,13 @@ public class VaultClient extends BaseClient {
 	 */
 	public SecretStoreResponse pangeaTokenStore(PangeaTokenStoreRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/secret/store", request, SecretStoreResponse.class);
+		return post("/v2/secret/store", request, SecretStoreResponse.class);
 	}
 
 	/**
 	 * Rotate a secret
 	 * @pangea.description Rotate a secret in vault service.
-	 * @pangea.operationId vault_post_v1_secret_rotate 1
+	 * @pangea.operationId vault_post_v2_secret_rotate 1
 	 * @param request - secret rotate request
 	 * @return SecretRotateResponse
 	 * @throws PangeaException
@@ -299,13 +314,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public SecretRotateResponse secretRotate(SecretRotateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/secret/rotate", request, SecretRotateResponse.class);
+		return post("/v2/secret/rotate", request, SecretRotateResponse.class);
 	}
 
 	/**
 	 * Rotate a Pangea Token
 	 * @pangea.description Rotate a Pangea Token in vault service.
-	 * @pangea.operationId vault_post_v1_secret_rotate 2
+	 * @pangea.operationId vault_post_v2_secret_rotate 2
 	 * @param request - pangea token store request
 	 * @return SecretRotateResponse
 	 * @throws PangeaException
@@ -320,13 +335,13 @@ public class VaultClient extends BaseClient {
 	 */
 	public SecretRotateResponse pangeaTokenRotate(PangeaTokenRotateRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/secret/rotate", request, SecretRotateResponse.class);
+		return post("/v2/secret/rotate", request, SecretRotateResponse.class);
 	}
 
 	/**
 	 * Symmetric generate
 	 * @pangea.description Generate a symmetric key.
-	 * @pangea.operationId vault_post_v1_key_generate 2
+	 * @pangea.operationId vault_post_v2_key_generate 2
 	 * @param request - request parameters to send to /key/generate endpoint
 	 * @return SymmetricGenerateResponse
 	 * @throws PangeaException
@@ -343,13 +358,13 @@ public class VaultClient extends BaseClient {
 	 */
 	public SymmetricGenerateResponse symmetricGenerate(SymmetricGenerateRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/key/generate", request, SymmetricGenerateResponse.class);
+		return post("/v2/key/generate", request, SymmetricGenerateResponse.class);
 	}
 
 	/**
 	 * Asymmetric generate
 	 * @pangea.description Generate an asymmetric key.
-	 * @pangea.operationId vault_post_v1_key_generate 1
+	 * @pangea.operationId vault_post_v2_key_generate 1
 	 * @param request - request parameters to send to /key/generate endpoint
 	 * @return AsymmetricGenerateResponse
 	 * @throws PangeaException
@@ -366,13 +381,13 @@ public class VaultClient extends BaseClient {
 	 */
 	public AsymmetricGenerateResponse asymmetricGenerate(AsymmetricGenerateRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/key/generate", request, AsymmetricGenerateResponse.class);
+		return post("/v2/key/generate", request, AsymmetricGenerateResponse.class);
 	}
 
 	/**
 	 * Asymmetric store
 	 * @pangea.description Import an asymmetric key.
-	 * @pangea.operationId vault_post_v1_key_store 1
+	 * @pangea.operationId vault_post_v2_key_store 1
 	 * @param request - request parameters to send to /key/store endpoint
 	 * @return AsymmetricStoreResponse
 	 * @throws PangeaException
@@ -391,13 +406,13 @@ public class VaultClient extends BaseClient {
 	 */
 	public AsymmetricStoreResponse asymmetricStore(AsymmetricStoreRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/key/store", request, AsymmetricStoreResponse.class);
+		return post("/v2/key/store", request, AsymmetricStoreResponse.class);
 	}
 
 	/**
 	 * Symmetric store
 	 * @pangea.description Import a symmetric key.
-	 * @pangea.operationId vault_post_v1_key_store 2
+	 * @pangea.operationId vault_post_v2_key_store 2
 	 * @param request - request parameters to send to /key/store endpoint
 	 * @return SymmetricStoreResponse
 	 * @throws PangeaException
@@ -415,13 +430,13 @@ public class VaultClient extends BaseClient {
 	 */
 	public SymmetricStoreResponse symmetricStore(SymmetricStoreRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/key/store", request, SymmetricStoreResponse.class);
+		return post("/v2/key/store", request, SymmetricStoreResponse.class);
 	}
 
 	/**
 	 * Key rotate
 	 * @pangea.description Manually rotate a symmetric or asymmetric key.
-	 * @pangea.operationId vault_post_v1_key_rotate
+	 * @pangea.operationId vault_post_v2_key_rotate
 	 * @param request - request parameters to send to /key/rotate endpoint
 	 * @return KeyRotateResponse
 	 * @throws PangeaException
@@ -434,13 +449,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public KeyRotateResponse keyRotate(KeyRotateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/key/rotate", request, KeyRotateResponse.class);
+		return post("/v2/key/rotate", request, KeyRotateResponse.class);
 	}
 
 	/**
 	 * Encrypt
 	 * @pangea.description Encrypt a message using a key.
-	 * @pangea.operationId vault_post_v1_key_encrypt
+	 * @pangea.operationId vault_post_v2_key_encrypt
 	 * @param request - request to be send to /key/encrypt
 	 * @return EncryptResponse
 	 * @throws PangeaException
@@ -453,13 +468,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public EncryptResponse encrypt(EncryptRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/key/encrypt", request, EncryptResponse.class);
+		return post("/v2/encrypt", request, EncryptResponse.class);
 	}
 
 	/**
 	 * Decrypt
 	 * @pangea.description Decrypt a message using a key.
-	 * @pangea.operationId vault_post_v1_key_decrypt
+	 * @pangea.operationId vault_post_v2_key_decrypt
 	 * @param request - request to be send to /key/decrypt
 	 * @return DecryptResponse
 	 * @throws PangeaException
@@ -474,13 +489,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public DecryptResponse decrypt(DecryptRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/key/decrypt", request, DecryptResponse.class);
+		return post("/v2/decrypt", request, DecryptResponse.class);
 	}
 
 	/**
 	 * Sign
 	 * @pangea.description Sign a message using a key.
-	 * @pangea.operationId vault_post_v1_key_sign
+	 * @pangea.operationId vault_post_v2_key_sign
 	 * @param id - key id to sign message
 	 * @param message - message to sign
 	 * @return SignResponse
@@ -492,7 +507,7 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public SignResponse sign(String id, String message) throws PangeaException, PangeaAPIException {
-		return post("/v1/key/sign", new SignRequest(id, message, null), SignResponse.class);
+		return post("/v2/sign", new SignRequest(id, message, null), SignResponse.class);
 	}
 
 	/**
@@ -510,13 +525,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public SignResponse sign(String id, String message, int version) throws PangeaException, PangeaAPIException {
-		return post("/v1/key/sign", new SignRequest(id, message, version), SignResponse.class);
+		return post("/v2/sign", new SignRequest(id, message, version), SignResponse.class);
 	}
 
 	/**
 	 * JWT Sign
 	 * @pangea.description Sign a JSON Web Token (JWT) using a key.
-	 * @pangea.operationId vault_post_v1_key_sign_jwt
+	 * @pangea.operationId vault_post_v2_key_sign_jwt
 	 * @param id - key id to sign payload
 	 * @param payload - message to sign
 	 * @return JWTSignResponse
@@ -531,13 +546,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public JWTSignResponse jwtSign(String id, String payload) throws PangeaException, PangeaAPIException {
-		return post("/v1/key/sign/jwt", new JWTSignRequest(id, payload), JWTSignResponse.class);
+		return post("/v2/jwt/sign", new JWTSignRequest(id, payload), JWTSignResponse.class);
 	}
 
 	/**
 	 * Verify
 	 * @pangea.description Verify a signature using a key.
-	 * @pangea.operationId vault_post_v1_key_verify
+	 * @pangea.operationId vault_post_v2_key_verify
 	 * @param id - key id to verify message/signature
 	 * @param message - message to verify
 	 * @param signature - signature to verify
@@ -551,7 +566,7 @@ public class VaultClient extends BaseClient {
 	 */
 	public VerifyResponse verify(String id, String message, String signature)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/key/verify", new VerifyRequest(id, message, signature), VerifyResponse.class);
+		return this.verify(id, message, signature, null);
 	}
 
 	/**
@@ -571,13 +586,13 @@ public class VaultClient extends BaseClient {
 	 */
 	public VerifyResponse verify(String id, String message, String signature, Integer version)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/key/verify", new VerifyRequest(id, message, signature, version), VerifyResponse.class);
+		return post("/v2/verify", new VerifyRequest(id, message, signature, version), VerifyResponse.class);
 	}
 
 	/**
 	 * JWT Verify
 	 * @pangea.description Verify the signature of a JSON Web Token (JWT).
-	 * @pangea.operationId vault_post_v1_key_verify_jwt
+	 * @pangea.operationId vault_post_v2_key_verify_jwt
 	 * @param jws - signature to verify
 	 * @return JWTVerifyResponse
 	 * @throws PangeaException
@@ -588,13 +603,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public JWTVerifyResponse jwtVerify(String jws) throws PangeaException, PangeaAPIException {
-		return post("/v1/key/verify/jwt", new JWTVerifyRequest(jws), JWTVerifyResponse.class);
+		return post("/v2/jwt/verify", new JWTVerifyRequest(jws), JWTVerifyResponse.class);
 	}
 
 	/**
 	 * JWT Retrieve
 	 * @pangea.description Retrieve a key in JWK format.
-	 * @pangea.operationId vault_post_v1_get_jwk
+	 * @pangea.operationId vault_post_v2_get_jwk
 	 * @param id - item id to get
 	 * @return GetResponse
 	 * @throws PangeaException
@@ -605,7 +620,7 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public JWKGetResponse jwkGet(String id) throws PangeaException, PangeaAPIException {
-		return post("/v1/get/jwk", new JWKGetRequest(id, null), JWKGetResponse.class);
+		return post("/v2/jwk/get", new JWKGetRequest(id, null), JWKGetResponse.class);
 	}
 
 	/**
@@ -622,13 +637,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public JWKGetResponse jwkGet(String id, String version) throws PangeaException, PangeaAPIException {
-		return post("/v1/get/jwk", new JWKGetRequest(id, version), JWKGetResponse.class);
+		return post("/v2/jwk/get", new JWKGetRequest(id, version), JWKGetResponse.class);
 	}
 
 	/**
 	 * Create
 	 * @pangea.description Creates a folder.
-	 * @pangea.operationId vault_post_v1_folder_create
+	 * @pangea.operationId vault_post_v2_folder_create
 	 * @param request - request parameters to send to /folder/create endpoint
 	 * @return FolderCreateResponse
 	 * @throws PangeaException
@@ -641,13 +656,13 @@ public class VaultClient extends BaseClient {
 	 * }
 	 */
 	public FolderCreateResponse folderCreate(FolderCreateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/folder/create", request, FolderCreateResponse.class);
+		return post("/v2/folder/create", request, FolderCreateResponse.class);
 	}
 
 	/**
 	 * Encrypt structured
 	 * @pangea.description Encrypt parts of a JSON object.
-	 * @pangea.operationId vault_post_v1_key_encrypt_structured
+	 * @pangea.operationId vault_post_v2_key_encrypt_structured
 	 * @param request Request parameters.
 	 * @return Encrypted result.
 	 * @throws PangeaException
@@ -665,13 +680,13 @@ public class VaultClient extends BaseClient {
 	public <K, V, T extends Map<K, V>> EncryptStructuredResponse<K, V, T> encryptStructured(
 		EncryptStructuredRequest<K, V, T> request
 	) throws PangeaException, PangeaAPIException {
-		return post("/v1/key/encrypt/structured", request, new TypeReference<EncryptStructuredResponse<K, V, T>>() {});
+		return post("/v2/encrypt_structured", request, new TypeReference<EncryptStructuredResponse<K, V, T>>() {});
 	}
 
 	/**
 	 * Decrypt structured
 	 * @pangea.description Decrypt parts of a JSON object.
-	 * @pangea.operationId vault_post_v1_key_decrypt_structured
+	 * @pangea.operationId vault_post_v2_key_decrypt_structured
 	 * @param request Request parameters.
 	 * @return Decrypted result.
 	 * @throws PangeaException
@@ -689,13 +704,13 @@ public class VaultClient extends BaseClient {
 	public <K, V, T extends Map<K, V>> EncryptStructuredResponse<K, V, T> decryptStructured(
 		EncryptStructuredRequest<K, V, T> request
 	) throws PangeaException, PangeaAPIException {
-		return post("/v1/key/decrypt/structured", request, new TypeReference<EncryptStructuredResponse<K, V, T>>() {});
+		return post("/v2/decrypt_structured", request, new TypeReference<EncryptStructuredResponse<K, V, T>>() {});
 	}
 
 	/**
 	 * Encrypt transform
 	 * @pangea.description Encrypt using a format preserving algorithm (FPE).
-	 * @pangea.operationId vault_post_v1_key_encrypt_transform
+	 * @pangea.operationId vault_post_v2_key_encrypt_transform
 	 * @param request Request parameters.
 	 * @return Encrypted response.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -713,13 +728,13 @@ public class VaultClient extends BaseClient {
 	 */
 	public EncryptTransformResponse encryptTransform(EncryptTransformRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/key/encrypt/transform", request, EncryptTransformResponse.class);
+		return post("/v2/encrypt_transform", request, EncryptTransformResponse.class);
 	}
 
 	/**
 	 * Decrypt transform
 	 * @pangea.description Decrypt using a format preserving algorithm (FPE).
-	 * @pangea.operationId vault_post_v1_key_decrypt_transform
+	 * @pangea.operationId vault_post_v2_key_decrypt_transform
 	 * @param request Request parameters.
 	 * @return Decrypted response.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -738,13 +753,13 @@ public class VaultClient extends BaseClient {
 	 */
 	public DecryptTransformResponse decryptTransform(DecryptTransformRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1/key/decrypt/transform", request, DecryptTransformResponse.class);
+		return post("/v2/decrypt_transform", request, DecryptTransformResponse.class);
 	}
 
 	/**
 	 * Export
 	 * @pangea.description Export a symmetric or asymmetric key.
-	 * @pangea.operationId vault_post_v1_export
+	 * @pangea.operationId vault_post_v2_export
 	 * @param request Request parameters.
 	 * @return Exported result.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -763,11 +778,11 @@ public class VaultClient extends BaseClient {
 	 * final var key = generated.getResult().getId();
 	 *
 	 * // Then it can be exported whenever needed.
-	 * final var request = new ExportRequest.Builder(key).build();
+	 * final var request = ExportRequest.builder(key).build();
 	 * final var exported = client.export(request);
 	 * }
 	 */
 	public ExportResponse export(ExportRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/export", request, ExportResponse.class);
+		return post("/v2/export", request, ExportResponse.class);
 	}
 }

@@ -5,17 +5,28 @@ import cloud.pangeacyber.pangea.vault.models.TransformAlphabet;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 /**
  * Parameters for a decrypt transform request.
  */
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@SuperBuilder
+@Value
 public class DecryptTransformRequest extends BaseRequest {
 
 	/** The ID of the key to use. */
+	@NonNull
 	@JsonProperty("id")
 	private String id;
 
 	/** A message encrypted by Vault. */
+	@NonNull
 	@JsonProperty("cipher_text")
 	private String cipherText;
 
@@ -24,10 +35,12 @@ public class DecryptTransformRequest extends BaseRequest {
 	 * generated and returned. The user must securely store the tweak source
 	 * which will be needed to decrypt the data.
 	 */
+	@NonNull
 	@JsonProperty("tweak")
 	private String tweak;
 
 	/** Set of characters to use for format-preserving encryption (FPE). */
+	@NonNull
 	@JsonProperty("alphabet")
 	private TransformAlphabet alphabet;
 
@@ -35,57 +48,4 @@ public class DecryptTransformRequest extends BaseRequest {
 	@JsonProperty("version")
 	@JsonInclude(Include.NON_NULL)
 	private Integer version;
-
-	private DecryptTransformRequest(Builder builder) {
-		this.id = builder.id;
-		this.cipherText = builder.cipherText;
-		this.tweak = builder.tweak;
-		this.alphabet = builder.alphabet;
-		this.version = builder.version;
-	}
-
-	public static class Builder {
-
-		private String id;
-		private String cipherText;
-		private String tweak;
-		private TransformAlphabet alphabet;
-		private Integer version;
-
-		public Builder(String id, String cipherText, String tweak, TransformAlphabet alphabet) {
-			this.id = id;
-			this.cipherText = cipherText;
-			this.tweak = tweak;
-			this.alphabet = alphabet;
-		}
-
-		public Builder version(Integer version) {
-			this.version = version;
-			return this;
-		}
-
-		public DecryptTransformRequest build() {
-			return new DecryptTransformRequest(this);
-		}
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public String getCipherText() {
-		return cipherText;
-	}
-
-	public String getTweak() {
-		return tweak;
-	}
-
-	public TransformAlphabet getAlphabet() {
-		return alphabet;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
 }

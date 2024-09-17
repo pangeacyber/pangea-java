@@ -3,13 +3,17 @@ package cloud.pangeacyber.pangea.vault.results;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Result of an encrypt/decrypt structured request.
  *
  * @param <T> Structured data type.
  */
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 public class EncryptStructuredResult<K, V, T extends Map<K, V>> {
 
 	/** The ID of the item. */
@@ -27,22 +31,4 @@ public class EncryptStructuredResult<K, V, T extends Map<K, V>> {
 	/** Structured data with filtered fields encrypted/decrypted. */
 	@JsonProperty("structured_data")
 	T structuredData;
-
-	public EncryptStructuredResult() {}
-
-	public String getAlgorithm() {
-		return this.algorithm;
-	}
-
-	public String getId() {
-		return this.id;
-	}
-
-	public int getVersion() {
-		return this.version;
-	}
-
-	public T getStructuredData() {
-		return this.structuredData;
-	}
 }

@@ -6,92 +6,44 @@ import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@Value
 public class AsymmetricStoreRequest extends CommonStoreRequest {
 
+	@NonNull
 	@JsonProperty("type")
-	ItemType type;
+	final ItemType type = ItemType.ASYMMETRIC_KEY;
 
+	/** The algorithm of the key. */
+	@NonNull
 	@JsonProperty("algorithm")
-	AsymmetricAlgorithm algorithm = null;
+	AsymmetricAlgorithm algorithm;
 
-	@JsonInclude(Include.NON_NULL)
+	/** The purpose of this key. */
+	@NonNull
 	@JsonProperty("purpose")
-	KeyPurpose purpose = null;
+	KeyPurpose purpose;
 
+	/** The public key (in PEM format). */
+	@NonNull
 	@JsonProperty("public_key")
-	String encodedPublicKey;
+	String publicKey;
 
+	/** The private key (in PEM format). */
+	@NonNull
 	@JsonProperty("private_key")
-	String encodedPrivateKey = null;
+	String privateKey;
 
 	/** Whether the key is exportable or not. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("exportable")
-	Boolean exportable = null;
-
-	protected AsymmetricStoreRequest(Builder builder) {
-		super(builder);
-		this.type = builder.type;
-		this.algorithm = builder.algorithm;
-		this.purpose = builder.purpose;
-		this.encodedPrivateKey = builder.encodedPrivateKey;
-		this.encodedPublicKey = builder.encodedPublicKey;
-		this.exportable = builder.exportable;
-	}
-
-	public AsymmetricAlgorithm getAlgorithm() {
-		return algorithm;
-	}
-
-	public KeyPurpose getPurpose() {
-		return purpose;
-	}
-
-	public String getEncodedPublicKey() {
-		return encodedPublicKey;
-	}
-
-	public String getEncodedPrivateKey() {
-		return encodedPrivateKey;
-	}
-
-	public static class Builder extends CommonBuilder<Builder> {
-
-		ItemType type;
-		AsymmetricAlgorithm algorithm = null;
-		KeyPurpose purpose = null;
-		String encodedPublicKey;
-		String encodedPrivateKey = null;
-		Boolean exportable = null;
-
-		public Builder(
-			String encodedPrivateKey,
-			String encodedPublicKey,
-			AsymmetricAlgorithm algorithm,
-			KeyPurpose purpose,
-			String name
-		) {
-			super(name);
-			this.type = ItemType.ASYMMETRIC_KEY;
-			this.algorithm = algorithm;
-			this.encodedPublicKey = encodedPublicKey;
-			this.encodedPrivateKey = encodedPrivateKey;
-			this.purpose = purpose;
-		}
-
-		public AsymmetricStoreRequest build() {
-			return new AsymmetricStoreRequest(this);
-		}
-
-		public Builder purpose(KeyPurpose purpose) {
-			this.purpose = purpose;
-			return this;
-		}
-
-		public Builder exportable(boolean exportable) {
-			this.exportable = exportable;
-			return this;
-		}
-	}
+	boolean exportable;
 }

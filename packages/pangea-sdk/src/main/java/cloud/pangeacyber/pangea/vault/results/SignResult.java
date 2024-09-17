@@ -1,48 +1,32 @@
 package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 public class SignResult {
 
+	/** The ID of the item. */
 	@JsonProperty("id")
 	String id;
 
+	/** The item version. */
 	@JsonProperty("version")
 	Integer version;
 
+	/** The signature of the message. */
 	@JsonProperty("signature")
 	String signature;
 
+	/** The algorithm of the key. */
 	@JsonProperty("algorithm")
 	String algorithm;
 
-	@JsonInclude(Include.NON_NULL)
+	/** The public key (in PEM format). */
 	@JsonProperty("public_key")
-	String encodedPublicKey = null;
-
-	public SignResult() {}
-
-	public String getEncodedPublicKey() {
-		return encodedPublicKey;
-	}
-
-	public String getAlgorithm() {
-		return algorithm;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public String getSignature() {
-		return signature;
-	}
+	String publicKey;
 }

@@ -1,41 +1,22 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
+import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 public class AsymmetricGenerateResult extends CommonGenerateResult {
 
 	@JsonProperty("algorithm")
-	String algorithm;
+	AsymmetricAlgorithm algorithm;
 
 	@JsonProperty("purpose")
-	String purpose;
-
-	@JsonProperty("public_key")
-	String encodedPublicKey;
-
-	public AsymmetricGenerateResult() {
-		super();
-	}
-
-	public String getEncodedPublicKey() {
-		return encodedPublicKey;
-	}
-
-	public void setEncodedPublicKey(String encodedPublicKey) {
-		this.encodedPublicKey = encodedPublicKey;
-	}
-
-	public String getAlgorithm() {
-		return algorithm;
-	}
-
-	public void setAlgorithm(String algorithm) {
-		this.algorithm = algorithm;
-	}
-
-	public String getPurpose() {
-		return purpose;
-	}
+	KeyPurpose purpose;
 }

@@ -4,8 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 public class JWK {
 
 	@JsonProperty("alg")
@@ -49,50 +53,4 @@ public class JWK {
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("k")
 	String k;
-
-	public JWK() {}
-
-	public String getAlg() {
-		return alg;
-	}
-
-	public String getKty() {
-		return kty;
-	}
-
-	public String getKid() {
-		return kid;
-	}
-
-	public String getUse() {
-		return use;
-	}
-
-	public String getCrv() {
-		return crv;
-	}
-
-	public String getD() {
-		return d;
-	}
-
-	public String getX() {
-		return x;
-	}
-
-	public String getY() {
-		return y;
-	}
-
-	public String getN() {
-		return n;
-	}
-
-	public String getE() {
-		return e;
-	}
-
-	public String getK() {
-		return k;
-	}
 }

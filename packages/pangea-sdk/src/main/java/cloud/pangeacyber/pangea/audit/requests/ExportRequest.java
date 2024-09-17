@@ -5,7 +5,15 @@ import cloud.pangeacyber.pangea.audit.models.DownloadFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@SuperBuilder
+@Value
 @JsonInclude(Include.NON_NULL)
 public final class ExportRequest extends BaseRequest {
 
@@ -38,90 +46,4 @@ public final class ExportRequest extends BaseRequest {
 	 */
 	@JsonProperty("verbose")
 	private boolean verbose;
-
-	private ExportRequest(
-		DownloadFormat format,
-		String start,
-		String end,
-		String order,
-		String orderBy,
-		boolean verbose
-	) {
-		this.format = format;
-		this.start = start;
-		this.end = end;
-		this.order = order;
-		this.orderBy = orderBy;
-		this.verbose = verbose;
-	}
-
-	public String getStart() {
-		return start;
-	}
-
-	public String getEnd() {
-		return end;
-	}
-
-	public String getOrder() {
-		return order;
-	}
-
-	public String getOrderBy() {
-		return orderBy;
-	}
-
-	public Boolean getVerbose() {
-		return verbose;
-	}
-
-	public static Builder builder() {
-		return new Builder();
-	}
-
-	public static class Builder {
-
-		private DownloadFormat format = null;
-		private String order = null;
-		private String orderBy = null;
-		private String start = null;
-		private String end = null;
-		private Boolean verbose = null;
-
-		public Builder() {}
-
-		public Builder format(DownloadFormat format) {
-			this.format = format;
-			return this;
-		}
-
-		public Builder order(String order) {
-			this.order = order;
-			return this;
-		}
-
-		public Builder orderBy(String orderBy) {
-			this.orderBy = orderBy;
-			return this;
-		}
-
-		public Builder start(String start) {
-			this.start = start;
-			return this;
-		}
-
-		public Builder end(String end) {
-			this.end = end;
-			return this;
-		}
-
-		public Builder verbose(Boolean verbose) {
-			this.verbose = verbose;
-			return this;
-		}
-
-		public ExportRequest build() {
-			return new ExportRequest(format, start, end, order, orderBy, verbose);
-		}
-	}
 }

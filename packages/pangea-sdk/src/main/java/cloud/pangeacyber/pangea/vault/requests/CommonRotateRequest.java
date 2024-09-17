@@ -5,64 +5,28 @@ import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@JsonInclude(Include.NON_NULL)
+@SuperBuilder
 public class CommonRotateRequest extends BaseRequest {
 
+	/** The item ID. */
+	@NonNull
 	@JsonProperty("id")
 	String id;
 
+	/** State to which the previous version should transition upon rotation. */
 	@JsonProperty("rotation_state")
 	ItemVersionState rotationState;
 
-	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_frequency")
 	String rotationFrequency;
-
-	protected CommonRotateRequest(CommonBuilder<?> builder) {
-		this.id = builder.id;
-		this.rotationState = builder.rotationState;
-		this.rotationFrequency = builder.rotationFrequency;
-	}
-
-	public String getRotationFrequency() {
-		return rotationFrequency;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public ItemVersionState getRotationState() {
-		return rotationState;
-	}
-
-	public static class CommonBuilder<B extends CommonBuilder<B>> {
-
-		String id;
-		ItemVersionState rotationState = null;
-		String rotationFrequency = null;
-
-		public CommonBuilder(String id) {
-			this.id = id;
-		}
-
-		@SuppressWarnings("unchecked")
-		final B self() {
-			return (B) this;
-		}
-
-		public CommonRotateRequest build() {
-			return new CommonRotateRequest(this);
-		}
-
-		public B rotationState(ItemVersionState rotationState) {
-			this.rotationState = rotationState;
-			return self();
-		}
-
-		public B rotationFrequency(String rotationFrequency) {
-			this.rotationFrequency = rotationFrequency;
-			return self();
-		}
-	}
 }

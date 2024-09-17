@@ -5,22 +5,29 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
 /**
  * Parameters for an encrypt/decrypt structured request.
  *
  * @param <T> Structured data type.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class EncryptStructuredRequest<K, V, T extends Map<K, V>> extends BaseRequest {
 
 	/**
 	 * The ID of the key to use. It must be an item of type `symmetric_key` or
 	 * `asymmetric_key` and purpose `encryption`.
 	 */
+	@NonNull
 	@JsonProperty("id")
 	String id;
 
 	/** Structured data for applying bulk operations. */
+	@NonNull
 	@JsonProperty("structured_data")
 	T structuredData;
 
@@ -28,6 +35,7 @@ public class EncryptStructuredRequest<K, V, T extends Map<K, V>> extends BaseReq
 	 * A filter expression. It must point to string elements of the
 	 * `structured_data` field.
 	 */
+	@NonNull
 	@JsonProperty("filter")
 	String filter;
 

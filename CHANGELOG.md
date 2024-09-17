@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Detect-only Redact for Sanitize.
 
+### Changed
+
+- Vault APIs have been updated to v2.
+
 ## 3.15.0 - 2024-09-25
 
 ### Added

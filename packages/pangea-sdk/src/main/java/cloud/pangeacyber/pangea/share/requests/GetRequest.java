@@ -13,11 +13,6 @@ public class GetRequest extends BaseRequest {
 	@JsonProperty("id")
 	String id;
 
-	/** The path of the object to retrieve. */
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("path")
-	String path;
-
 	/** If the file was protected with a password, the password to decrypt with. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("password")
@@ -30,7 +25,6 @@ public class GetRequest extends BaseRequest {
 
 	protected GetRequest(Builder builder) {
 		this.id = builder.id;
-		this.path = builder.path;
 		this.bucketId = builder.bucketId;
 		this.setTransferMethod(builder.transferMethod);
 	}
@@ -38,7 +32,6 @@ public class GetRequest extends BaseRequest {
 	public static class Builder {
 
 		String id;
-		String path;
 		String password;
 		TransferMethod transferMethod;
 		String bucketId;
@@ -54,12 +47,6 @@ public class GetRequest extends BaseRequest {
 		/** The ID of the object to retrieve. */
 		public Builder id(String id) {
 			this.id = id;
-			return this;
-		}
-
-		/** The path of the object to retrieve. */
-		public Builder path(String path) {
-			this.path = path;
 			return this;
 		}
 

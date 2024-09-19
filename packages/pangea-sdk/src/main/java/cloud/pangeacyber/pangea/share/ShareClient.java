@@ -64,8 +64,7 @@ public class ShareClient extends BaseClient {
 
 	/**
 	 * Delete
-	 * @pangea.description Delete object by ID or path. If both are supplied,
-	 * the path must match that of the object represented by the ID.
+	 * @pangea.description Delete object by ID.
 	 * @pangea.operationId share_post_v1_delete
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -90,7 +89,7 @@ public class ShareClient extends BaseClient {
 	 * @pangea.code
 	 * {@code
 	 * var response = client.folderCreate(
-	 *     new FolderCreateRequest.Builder().path("/path/to/new/folder").build()
+	 *     new FolderCreateRequest.Builder().folder("/path/to/new/folder").build()
 	 * );
 	 * }
 	 */

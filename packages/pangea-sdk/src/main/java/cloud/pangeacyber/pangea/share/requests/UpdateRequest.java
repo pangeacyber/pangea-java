@@ -13,10 +13,13 @@ public class UpdateRequest extends BaseRequest {
 	@JsonProperty("id")
 	String id;
 
-	/** An alternative to ID for identifying the target file. */
+	/**
+	 * Set the parent (folder). Leave blank for the root folder. Path must
+	 * resolve to `parent_id` if also set.
+	 */
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("path")
-	String path;
+	@JsonProperty("folder")
+	String folder;
 
 	/** A list of Metadata key/values to set in the object. If a provided key exists, the value will be replaced. */
 	@JsonInclude(Include.NON_NULL)
@@ -85,7 +88,7 @@ public class UpdateRequest extends BaseRequest {
 
 	protected UpdateRequest(Builder builder) {
 		this.id = builder.id;
-		this.path = builder.path;
+		this.folder = builder.folder;
 		this.addMetadata = builder.addMetadata;
 		this.addPassword = builder.addPassword;
 		this.addPasswordAlgorithm = builder.addPasswordAlgorithm;
@@ -104,7 +107,7 @@ public class UpdateRequest extends BaseRequest {
 	public static class Builder {
 
 		String id;
-		String path;
+		String folder;
 		Metadata addMetadata;
 		String addPassword;
 		String addPasswordAlgorithm;
@@ -127,9 +130,12 @@ public class UpdateRequest extends BaseRequest {
 			return new UpdateRequest(this);
 		}
 
-		/** An alternative to ID for identifying the target file. */
-		public Builder path(String path) {
-			this.path = path;
+		/**
+		 * Set the parent (folder). Leave blank for the root folder. Path must
+		 * resolve to `parent_id` if also set.
+		 */
+		public Builder folder(String folder) {
+			this.folder = folder;
 			return this;
 		}
 

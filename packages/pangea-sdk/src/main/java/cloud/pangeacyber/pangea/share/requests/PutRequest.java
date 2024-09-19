@@ -38,10 +38,13 @@ public class PutRequest extends BaseRequest {
 	@JsonProperty("parent_id")
 	String parentID;
 
-	/** An optional path where the file should be placed. It will auto-create directories if necessary. */
+	/**
+	 * The path to the parent folder. Leave blank for the root folder. Path must
+	 * resolve to `parent_id` if also set.
+	 */
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("path")
-	String path;
+	@JsonProperty("folder")
+	String folder;
 
 	/** An optional password to protect the file with. Downloading the file will require this password. */
 	@JsonInclude(Include.NON_NULL)
@@ -104,7 +107,7 @@ public class PutRequest extends BaseRequest {
 		this.metadata = builder.metadata;
 		this.mimetype = builder.mimetype;
 		this.parentID = builder.parentID;
-		this.path = builder.path;
+		this.folder = builder.folder;
 		this.password = builder.password;
 		this.passwordAlgorithm = builder.passwordAlgorithm;
 		this.crc32c = builder.crc32c;
@@ -125,7 +128,7 @@ public class PutRequest extends BaseRequest {
 		Metadata metadata;
 		String mimetype;
 		String parentID;
-		String path;
+		String folder;
 		String password;
 		String passwordAlgorithm;
 		String crc32c;
@@ -175,9 +178,12 @@ public class PutRequest extends BaseRequest {
 			return this;
 		}
 
-		/** An optional path where the file should be placed. It will auto-create directories if necessary. */
-		public Builder path(String path) {
-			this.path = path;
+		/**
+		 * The path to the parent folder. Leave blank for the root folder. Path
+		 * must resolve to `parent_id` if also set.
+		 */
+		public Builder folder(String folder) {
+			this.folder = folder;
 			return this;
 		}
 
@@ -299,8 +305,8 @@ public class PutRequest extends BaseRequest {
 		return parentID;
 	}
 
-	public String getPath() {
-		return path;
+	public String getFolder() {
+		return folder;
 	}
 
 	public String getMD5() {

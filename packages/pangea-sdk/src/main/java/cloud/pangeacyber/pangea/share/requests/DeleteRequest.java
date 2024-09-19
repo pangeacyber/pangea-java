@@ -17,11 +17,6 @@ public class DeleteRequest extends BaseRequest {
 	@JsonProperty("force")
 	Boolean force;
 
-	/** The path of the object to delete. */
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("path")
-	String path;
-
 	/** The bucket to use, if not the default. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("bucket_id")
@@ -30,7 +25,6 @@ public class DeleteRequest extends BaseRequest {
 	protected DeleteRequest(Builder builder) {
 		this.id = builder.id;
 		this.force = builder.force;
-		this.path = builder.path;
 		this.bucketId = builder.bucketId;
 	}
 
@@ -38,7 +32,6 @@ public class DeleteRequest extends BaseRequest {
 
 		String id;
 		Boolean force;
-		String path;
 		String bucketId;
 
 		public Builder() {
@@ -58,12 +51,6 @@ public class DeleteRequest extends BaseRequest {
 		/** If true, delete a folder even if it's not empty. Deletes the contents of folder as well. */
 		public Builder force(Boolean force) {
 			this.force = force;
-			return this;
-		}
-
-		/** The path of the object to delete. */
-		public Builder path(String path) {
-			this.path = path;
 			return this;
 		}
 

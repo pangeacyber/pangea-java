@@ -15,6 +15,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
 import cloud.pangeacyber.pangea.vault.models.ExportEncryptionAlgorithm;
 import cloud.pangeacyber.pangea.vault.models.ExportEncryptionType;
+import cloud.pangeacyber.pangea.vault.models.ItemType;
 import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
@@ -696,7 +697,7 @@ public class ITVaultTest {
 	}
 
 	@Test
-	public void testExport()
+	void testExport()
 		throws PangeaException, PangeaAPIException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
 		// Generate an exportable key.
 		final var generateRequest = AsymmetricGenerateRequest
@@ -761,5 +762,48 @@ public class ITVaultTest {
 		assertEquals(storedKey, actual.getResult().getId());
 		assertNotNull(actual.getResult().getPublicKey());
 		assertNotNull(actual.getResult().getPrivateKey());
+	}
+
+	@Test
+	void testExportKem() throws PangeaException, PangeaAPIException {
+		// Generate a RSA key pair.
+		final var keyPair = CryptoUtils.generateRsaKeyPair(4096);
+		final var publicKey = CryptoUtils.asymmetricPemExport(keyPair.getPublic());
+
+		// Generate an exportable key.
+		final var generateRequest = AsymmetricGenerateRequest
+			.builder()
+			.algorithm(AsymmetricAlgorithm.ED25519)
+			.purpose(KeyPurpose.SIGNING)
+			.name(getName())
+			.exportable(true)
+			.build();
+		final var generated = client.asymmetricGenerate(generateRequest);
+		final var key = generated.getResult().getId();
+		assertNotNull(key);
+
+		// Export without any encryption.
+		final var plainExport = client.export(ExportRequest.builder().id(key).build()).getResult();
+		assertNotNull(plainExport);
+		assertEquals(key, plainExport.getId());
+		assertEquals(ItemType.ASYMMETRIC_KEY, plainExport.getType());
+		assertNotNull(plainExport.getPrivateKey());
+
+		// Export with KEM.
+		var request = ExportRequest
+			.builder()
+			.id(key)
+			.asymmetricAlgorithm(ExportEncryptionAlgorithm.RSA_NO_PADDING_4096_KEM)
+			.asymmetricPublicKey(publicKey)
+			.kemPassword("password")
+			.build();
+		var actual = client.export(request).getResult();
+		assertNotNull(actual);
+		assertEquals(key, actual.getId());
+		assertEquals(ExportEncryptionType.KEM, actual.getEncryptionType());
+		assertEquals(plainExport.getPublicKey(), actual.getPublicKey());
+
+		final var decryptedPrivateKey = CryptoUtils.kemDecrypt(actual, "password", keyPair.getPrivate());
+		assertEquals(plainExport.getPrivateKey(), decryptedPrivateKey);
 	}
 }

@@ -206,6 +206,20 @@ public class ITUserIntelTest {
 	}
 
 	@Test
+	public void testUserBreached_ByDomainBulk() throws PangeaException, PangeaException, PangeaAPIException {
+		// Default provider, not verbose by default, not raw by default;
+		UserBreachedBulkResponse response = client.breachedBulk(
+			new UserBreachedBulkRequest.Builder().domains(new String[] { "example.com" }).build()
+		);
+		assertTrue(response.isOk());
+
+		UserBreachedBulkData data = response.getResult().getData();
+		assertNull(response.getResult().getParameters());
+		assertNull(response.getResult().getRawData());
+		assertEquals(1, data.size());
+	}
+
+	@Test
 	public void testUserPasswordBreached_1() throws PangeaException, PangeaException, PangeaAPIException {
 		// Default provider, not verbose by default, not raw by default;
 		UserPasswordBreachedResponse response = client.breached(

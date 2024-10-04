@@ -19,6 +19,10 @@ public class UserBreachedBulkRequest extends IntelCommonRequest {
 	String[] ips;
 
 	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("domains")
+	String[] domains;
+
+	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("phone_numbers")
 	String[] phoneNumbers;
 
@@ -35,6 +39,7 @@ public class UserBreachedBulkRequest extends IntelCommonRequest {
 		this.emails = builder.emails;
 		this.usernames = builder.usernames;
 		this.ips = builder.ips;
+		this.domains = builder.domains;
 		this.phoneNumbers = builder.phoneNumbers;
 		this.start = builder.start;
 		this.end = builder.end;
@@ -45,6 +50,7 @@ public class UserBreachedBulkRequest extends IntelCommonRequest {
 		String[] emails;
 		String[] usernames;
 		String[] ips;
+		String[] domains;
 		String[] phoneNumbers;
 		String start;
 		String end;
@@ -67,6 +73,11 @@ public class UserBreachedBulkRequest extends IntelCommonRequest {
 
 		public Builder ips(String[] ips) {
 			this.ips = ips;
+			return this;
+		}
+
+		public Builder domains(String[] domains) {
+			this.domains = domains;
 			return this;
 		}
 

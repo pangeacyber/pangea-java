@@ -1,36 +1,23 @@
 package cloud.pangeacyber.pangea.vault.results;
 
+import cloud.pangeacyber.pangea.vault.models.KeyPurpose;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 public class KeyRotateResult extends CommonRotateResult {
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("public_key")
-	String encodedPublicKey = null;
-
+	/** Algorithm of the key. */
 	@JsonProperty("algorithm")
 	String algorithm = null;
 
+	/** Purpose of the key. */
 	@JsonProperty("purpose")
-	String purpose = null;
-
-	public KeyRotateResult() {
-		super();
-	}
-
-	public String getEncodedPublicKey() {
-		return encodedPublicKey;
-	}
-
-	public String getAlgorithm() {
-		return algorithm;
-	}
-
-	public String getPurpose() {
-		return purpose;
-	}
+	KeyPurpose purpose = null;
 }

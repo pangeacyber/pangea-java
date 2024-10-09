@@ -6,128 +6,57 @@ import cloud.pangeacyber.pangea.vault.models.Tags;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@SuperBuilder
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
 public class CommonStoreRequest extends BaseRequest {
 
+	/** The name of this item. */
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("name")
 	String name = null;
 
+	/** The folder where this item is stored. */
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("folder")
 	String folder = null;
 
+	/** User-provided metadata. */
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("metadata")
 	Metadata metadata = null;
 
+	/** A list of user-defined tags. */
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("tags")
 	Tags tags = null;
 
+	/** Period of time between item rotations. */
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_frequency")
 	String rotationFrequency = null;
 
+	/** State to which the previous version should transition upon rotation. */
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_state")
 	String rotationState = null;
 
+	/** Timestamp indicating when the item will be disabled. */
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("expiration")
-	String expiration = null;
-
-	protected CommonStoreRequest(CommonBuilder<?> builder) {
-		this.name = builder.name;
-		this.folder = builder.folder;
-		this.metadata = builder.metadata;
-		this.tags = builder.tags;
-		this.rotationFrequency = builder.rotationFrequency;
-		this.rotationState = builder.rotationState;
-		this.expiration = builder.expiration;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getFolder() {
-		return folder;
-	}
-
-	public Metadata getMetadata() {
-		return metadata;
-	}
-
-	public Tags getTags() {
-		return tags;
-	}
-
-	public String getRotationFrequency() {
-		return rotationFrequency;
-	}
-
-	public String getExpiration() {
-		return expiration;
-	}
-
-	public static class CommonBuilder<B extends CommonBuilder<B>> {
-
-		String name = null;
-		String folder = null;
-		Metadata metadata = null;
-		Tags tags = null;
-		Boolean autoRotate = null;
-		String rotationFrequency = null;
-		String rotationState = null;
-		String expiration = null;
-
-		public CommonBuilder(String name) {
-			this.name = name;
-		}
-
-		public CommonStoreRequest build() {
-			return new CommonStoreRequest(this);
-		}
-
-		@SuppressWarnings("unchecked")
-		final B self() {
-			return (B) this;
-		}
-
-		public B name(String name) {
-			this.name = name;
-			return self();
-		}
-
-		public B folder(String folder) {
-			this.folder = folder;
-			return self();
-		}
-
-		public B metadata(Metadata metadata) {
-			this.metadata = metadata;
-			return self();
-		}
-
-		public B tags(Tags tags) {
-			this.tags = tags;
-			return self();
-		}
-
-		public B autoRotate(Boolean autoRotate) {
-			this.autoRotate = autoRotate;
-			return self();
-		}
-
-		public B rotationFrequency(String rotationFrequency) {
-			this.rotationFrequency = rotationFrequency;
-			return self();
-		}
-
-		public B expiration(String expiration) {
-			this.expiration = expiration;
-			return self();
-		}
-	}
+	@JsonProperty("disabled_at")
+	String disabledAt = null;
 }

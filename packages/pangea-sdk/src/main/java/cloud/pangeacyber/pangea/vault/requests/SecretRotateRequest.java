@@ -1,37 +1,20 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@SuperBuilder
+@Value
 public class SecretRotateRequest extends CommonRotateRequest {
 
+	/** The secret value. */
+	@NonNull
 	@JsonProperty("secret")
-	String secret = null;
-
-	protected SecretRotateRequest(Builder builder) {
-		super(builder);
-		this.secret = builder.secret;
-	}
-
-	public String getSecret() {
-		return secret;
-	}
-
-	public static class Builder extends CommonBuilder<Builder> {
-
-		String secret = null;
-
-		public SecretRotateRequest build() {
-			return new SecretRotateRequest(this);
-		}
-
-		public Builder(String id, String secret) {
-			super(id);
-			this.secret = secret;
-		}
-
-		public Builder secret(String secret) {
-			this.secret = secret;
-			return this;
-		}
-	}
+	String secret;
 }

@@ -51,16 +51,6 @@ public class UserInviteListRequest extends BaseRequest {
 
 		public Builder() {}
 
-		/**
-		 * @deprecated Use setFilter(FilterUserInviteList filter) instead
-		 */
-		@Deprecated
-		public Builder setFilter(Filter filter) {
-			this.filter = new Filter();
-			this.filter.putAll(filter);
-			return this;
-		}
-
 		public Builder setFilter(FilterUserInviteList filter) {
 			this.filter = new Filter();
 			this.filter.putAll(filter);

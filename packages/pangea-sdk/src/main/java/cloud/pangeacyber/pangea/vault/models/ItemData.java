@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
+import lombok.Data;
 
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ItemData {
 
@@ -17,7 +20,7 @@ public class ItemData {
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("current_version")
-	ItemVersionData currentVersion;
+	Integer currentVersion = null;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("name")
@@ -72,67 +75,7 @@ public class ItemData {
 	@JsonProperty("exportable")
 	Boolean exportable = null;
 
-	public String getId() {
-		return id;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getFolder() {
-		return folder;
-	}
-
-	public Metadata getMetadata() {
-		return metadata;
-	}
-
-	public Tags getTags() {
-		return tags;
-	}
-
-	public String getRotationFrequency() {
-		return rotationFrequency;
-	}
-
-	public String getLastRotated() {
-		return lastRotated;
-	}
-
-	public String getNextRotation() {
-		return nextRotation;
-	}
-
-	public String getExpiration() {
-		return expiration;
-	}
-
-	public String getCreatedAt() {
-		return createdAt;
-	}
-
-	public ItemVersionData getCurrentVersion() {
-		return currentVersion;
-	}
-
-	public String getRotationState() {
-		return rotationState;
-	}
-
-	public String getAlgorithm() {
-		return algorithm;
-	}
-
-	public String getPurpose() {
-		return purpose;
-	}
-
-	public Boolean isExportable() {
-		return exportable;
-	}
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("item_versions")
+	List<ItemVersionData> itemVersions = null;
 }

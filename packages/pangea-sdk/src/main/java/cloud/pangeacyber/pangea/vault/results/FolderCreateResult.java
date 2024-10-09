@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FolderCreateResult {
 
+	/** ID of the folder. */
 	@JsonProperty("id")
 	String id = null;
 }

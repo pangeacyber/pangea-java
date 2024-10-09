@@ -13,9 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class KeyRotateResult extends CommonRotateResult {
 
+	/** Algorithm of the key. */
 	@JsonProperty("algorithm")
 	String algorithm = null;
 
+	/** Purpose of the key. */
 	@JsonProperty("purpose")
 	KeyPurpose purpose = null;
 }

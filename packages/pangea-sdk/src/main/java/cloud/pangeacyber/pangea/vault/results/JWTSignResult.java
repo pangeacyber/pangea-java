@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JWTSignResult {
 
+	/** Signed JSON Web Token (JWS). */
 	@JsonProperty("jws")
 	String jws;
 }

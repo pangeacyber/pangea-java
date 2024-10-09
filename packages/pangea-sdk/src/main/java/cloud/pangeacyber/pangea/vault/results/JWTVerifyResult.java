@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JWTVerifyResult {
 
+	/** Indicates whether the signature has been verified. */
 	@JsonProperty("valid_signature")
 	boolean validSignature;
 }

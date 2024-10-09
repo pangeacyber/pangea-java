@@ -11,9 +11,11 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommonGenerateResult {
 
+	/** Type of the Vault item. */
 	@JsonProperty("type")
 	ItemType type;
 
+	/** ID of the key. */
 	@JsonProperty("id")
 	String id = null;
 

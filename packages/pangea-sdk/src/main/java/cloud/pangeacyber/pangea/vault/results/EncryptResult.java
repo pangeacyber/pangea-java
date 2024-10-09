@@ -10,15 +10,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EncryptResult {
 
+	/** ID of the key. */
 	@JsonProperty("id")
 	String id;
 
+	/** Version of the key used for encryption. */
 	@JsonProperty("version")
 	Integer version;
 
+	/** Encrypted message (Base64-encoded). */
 	@JsonProperty("cipher_text")
 	String cipherText;
 
+	/** Algorithm of the key used for encryption. */
 	@JsonProperty("algorithm")
 	String algorithm;
 }

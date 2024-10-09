@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeleteResult {
 
+	/** ID of the item. */
 	@JsonProperty("id")
 	String id;
 }

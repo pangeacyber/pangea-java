@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateResult {
 
+	/** ID of the Vault item. */
 	@JsonProperty("id")
 	String id;
 }

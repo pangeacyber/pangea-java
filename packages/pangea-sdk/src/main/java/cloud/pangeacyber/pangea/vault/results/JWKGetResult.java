@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JWKGetResult {
 
+	/** JSON Web Key Set (JWKS) object. */
 	@JsonProperty("keys")
 	List<JWK> keys;
 }

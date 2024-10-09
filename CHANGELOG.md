@@ -18,8 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Deprecated functions `UserListRequest.Builder.setFilter(Filter filter)` and
-  `UserInviteListRequest.Builder.setFilter(Filter filter)`.
+- AuthN's deprecated functions `UserListRequest.Builder.setFilter(Filter filter)`
+  and `UserInviteListRequest.Builder.setFilter(Filter filter)`.
 
 ## 3.15.0 - 2024-09-25
 

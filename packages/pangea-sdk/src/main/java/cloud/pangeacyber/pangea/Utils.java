@@ -70,7 +70,9 @@ public final class Utils {
 				size += bytesRead;
 				crc32c.update(buffer, 0, bytesRead);
 			}
-			crc = Long.toHexString(crc32c.getValue()).toLowerCase(Locale.ROOT);
+
+			// Pad to 8 characters to satisfy Secure Share's input validation.
+			crc = String.format("%08x", crc32c.getValue()).toLowerCase(Locale.ROOT);
 		} catch (IOException e) {
 			throw new PangeaException(String.format("Failed to read file: %s", file.getAbsolutePath()), e);
 		}
@@ -81,6 +83,10 @@ public final class Utils {
 			throw new PangeaException(String.format("Failed to read file: %s", file.getAbsolutePath()), e);
 		}
 		return new FileParams(size, sha256, crc);
+	}
+
+	public static long getFileSize(File file) {
+		return file.length();
 	}
 
 	public static FileParams getFileUploadParams(String filepath) throws PangeaException {

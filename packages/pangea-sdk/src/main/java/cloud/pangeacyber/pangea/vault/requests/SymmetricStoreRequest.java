@@ -6,64 +6,40 @@ import cloud.pangeacyber.pangea.vault.models.SymmetricAlgorithm;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@Value
 public class SymmetricStoreRequest extends CommonStoreRequest {
 
 	@JsonProperty("type")
-	ItemType type;
+	static final ItemType type = ItemType.SYMMETRIC_KEY;
 
-	@JsonProperty("algorithm")
-	SymmetricAlgorithm algorithm = null;
-
-	@JsonProperty("key")
-	String encodedSymmetricKey;
-
+	/** The purpose of this key. */
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("purpose")
-	KeyPurpose purpose = null;
+	KeyPurpose purpose = KeyPurpose.ENCRYPTION;
+
+	/** The algorithm of the key. */
+	@NonNull
+	@JsonProperty("algorithm")
+	SymmetricAlgorithm algorithm;
+
+	/** The key material */
+	@NonNull
+	@JsonProperty("key")
+	String key;
 
 	/** Whether the key is exportable or not. */
-	@JsonInclude(Include.NON_NULL)
+	@Builder.Default
 	@JsonProperty("exportable")
-	Boolean exportable = null;
-
-	public SymmetricStoreRequest(Builder builder) {
-		super(builder);
-		this.type = builder.type;
-		this.algorithm = builder.algorithm;
-		this.encodedSymmetricKey = builder.encodedSymmetricKey;
-		this.purpose = builder.purpose;
-		this.exportable = builder.exportable;
-	}
-
-	public static class Builder extends CommonBuilder<Builder> {
-
-		ItemType type;
-		SymmetricAlgorithm algorithm = null;
-		String encodedSymmetricKey;
-		KeyPurpose purpose = null;
-		Boolean exportable = null;
-
-		public Builder(String encodedSymmetricKey, SymmetricAlgorithm algorithm, KeyPurpose purpose, String name) {
-			super(name);
-			this.type = ItemType.SYMMETRIC_KEY;
-			this.algorithm = algorithm;
-			this.encodedSymmetricKey = encodedSymmetricKey;
-			this.purpose = purpose;
-		}
-
-		public SymmetricStoreRequest build() {
-			return new SymmetricStoreRequest(this);
-		}
-
-		public Builder purpose(KeyPurpose purpose) {
-			this.purpose = purpose;
-			return this;
-		}
-
-		public Builder exportable(boolean exportable) {
-			this.exportable = exportable;
-			return this;
-		}
-	}
+	boolean exportable = false;
 }

@@ -6,144 +6,53 @@ import cloud.pangeacyber.pangea.vault.models.Tags;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@SuperBuilder
 public class CommonGenerateRequest extends BaseRequest {
 
+	/** The name of this item. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("name")
-	String name = null;
+	String name;
 
+	/** The folder where this item is stored. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("folder")
-	String folder = null;
+	String folder;
 
+	/** User-provided metadata. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("metadata")
-	Metadata metadata = null;
+	Metadata metadata;
 
+	/** A list of user-defined tags. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("tags")
-	Tags tags = null;
+	Tags tags;
 
+	/** Period of time between item rotations. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_frequency")
-	String rotationFrequency = null;
+	String rotationFrequency;
 
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_state")
-	String rotationState = null;
+	String rotationState;
 
+	/** State to which the previous version should transition upon rotation. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("expiration")
-	String expiration = null;
+	String expiration;
 
 	/** Whether the key is exportable or not. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("exportable")
-	Boolean exportable = null;
-
-	protected CommonGenerateRequest(CommonBuilder<?> builder) {
-		this.name = builder.name;
-		this.folder = builder.folder;
-		this.metadata = builder.metadata;
-		this.tags = builder.tags;
-		this.rotationFrequency = builder.rotationFrequency;
-		this.expiration = builder.expiration;
-		this.exportable = builder.exportable;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getFolder() {
-		return folder;
-	}
-
-	public Metadata getMetadata() {
-		return metadata;
-	}
-
-	public Tags getTags() {
-		return tags;
-	}
-
-	public String getRotationFrequency() {
-		return rotationFrequency;
-	}
-
-	public String getExpiration() {
-		return expiration;
-	}
-
-	public static class CommonBuilder<B extends CommonBuilder<B>> {
-
-		String name = null;
-		String folder = null;
-		Metadata metadata = null;
-		Tags tags = null;
-		Boolean autoRotate = null;
-		String rotationFrequency = null;
-		String rotationState = null;
-		String expiration = null;
-		Boolean exportable = null;
-
-		public CommonBuilder(String name) {
-			this.name = name;
-		}
-
-		public CommonGenerateRequest build() {
-			return new CommonGenerateRequest(this);
-		}
-
-		@SuppressWarnings("unchecked")
-		final B self() {
-			return (B) this;
-		}
-
-		public B name(String name) {
-			this.name = name;
-			return self();
-		}
-
-		public B folder(String folder) {
-			this.folder = folder;
-			return self();
-		}
-
-		public B metadata(Metadata metadata) {
-			this.metadata = metadata;
-			return self();
-		}
-
-		public B tags(Tags tags) {
-			this.tags = tags;
-			return self();
-		}
-
-		public B autoRotate(Boolean autoRotate) {
-			this.autoRotate = autoRotate;
-			return self();
-		}
-
-		public B rotationFrequency(String rotationFrequency) {
-			this.rotationFrequency = rotationFrequency;
-			return self();
-		}
-
-		public B rotationState(String rotationState) {
-			this.rotationState = rotationState;
-			return self();
-		}
-
-		public B expiration(String expiration) {
-			this.expiration = expiration;
-			return self();
-		}
-
-		public B exportable(boolean exportable) {
-			this.exportable = exportable;
-			return self();
-		}
-	}
+	boolean exportable;
 }

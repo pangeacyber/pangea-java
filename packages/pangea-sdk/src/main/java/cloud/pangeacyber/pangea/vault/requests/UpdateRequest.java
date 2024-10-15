@@ -7,168 +7,66 @@ import cloud.pangeacyber.pangea.vault.models.Tags;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@SuperBuilder
+@Value
 public class UpdateRequest extends BaseRequest {
 
+	@NonNull
 	@JsonProperty("id")
 	String id;
 
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("name")
 	String name = null;
 
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("folder")
 	String folder = null;
 
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("metadata")
 	Metadata metadata = null;
 
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("tags")
 	Tags tags = null;
 
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_frequency")
 	String rotationFrequency = null;
 
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_state")
 	String rotationState = null;
 
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_grace_period")
 	String rotationGracePeriod = null;
 
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("expiration")
 	String expiration = null;
 
 	/** The new state of the item. */
+	@Builder.Default
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("item_state")
 	ItemState itemState = null;
-
-	public UpdateRequest(Builder builder) {
-		this.id = builder.id;
-		this.name = builder.name;
-		this.folder = builder.folder;
-		this.metadata = builder.metadata;
-		this.tags = builder.tags;
-		this.rotationFrequency = builder.rotationFrequency;
-		this.rotationState = builder.rotationState;
-		this.expiration = builder.expiration;
-		this.rotationGracePeriod = builder.rotationGracePeriod;
-		this.itemState = builder.itemState;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getFolder() {
-		return folder;
-	}
-
-	public Metadata getMetadata() {
-		return metadata;
-	}
-
-	public Tags getTags() {
-		return tags;
-	}
-
-	public String getRotationFrequency() {
-		return rotationFrequency;
-	}
-
-	public String getExpiration() {
-		return expiration;
-	}
-
-	/** The new state of the item. */
-	public ItemState getItemState() {
-		return itemState;
-	}
-
-	public static class Builder {
-
-		String id;
-		String name = null;
-		String folder = null;
-		Metadata metadata = null;
-		Tags tags = null;
-		Boolean autoRotate = null;
-		String rotationFrequency = null;
-		String rotationState = null;
-		String expiration = null;
-		String rotationGracePeriod = null;
-
-		/** The new state of the item. */
-		ItemState itemState = null;
-
-		public Builder(String id) {
-			this.id = id;
-		}
-
-		public UpdateRequest build() {
-			return new UpdateRequest(this);
-		}
-
-		public Builder name(String name) {
-			this.name = name;
-			return this;
-		}
-
-		public Builder folder(String folder) {
-			this.folder = folder;
-			return this;
-		}
-
-		public Builder metadata(Metadata metadata) {
-			this.metadata = metadata;
-			return this;
-		}
-
-		public Builder tags(Tags tags) {
-			this.tags = tags;
-			return this;
-		}
-
-		public Builder autoRotate(Boolean autoRotate) {
-			this.autoRotate = autoRotate;
-			return this;
-		}
-
-		public Builder rotationFrequency(String rotationFrequency) {
-			this.rotationFrequency = rotationFrequency;
-			return this;
-		}
-
-		public Builder rotationState(String rotationState) {
-			this.rotationState = rotationState;
-			return this;
-		}
-
-		public Builder expiration(String expiration) {
-			this.expiration = expiration;
-			return this;
-		}
-
-		public Builder rotationGracePeriod(String rotationGracePeriod) {
-			this.rotationGracePeriod = rotationGracePeriod;
-			return this;
-		}
-
-		/** The new state of the item. */
-		public Builder itemState(ItemState itemState) {
-			this.itemState = itemState;
-			return this;
-		}
-	}
 }

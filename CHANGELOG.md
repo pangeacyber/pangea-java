@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Detect-only Redact for Sanitize.
 - Support for `domains` field in `v2/user/breached` endpoint in User Intel service
 
+### Changed
+
+- Vault APIs have been updated to v2.
+
+### Removed
+
+- AuthN's deprecated functions `UserListRequest.Builder.setFilter(Filter filter)`
+  and `UserInviteListRequest.Builder.setFilter(Filter filter)`.
+
 ## 3.15.0 - 2024-09-25
 
 ### Added

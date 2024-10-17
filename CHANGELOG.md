@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.1.1 - 2024-10-17
+
 ### Added
 
 - `token`, `client_secret`, and `client_secret_id` to Vault's `ItemVersionData`.

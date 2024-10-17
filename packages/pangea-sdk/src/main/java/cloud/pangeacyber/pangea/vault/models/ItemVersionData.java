@@ -29,9 +29,23 @@ public class ItemVersionData {
 	@JsonProperty("destroyed_at")
 	String destroyedAt = null;
 
+	/** Public key (in PEM format). */
 	@JsonProperty("public_key")
 	String publicKey = null;
 
+	/** Secret value. */
 	@JsonProperty("secret")
 	String secret = null;
+
+	/** Pangea token value. */
+	@JsonProperty("token")
+	String token = null;
+
+	/** OAuth client secret. */
+	@JsonProperty("client_secret")
+	String clientSecret = null;
+
+	/** OAuth client secret ID. */
+	@JsonProperty("client_secret_id")
+	String clientSecretId = null;
 }

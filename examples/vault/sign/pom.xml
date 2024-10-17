@@ -13,8 +13,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.release>17</maven.compiler.release>
   </properties>
 
   <repositories>
@@ -36,7 +35,7 @@
     <dependency>
       <groupId>cloud.pangea</groupId>
       <artifactId>pangea-sdk</artifactId>
-      <version>3.15.0</version>
+      <version>4.1.0</version>
     </dependency>
 
     <dependency>

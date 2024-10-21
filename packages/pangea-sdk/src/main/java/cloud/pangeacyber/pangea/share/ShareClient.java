@@ -48,10 +48,9 @@ public class ShareClient extends BaseClient {
 	}
 
 	/**
-	 * Buckets (Beta)
+	 * Buckets
 	 * @pangea.description Get information on the accessible buckets.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_buckets
+	 * @pangea.operationId share_post_v1_buckets
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
 	 * @pangea.code
@@ -60,15 +59,13 @@ public class ShareClient extends BaseClient {
 	 * }
 	 */
 	public BucketsResponse buckets() throws PangeaException, PangeaAPIException {
-		return post("/v1beta/buckets", new BaseRequest(), BucketsResponse.class);
+		return post("/v1/buckets", new BaseRequest(), BucketsResponse.class);
 	}
 
 	/**
-	 * Delete (Beta)
-	 * @pangea.description Delete object by ID or path. If both are supplied,
-	 * the path must match that of the object represented by the ID.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_delete
+	 * Delete
+	 * @pangea.description Delete object by ID.
+	 * @pangea.operationId share_post_v1_delete
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -78,35 +75,33 @@ public class ShareClient extends BaseClient {
 	 * }
 	 */
 	public DeleteResponse delete(DeleteRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/delete", request, DeleteResponse.class);
+		return post("/v1/delete", request, DeleteResponse.class);
 	}
 
 	/**
-	 * Create a folder (Beta)
+	 * Create a folder
 	 * @pangea.description Create a folder, either by name or path and
 	 * parent_id.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_folder_create
+	 * @pangea.operationId share_post_v1_folder_create
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
 	 * @pangea.code
 	 * {@code
 	 * var response = client.folderCreate(
-	 *     new FolderCreateRequest.Builder().path("/path/to/new/folder").build()
+	 *     new FolderCreateRequest.Builder().folder("/path/to/new/folder").build()
 	 * );
 	 * }
 	 */
 	public FolderCreateResponse folderCreate(FolderCreateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/folder/create", request, FolderCreateResponse.class);
+		return post("/v1/folder/create", request, FolderCreateResponse.class);
 	}
 
 	/**
-	 * Get an object (Beta)
+	 * Get an object
 	 * @pangea.description Get object. If both ID and path are supplied, the
 	 * call will fail if the target object doesn't match both properties.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_folder_create
+	 * @pangea.operationId share_post_v1_folder_create
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -121,14 +116,13 @@ public class ShareClient extends BaseClient {
 	 * }
 	 */
 	public GetResponse get(GetRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/get", request, GetResponse.class);
+		return post("/v1/get", request, GetResponse.class);
 	}
 
 	/**
-	 * Get archive (Beta)
+	 * Get archive
 	 * @pangea.description Get an archive file of multiple objects.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_get_archive
+	 * @pangea.operationId share_post_v1_get_archive
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -143,14 +137,13 @@ public class ShareClient extends BaseClient {
 	 * }
 	 */
 	public GetArchiveResponse getArchive(GetArchiveRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/get_archive", request, GetArchiveResponse.class);
+		return post("/v1/get_archive", request, GetArchiveResponse.class);
 	}
 
 	/**
-	 * Update a file (Beta)
+	 * Update a file
 	 * @pangea.description Update a file.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_update
+	 * @pangea.operationId share_post_v1_update
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -166,14 +159,13 @@ public class ShareClient extends BaseClient {
 	 * }
 	 */
 	public UpdateResponse update(UpdateRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/update", request, UpdateResponse.class);
+		return post("/v1/update", request, UpdateResponse.class);
 	}
 
 	/**
-	 * List (Beta)
+	 * List
 	 * @pangea.description List or filter/search records.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_list
+	 * @pangea.operationId share_post_v1_list
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -185,14 +177,13 @@ public class ShareClient extends BaseClient {
 	 * }
 	 */
 	public ListResponse list(ListRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/list", request, ListResponse.class);
+		return post("/v1/list", request, ListResponse.class);
 	}
 
 	/**
-	 * Upload a file (Beta)
+	 * Upload a file
 	 * @pangea.description Upload a file.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_put
+	 * @pangea.operationId share_post_v1_put
 	 * @param request Request parameters.
 	 * @param file File to upload.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
@@ -225,14 +216,13 @@ public class ShareClient extends BaseClient {
 		}
 
 		FileData fileData = new FileData(file, "file");
-		return post("/v1beta/put", request, fileData, PutResponse.class);
+		return post("/v1/put", request, fileData, PutResponse.class);
 	}
 
 	/**
-	 * Request upload URL (Beta)
+	 * Request upload URL
 	 * @pangea.description Request an upload URL.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_put 2
+	 * @pangea.operationId share_post_v1_put 2
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -266,14 +256,13 @@ public class ShareClient extends BaseClient {
 			);
 		}
 
-		return requestPresignedURL("/v1beta/put", request);
+		return requestPresignedURL("/v1/put", request);
 	}
 
 	/**
-	 * Create share links (Beta)
+	 * Create share links
 	 * @pangea.description Create a share link.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_share_link_create
+	 * @pangea.operationId share_post_v1_share_link_create
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -297,14 +286,13 @@ public class ShareClient extends BaseClient {
 	 */
 	public ShareLinkCreateResponse shareLinkCreate(ShareLinkCreateRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1beta/share/link/create", request, ShareLinkCreateResponse.class);
+		return post("/v1/share/link/create", request, ShareLinkCreateResponse.class);
 	}
 
 	/**
-	 * Get share link (Beta)
+	 * Get share link
 	 * @pangea.description Get a share link.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_share_link_get
+	 * @pangea.operationId share_post_v1_share_link_get
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -314,14 +302,13 @@ public class ShareClient extends BaseClient {
 	 * }
 	 */
 	public ShareLinkGetResponse shareLinkGet(ShareLinkGetRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/share/link/get", request, ShareLinkGetResponse.class);
+		return post("/v1/share/link/get", request, ShareLinkGetResponse.class);
 	}
 
 	/**
-	 * List share links (Beta)
+	 * List share links
 	 * @pangea.description Look up share links by filter options.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_share_link_list
+	 * @pangea.operationId share_post_v1_share_link_list
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -332,14 +319,13 @@ public class ShareClient extends BaseClient {
 	 */
 	public ShareLinkListResponse shareLinkList(ShareLinkListRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1beta/share/link/list", request, ShareLinkListResponse.class);
+		return post("/v1/share/link/list", request, ShareLinkListResponse.class);
 	}
 
 	/**
-	 * Delete share links (Beta)
+	 * Delete share links
 	 * @pangea.description Delete share links.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_share_link_delete
+	 * @pangea.operationId share_post_v1_share_link_delete
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -352,14 +338,13 @@ public class ShareClient extends BaseClient {
 	 */
 	public ShareLinkDeleteResponse shareLinkDelete(ShareLinkDeleteRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1beta/share/link/delete", request, ShareLinkDeleteResponse.class);
+		return post("/v1/share/link/delete", request, ShareLinkDeleteResponse.class);
 	}
 
 	/**
-	 * Send share links (Beta)
+	 * Send share links
 	 * @pangea.description Send share links.
-	 * How to install a <a href="https://pangea.cloud/docs/sdk/java/#beta-releases">Beta release</a>.
-	 * @pangea.operationId share_post_v1beta_share_link_send
+	 * @pangea.operationId share_post_v1_share_link_send
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -375,6 +360,6 @@ public class ShareClient extends BaseClient {
 	 */
 	public ShareLinkSendResponse shareLinkSend(ShareLinkSendRequest request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1beta/share/link/send", request, ShareLinkSendResponse.class);
+		return post("/v1/share/link/send", request, ShareLinkSendResponse.class);
 	}
 }

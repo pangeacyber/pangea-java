@@ -2,11 +2,13 @@ package cloud.pangeacyber.pangea.vault.results;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/**
- * Result of a decrypt transform request.
- */
+/** Result of a decrypt transform request. */
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 public class DecryptTransformResult {
 
 	/** The ID of the item. */
@@ -32,26 +34,4 @@ public class DecryptTransformResult {
 	 */
 	@JsonProperty("tweak")
 	private String tweak;
-
-	public DecryptTransformResult() {}
-
-	public String getId() {
-		return id;
-	}
-
-	public int getVersion() {
-		return version;
-	}
-
-	public String getAlgorithm() {
-		return algorithm;
-	}
-
-	public String getPlainText() {
-		return plainText;
-	}
-
-	public String getTweak() {
-		return tweak;
-	}
 }

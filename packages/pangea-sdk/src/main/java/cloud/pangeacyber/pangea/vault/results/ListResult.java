@@ -6,32 +6,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
+@NoArgsConstructor
 public class ListResult {
 
-	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("items")
 	List<ListItemData> items = null;
 
-	@JsonProperty("count")
-	int count;
-
-	@JsonInclude(Include.NON_NULL)
+	/**
+	 * Internal ID returned in the previous look up response. Used for
+	 * pagination.
+	 */
 	@JsonProperty("last")
-	String last = null;
-
-	public ListResult() {}
-
-	public List<ListItemData> getItems() {
-		return items;
-	}
-
-	public int getCount() {
-		return count;
-	}
-
-	public String getLast() {
-		return last;
-	}
+	String last;
 }

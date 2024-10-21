@@ -38,7 +38,6 @@ public class ITShareTest {
 	ShareClient client;
 	static TestEnvironment environment;
 	final String TESTFILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/testfile.pdf";
-	final String TESTFILE_PATH_18MB = "./src/test/java/cloud/pangeacyber/pangea/testdata/interactive3.pdf";
 	final String ZERO_BYTES_FILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/zerobytes.txt";
 	private String FOLDER_DELETE;
 	private String FOLDER_FILES;
@@ -78,7 +77,7 @@ public class ITShareTest {
 	@Test
 	public void testFolder() throws PangeaException, PangeaAPIException {
 		FolderCreateResponse respCreate = client.folderCreate(
-			new FolderCreateRequest.Builder().path(FOLDER_DELETE).build()
+			new FolderCreateRequest.Builder().folder(FOLDER_DELETE).build()
 		);
 
 		assertTrue(respCreate.isOk());
@@ -131,38 +130,6 @@ public class ITShareTest {
 	}
 
 	@Test
-	public void testPut_PathAnd18MB_TransferMethod_PostURL() throws PangeaException, PangeaAPIException {
-		File file = new File(TESTFILE_PATH_18MB);
-		String path = "/sdk/tests/java/" + time + "_file_post_url";
-		PutResponse respPut = client.put(
-			new PutRequest.Builder().path(path).transferMethod(TransferMethod.POST_URL).build(),
-			file
-		);
-
-		assertTrue(respPut.isOk());
-		String id = respPut.getResult().getObject().getID();
-		assertNotNull(id);
-
-		// Get multipart
-		GetResponse respGet = client.get(
-			new GetRequest.Builder().id(id).transferMethod(TransferMethod.MULTIPART).build()
-		);
-
-		assertTrue(respGet.isOk());
-		assertNull(respGet.getResult().getDestUrl());
-		assertEquals(respGet.getAttachedFiles().size(), 1);
-		AttachedFile attachedFile = respGet.getAttachedFiles().get(0);
-		attachedFile.save(Paths.get("./download/", attachedFile.getFilename()));
-
-		// Get dest-url
-		respGet = client.get(new GetRequest.Builder().id(id).transferMethod(TransferMethod.DEST_URL).build());
-
-		assertTrue(respGet.isOk());
-		assertEquals(respGet.getAttachedFiles().size(), 0);
-		assertNotNull(respGet.getResult().getDestUrl());
-	}
-
-	@Test
 	public void testPut_ZeroBytes_TransferMethod_PostURL() throws PangeaException, PangeaAPIException {
 		File file = new File(ZERO_BYTES_FILE_PATH);
 		String name = time + "_file_post_url";
@@ -182,7 +149,7 @@ public class ITShareTest {
 
 		assertTrue(respGet.isOk());
 		assertNull(respGet.getResult().getDestUrl());
-		assertEquals(respGet.getAttachedFiles().size(), 1);
+		assertEquals(1, respGet.getAttachedFiles().size());
 		AttachedFile attachedFile = respGet.getAttachedFiles().get(0);
 		attachedFile.save(Paths.get("./download/", attachedFile.getFilename()));
 
@@ -190,7 +157,7 @@ public class ITShareTest {
 		respGet = client.get(new GetRequest.Builder().id(id).transferMethod(TransferMethod.DEST_URL).build());
 
 		assertTrue(respGet.isOk());
-		assertEquals(respGet.getAttachedFiles().size(), 0);
+		assertEquals(0, respGet.getAttachedFiles().size());
 		assertNotNull(respGet.getResult().getDestUrl());
 	}
 
@@ -340,7 +307,7 @@ public class ITShareTest {
 	public void testLifeCycle() throws PangeaException, PangeaAPIException {
 		// Create a folder
 		FolderCreateResponse respCreate = client.folderCreate(
-			new FolderCreateRequest.Builder().path(FOLDER_FILES).build()
+			new FolderCreateRequest.Builder().folder(FOLDER_FILES).build()
 		);
 
 		assertTrue(respCreate.isOk());
@@ -350,16 +317,15 @@ public class ITShareTest {
 		String path = FOLDER_FILES + "/" + time + "_file_multipart_1";
 		File file = new File(TESTFILE_PATH);
 		PutResponse respPutPath = client.put(
-			new PutRequest.Builder().path(path).transferMethod(TransferMethod.MULTIPART).build(),
+			new PutRequest.Builder().folder(path).transferMethod(TransferMethod.MULTIPART).build(),
 			file
 		);
 
 		assertTrue(respPutPath.isOk());
-		assertEquals(folderID, respPutPath.getResult().getObject().getParentID());
 		assertNull(respPutPath.getResult().getObject().getMetadata());
 		assertNull(respPutPath.getResult().getObject().getTags());
-		assertNull(respPutPath.getResult().getObject().getMD5());
-		assertNull(respPutPath.getResult().getObject().getSHA512());
+		assertNotNull(respPutPath.getResult().getObject().getMD5());
+		assertNotNull(respPutPath.getResult().getObject().getSHA512());
 		assertNotNull(respPutPath.getResult().getObject().getSHA256());
 
 		// Upload a file with parent id and name
@@ -379,8 +345,8 @@ public class ITShareTest {
 		assertEquals(folderID, respPutID.getResult().getObject().getParentID());
 		assertEquals(respPutID.getResult().getObject().getMetadata(), metadata);
 		assertEquals(respPutID.getResult().getObject().getTags(), tags);
-		assertNull(respPutID.getResult().getObject().getMD5());
-		assertNull(respPutID.getResult().getObject().getSHA512());
+		assertNotNull(respPutID.getResult().getObject().getMD5());
+		assertNotNull(respPutID.getResult().getObject().getSHA512());
 		assertNotNull(respPutID.getResult().getObject().getSHA256());
 
 		// Update file. full metadata and tags

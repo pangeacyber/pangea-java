@@ -5,7 +5,85 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## Unreleased
+
+## 4.1.1 - 2024-10-17
+
+### Added
+
+- `token`, `client_secret`, and `client_secret_id` to Vault's `ItemVersionData`.
+
+## 4.1.0 - 2024-10-16
+
+### Added
+
+- Secure Share support.
+- `metadata_protected` and `tags_protected` support to Share `ItemData`
+- `password` and `password_algorithm` support to Share
+- Filter fields to `filter_list` on Share service
+- `objects` field to Share `GetArchiveResult`
+- `title` and `message` to Share `ShareCreateLinkItem`
+
+## 4.0.0 - 2024-10-15
+
+### Added
+
+- Detect-only Redact for Sanitize.
+- Support for `domains` field in `v2/user/breached` endpoint in User Intel service
+- Vault KEM export support.
+
+### Changed
+
+- Vault APIs have been updated to v2.
+
+### Removed
+
+- AuthN's deprecated functions `UserListRequest.Builder.setFilter(Filter filter)`
+  and `UserInviteListRequest.Builder.setFilter(Filter filter)`.
+
+## 3.15.0 - 2024-09-25
+
+### Added
+
+- Sanitize service support
+
+### Changed
+
+- HTTP/500 and HTTP/502 responses are now retried.
+
+## 3.14.0 - 2024-09-13
+
+### Added
+
+- Secure Audit Log events may now be validated against the service's OpenAPI
+  spec before sending them. This feature is disabled by default and can be
+  enabled by calling `withSchemaValidation(true)` when building an
+  `AuditClient`.
+
+## 3.13.1 - 2024-08-23
+
+### Fixed
+
+- POST request bodies now have a content type of "application/json" with UTF8
+  encoding.
+
+## 3.13.0 - 2024-08-20
+
+### Added
+
+- `attributes` field in `/list-resources` and `/list-subjects` endpoint.
+
+### Changed
+
+- The maximum number of total HTTP connections is now configurable via
+  `Config`'s `maxConnectionsPerRoute` (per-route limit) and
+  `maxTotalConnections` (total limit). The default value for both of these is
+  now 50.
+
+### Fixed
+
+- Value of `TransferMethod.SOURCE_URL`.
+- Audit consistency proof verification is now thread-safe.
 
 ### Added
 

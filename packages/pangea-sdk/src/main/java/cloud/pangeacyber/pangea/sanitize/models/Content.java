@@ -36,6 +36,14 @@ public class Content {
 	@JsonInclude(Include.NON_NULL)
 	private Boolean redact;
 
+	/**
+	 * If redact is enabled, avoids redacting the file and instead returns the
+	 * PII analysis engine results. Only works if redact is enabled.
+	 */
+	@JsonProperty("redact_detect_only")
+	@JsonInclude(Include.NON_NULL)
+	private Boolean redactDetectOnly;
+
 	@JsonProperty("remove_attachments")
 	@JsonInclude(Include.NON_NULL)
 	private Boolean removeAttachments;
@@ -52,6 +60,7 @@ public class Content {
 		this.defang = builder.defang;
 		this.defangThreshold = builder.defangThreshold;
 		this.redact = builder.redact;
+		this.redactDetectOnly = builder.redactDetectOnly;
 		this.removeAttachments = builder.removeAttachments;
 		this.removeInteractive = builder.removeInteractive;
 	}
@@ -101,6 +110,7 @@ public class Content {
 		private Boolean defang;
 		private Integer defangThreshold;
 		private Boolean redact;
+		private Boolean redactDetectOnly;
 		private Boolean removeAttachments;
 		private Boolean removeInteractive;
 
@@ -138,6 +148,11 @@ public class Content {
 
 		public Builder redact(Boolean redact) {
 			this.redact = redact;
+			return this;
+		}
+
+		public Builder redactDetectOnly(boolean redactDetectOnly) {
+			this.redactDetectOnly = redactDetectOnly;
 			return this;
 		}
 

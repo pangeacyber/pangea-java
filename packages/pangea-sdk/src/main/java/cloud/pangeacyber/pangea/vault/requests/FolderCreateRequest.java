@@ -6,104 +6,55 @@ import cloud.pangeacyber.pangea.vault.models.Tags;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@SuperBuilder
+@Value
 public class FolderCreateRequest extends BaseRequest {
 
+	/** The name of this folder. */
+	@NonNull
 	@JsonProperty("name")
-	String name = null;
+	String name;
 
-	@JsonInclude(Include.NON_NULL)
+	/** The parent folder where this folder is stored. */
+	@NonNull
 	@JsonProperty("folder")
-	String folder = null;
+	String folder;
 
+	/** User-provided metadata. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("metadata")
-	Metadata metadata = null;
+	Metadata metadata;
 
+	/** A list of user-defined tags. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("tags")
-	Tags tags = null;
+	Tags tags;
 
+	/** Period of time between item rotations. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_frequency")
-	String rotationFrequency = null;
+	String rotationFrequency;
 
+	/** State to which the previous version should transition upon rotation. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_state")
-	String rotationState = null;
+	String rotationState;
 
+	/** Grace period for the previous version. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("rotation_grace_period")
-	String rotationGracePeriod = null;
+	String rotationGracePeriod;
 
-	protected FolderCreateRequest(Builder builder) {
-		this.name = builder.name;
-		this.folder = builder.folder;
-		this.metadata = builder.metadata;
-		this.tags = builder.tags;
-		this.rotationFrequency = builder.rotationFrequency;
-		this.rotationGracePeriod = builder.rotationGracePeriod;
-		this.rotationState = builder.rotationState;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getFolder() {
-		return folder;
-	}
-
-	public Metadata getMetadata() {
-		return metadata;
-	}
-
-	public Tags getTags() {
-		return tags;
-	}
-
-	public static class Builder {
-
-		String name = null;
-		String folder = null;
-		Metadata metadata = null;
-		Tags tags = null;
-		String rotationFrequency = null;
-		String rotationState = null;
-		String rotationGracePeriod = null;
-
-		public Builder(String name, String folder) {
-			this.name = name;
-			this.folder = folder;
-		}
-
-		public FolderCreateRequest build() {
-			return new FolderCreateRequest(this);
-		}
-
-		public Builder metadata(Metadata metadata) {
-			this.metadata = metadata;
-			return this;
-		}
-
-		public Builder tags(Tags tags) {
-			this.tags = tags;
-			return this;
-		}
-
-		public Builder rotationFrequency(String rotationFrequency) {
-			this.rotationFrequency = rotationFrequency;
-			return this;
-		}
-
-		public Builder rotationState(String rotationState) {
-			this.rotationState = rotationState;
-			return this;
-		}
-
-		public Builder rotationGracePeriod(String rotationGracePeriod) {
-			this.rotationGracePeriod = rotationGracePeriod;
-			return this;
-		}
-	}
+	/** Timestamp indicating when the item will be disabled. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("disabled_at")
+	String disabledAt;
 }

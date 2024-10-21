@@ -51,16 +51,6 @@ public class UserListRequest extends BaseRequest {
 
 		public Builder() {}
 
-		/**
-		 * @deprecated Use setFilter(FilterUserList filter) instead
-		 */
-		@Deprecated
-		public Builder setFilter(Filter filter) {
-			this.filter = new Filter();
-			this.filter.putAll(filter);
-			return this;
-		}
-
 		public Builder setFilter(FilterUserList filter) {
 			this.filter = new Filter();
 			this.filter.putAll(filter);

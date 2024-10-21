@@ -1,6 +1,8 @@
 package cloud.pangeacyber.pangea.audit;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -11,6 +13,7 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.ResponseStatus;
+import cloud.pangeacyber.pangea.SkipAccepted;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.audit.models.*;
 import cloud.pangeacyber.pangea.audit.requests.*;
@@ -19,11 +22,14 @@ import cloud.pangeacyber.pangea.audit.results.LogBulkResult;
 import cloud.pangeacyber.pangea.audit.results.RootResult;
 import cloud.pangeacyber.pangea.exceptions.*;
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +37,7 @@ import org.junit.jupiter.api.Test;
 public class ITAuditTest {
 
 	Config cfgGeneral;
+	Config customSchemaCfg;
 	AuditClient clientGeneral, clientGeneralNoQueue, localSignClient, localSignInfoClient, vaultSignClient, signNtenandIDClient, customSchemaClient, localSignCustomSchemaClient;
 	static TestEnvironment environment;
 	CustomEvent customEvent;
@@ -57,7 +64,7 @@ public class ITAuditTest {
 		this.cfgGeneral = Config.fromIntegrationEnvironment(environment);
 		Config cfgGeneralNoQueue = Config.fromIntegrationEnvironment(environment);
 		cfgGeneralNoQueue.setQueuedRetryEnabled(false);
-		Config customSchemaCfg = Config.fromCustomSchemaIntegrationEnvironment(environment);
+		this.customSchemaCfg = Config.fromCustomSchemaIntegrationEnvironment(environment);
 		Map<String, Object> pkInfo = new LinkedHashMap<String, Object>();
 		pkInfo.put("ExtraInfo", "LocalKey");
 
@@ -98,6 +105,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLog() throws PangeaException, PangeaAPIException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
@@ -117,6 +125,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLog_customSchema() throws PangeaException, PangeaAPIException {
 		LogResponse response = customSchemaClient.log(
 			customEvent,
@@ -135,6 +144,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogNoVerbose() throws PangeaException, PangeaAPIException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
@@ -157,6 +167,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogNoVerbose_customSchema() throws PangeaException, PangeaAPIException {
 		LogResponse response = customSchemaClient.log(
 			customEvent,
@@ -176,6 +187,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogVerbose() throws PangeaAPIException, PangeaException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
@@ -205,6 +217,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogVerbose_customSchema() throws PangeaAPIException, PangeaException {
 		try {
 			LogResponse response = customSchemaClient.log(
@@ -234,6 +247,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogTenantID() throws PangeaAPIException, PangeaException, ConfigException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
@@ -259,6 +273,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogVerify() throws PangeaAPIException, PangeaException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
@@ -300,6 +315,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogVerify_customSchema() throws PangeaAPIException, PangeaException {
 		LogResponse response = customSchemaClient.log(
 			customEvent,
@@ -345,6 +361,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogLocalSignature() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent(MSG_SIGNED_LOCAL);
 		event.setActor(ACTOR);
@@ -375,6 +392,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogLocalSignature_customSchema() throws PangeaException, PangeaAPIException, ConfigException {
 		CustomEvent event = new CustomEvent.Builder(MSG_CUSTOM_SCHEMA_SIGNED_LOCAL)
 			.fieldInt(1)
@@ -403,6 +421,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogLocalSignatureWithPublicKeyInfo() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent(MSG_SIGNED_LOCAL);
 		event.setActor(ACTOR);
@@ -433,6 +452,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogVaultSignature() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent(MSG_SIGNED_VAULT);
 		event.setActor(ACTOR);
@@ -461,6 +481,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogLocalSignatureAndTenantID() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent(MSG_SIGNED_LOCAL);
 		event.setActor(ACTOR);
@@ -492,6 +513,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testSearchDefault() throws PangeaException, PangeaAPIException {
 		int limit = 4;
 		int maxResults = 6;
@@ -516,6 +538,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testSearchDefault_customSchema() throws PangeaException, PangeaAPIException {
 		int limit = 4;
 		int maxResults = 6;
@@ -540,6 +563,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testSearchNoVerify() throws PangeaAPIException, PangeaException {
 		int maxResults = 10;
 		SearchRequest request = new SearchRequest.Builder("message:Integration test msg")
@@ -561,6 +585,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testSearchNoVerify_customEvent() throws PangeaAPIException, PangeaException {
 		int maxResults = 10;
 		SearchRequest request = new SearchRequest.Builder("message:" + MSG_CUSTOM_SCHEMA_NO_SIGNED)
@@ -582,6 +607,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testSearchVerifyConsistency() throws PangeaAPIException, PangeaException {
 		int maxResults = 10;
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").maxResults(maxResults).order("asc").build();
@@ -599,6 +625,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testSearchVerifyConsistency_customEvent() throws PangeaAPIException, PangeaException {
 		int maxResults = 10;
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").maxResults(maxResults).order("asc").build();
@@ -616,6 +643,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testSearchVerifySignature() throws PangeaAPIException, PangeaException {
 		int maxResults = 10;
 		SearchRequest request = new SearchRequest.Builder("message:" + MSG_SIGNED_LOCAL + " status:" + STATUS_SIGNED)
@@ -635,6 +663,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testSearchVerifySignature_customEvent() throws PangeaAPIException, PangeaException {
 		int maxResults = 10;
 		SearchRequest request = new SearchRequest.Builder("message:" + MSG_CUSTOM_SCHEMA_SIGNED_LOCAL)
@@ -654,6 +683,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testResultsDefault() throws PangeaAPIException, PangeaException {
 		int searchMaxResults = 10;
 
@@ -713,6 +743,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testResultsNoVerify() throws PangeaAPIException, PangeaException {
 		int searchMaxResults = 10;
 		SearchRequest request = new SearchRequest.Builder("message:\"\"")
@@ -746,6 +777,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testResultsDefault_customEvent() throws PangeaAPIException, PangeaException {
 		int searchMaxResults = 10;
 
@@ -805,6 +837,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testResultsNoVerify_customEvent() throws PangeaAPIException, PangeaException {
 		int searchMaxResults = 10;
 		SearchRequest request = new SearchRequest.Builder("message:\"\"")
@@ -838,6 +871,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testRoot() throws PangeaException, PangeaAPIException {
 		RootResponse response = clientGeneral.getRoot();
 		assertTrue(response.isOk());
@@ -851,6 +885,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testRootWithSize() throws PangeaException, PangeaAPIException {
 		int treeSize = 2;
 		RootResponse response = clientGeneral.getRoot(treeSize);
@@ -866,12 +901,14 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testRootTreeNotFound() throws PangeaException, PangeaAPIException {
 		int treeSize = 1000000;
 		assertThrows(PangeaAPIException.class, () -> clientGeneral.getRoot(treeSize));
 	}
 
 	@Test
+	@SkipAccepted
 	public void testRootUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		int treeSize = 1;
 		Config cfg = Config.fromIntegrationEnvironment(environment);
@@ -881,6 +918,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogUnathorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
@@ -893,6 +931,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testSearchValidationException() throws PangeaAPIException, PangeaException {
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").order("notavalidorder").build();
 		SearchConfig config = new SearchConfig.Builder().build();
@@ -900,6 +939,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testSearchValidationException2() throws PangeaAPIException, PangeaException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
@@ -911,6 +951,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogSignerNotSet() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		assertThrows(
@@ -920,6 +961,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testMultiConfig1Log() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
@@ -947,6 +989,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testMultiConfig2Log() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
@@ -974,6 +1017,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testMultiConfigWithoutConfigID() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
@@ -988,6 +1032,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogBulk() throws PangeaAPIException, PangeaException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
@@ -1019,6 +1064,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogBulkAndSign() throws PangeaAPIException, PangeaException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
@@ -1049,6 +1095,8 @@ public class ITAuditTest {
 		}
 	}
 
+	@Test
+	@SkipAccepted
 	public void testLogBulkAsync() throws PangeaAPIException, PangeaException {
 		StandardEvent event = new StandardEvent(MSG_NO_SIGNED);
 		event.setActor(ACTOR);
@@ -1061,7 +1109,6 @@ public class ITAuditTest {
 			new LogConfig.Builder().verbose(true).signLocal(false).verify(false).build()
 		);
 
-		assertTrue(response.isOk());
 		assertNull(response.getResult());
 		assertNotNull(response.getAcceptedResult());
 		assertNotNull(response.getRequestId());
@@ -1072,6 +1119,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testDownloadSearch() throws PangeaAPIException, PangeaException {
 		int maxResults = 10;
 		SearchRequest request = new SearchRequest.Builder("message:sign-test-local")
@@ -1097,6 +1145,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testLogStream() throws ConfigException, PangeaAPIException, PangeaException {
 		// Sample data.
 		final var logStreamEventData = new LogStreamEventData();
@@ -1134,6 +1183,7 @@ public class ITAuditTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testExportDownload() throws PangeaAPIException, PangeaException, InterruptedException {
 		final var exportResponse = clientGeneral.export(ExportRequest.builder().start("1d").verbose(false).build());
 		assertEquals(ResponseStatus.ACCEPTED.toString(), exportResponse.getStatus());
@@ -1168,5 +1218,118 @@ public class ITAuditTest {
 		final var downloadResponse = clientGeneral.downloadResults(downloadRequest);
 		assertEquals(ResponseStatus.SUCCESS.toString(), downloadResponse.getStatus());
 		assertNotNull(downloadResponse.getResult().getDestURL());
+	}
+
+	@Test
+	@SkipAccepted
+	public void testMultiThreadStandardEvent() throws PangeaAPIException, PangeaException, InterruptedException {
+		final var taskCount = 200;
+		final var threadsCount = 8;
+
+		final var service = Executors.newFixedThreadPool(threadsCount);
+		final var latch = new CountDownLatch(taskCount);
+		final var totalStartTime = System.nanoTime();
+		for (var i = 0; i < taskCount; i++) {
+			service.submit(() -> {
+				final var event = new StandardEvent.Builder("Hello, World!").action("Login").actor("Terminal").build();
+
+				final var startTime = System.nanoTime();
+				try {
+					var resp = clientGeneral.log(event, new LogConfig.Builder().verbose(true).verify(true).build());
+					assertNotEquals(EventVerification.FAILED, resp.getResult().getConsistencyVerification());
+				} catch (PangeaException | PangeaAPIException e) {
+					e.printStackTrace();
+				} finally {
+					final var estimatedTime = System.nanoTime() - startTime;
+					System.out.printf("Task completed in %d ms.\n", estimatedTime / (1000 * 1000));
+					latch.countDown();
+				}
+			});
+		}
+		latch.await();
+		final var totalEstimatedTime = System.nanoTime() - totalStartTime;
+		System.out.printf("Finished everything in %d ms.\n", totalEstimatedTime / (1000 * 1000));
+		System.out.printf("Tasks: %d. Threads: %d.\n", taskCount, threadsCount);
+		service.shutdown();
+	}
+
+	@Test
+	@SkipAccepted
+	public void testMultiThreadCustomEvent() throws PangeaAPIException, PangeaException, InterruptedException {
+		final var taskCount = 200;
+		final var threadsCount = 8;
+
+		final var service = Executors.newFixedThreadPool(threadsCount);
+		final var latch = new CountDownLatch(taskCount);
+		final var totalStartTime = System.nanoTime();
+		for (var i = 0; i < taskCount; i++) {
+			service.submit(() -> {
+				final var startTime = System.nanoTime();
+				try {
+					var resp = customSchemaClient.log(
+						customEvent,
+						new LogConfig.Builder().verbose(true).verify(true).build()
+					);
+					assertNotEquals(EventVerification.FAILED, resp.getResult().getConsistencyVerification());
+				} catch (PangeaException | PangeaAPIException e) {
+					e.printStackTrace();
+				} finally {
+					final var estimatedTime = System.nanoTime() - startTime;
+					System.out.printf("Task completed in %d ms.\n", estimatedTime / (1000 * 1000));
+					latch.countDown();
+				}
+			});
+		}
+		latch.await();
+		final var totalEstimatedTime = System.nanoTime() - totalStartTime;
+		System.out.printf("Finished everything in %d ms.\n", totalEstimatedTime / (1000 * 1000));
+		System.out.printf("Tasks: %d. Threads: %d.\n", taskCount, threadsCount);
+		service.shutdown();
+	}
+
+	@Test
+	@SkipAccepted
+	public void testEncoding() throws PangeaAPIException, PangeaException {
+		final var event = new StandardEvent.Builder(
+			new String(new byte[] { 0x00, (byte) 0xE2, (byte) 0x98 }, StandardCharsets.UTF_16)
+		)
+			.build();
+		final var response = clientGeneral.log(event, null);
+		assertTrue(response.isOk());
+	}
+
+	@Test
+	@SkipAccepted
+	void testOpenApiSchemaValidation() {
+		// Create an event with a message long enough to fail validation. It
+		// only requires a length >32766.
+		final var sb = new StringBuilder(32766 + 1);
+		for (var i = 0; i < 32766 + 1; i++) {
+			sb.append('a');
+		}
+		final var invalidEvent = new StandardEvent(sb.toString());
+		final IEvent[] invalidEvents = { invalidEvent };
+
+		// Create a client with schema validation enabled.
+		final var client = new AuditClient.Builder(cfgGeneral).withSchemaValidation(true).build();
+
+		assertThrows(SchemaValidationException.class, () -> client.log(invalidEvent, null));
+		assertThrows(SchemaValidationException.class, () -> client.logBulk(invalidEvents, null));
+		assertThrows(SchemaValidationException.class, () -> client.logBulkAsync(invalidEvents, null));
+		assertDoesNotThrow(() -> client.log(new StandardEvent(MSG_NO_SIGNED), null));
+
+		// Also works with custom schemas.
+		final var invalidCustomEvent = new CustomEvent.Builder(sb.toString())
+			.fieldTime("definitely not a date-time")
+			.build();
+		final IEvent[] invalidCustomEvents = { invalidCustomEvent };
+		final var customClient = new AuditClient.Builder(this.customSchemaCfg)
+			.withCustomSchema(CustomEvent.class)
+			.withSchemaValidation(true)
+			.build();
+		assertThrows(SchemaValidationException.class, () -> customClient.log(invalidCustomEvent, null));
+		assertThrows(SchemaValidationException.class, () -> customClient.logBulk(invalidCustomEvents, null));
+		assertThrows(SchemaValidationException.class, () -> customClient.logBulkAsync(invalidCustomEvents, null));
+		assertDoesNotThrow(() -> customClient.log(customEvent, null));
 	}
 }

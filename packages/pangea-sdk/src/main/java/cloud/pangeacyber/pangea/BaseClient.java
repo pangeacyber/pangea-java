@@ -40,6 +40,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -164,7 +165,7 @@ final class InternalHttpResponse {
 
 public abstract class BaseClient {
 
-	private static final ObjectMapper objectMapper = JsonMapper
+	protected static final ObjectMapper objectMapper = JsonMapper
 		.builder()
 		.findAndAddModules()
 		.defaultTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
@@ -262,6 +263,10 @@ public abstract class BaseClient {
 			return self();
 		}
 
+		/**
+		 * HTTP client to use for all requests. If set, this overrides any
+		 * timeouts, retries, and max requests configuration.
+		 */
 		public B httpClient(final HttpClient httpClient) {
 			this.httpClient = httpClient;
 			return self();
@@ -281,6 +286,10 @@ public abstract class BaseClient {
 			timeout = (int) config.connectionTimeout.toMillis();
 		}
 
+		final var connectionManager = new PoolingHttpClientConnectionManager();
+		connectionManager.setMaxTotal(config.getMaxConnectionsPerRoute());
+		connectionManager.setDefaultMaxPerRoute(config.getMaxConnectionsPerRoute());
+
 		RequestConfig config = RequestConfig
 			.custom()
 			.setConnectTimeout(timeout)
@@ -290,6 +299,7 @@ public abstract class BaseClient {
 			.build();
 		return HttpClientBuilder
 			.create()
+			.setConnectionManager(connectionManager)
 			.setDefaultRequestConfig(config)
 			.setServiceUnavailableRetryStrategy(
 				new ServerErrorRetryStrategy(this.config.getMaxRetries(), this.config.getRetryInterval().toMillis())
@@ -299,7 +309,7 @@ public abstract class BaseClient {
 
 	protected HttpPost buildPostRequest(URI url, String body) throws UnsupportedEncodingException {
 		HttpPost httpPost = new HttpPost(url);
-		httpPost.setEntity(new StringEntity(body));
+		httpPost.setEntity(new StringEntity(body, ContentType.APPLICATION_JSON));
 		fillHeaders(httpPost);
 		return httpPost;
 	}
@@ -308,7 +318,7 @@ public abstract class BaseClient {
 		HttpPost httpPost = new HttpPost(url);
 
 		final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-		final StringBody requestBody = new StringBody(body, ContentType.create("application/json"));
+		final StringBody requestBody = new StringBody(body, ContentType.APPLICATION_JSON);
 		builder.addPart("request", requestBody);
 		builder.addBinaryBody(fileData.getName(), fileData.getFile(), ContentType.APPLICATION_OCTET_STREAM, "file.exe");
 
@@ -338,7 +348,7 @@ public abstract class BaseClient {
 				if (entry.getValue() instanceof String) {
 					final StringBody requestBody = new StringBody(
 						(String) entry.getValue(),
-						ContentType.create("application/json")
+						ContentType.APPLICATION_JSON
 					);
 					String key = entry.getKey();
 					builder.addPart(key, requestBody);
@@ -440,6 +450,21 @@ public abstract class BaseClient {
 		Class<ResponseType> responseClass
 	) throws PangeaException, PangeaAPIException {
 		return doPost(path, request, fileData, responseClass, new PostConfig.Builder().build());
+	}
+
+	/**
+	 * Perform a HTTP POST request and return the request body as a string.
+	 *
+	 * @param <Req> Request body type.
+	 * @param path Request URL path.
+	 * @param request Request body.
+	 * @return Response body as a string.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	protected <Req extends BaseRequest> String post(String path, Req request)
+		throws PangeaException, PangeaAPIException {
+		return this.postSingle(this.config.getServiceUrl(this.serviceName, path), request, null).getBody();
 	}
 
 	/**
@@ -605,7 +630,7 @@ public abstract class BaseClient {
 			response = postSingle(url, request, fileData);
 		}
 
-		if (postConfig.getPollResult() == true) {
+		if (postConfig.getPollResult()) {
 			response = this.handleQueued(response);
 		}
 		return checkResponse(response, responseTypeRef, url.toString());

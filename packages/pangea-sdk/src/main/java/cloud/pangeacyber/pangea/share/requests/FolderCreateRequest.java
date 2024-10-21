@@ -24,10 +24,10 @@ public class FolderCreateRequest extends BaseRequest {
 	@JsonProperty("parent_id")
 	String parentId;
 
-	/** An case-sensitive path to an object. Contains a sequence of path segments delimited by the / character. Any path ending in a / character refers to a folder. */
+	/** The folder to place the folder in. Must match `parent_id` if also set. */
 	@JsonInclude(Include.NON_NULL)
-	@JsonProperty("path")
-	String path;
+	@JsonProperty("folder")
+	String folder;
 
 	/** A list of user-defined tags */
 	@JsonInclude(Include.NON_NULL)
@@ -43,7 +43,7 @@ public class FolderCreateRequest extends BaseRequest {
 		this.name = builder.name;
 		this.metadata = builder.metadata;
 		this.parentId = builder.parentId;
-		this.path = builder.path;
+		this.folder = builder.folder;
 		this.tags = builder.tags;
 		this.bucketId = builder.bucketId;
 	}
@@ -53,7 +53,7 @@ public class FolderCreateRequest extends BaseRequest {
 		String name;
 		Metadata metadata;
 		String parentId;
-		String path;
+		String folder;
 		Tags tags;
 		String bucketId;
 
@@ -83,9 +83,9 @@ public class FolderCreateRequest extends BaseRequest {
 			return this;
 		}
 
-		/** An case-sensitive path to an object. Contains a sequence of path segments delimited by the / character. Any path ending in a / character refers to a folder. */
-		public Builder path(String path) {
-			this.path = path;
+		/** The folder to place the folder in. Must match `parent_id` if also set. */
+		public Builder folder(String folder) {
+			this.folder = folder;
 			return this;
 		}
 

@@ -17,7 +17,7 @@
     <dependency>
       <groupId>cloud.pangea</groupId>
       <artifactId>pangea-sdk</artifactId>
-      <version>3.12.0</version>
+      <version>4.1.1</version>
     </dependency>
   </dependencies>
 
@@ -30,7 +30,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.4.1</version>
         <configuration>
           <mainClass>cloud.pangeacyber.examples.App</mainClass>
         </configuration>

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.abort;
 
 import cloud.pangeacyber.pangea.AttachedFile;
 import cloud.pangeacyber.pangea.Config;
@@ -26,7 +27,6 @@ import cloud.pangeacyber.pangea.sanitize.models.ShareOutput;
 import cloud.pangeacyber.pangea.sanitize.requests.SanitizeRequest;
 import cloud.pangeacyber.pangea.sanitize.responses.SanitizeResponse;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,11 +55,11 @@ public class ITSanitizeTest {
 	}
 
 	@Test
-	public void testSanitizeAndShare() throws PangeaException, PangeaAPIException, IOException {
+	void testSanitizeAndShare() throws PangeaException, PangeaAPIException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
 			new SanitizeRequest.Builder()
-				.file(new SanitizeFile.Builder().cdrProvider("apryse").scanProvider("crowdstrike").build())
+				.file(new SanitizeFile.Builder().scanProvider("crowdstrike").build())
 				.content(
 					new Content.Builder()
 						.urlIntel(true)
@@ -89,19 +89,19 @@ public class ITSanitizeTest {
 		assertNotNull(response.getResult().getData().getDefang());
 		assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
 		assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
-		assertEquals((int) response.getResult().getData().getDefang().getDefangedCount(), 0);
+		assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 		assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-		assertEquals((int) response.getResult().getData().getCDR().getFileAttachmentsRemoved(), 0);
-		assertEquals((int) response.getResult().getData().getCDR().getInteractiveContentsRemoved(), 0);
+		assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
+		assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 		assertFalse(response.getResult().getData().getMaliciousFile());
 	}
 
 	@Test
-	public void testSanitizeNoShare() throws PangeaException, PangeaAPIException, IOException {
+	void testSanitizeNoShare() throws PangeaException, PangeaAPIException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
 			new SanitizeRequest.Builder()
-				.file(new SanitizeFile.Builder().cdrProvider("apryse").scanProvider("crowdstrike").build())
+				.file(new SanitizeFile.Builder().scanProvider("crowdstrike").build())
 				.content(
 					new Content.Builder()
 						.urlIntel(true)
@@ -131,10 +131,10 @@ public class ITSanitizeTest {
 		assertNotNull(response.getResult().getData().getDefang());
 		assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
 		assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
-		assertEquals((int) response.getResult().getData().getDefang().getDefangedCount(), 0);
+		assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 		assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-		assertEquals((int) response.getResult().getData().getCDR().getFileAttachmentsRemoved(), 0);
-		assertEquals((int) response.getResult().getData().getCDR().getInteractiveContentsRemoved(), 0);
+		assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
+		assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 		assertFalse(response.getResult().getData().getMaliciousFile());
 
 		AttachedFile attachedFile = client.downloadFile(response.getResult().getDestURL());
@@ -142,7 +142,7 @@ public class ITSanitizeTest {
 	}
 
 	@Test
-	public void testSanitizeAllDefaults() throws PangeaException, PangeaAPIException, IOException {
+	void testSanitizeAllDefaults() throws PangeaException, PangeaAPIException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
 			new SanitizeRequest.Builder().uploadedFileName("uploaded_file").build(),
@@ -156,19 +156,19 @@ public class ITSanitizeTest {
 		assertNotNull(response.getResult().getData().getDefang());
 		assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
 		assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
-		assertEquals((int) response.getResult().getData().getDefang().getDefangedCount(), 0);
+		assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 		assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-		assertEquals((int) response.getResult().getData().getCDR().getFileAttachmentsRemoved(), 0);
-		assertEquals((int) response.getResult().getData().getCDR().getInteractiveContentsRemoved(), 0);
+		assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
+		assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 		assertFalse(response.getResult().getData().getMaliciousFile());
 	}
 
 	@Test
-	public void testSanitizeMultipart() throws PangeaException, PangeaAPIException, IOException {
+	void testSanitizeMultipart() throws PangeaException, PangeaAPIException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
 			new SanitizeRequest.Builder()
-				.file(new SanitizeFile.Builder().cdrProvider("apryse").scanProvider("crowdstrike").build())
+				.file(new SanitizeFile.Builder().scanProvider("crowdstrike").build())
 				.content(
 					new Content.Builder()
 						.urlIntel(true)
@@ -198,16 +198,15 @@ public class ITSanitizeTest {
 		assertNotNull(response.getResult().getData().getDefang());
 		assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
 		assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
-		assertEquals((int) response.getResult().getData().getDefang().getDefangedCount(), 0);
+		assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 		assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-		assertEquals((int) response.getResult().getData().getCDR().getFileAttachmentsRemoved(), 0);
-		assertEquals((int) response.getResult().getData().getCDR().getInteractiveContentsRemoved(), 0);
+		assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
+		assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 		assertFalse(response.getResult().getData().getMaliciousFile());
 	}
 
 	@Test
-	public void testSanitize_PollResult()
-		throws PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+	void testSanitize_PollResult() throws PangeaException, PangeaAPIException, ConfigException, InterruptedException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
 		cfg.setQueuedRetryEnabled(false);
 		client = new SanitizeClient.Builder(cfg).build();
@@ -216,29 +215,28 @@ public class ITSanitizeTest {
 		AcceptedRequestException exception = null;
 		try {
 			File file = new File(TESTFILE_PATH);
-			response =
-				client.sanitize(
-					new SanitizeRequest.Builder()
-						.file(new SanitizeFile.Builder().cdrProvider("apryse").scanProvider("crowdstrike").build())
-						.content(
-							new Content.Builder()
-								.urlIntel(true)
-								.urlIntelProvider("crowdstrike")
-								.domainIntel(true)
-								.domainIntelProvider("crowdstrike")
-								.defang(true)
-								.defangThreshold(20)
-								.removeInteractive(true)
-								.removeAttachments(true)
-								.redact(true)
-								.build()
-						)
-						.shareOutput(new ShareOutput.Builder().enabled(true).outputFolder("sdk_test/sanitize/").build())
-						.uploadedFileName("uploaded_file")
-						.transferMethod(TransferMethod.POST_URL)
-						.build(),
-					file
-				);
+			client.sanitize(
+				new SanitizeRequest.Builder()
+					.file(new SanitizeFile.Builder().scanProvider("crowdstrike").build())
+					.content(
+						new Content.Builder()
+							.urlIntel(true)
+							.urlIntelProvider("crowdstrike")
+							.domainIntel(true)
+							.domainIntelProvider("crowdstrike")
+							.defang(true)
+							.defangThreshold(20)
+							.removeInteractive(true)
+							.removeAttachments(true)
+							.redact(true)
+							.build()
+					)
+					.shareOutput(new ShareOutput.Builder().enabled(true).outputFolder("sdk_test/sanitize/").build())
+					.uploadedFileName("uploaded_file")
+					.transferMethod(TransferMethod.POST_URL)
+					.build(),
+				file
+			);
 			assertTrue(false);
 		} catch (AcceptedRequestException e) {
 			exception = e;
@@ -264,26 +262,27 @@ public class ITSanitizeTest {
 				assertNotNull(response.getResult().getData().getDefang());
 				assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
 				assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
-				assertEquals((int) response.getResult().getData().getDefang().getDefangedCount(), 0);
+				assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 				assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-				assertEquals((int) response.getResult().getData().getCDR().getFileAttachmentsRemoved(), 0);
-				assertEquals((int) response.getResult().getData().getCDR().getInteractiveContentsRemoved(), 0);
+				assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
+				assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 				assertFalse(response.getResult().getData().getMaliciousFile());
 
-				break;
-			} catch (PangeaAPIException e) {
-				assertTrue(retry < maxRetry - 1);
+				return;
+			} catch (AcceptedRequestException e) {
+				// No-op.
 			}
 		}
+
+		abort(String.format("Result of request '%s' took too long.", exception.getRequestId()));
 	}
 
 	@Test
-	public void testSanitize_SplitUpload_Post()
-		throws PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+	void testSanitize_SplitUpload_Post() throws PangeaException, PangeaAPIException, InterruptedException {
 		File file = new File(TESTFILE_PATH);
 		FileParams fileParams = Utils.getFileUploadParams(file);
 		SanitizeRequest request = new SanitizeRequest.Builder()
-			.file(new SanitizeFile.Builder().cdrProvider("apryse").scanProvider("crowdstrike").build())
+			.file(new SanitizeFile.Builder().scanProvider("crowdstrike").build())
 			.content(
 				new Content.Builder()
 					.urlIntel(true)
@@ -338,26 +337,27 @@ public class ITSanitizeTest {
 				assertNotNull(response.getResult().getData().getDefang());
 				assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
 				assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
-				assertEquals((int) response.getResult().getData().getDefang().getDefangedCount(), 0);
+				assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 				assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-				assertEquals((int) response.getResult().getData().getCDR().getFileAttachmentsRemoved(), 0);
-				assertEquals((int) response.getResult().getData().getCDR().getInteractiveContentsRemoved(), 0);
+				assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
+				assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 				assertFalse(response.getResult().getData().getMaliciousFile());
 
-				break;
-			} catch (PangeaAPIException e) {
-				assertTrue(retry < maxRetry - 1);
+				return;
+			} catch (AcceptedRequestException e) {
+				// No-op.
 			}
 		}
+
+		abort(String.format("Result of request '%s' took too long.", acceptedResponse.getRequestId()));
 	}
 
 	@Test
-	public void testSanitize_SplitUpload_Put()
-		throws PangeaException, PangeaAPIException, IOException, ConfigException, InterruptedException {
+	void testSanitize_SplitUpload_Put() throws PangeaException, PangeaAPIException, InterruptedException {
 		File file = new File(TESTFILE_PATH);
 		FileParams fileParams = Utils.getFileUploadParams(file);
 		SanitizeRequest request = new SanitizeRequest.Builder()
-			.file(new SanitizeFile.Builder().cdrProvider("apryse").scanProvider("crowdstrike").build())
+			.file(new SanitizeFile.Builder().scanProvider("crowdstrike").build())
 			.content(
 				new Content.Builder()
 					.urlIntel(true)
@@ -411,16 +411,18 @@ public class ITSanitizeTest {
 				assertNotNull(response.getResult().getData().getDefang());
 				assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
 				assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
-				assertEquals((int) response.getResult().getData().getDefang().getDefangedCount(), 0);
+				assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 				assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-				assertEquals((int) response.getResult().getData().getCDR().getFileAttachmentsRemoved(), 0);
-				assertEquals((int) response.getResult().getData().getCDR().getInteractiveContentsRemoved(), 0);
+				assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
+				assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 				assertFalse(response.getResult().getData().getMaliciousFile());
 
-				break;
-			} catch (PangeaAPIException e) {
-				assertTrue(retry < maxRetry - 1);
+				return;
+			} catch (AcceptedRequestException e) {
+				// No-op.
 			}
 		}
+
+		abort(String.format("Result of request '%s' took too long.", acceptedResponse.getRequestId()));
 	}
 }

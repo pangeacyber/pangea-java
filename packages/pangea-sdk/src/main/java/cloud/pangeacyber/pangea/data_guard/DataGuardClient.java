@@ -2,13 +2,10 @@ package cloud.pangeacyber.pangea.data_guard;
 
 import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.Response;
-import cloud.pangeacyber.pangea.data_guard.requests.FileGuardRequest;
 import cloud.pangeacyber.pangea.data_guard.requests.TextGuardRequest;
 import cloud.pangeacyber.pangea.data_guard.responses.TextGuardResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 /** Data Guard API client. */
 public class DataGuardClient extends BaseClient {
@@ -37,7 +34,7 @@ public class DataGuardClient extends BaseClient {
 	/**
 	 * Text guard (Beta)
 	 * @pangea.description Guard text.
-	 * @pangea.operationId data_guard_post_v1_text_guard
+	 * @pangea.operationId data_guard_post_v1beta_text_guard
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -47,24 +44,6 @@ public class DataGuardClient extends BaseClient {
 	 * }
 	 */
 	public TextGuardResponse guardText(final TextGuardRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/text/guard", request, TextGuardResponse.class);
-	}
-
-	/**
-	 * File guard (Beta)
-	 * @pangea.description Guard a file URL.
-	 * @pangea.operationId data_guard_post_v1_file_guard
-	 * @param request Request parameters.
-	 * @throws PangeaException Thrown if an error occurs during the operation.
-	 * @throws PangeaAPIException Thrown if the API returns an error response.
-	 * @pangea.code
-	 * {@code
-	 * final var response = client.guardFile(
-	 * 	FileGuardRequest.builder().fileUrl("https://pangea.cloud/robots.txt").build()
-	 * );
-	 * }
-	 */
-	public Response<Void> guardFile(final FileGuardRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1/file/guard", request, new TypeReference<Response<Void>>() {});
+		return post("/v1beta/text/guard", request, TextGuardResponse.class);
 	}
 }

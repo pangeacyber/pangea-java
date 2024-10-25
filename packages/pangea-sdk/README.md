@@ -18,7 +18,7 @@ A Java SDK for integrating with Pangea services. Supports Java 11, 17, and 21.
 Via Gradle:
 
 ```gradle
-implementation("cloud.pangea:pangea-sdk:3.15.0")
+implementation("cloud.pangea:pangea-sdk:4.1.1")
 ```
 
 Via Maven:
@@ -27,7 +27,7 @@ Via Maven:
 <dependency>
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>3.15.0</version>
+  <version>4.1.1</version>
 </dependency>
 ```
 
@@ -36,14 +36,14 @@ Via Maven:
 #### Beta releases
 
 Pre-release versions may be available with the `beta` denotation in the version
-number. These releases serve to preview beta services and APIs. Per Semantic
-Versioning, they are considered unstable and do not carry the same compatibility
-guarantees as stable releases. [Beta changelog][]
+number. These releases serve to preview Beta and Early Access services and APIs.
+Per Semantic Versioning, they are considered unstable and do not carry the same
+compatibility guarantees as stable releases. [Beta changelog][].
 
 Via Gradle:
 
 ```gradle
-implementation("cloud.pangea:pangea-sdk:3.8.0-beta-3")
+implementation("cloud.pangea:pangea-sdk:4.2.0-beta-1")
 ```
 
 Via Maven:
@@ -52,7 +52,7 @@ Via Maven:
 <dependency>
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>3.8.0-beta-3</version>
+  <version>4.2.0-beta-1</version>
 </dependency>
 ```
 

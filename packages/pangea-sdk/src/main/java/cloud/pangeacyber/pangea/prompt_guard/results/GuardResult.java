@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class GuardResult {
 
-	boolean promptInjectionDetected;
-	String promptInjectionType;
-	String promptInjectionDetector;
+	boolean detected;
+	String type;
+	String detector;
+	int confidence;
 }

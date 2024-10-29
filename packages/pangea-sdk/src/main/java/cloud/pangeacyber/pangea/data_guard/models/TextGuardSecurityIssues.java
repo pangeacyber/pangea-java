@@ -19,5 +19,5 @@ public final class TextGuardSecurityIssues {
 	int maliciousDomainCount;
 	int maliciousIpCount;
 	int maliciousUrlCount;
-	int redactedItemCount;
+	int redactRuleMatchCount;
 }

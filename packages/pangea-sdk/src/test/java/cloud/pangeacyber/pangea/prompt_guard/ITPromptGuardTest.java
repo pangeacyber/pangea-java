@@ -37,7 +37,7 @@ public class ITPromptGuardTest {
 		);
 		assertTrue(response.isOk());
 		var result = response.getResult();
-		assertFalse(result.isPromptInjectionDetected());
+		assertFalse(result.isDetected());
 
 		response =
 			client.guard(
@@ -48,6 +48,6 @@ public class ITPromptGuardTest {
 			);
 		assertTrue(response.isOk());
 		result = response.getResult();
-		assertTrue(result.isPromptInjectionDetected());
+		assertTrue(result.isDetected());
 	}
 }

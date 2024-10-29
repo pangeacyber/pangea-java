@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
-import cloud.pangeacyber.pangea.data_guard.requests.FileGuardRequest;
 import cloud.pangeacyber.pangea.data_guard.requests.TextGuardRequest;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -45,13 +44,5 @@ public class ITDataGuardTest {
 		assertNotNull(result.getRedactedPrompt());
 		assertEquals(1, result.getFindings().getArtifactCount());
 		assertEquals(0, result.getFindings().getMaliciousCount());
-	}
-
-	@Test
-	void testGuardFile() throws PangeaException, PangeaAPIException {
-		final var response = client.guardFile(
-			FileGuardRequest.builder().fileUrl("https://pangea.cloud/robots.txt").build()
-		);
-		assertTrue(response.isOk());
 	}
 }

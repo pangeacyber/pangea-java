@@ -1,23 +1,23 @@
-package cloud.pangeacyber.pangea.data_guard;
+package cloud.pangeacyber.pangea.ai_guard;
 
 import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
-import cloud.pangeacyber.pangea.data_guard.requests.TextGuardRequest;
-import cloud.pangeacyber.pangea.data_guard.responses.TextGuardResponse;
+import cloud.pangeacyber.pangea.ai_guard.requests.TextGuardRequest;
+import cloud.pangeacyber.pangea.ai_guard.responses.TextGuardResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
-/** Data Guard API client. */
-public class DataGuardClient extends BaseClient {
+/** AI Guard API client. */
+public class AIGuardClient extends BaseClient {
 
-	public static final String serviceName = "data-guard";
+	public static final String serviceName = "ai-guard";
 
-	/** Creates a new Data Guard API client. */
-	public DataGuardClient(Builder builder) {
+	/** Creates a new AI Guard API client. */
+	public AIGuardClient(Builder builder) {
 		super(builder, serviceName);
 	}
 
-	/** Builder of Data Guard API clients. */
+	/** Builder of AI Guard API clients. */
 	public static class Builder extends BaseClient.Builder<Builder> {
 
 		/** Creates a new builder. */
@@ -25,16 +25,16 @@ public class DataGuardClient extends BaseClient {
 			super(config);
 		}
 
-		/** Builds a new Data Guard API client. */
-		public DataGuardClient build() {
-			return new DataGuardClient(this);
+		/** Builds a new AI Guard API client. */
+		public AIGuardClient build() {
+			return new AIGuardClient(this);
 		}
 	}
 
 	/**
 	 * Text guard (Beta)
 	 * @pangea.description Guard text.
-	 * @pangea.operationId data_guard_post_v1beta_text_guard
+	 * @pangea.operationId ai_guard_post_v1beta_text_guard
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.

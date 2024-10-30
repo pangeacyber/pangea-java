@@ -1,4 +1,4 @@
-package cloud.pangeacyber.pangea.data_guard;
+package cloud.pangeacyber.pangea.ai_guard;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,26 +7,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
-import cloud.pangeacyber.pangea.data_guard.requests.TextGuardRequest;
+import cloud.pangeacyber.pangea.ai_guard.requests.TextGuardRequest;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ITDataGuardTest {
+public class ITAIGuardTest {
 
-	static DataGuardClient client;
+	static AIGuardClient client;
 	static TestEnvironment environment;
 
 	@BeforeAll
 	public static void setUpClass() throws Exception {
-		environment = Helper.loadTestEnvironment(DataGuardClient.serviceName, TestEnvironment.LIVE);
+		environment = Helper.loadTestEnvironment(AIGuardClient.serviceName, TestEnvironment.LIVE);
 	}
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		client = new DataGuardClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
+		client = new AIGuardClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
 	}
 
 	@Test

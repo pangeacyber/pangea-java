@@ -1,4 +1,4 @@
-package cloud.pangeacyber.pangea.data_guard.requests;
+package cloud.pangeacyber.pangea.ai_guard.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import com.fasterxml.jackson.annotation.JsonInclude;

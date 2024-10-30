@@ -1,21 +1,25 @@
-package cloud.pangeacyber.pangea.data_guard.models;
+package cloud.pangeacyber.pangea.ai_guard.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.List;
+import lombok.Value;
 
-@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@NoArgsConstructor
-public final class TextGuardFindings {
+@Value
+public final class IntelResults {
 
-	int artifactCount;
-	int maliciousCount;
-	TextGuardSecurityIssues securityIssues;
+	/** The categories that apply to this indicator as determined by the provider. */
+	List<String> category;
+
+	/** The score, given by the Pangea service, for the indicator. */
+	double score;
+
+	/** The verdict for the indicator. */
+	String verdict;
 }

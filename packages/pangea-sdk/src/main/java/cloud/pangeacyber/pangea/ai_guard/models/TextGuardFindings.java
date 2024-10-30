@@ -1,4 +1,4 @@
-package cloud.pangeacyber.pangea.data_guard.models;
+package cloud.pangeacyber.pangea.ai_guard.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,11 +13,9 @@ import lombok.NoArgsConstructor;
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor
-public final class TextGuardSecurityIssues {
+public final class TextGuardFindings {
 
-	int compromisedEmailAddresses;
-	int maliciousDomainCount;
-	int maliciousIpCount;
-	int maliciousUrlCount;
-	int redactRuleMatchCount;
+	int artifactCount;
+	int maliciousCount;
+	TextGuardSecurityIssues securityIssues;
 }

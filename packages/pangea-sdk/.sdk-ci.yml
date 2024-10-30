@@ -15,10 +15,10 @@ sdk-integration-tests:
   retry: 2
   variables:
   # Set each service test environment
+    SERVICE_AI_GUARD_ENV: DEV
     SERVICE_AUDIT_ENV: LVE
     SERVICE_AUTHN_ENV: LVE
     SERVICE_AUTHZ_ENV: LVE
-    SERVICE_DATA_GUARD_ENV: LVE
     SERVICE_EMBARGO_ENV: LVE
     SERVICE_FILE_SCAN_ENV: LVE
     SERVICE_IP_INTEL_ENV: LVE
@@ -26,7 +26,7 @@ sdk-integration-tests:
     SERVICE_URL_INTEL_ENV: LVE
     SERVICE_FILE_INTEL_ENV: LVE
     SERVICE_USER_INTEL_ENV: LVE
-    SERVICE_PROMPT_GUARD_ENV: LVE
+    SERVICE_PROMPT_GUARD_ENV: DEV
     SERVICE_REDACT_ENV: LVE
     SERVICE_SANITIZE_ENV: LVE
     SERVICE_VAULT_ENV: LVE
@@ -55,6 +55,9 @@ sdk-integration-tests:
 
   parallel:
     matrix:
+      - CLOUD: [AWS]
+        ENV: ${SERVICE_AI_GUARD_ENV}
+        TEST: ITAIGuardTest
       - CLOUD: [AWS, GCP]
         ENV: ${SERVICE_AUDIT_ENV}
         TEST: ITAuditTest
@@ -64,9 +67,6 @@ sdk-integration-tests:
       - CLOUD: [AWS, GCP]
         ENV: ${SERVICE_AUTHZ_ENV}
         TEST: ITAuthZTest
-      - CLOUD: [AWS]
-        ENV: ${SERVICE_DATA_GUARD_ENV}
-        TEST: ITDataGuardTest
       - CLOUD: [AWS, GCP]
         ENV: ${SERVICE_EMBARGO_ENV}
         TEST: ITEmbargoTest

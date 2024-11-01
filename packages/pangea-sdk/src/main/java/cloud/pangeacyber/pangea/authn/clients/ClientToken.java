@@ -19,6 +19,7 @@ final class TokenCheckRequest extends BaseRequest {
 
 public class ClientToken extends AuthNBaseClient {
 
+	/** @hidden */
 	public ClientToken(AuthNClient.Builder builder) {
 		super(builder);
 	}

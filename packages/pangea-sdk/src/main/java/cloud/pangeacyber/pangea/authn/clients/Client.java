@@ -24,6 +24,7 @@ public class Client extends AuthNBaseClient {
 	private ClientPassword password;
 	private ClientToken token;
 
+	/** @hidden */
 	public Client(AuthNClient.Builder builder) {
 		super(builder);
 		session = new ClientSession(builder);

@@ -25,6 +25,7 @@ final class FlowCompleteRequest extends BaseRequest {
 
 public class Flow extends AuthNBaseClient {
 
+	/** @hidden */
 	public Flow(AuthNClient.Builder builder) {
 		super(builder);
 	}

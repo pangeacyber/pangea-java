@@ -9,6 +9,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
 public class UserAuthenticators extends AuthNBaseClient {
 
+	/** @hidden */
 	public UserAuthenticators(AuthNClient.Builder builder) {
 		super(builder);
 	}

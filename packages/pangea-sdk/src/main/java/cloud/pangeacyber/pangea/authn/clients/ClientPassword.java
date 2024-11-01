@@ -30,6 +30,7 @@ final class ClientPasswordChangeRequest extends BaseRequest {
 
 public class ClientPassword extends AuthNBaseClient {
 
+	/** @hidden */
 	public ClientPassword(AuthNClient.Builder builder) {
 		super(builder);
 	}

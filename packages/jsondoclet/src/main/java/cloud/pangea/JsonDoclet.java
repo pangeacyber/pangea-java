@@ -1,229 +1,292 @@
 package cloud.pangea;
 
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sun.source.doctree.CommentTree;
+import com.sun.source.doctree.DeprecatedTree;
+import com.sun.source.doctree.DocCommentTree;
+import com.sun.source.doctree.DocTree;
+import com.sun.source.doctree.LinkTree;
+import com.sun.source.doctree.ParamTree;
+import com.sun.source.doctree.ReturnTree;
+import com.sun.source.doctree.TextTree;
+import com.sun.source.doctree.ThrowsTree;
+import com.sun.source.util.DocTrees;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.source.doctree.DocCommentTree;
-import com.sun.source.doctree.DocTree;
-import com.sun.source.util.DocTrees;
-
 import jdk.javadoc.doclet.Doclet;
 import jdk.javadoc.doclet.DocletEnvironment;
 import jdk.javadoc.doclet.Reporter;
 
-public class JsonDoclet implements Doclet {
-    public void init(Locale locale, Reporter reporter) {
-    }
+public final class JsonDoclet implements Doclet {
+	private static final ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
 
-    public HashMap<String, Object> printElement(DocTrees trees, Element e) {
-        HashMap<String, Object> props = new HashMap<>();
+	private DocTrees trees;
 
-        DocCommentTree docCommentTree = trees.getDocCommentTree(e);
-        if (docCommentTree != null) {
-            List<HashMap<String, Object>> tags = new ArrayList<HashMap<String, Object>>();
-            List<HashMap<String, Object>> paramTags = new ArrayList<HashMap<String, Object>>();
-            List<HashMap<String, Object>> throwsTags = new ArrayList<HashMap<String, Object>>();
-            List<HashMap<String, Object>> returnsTags = new ArrayList<HashMap<String, Object>>();
-            String[] types = {};
+	@Override
+	public void init(final Locale locale, final Reporter reporter) {
+	}
 
-            // Usually: "METHOD" with a value of the method signature
-            props.put(e.getKind().toString(), e.toString());
-            props.put("fullBody", docCommentTree.getFullBody().toString());
+	@Override
+	public String getName() {
+		return this.getClass().getSimpleName();
+	}
 
-            if (e.getKind() == ElementKind.CONSTRUCTOR || e.getKind() == ElementKind.METHOD) {
-                types = getTypesFromMethod(e.toString());
-            }
+	@Override
+	public Set<? extends Option> getSupportedOptions() {
+		return Set.of();
+	}
 
-            for (DocTree t : docCommentTree.getBlockTags()) {
-                HashMap<String, Object> tag = new HashMap<>();
-                tag.put("kind", t.getKind());
+	@Override
+	public SourceVersion getSupportedSourceVersion() {
+		return SourceVersion.RELEASE_21;
+	}
 
-                switch (t.getKind()) {
-                    case PARAM:
-                        var paramTag = processParamDocComment(t.toString());
-						if (paramTag != null) {
-							paramTags.add(paramTag);
-						}
-                        break;
-                    case RETURN:
-                      HashMap<String, Object> returnComment = processDocComment(t.toString());
-                        returnsTags.add(returnComment);
-                        props.put("returns", returnComment.get("text"));
-                        break;
-                    case THROWS:
-                        throwsTags.add(processDocComment(t.toString()));
-                        break;
-                    case DEPRECATED:
-                        props.put("deprecated", processDocComment(t.toString()).get("text"));
-                        break;
-                    case UNKNOWN_BLOCK_TAG:
-                        HashMap<String, Object> processedComment = processDocComment(t.toString());
+	@Override
+	public boolean run(final DocletEnvironment environment) {
+		this.trees = environment.getDocTrees();
 
-                        tag.put("data", processedComment);
+		final var docComments = ElementFilter.typesIn(environment.getIncludedElements())
+				.stream()
+				.filter(e -> e.getKind().isClass() || e.getKind().isInterface())
+				.map(this::classToJson)
+				.collect(Collectors.toList());
 
-                        if (processedComment.get("tag").equals("@pangea.description")) {
-                            props.put("description", processedComment.get("text"));
-                        } else if (processedComment.get("tag").equals("@pangea.code")) {
-                            props.put("example", processedComment.get("text"));
-                        } else if (processedComment.get("tag").equals("@pangea.operationId")) {
-                            props.put("operationId", processedComment.get("text"));
-                        }
-                        break;
-                    default:
-                        break;
-                }
+		// Sort by qualified name.
+		docComments.sort((a, b) -> a.get("qualifiedName").asText().compareTo(b.get("qualifiedName").asText()));
 
-                tag.put("rawText", t.toString());
-                tags.add(tag);
-            }
-
-            // Add in types to params
-            int i = 0;
-            for (HashMap<String, Object> param : paramTags) {
-                param.put("type", types[i]);
-                i++;
-            }
-
-            props.put("throws", throwsTags);
-            props.put("params", paramTags);
-            props.put("tags", tags);
-            props.put("rawDocString", docCommentTree.toString());
-        }
-
-        return props;
-    }
-
-    public String getName() {
-        return null;
-    }
-
-    String classPathString;
-
-    public Set<? extends Option> getSupportedOptions() {
-        return null;
-    }
-
-    public SourceVersion getSupportedSourceVersion() {
-        return null;
-    }
-
-    public boolean run(DocletEnvironment environment) {
-        // get the DocTrees utility class to access document comments
-        DocTrees docTrees = environment.getDocTrees();
-
-        ArrayList<HashMap<String, Object>> docComments = new ArrayList<HashMap<String, Object>>();
-
-        for (TypeElement t : ElementFilter.typesIn(environment.getIncludedElements())) {
-            // System.out.println(t.getKind() + ":" + t);
-            HashMap<String, Object> doc = new HashMap<>();
-
-            doc.put("kind", t.getKind());
-            doc.put("name", t.getSimpleName().toString());
-            doc.put("qualifiedName", t.getQualifiedName().toString());
-
-            // I don't know what these are and if they're useful or not...
-            // commenting out for now
-            // doc.put("typeParams", t.getTypeParameters().toString());
-            // doc.put("interfaces", t.getInterfaces().toString());
-
-            ArrayList<HashMap<String, Object>> comments = new ArrayList<>();
-            for (Element e : t.getEnclosedElements()) {
-                HashMap<String, Object> docComment = printElement(docTrees, e);
-
-                if (!docComment.isEmpty())
-                    comments.add(docComment);
-            }
-
-            doc.put("docComments", comments);
-
-            docComments.add(doc);
-        }
-
-        try {
-            writeJson(new File("docs.json"), docComments);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-            System.out.println("Something bad happened: " + e1);
-        }
-
-        return true;
-    }
-
-    public static void writeJson(File f, Object o) throws IOException {
-        if (f.exists())
-            f.delete();
-        if (!f.createNewFile())
-            throw new IOException("Cannot create the file: " + f.getName());
-        if (!f.canWrite())
-            throw new IOException("Cannot write to " + f.getName());
-
-        FileWriter fw = new FileWriter(f);
-
-        // Try with ObjectMapper?
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(o);
-
-        fw.write(json);
-        fw.flush();
-        fw.close();
-    }
-
-    /**
-     * Takes a doc comment assuming the form "@param paramType paramDescription"
-     * and splits it out to a HashMap: { name: "paramName", text: "paramDescription"
-     * }
-     *
-     * @param comment
-     * @return HashMap<String, Object>
-     */
-    private HashMap<String, Object> processParamDocComment(String comment) {
-        HashMap<String, Object> param = new HashMap<>();
-
-        String[] splitComment = comment.split(" ");
-        String[] textArr = Arrays.copyOfRange(splitComment, 2, splitComment.length);
-
-		// HACK: do nothing with type params.
-		if (splitComment[1].startsWith("<") && splitComment[1].endsWith(">")) {
-			return null;
+		try {
+			writeJson(new File("docs.json"), docComments);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			System.out.println("Something bad happened: " + e1);
 		}
 
-        param.put("name", splitComment[1]);
-        param.put("text", String.join(" ", textArr));
+		return true;
+	}
 
-        return param;
-    }
+	public static void writeJson(File f, Object o) throws IOException {
+		if (f.exists())
+			f.delete();
+		if (!f.createNewFile())
+			throw new IOException("Cannot create the file: " + f.getName());
+		if (!f.canWrite())
+			throw new IOException("Cannot write to " + f.getName());
 
-    private HashMap<String, Object> processDocComment(String comment) {
-        HashMap<String, Object> docComment = new HashMap<>();
+		FileWriter fw = new FileWriter(f);
 
-        String[] splitComment = comment.split(" ");
-        String[] textArr = Arrays.copyOfRange(splitComment, 1, splitComment.length);
+		final var printer = new DefaultPrettyPrinter();
+		printer.indentArraysWith(new DefaultIndenter("  ", DefaultIndenter.SYS_LF));
+		final var objectMapper = JsonDoclet.mapper.setDefaultPrettyPrinter(printer);
+		final var json = objectMapper.writeValueAsString(o);
 
-        docComment.put("tag", splitComment[0]);
-        docComment.put("text", String.join(" ", textArr));
+		fw.write(json);
+		fw.flush();
+		fw.close();
+	}
 
-        return docComment;
-    }
+	private ObjectNode classToJson(final TypeElement classElement) {
+		final var classObj = new ObjectMapper().createObjectNode();
+		processClassAttributes(classElement, classObj);
+		processFieldAndMethodAttributes(classElement, classObj);
+		return classObj;
+	}
 
-    private String[] getTypesFromMethod(String method) {
-        int start = method.indexOf("(");
-        int end = method.indexOf(")");
+	private void processClassAttributes(final TypeElement classElement, final ObjectNode classObj) {
+		classObj.put("name", classElement.getSimpleName().toString());
+		classObj.put("qualifiedName", classElement.getQualifiedName().toString());
+		classObj.put("comment", getComment(this.trees.getDocCommentTree(classElement)));
+	}
 
-        String typeString = method.substring(start + 1, end);
+	private void processFieldAndMethodAttributes(final TypeElement classElement, final ObjectNode classObj) {
+		final var fields = JsonDoclet.mapper.createArrayNode();
+		final var methods = JsonDoclet.mapper.createArrayNode();
 
-        return typeString.split(",");
-    }
+		for (final var el : classElement.getEnclosedElements()) {
+			// Skip private APIs.
+			if (!el.getModifiers().contains(Modifier.PUBLIC)) {
+				continue;
+			}
+
+			// Skip if this element contains the `@hidden` block tag.
+			// <https://docs.oracle.com/en/java/javase/11/docs/specs/doc-comment-spec.html#hidden>
+			if (isHidden(el)) {
+				continue;
+			}
+
+			final var obj = JsonDoclet.mapper.createObjectNode();
+			obj.put("name", el.getSimpleName().toString());
+			obj.put("comment", getComment(this.trees.getDocCommentTree(el)));
+
+			switch (el.getKind()) {
+				case FIELD:
+					obj.put("typeLong", getTypeLong(el.asType()));
+					obj.put("typeShort", getTypeShort(el.asType()));
+					fields.add(obj);
+					break;
+				case CONSTRUCTOR:
+				case METHOD:
+					final var execElement = (ExecutableElement) el;
+					obj.put("signature", execElement.toString());
+					addParams(execElement, obj);
+					addReturn(execElement, obj);
+					addDeprecated(execElement, obj);
+					addPangeaBlocks(execElement, obj);
+					methods.add(obj);
+					break;
+				default:
+					break;
+			}
+		}
+
+		classObj.set("fields", fields);
+		classObj.set("methods", methods);
+	}
+
+	private void addParams(final ExecutableElement execElement, final ObjectNode obj) {
+		final var params = mapper.createArrayNode();
+		for (final var varElement : execElement.getParameters()) {
+			final var paramObj = mapper.createObjectNode();
+			paramObj.put("name", varElement.getSimpleName().toString());
+			paramObj.put("typeLong", getTypeLong(varElement.asType()));
+			paramObj.put("typeShort", getTypeShort(varElement.asType()));
+			var comment = "";
+			final var commentTree = this.trees.getDocCommentTree(execElement);
+			if (commentTree != null) {
+				for (final var blockTag : commentTree.getBlockTags()) {
+					if (blockTag.getKind().equals(DocTree.Kind.PARAM)) {
+						ParamTree paramTree = (ParamTree) blockTag;
+						if (paramTree.getName().getName().equals(varElement.getSimpleName())) {
+							comment = getComment(blockTag);
+							break;
+						}
+					}
+				}
+			}
+			paramObj.put("comment", comment);
+			params.add(paramObj);
+		}
+		obj.set("params", params);
+	}
+
+	private void addReturn(final ExecutableElement execElement, final ObjectNode obj) {
+		final var returnType = execElement.getReturnType();
+		final var returnObj = mapper.createObjectNode();
+		returnObj.put("typeLong", getTypeLong(returnType));
+		returnObj.put("typeShort", getTypeShort(returnType));
+
+		final var commentTree = this.trees.getDocCommentTree(execElement);
+		if (commentTree != null) {
+			for (final var blockTag : commentTree.getBlockTags()) {
+				if (blockTag.getKind().equals(DocTree.Kind.RETURN)) {
+					returnObj.put("comment", getComment(blockTag));
+					break;
+				}
+			}
+		}
+
+		obj.set("return", returnObj);
+	}
+
+	private void addDeprecated(final ExecutableElement execElement, final ObjectNode obj) {
+		final var commentTree = this.trees.getDocCommentTree(execElement);
+		if (commentTree == null) {
+			return;
+		}
+
+		for (final var blockTag : commentTree.getBlockTags()) {
+			if (blockTag.getKind().equals(DocTree.Kind.DEPRECATED)) {
+				obj.put("deprecated", getComment(blockTag));
+				return;
+			}
+		}
+	}
+
+	private void addPangeaBlocks(final ExecutableElement execElement, final ObjectNode obj) {
+		final var commentTree = this.trees.getDocCommentTree(execElement);
+		if (commentTree == null) {
+			return;
+		}
+
+		for (final var blockTag : commentTree.getBlockTags()) {
+			// The custom `@pangea.*` block tags will be unknown to the parser.
+			if (blockTag.getKind().equals(DocTree.Kind.UNKNOWN_BLOCK_TAG)) {
+				final var split = blockTag.toString().split(" ", 2);
+				if (split[0].equals("@pangea.code")) {
+					obj.put("example", split[1]);
+				} else if (split[0].equals("@pangea.description")) {
+					obj.put("description", split[1]);
+				} else if (split[0].equals("@pangea.operationId")) {
+					obj.put("operationId", split[1]);
+				}
+			}
+		}
+	}
+
+	private String getComment(final DocTree docTree) {
+		switch (docTree.getKind()) {
+			case COMMENT:
+				return ((CommentTree) docTree).getBody();
+			case DEPRECATED:
+				return getComment(((DeprecatedTree) docTree).getBody());
+			case LINK:
+				return ((LinkTree) docTree).getReference().getSignature();
+			case PARAM:
+				return getComment(((ParamTree) docTree).getDescription());
+			case RETURN:
+				return getComment(((ReturnTree) docTree).getDescription());
+			case TEXT:
+				return ((TextTree) docTree).getBody();
+			case THROWS:
+				return getComment(((ThrowsTree) docTree).getDescription());
+			default:
+				return "";
+		}
+	}
+
+	private String getComment(final List<? extends DocTree> docTreeList) {
+		return docTreeList.stream().map(this::getComment).collect(Collectors.joining());
+	}
+
+	private String getComment(final DocCommentTree docCommentTree) {
+		return docCommentTree != null
+				? getComment(docCommentTree.getFullBody())
+				: "";
+	}
+
+	private String getTypeLong(final TypeMirror type) {
+		return type.toString();
+	}
+
+	private String getTypeShort(final TypeMirror type) {
+		return type.getKind().equals(TypeKind.DECLARED)
+				? ((DeclaredType) type).asElement().getSimpleName().toString()
+				: type.toString();
+	}
+
+	private boolean isHidden(final Element element) {
+		final var commentTree = this.trees.getDocCommentTree(element);
+		if (commentTree == null) {
+			return false;
+		}
+
+		return commentTree.getBlockTags().stream().anyMatch(blockTag -> blockTag.getKind().equals(DocTree.Kind.HIDDEN));
+	}
 }

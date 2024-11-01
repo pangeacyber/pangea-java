@@ -7,6 +7,7 @@ public class AuthNBaseClient extends BaseClient {
 
 	public static String serviceName = "authn";
 
+	/** @hidden */
 	public AuthNBaseClient(AuthNClient.Builder builder) {
 		super(builder, serviceName);
 	}

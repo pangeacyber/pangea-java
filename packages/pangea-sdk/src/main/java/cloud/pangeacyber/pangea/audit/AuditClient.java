@@ -119,6 +119,7 @@ final class LogBulkRequest extends LogCommonRequest {
 	}
 }
 
+/** Secure Audit Log API client. */
 public class AuditClient extends BaseClient {
 
 	public static final String serviceName = "audit";
@@ -146,6 +147,15 @@ public class AuditClient extends BaseClient {
 	 */
 	private boolean schemaValidation = false;
 
+	/**
+	 * Creates a new Secure Audit Log API client.
+	 *
+	 * @pangea.code
+	 * {@code
+	 * final var config = new Config.Builder(token, domain).build();
+	 * final var client = new AuditClient.Builder(config).build();
+	 * }
+	 */
 	public AuditClient(Builder builder) {
 		super(builder, serviceName);
 		if (builder.privateKeyFilename != null) {

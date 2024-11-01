@@ -68,6 +68,7 @@ public class User extends AuthNBaseClient {
 	private UserProfile profile;
 	private UserInvite invite;
 
+	/** @hidden */
 	public User(AuthNClient.Builder builder) {
 		super(builder);
 		profile = new UserProfile(builder);

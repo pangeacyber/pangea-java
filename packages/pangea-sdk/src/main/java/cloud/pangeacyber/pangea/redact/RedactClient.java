@@ -10,7 +10,6 @@ import cloud.pangeacyber.pangea.redact.requests.UnredactRequest;
 import cloud.pangeacyber.pangea.redact.responses.RedactStructuredResponse;
 import cloud.pangeacyber.pangea.redact.responses.RedactTextResponse;
 import cloud.pangeacyber.pangea.redact.responses.UnredactResponse;
-import cloud.pangeacyber.pangea.vault.responses.EncryptStructuredResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 public class RedactClient extends BaseClient {
@@ -50,9 +49,9 @@ public class RedactClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * 		RedactTextResponse response = client.redactText(
-	 *			new RedactTextRequest.RedactTextRequestBuilder("Jenny Jenny... 415-867-5309").build()
-	 *		);
+	 * final var response = client.redactText(
+	 * 	new RedactTextRequest.RedactTextRequestBuilder("Jenny Jenny... 415-867-5309").build()
+	 * );
 	 * }
 	 */
 	public RedactTextResponse redactText(RedactTextRequest request) throws PangeaException, PangeaAPIException {
@@ -69,18 +68,18 @@ public class RedactClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * Map<String, Object> data = new LinkedHashMap<String, Object>();
+	 * final var data = new LinkedHashMap<String, Object>();
 	 *
 	 * data.put("Name", "Jenny Jenny");
 	 * data.put("Phone", "This is its number: 415-867-5309");
 	 *
-	 *	RedactStructuredResponse response = client.redactStructured(
-	 *		new RedactStructuredRequest.RedactStructuredRequestBuilder(data)
-	 *			.setDebug(true)
-	 *			.setJsonp(new String[] { "Phone", "Name" })
-	 *			.setRules(new String[] { "PHONE_NUMBER" })
-	 *			.build()
-	 *	);
+	 * final var response = client.redactStructured(
+	 * 	new RedactStructuredRequest.RedactStructuredRequestBuilder(data)
+	 * 		.setDebug(true)
+	 * 		.setJsonp(new String[] { "Phone", "Name" })
+	 * 		.setRules(new String[] { "PHONE_NUMBER" })
+	 * 		.build()
+	 * );
 	 * }
 	 */
 	public RedactStructuredResponse redactStructured(RedactStructuredRequest request)

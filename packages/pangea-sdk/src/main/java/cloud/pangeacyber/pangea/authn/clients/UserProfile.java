@@ -37,6 +37,7 @@ final class UserProfileGetRequest extends BaseRequest {
 
 public class UserProfile extends AuthNBaseClient {
 
+	/** @hidden */
 	public UserProfile(AuthNClient.Builder builder) {
 		super(builder);
 	}

@@ -8,6 +8,7 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 
 public class Agreements extends AuthNBaseClient {
 
+	/** @hidden */
 	public Agreements(AuthNClient.Builder builder) {
 		super(builder);
 	}

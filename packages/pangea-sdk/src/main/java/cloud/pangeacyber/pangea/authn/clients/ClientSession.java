@@ -51,6 +51,7 @@ final class ClientSessionLogoutRequest extends BaseRequest {
 
 public class ClientSession extends AuthNBaseClient {
 
+	/** @hidden */
 	public ClientSession(AuthNClient.Builder builder) {
 		super(builder);
 	}

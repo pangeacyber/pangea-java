@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Support for `cursor` field on `v1/user/breached` of `user-intel`
+
 ## 4.1.1 - 2024-10-17
 
 ### Added

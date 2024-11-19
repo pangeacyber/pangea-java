@@ -30,6 +30,7 @@ public class UserBreachedRequest extends IntelCommonRequest {
 	@JsonProperty("end")
 	String end;
 
+	/* A token given in the raw response from SpyCloud. Post this back to paginate results */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("cursor")
 	String cursor;

@@ -34,6 +34,13 @@ public class UserBreachedBulkRequest extends IntelCommonRequest {
 	@JsonProperty("end")
 	String end;
 
+	/**
+	 * Filter for records that match one of the given severities.
+	 */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("severity")
+	String[] severity;
+
 	protected UserBreachedBulkRequest(Builder builder) {
 		super(builder);
 		this.emails = builder.emails;
@@ -43,6 +50,7 @@ public class UserBreachedBulkRequest extends IntelCommonRequest {
 		this.phoneNumbers = builder.phoneNumbers;
 		this.start = builder.start;
 		this.end = builder.end;
+		this.severity = builder.severity;
 	}
 
 	public static class Builder extends CommonBuilder<Builder> {
@@ -54,6 +62,7 @@ public class UserBreachedBulkRequest extends IntelCommonRequest {
 		String[] phoneNumbers;
 		String start;
 		String end;
+		String[] severity;
 
 		public Builder() {}
 
@@ -93,6 +102,11 @@ public class UserBreachedBulkRequest extends IntelCommonRequest {
 
 		public Builder end(String end) {
 			this.end = end;
+			return this;
+		}
+
+		public Builder severity(String[] severity) {
+			this.severity = severity;
 			return this;
 		}
 	}

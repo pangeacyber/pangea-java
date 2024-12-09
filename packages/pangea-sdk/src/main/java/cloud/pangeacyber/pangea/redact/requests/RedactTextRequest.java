@@ -2,6 +2,7 @@ package cloud.pangeacyber.pangea.redact.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.redact.models.RedactionMethodOverrides;
+import cloud.pangeacyber.pangea.redact.models.VaultParameters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,6 +32,15 @@ public class RedactTextRequest extends BaseRequest {
 	@JsonProperty("redaction_method_overrides")
 	RedactionMethodOverrides redactionMethodOverrides = null;
 
+	/** Is this redact call going to be used in an LLM request? */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("llm_request")
+	Boolean llmRequest = null;
+
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("vault_parameters")
+	VaultParameters vaultParameters = null;
+
 	protected RedactTextRequest(Builder builder) {
 		this.text = builder.text;
 		this.debug = builder.debug;
@@ -38,6 +48,8 @@ public class RedactTextRequest extends BaseRequest {
 		this.rulesets = builder.rulesets;
 		this.returnResult = builder.returnResult;
 		this.redactionMethodOverrides = builder.redactionMethodOverrides;
+		this.llmRequest = builder.llmRequest;
+		this.vaultParameters = builder.vaultParameters;
 	}
 
 	public String getText() {
@@ -68,6 +80,8 @@ public class RedactTextRequest extends BaseRequest {
 		String[] rulesets = null;
 		Boolean returnResult = null;
 		RedactionMethodOverrides redactionMethodOverrides = null;
+		Boolean llmRequest = null;
+		VaultParameters vaultParameters = null;
 
 		public Builder(String text) {
 			this.text = text;
@@ -99,6 +113,16 @@ public class RedactTextRequest extends BaseRequest {
 
 		public Builder setRedactionMethodOverrides(RedactionMethodOverrides rmo) {
 			this.redactionMethodOverrides = rmo;
+			return this;
+		}
+
+		public Builder setLLMRequest(Boolean llmRequest) {
+			this.llmRequest = llmRequest;
+			return this;
+		}
+
+		public Builder setVaultParameters(VaultParameters vp) {
+			this.vaultParameters = vp;
 			return this;
 		}
 	}

@@ -139,7 +139,7 @@ public class UserIntelClient extends BaseClient {
 	 * BreachResponse response = client.breach(request);
 	 * }
 	 */
-	public BreachResponse breached(BreachRequest request) throws PangeaException, PangeaAPIException {
+	public BreachResponse breach(BreachRequest request) throws PangeaException, PangeaAPIException {
 		return post("/v1/breach", request, BreachResponse.class);
 	}
 

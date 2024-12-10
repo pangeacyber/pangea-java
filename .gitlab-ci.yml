@@ -1,5 +1,5 @@
 default:
-  image: maven:3.9.9-eclipse-temurin-21@sha256:9ae8f001f2d978fdfe36052cc9950eda99929d410e2b1f03bd35c09f49890fc9
+  image: maven:3.9.9-eclipse-temurin-21@sha256:dc740c9dc0b822d0a1aa4e217e8a4b1182621364587f06487e03be6095a005a1
   tags:
     - pangea-internal
 

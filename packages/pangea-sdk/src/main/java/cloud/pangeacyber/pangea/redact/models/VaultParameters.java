@@ -19,7 +19,7 @@ public class VaultParameters {
 	/** A vault key ID of an exportable key used to redact with FPE instead of using the service config default. */
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("fpe_key_id")
-	private String FpeKeyId = null;
+	private String fpeKeyId = null;
 
 	/** A vault secret ID of a secret used to salt a hash instead of using the service config default. */
 	@JsonInclude(Include.NON_NULL)

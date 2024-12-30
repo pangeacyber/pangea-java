@@ -4,8 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 public class ItemData {
 
 	/** The ID of a stored object. */
@@ -87,66 +91,30 @@ public class ItemData {
 	@JsonProperty("external_bucket_key")
 	String externalBucketKey;
 
-	public ItemData() {}
+	/** The explicit file TTL setting for this object. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("file_ttl")
+	String fileTtl;
+
+	/**
+	 * The effective file TTL setting for this object, either explicitly set or
+	 * inherited (see file_ttl_from_id.)
+	 */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("file_ttl_effective")
+	String fileTtlEffective;
+
+	/**
+	 * The ID of the object the expiry / TTL is set from. Either a service
+	 * configuration, the object itself, or a parent folder.
+	 */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("file_ttl_from_id")
+	String fileTtlFromId;
 
 	/** The ID of a stored object. */
 	public String getID() {
 		return id;
-	}
-
-	/** The type of the item (file or dir). Cannot be written to. */
-	public String getType() {
-		return type;
-	}
-
-	/** The name of the object. */
-	public String getName() {
-		return name;
-	}
-
-	/** The date and time the object was created. */
-	public String getCreatedAt() {
-		return createdAt;
-	}
-
-	/** The full path to the folder the object is stored in. */
-	public String getFolder() {
-		return folder;
-	}
-
-	/** The date and time the object was last updated. */
-	public String getUpdatedAt() {
-		return updatedAt;
-	}
-
-	/** The size of the object in bytes. */
-	public Integer getSize() {
-		return size;
-	}
-
-	/** The number of billable bytes (includes Metadata, Tags, etc.) for the object. */
-	public Integer getBillableSize() {
-		return billableSize;
-	}
-
-	/** A list of user-defined tags */
-	public Tags getTags() {
-		return tags;
-	}
-
-	/** Protected (read-only) flags. */
-	public Tags getTagsProtected() {
-		return tagsProtected;
-	}
-
-	/** A set of string-based key/value pairs used to provide additional data about an object. */
-	public Metadata getMetadata() {
-		return metadata;
-	}
-
-	/** Protected (read-only) metadata. */
-	public Metadata getMetadataProtected() {
-		return metadataProtected;
 	}
 
 	/** The MD5 hash of the file contents. Cannot be written to. */
@@ -167,10 +135,5 @@ public class ItemData {
 	/** The parent ID (a folder). Blanks means the root folder. */
 	public String getParentID() {
 		return parentId;
-	}
-
-	/** The key in the external bucket that contains this file. */
-	public String getExternalBucketKey() {
-		return externalBucketKey;
 	}
 }

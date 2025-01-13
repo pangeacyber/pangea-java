@@ -1,6 +1,7 @@
 package cloud.pangeacyber.pangea.ai_guard;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,18 +32,24 @@ public class ITAIGuardTest {
 
 	@Test
 	void testGuardText() throws PangeaException, PangeaAPIException {
-		var response = client.guardText(TextGuardRequest.builder().text("hello world").build());
+		var response = client.guardText(
+			TextGuardRequest.builder().text("hello world").recipe("pangea_prompt_guard").build()
+		);
 		assertTrue(response.isOk());
 		var result = response.getResult();
-		assertNotNull(result.getRedactedPrompt());
-		assertEquals(0, result.getFindings().getArtifactCount());
-		assertEquals(0, result.getFindings().getMaliciousCount());
+		assertNotNull(result.getPrompt());
+		assertFalse(result.getDetectors().getMaliciousEntity().isDetected());
+		assertFalse(result.getDetectors().getPiiEntity().isDetected());
+		assertFalse(result.getDetectors().getPromptInjection().isDetected());
 
-		response = client.guardText(TextGuardRequest.builder().text("security@pangea.cloud").build());
+		response =
+			client.guardText(
+				TextGuardRequest.builder().text("security@pangea.cloud").recipe("pangea_prompt_guard").build()
+			);
 		assertTrue(response.isOk());
 		result = response.getResult();
-		assertNotNull(result.getRedactedPrompt());
-		assertEquals(1, result.getFindings().getArtifactCount());
-		assertEquals(0, result.getFindings().getMaliciousCount());
+		assertNotNull(result.getPrompt());
+		assertTrue(result.getDetectors().getPiiEntity().isDetected());
+		assertEquals(1, result.getDetectors().getPiiEntity().getData().getEntities().size());
 	}
 }

@@ -30,6 +30,18 @@ public class UserBreachedRequest extends IntelCommonRequest {
 	@JsonProperty("end")
 	String end;
 
+	/* A token given in the raw response from SpyCloud. Post this back to paginate results */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("cursor")
+	String cursor;
+
+	/**
+	 * Filter for records that match one of the given severities.
+	 */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("severity")
+	String[] severity;
+
 	protected UserBreachedRequest(Builder builder) {
 		super(builder);
 		this.email = builder.email;
@@ -38,6 +50,8 @@ public class UserBreachedRequest extends IntelCommonRequest {
 		this.phoneNumber = builder.phoneNumber;
 		this.start = builder.start;
 		this.end = builder.end;
+		this.cursor = builder.cursor;
+		this.severity = builder.severity;
 	}
 
 	public static class Builder extends CommonBuilder<Builder> {
@@ -48,6 +62,8 @@ public class UserBreachedRequest extends IntelCommonRequest {
 		String phoneNumber;
 		String start;
 		String end;
+		String cursor;
+		String[] severity;
 
 		public Builder() {}
 
@@ -82,6 +98,16 @@ public class UserBreachedRequest extends IntelCommonRequest {
 
 		public Builder end(String end) {
 			this.end = end;
+			return this;
+		}
+
+		public Builder cursor(String cursor) {
+			this.cursor = cursor;
+			return this;
+		}
+
+		public Builder severity(String[] severity) {
+			this.severity = severity;
 			return this;
 		}
 	}

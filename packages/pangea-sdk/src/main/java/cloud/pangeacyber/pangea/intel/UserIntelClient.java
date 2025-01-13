@@ -121,6 +121,28 @@ public class UserIntelClient extends BaseClient {
 		return post("/v2/password/breached", request, UserPasswordBreachedBulkResponse.class);
 	}
 
+	/**
+	 * Look up information about a specific breach
+	 * @pangea.description Given a provider specific breach ID, find details about the breach.
+	 * @pangea.operationId user_intel_post_v1_breach
+	 * @param request
+	 * @return BreachResponse
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 * @pangea.code
+	 * {@code
+	 *
+	 * BreachRequest request = new BreachRequest
+	 * 	.Builder("66111")
+	 * 	.build();
+	 *
+	 * BreachResponse response = client.breach(request);
+	 * }
+	 */
+	public BreachResponse breach(BreachRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/breach", request, BreachResponse.class);
+	}
+
 	public static PasswordStatus isPasswordBreached(UserPasswordBreachedResponse response, String hash)
 		throws PangeaException {
 		Map<String, Object> rawData = response.getResult().getRawData();

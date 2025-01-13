@@ -1,6 +1,5 @@
 package cloud.pangeacyber.pangea.vault.requests;
 
-import cloud.pangeacyber.pangea.vault.models.ItemVersionState;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;

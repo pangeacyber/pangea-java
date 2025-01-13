@@ -6,10 +6,20 @@ import cloud.pangeacyber.pangea.share.models.Tags;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@SuperBuilder
+@Value
 public class UpdateRequest extends BaseRequest {
 
 	/** An identifier for the file to update. */
+	@NonNull
 	@JsonProperty("id")
 	String id;
 
@@ -45,6 +55,11 @@ public class UpdateRequest extends BaseRequest {
 	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("add_tags")
 	Tags addTags;
+
+	/** Set the file TTL. */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty("file_ttl")
+	String fileTtl;
 
 	/** Sets the object's Name. */
 	@JsonInclude(Include.NON_NULL)
@@ -86,135 +101,21 @@ public class UpdateRequest extends BaseRequest {
 	@JsonProperty("bucket_id")
 	String bucketId;
 
-	protected UpdateRequest(Builder builder) {
-		this.id = builder.id;
-		this.folder = builder.folder;
-		this.addMetadata = builder.addMetadata;
-		this.addPassword = builder.addPassword;
-		this.addPasswordAlgorithm = builder.addPasswordAlgorithm;
-		this.metadata = builder.metadata;
-		this.addTags = builder.addTags;
-		this.name = builder.name;
-		this.removeMetadata = builder.removeMetadata;
-		this.removePassword = builder.removePassword;
-		this.removeTags = builder.removeTags;
-		this.tags = builder.tags;
-		this.parentId = builder.parentId;
-		this.updatedAt = builder.updatedAt;
-		this.bucketId = builder.bucketId;
-	}
-
-	public static class Builder {
-
-		String id;
-		String folder;
-		Metadata addMetadata;
-		String addPassword;
-		String addPasswordAlgorithm;
-		Metadata metadata;
-		Tags addTags;
-		String name;
-		Metadata removeMetadata;
-		String removePassword;
-		Tags removeTags;
-		Tags tags;
-		String parentId;
-		String updatedAt;
-		String bucketId;
+	// Legacy alias.
+	public static class Builder extends UpdateRequestBuilder<UpdateRequest, UpdateRequest.Builder> {
 
 		public Builder(String id) {
-			this.id = id;
+			this.id(id);
 		}
 
+		@Override
+		protected Builder self() {
+			return this;
+		}
+
+		@Override
 		public UpdateRequest build() {
 			return new UpdateRequest(this);
-		}
-
-		/**
-		 * Set the parent (folder). Leave blank for the root folder. Path must
-		 * resolve to `parent_id` if also set.
-		 */
-		public Builder folder(String folder) {
-			this.folder = folder;
-			return this;
-		}
-
-		/** A list of Metadata key/values to set in the object. If a provided key exists, the value will be replaced. */
-		public Builder addMetadata(Metadata addMetadata) {
-			this.addMetadata = addMetadata;
-			return this;
-		}
-
-		/** Protect the file with the supplied password. */
-		public Builder addPassword(String addPassword) {
-			this.addPassword = addPassword;
-			return this;
-		}
-
-		/** The algorithm to use to password protect the file. */
-		public Builder addPasswordAlgorithm(String addPasswordAlgorithm) {
-			this.addPasswordAlgorithm = addPasswordAlgorithm;
-			return this;
-		}
-
-		/** A list of metadata key/values to remove in the object. It is not an error for a provided key to not exist. If a provided key exists but doesn't match the provided value, it will not be removed. */
-		public Builder removeMetadata(Metadata removeMetadata) {
-			this.removeMetadata = removeMetadata;
-			return this;
-		}
-
-		/** Set the object's metadata. */
-		public Builder metadata(Metadata metadata) {
-			this.metadata = metadata;
-			return this;
-		}
-
-		/** A list of Tags to add. It is not an error to provide a tag which already exists. */
-		public Builder addTags(Tags addTags) {
-			this.addTags = addTags;
-			return this;
-		}
-
-		/** Sets the object's Name. */
-		public Builder name(String name) {
-			this.name = name;
-			return this;
-		}
-
-		/** Remove the supplied password from the file. */
-		public Builder removePassword(String removePassword) {
-			this.removePassword = removePassword;
-			return this;
-		}
-
-		/** A list of tags to remove. It is not an error to provide a tag which is not present. */
-		public Builder removeTags(Tags removeTags) {
-			this.removeTags = removeTags;
-			return this;
-		}
-
-		/** Set the object's tags. */
-		public Builder tags(Tags tags) {
-			this.tags = tags;
-			return this;
-		}
-
-		/** Set the parent (folder) of the object. Can be an empty string for the root folder. */
-		public Builder parentId(String parentId) {
-			this.parentId = parentId;
-			return this;
-		}
-
-		/** The date and time the object was last updated. If included, the update will fail if this doesn't match the date and time of the last update for the object. */
-		public Builder updatedAt(String updatedAt) {
-			this.updatedAt = updatedAt;
-			return this;
-		}
-
-		/** The bucket to use, if not the default. */
-		public Builder bucketId(String bucketId) {
-			this.bucketId = bucketId;
-			return this;
 		}
 	}
 }

@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.0 - 2025-01-13
+
+### Added
+
+- `file_ttl` support to Secure Share.
+
+## 4.2.0 - 2024-12-18
+
+### Added
+
+- Support for `cursor` field on `v1/user/breached` of `user-intel` service.
+- Support for `severity` field on `v1/user/breached` and `v2/user/breached` of `user-intel` service.
+- `/v1/breach` endpoint support on `user-intel` service.
+- `vault_parameters` and `llm_request` fields support on Redact service.
+
 ## 4.2.0-beta-2 - 2024-10-30
 
 ### Changed

@@ -6,7 +6,7 @@
 
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>4.2.0-beta-2</version>
+  <version>4.3.0</version>
   <packaging>jar</packaging>
 
   <name>cloud.pangea:pangea-sdk</name>
@@ -63,7 +63,7 @@
     <!-- By default just re-write code with prettier -->
     <plugin.prettier.goal>write</plugin.prettier.goal>
 
-    <lombok.version>1.18.34</lombok.version>
+    <lombok.version>1.18.36</lombok.version>
 
     <delombok.output.dir>${project.build.directory}/delombok</delombok.output.dir>
   </properties>
@@ -77,12 +77,12 @@
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.17.1</version>
+      <version>1.17.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.24.1</version>
+      <version>2.24.3</version>
     </dependency>
     <dependency>
         <groupId>commons-fileupload</groupId>
@@ -92,22 +92,22 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>2.18.1</version>
+      <version>2.18.2</version>
     </dependency>
       <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.18.1</version>
+      <version>2.18.2</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>2.18.1</version>
+      <version>2.18.2</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
-      <version>2.18.1</version>
+      <version>2.18.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -122,12 +122,12 @@
     <dependency>
       <groupId>io.swagger.parser.v3</groupId>
       <artifactId>swagger-parser</artifactId>
-      <version>2.1.23</version>
+      <version>2.1.24</version>
     </dependency>
     <dependency>
       <groupId>com.networknt</groupId>
       <artifactId>json-schema-validator</artifactId>
-      <version>1.5.3</version>
+      <version>1.5.4</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -140,13 +140,13 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.11.3</version>
+      <version>5.11.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.14.2</version>
+      <version>5.15.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -225,7 +225,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.11.1</version>
+          <version>3.11.2</version>
           <executions>
             <execution>
               <id>attach-javadocs</id>
@@ -295,7 +295,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>2.4.0</version>
+          <version>2.5.0</version>
         </plugin>
         <!-- <plugin>
           <groupId>cloud.pangea</groupId>
@@ -385,7 +385,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.11.1</version>
+        <version>3.11.2</version>
         <configuration>
           <doclint>all,-missing,-syntax</doclint>
           <tags>

@@ -20,10 +20,6 @@ public class SanitizeData {
 	@JsonInclude(Include.NON_NULL)
 	private Boolean maliciousFile;
 
-	@JsonProperty("cdr")
-	@JsonInclude(Include.NON_NULL)
-	private CDR cdr;
-
 	public SanitizeData() {}
 
 	public DefangData getDefang() {
@@ -36,9 +32,5 @@ public class SanitizeData {
 
 	public Boolean getMaliciousFile() {
 		return maliciousFile;
-	}
-
-	public CDR getCDR() {
-		return cdr;
 	}
 }

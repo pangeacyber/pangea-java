@@ -39,7 +39,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 @TestMethodOrder(MethodName.class)
 public class ITSanitizeTest {
 
-	final String TESTFILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/ds11.pdf";
+	final String TESTFILE_PATH = "./src/test/java/cloud/pangeacyber/pangea/testdata/test-sanitize.txt";
 
 	SanitizeClient client;
 	static TestEnvironment environment;
@@ -68,8 +68,6 @@ public class ITSanitizeTest {
 						.domainIntelProvider("crowdstrike")
 						.defang(true)
 						.defangThreshold(20)
-						.removeInteractive(true)
-						.removeAttachments(true)
 						.redact(true)
 						.build()
 				)
@@ -91,8 +89,6 @@ public class ITSanitizeTest {
 		assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
 		assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 		assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-		assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
-		assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 		assertFalse(response.getResult().getData().getMaliciousFile());
 	}
 
@@ -110,8 +106,6 @@ public class ITSanitizeTest {
 						.domainIntelProvider("crowdstrike")
 						.defang(true)
 						.defangThreshold(20)
-						.removeInteractive(true)
-						.removeAttachments(true)
 						.redact(true)
 						.build()
 				)
@@ -133,8 +127,6 @@ public class ITSanitizeTest {
 		assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
 		assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 		assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-		assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
-		assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 		assertFalse(response.getResult().getData().getMaliciousFile());
 
 		AttachedFile attachedFile = client.downloadFile(response.getResult().getDestURL());
@@ -158,8 +150,6 @@ public class ITSanitizeTest {
 		assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
 		assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 		assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-		assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
-		assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 		assertFalse(response.getResult().getData().getMaliciousFile());
 	}
 
@@ -177,8 +167,6 @@ public class ITSanitizeTest {
 						.domainIntelProvider("crowdstrike")
 						.defang(true)
 						.defangThreshold(20)
-						.removeInteractive(true)
-						.removeAttachments(true)
 						.redact(true)
 						.build()
 				)
@@ -200,8 +188,6 @@ public class ITSanitizeTest {
 		assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
 		assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 		assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-		assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
-		assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 		assertFalse(response.getResult().getData().getMaliciousFile());
 	}
 
@@ -226,8 +212,6 @@ public class ITSanitizeTest {
 							.domainIntelProvider("crowdstrike")
 							.defang(true)
 							.defangThreshold(20)
-							.removeInteractive(true)
-							.removeAttachments(true)
 							.redact(true)
 							.build()
 					)
@@ -264,8 +248,6 @@ public class ITSanitizeTest {
 				assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
 				assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 				assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-				assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
-				assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 				assertFalse(response.getResult().getData().getMaliciousFile());
 
 				return;
@@ -291,8 +273,6 @@ public class ITSanitizeTest {
 					.domainIntelProvider("crowdstrike")
 					.defang(true)
 					.defangThreshold(20)
-					.removeInteractive(true)
-					.removeAttachments(true)
 					.redact(true)
 					.build()
 			)
@@ -339,8 +319,6 @@ public class ITSanitizeTest {
 				assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
 				assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 				assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-				assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
-				assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 				assertFalse(response.getResult().getData().getMaliciousFile());
 
 				return;
@@ -366,8 +344,6 @@ public class ITSanitizeTest {
 					.domainIntelProvider("crowdstrike")
 					.defang(true)
 					.defangThreshold(20)
-					.removeInteractive(true)
-					.removeAttachments(true)
 					.redact(true)
 					.build()
 			)
@@ -413,8 +389,6 @@ public class ITSanitizeTest {
 				assertTrue(response.getResult().getData().getDefang().getExternalDomainsCount() > 0);
 				assertEquals(0, (int) response.getResult().getData().getDefang().getDefangedCount());
 				assertNotNull(response.getResult().getData().getDefang().getDomainIntelSummary());
-				assertEquals(0, (int) response.getResult().getData().getCDR().getFileAttachmentsRemoved());
-				assertEquals(0, (int) response.getResult().getData().getCDR().getInteractiveContentsRemoved());
 				assertFalse(response.getResult().getData().getMaliciousFile());
 
 				return;

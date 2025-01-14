@@ -16,6 +16,6 @@ public final class MaliciousEntity {
 	String type;
 	String value;
 	boolean redacted;
-	float startPos;
+	int startPos;
 	Map<String, Object> raw;
 }

@@ -15,5 +15,5 @@ public final class PiiEntity {
 	String type;
 	String value;
 	boolean redacted;
-	float startPos;
+	int startPos;
 }

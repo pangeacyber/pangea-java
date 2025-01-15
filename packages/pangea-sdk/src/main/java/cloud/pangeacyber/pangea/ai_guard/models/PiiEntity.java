@@ -1,6 +1,5 @@
-package cloud.pangeacyber.pangea.ai_guard.results;
+package cloud.pangeacyber.pangea.ai_guard.models;
 
-import cloud.pangeacyber.pangea.ai_guard.models.TextGuardDetectors;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -11,8 +10,10 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor
-public final class TextGuardResult {
+public final class PiiEntity {
 
-	TextGuardDetectors detectors;
-	String prompt;
+	String type;
+	String value;
+	boolean redacted;
+	int startPos;
 }

@@ -18,13 +18,13 @@ public class App {
         var client = new SanitizeClient.Builder(config).build();
 
 		// Pick a file to sanitize.
-		var file = new File("./sample.pdf");
+		var file = new File("./sample.txt");
 
 		try {
 			// Sanitize the file.
 			var response = client.sanitize(
 				new SanitizeRequest.Builder()
-					.uploadedFileName("sample.pdf")
+					.uploadedFileName("sample.txt")
 					.shareOutput(
 						new ShareOutput.Builder()
 							.enabled(true)

@@ -44,14 +44,6 @@ public class Content {
 	@JsonInclude(Include.NON_NULL)
 	private Boolean redactDetectOnly;
 
-	@JsonProperty("remove_attachments")
-	@JsonInclude(Include.NON_NULL)
-	private Boolean removeAttachments;
-
-	@JsonProperty("remove_interactive")
-	@JsonInclude(Include.NON_NULL)
-	private Boolean removeInteractive;
-
 	private Content(Builder builder) {
 		this.urlIntel = builder.urlIntel;
 		this.urlIntelProvider = builder.urlIntelProvider;
@@ -61,8 +53,6 @@ public class Content {
 		this.defangThreshold = builder.defangThreshold;
 		this.redact = builder.redact;
 		this.redactDetectOnly = builder.redactDetectOnly;
-		this.removeAttachments = builder.removeAttachments;
-		this.removeInteractive = builder.removeInteractive;
 	}
 
 	public Boolean getUrlIntel() {
@@ -93,14 +83,6 @@ public class Content {
 		return redact;
 	}
 
-	public Boolean getRemoveAttachments() {
-		return removeAttachments;
-	}
-
-	public Boolean getRemoveInteractive() {
-		return removeInteractive;
-	}
-
 	public static class Builder {
 
 		private Boolean urlIntel;
@@ -111,8 +93,6 @@ public class Content {
 		private Integer defangThreshold;
 		private Boolean redact;
 		private Boolean redactDetectOnly;
-		private Boolean removeAttachments;
-		private Boolean removeInteractive;
 
 		public Builder() {}
 
@@ -153,16 +133,6 @@ public class Content {
 
 		public Builder redactDetectOnly(boolean redactDetectOnly) {
 			this.redactDetectOnly = redactDetectOnly;
-			return this;
-		}
-
-		public Builder removeAttachments(Boolean removeAttachments) {
-			this.removeAttachments = removeAttachments;
-			return this;
-		}
-
-		public Builder removeInteractive(Boolean removeInteractive) {
-			this.removeInteractive = removeInteractive;
 			return this;
 		}
 

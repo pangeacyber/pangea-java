@@ -43,7 +43,7 @@ compatibility guarantees as stable releases. [Beta changelog][].
 Via Gradle:
 
 ```gradle
-implementation("cloud.pangea:pangea-sdk:4.2.0-beta-1")
+implementation("cloud.pangea:pangea-sdk:4.4.0-beta-1")
 ```
 
 Via Maven:
@@ -52,7 +52,7 @@ Via Maven:
 <dependency>
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>4.2.0-beta-1</version>
+  <version>4.4.0-beta-1</version>
 </dependency>
 ```
 

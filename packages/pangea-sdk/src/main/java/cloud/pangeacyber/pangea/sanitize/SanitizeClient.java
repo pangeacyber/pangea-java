@@ -57,7 +57,7 @@ public class SanitizeClient extends BaseClient {
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
 	 * @pangea.code
 	 * {@code
-	 * var file = new File("/path/to/file.pdf");
+	 * var file = new File("/path/to/file.txt");
 	 * var response = client.sanitize(
 	 *     new SanitizeRequest.Builder().uploadedFileName("uploaded_file").build(),
 	 *     file

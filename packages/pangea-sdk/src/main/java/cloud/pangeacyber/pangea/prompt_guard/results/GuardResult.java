@@ -12,8 +12,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class GuardResult {
 
+	/** Boolean response for if the prompt was considered malicious or not */
 	boolean detected;
+
+	/** Type of analysis, either direct or indirect */
 	String type;
-	String detector;
+
+	/** Prompt Analyzers for identifying and rejecting properties of prompts */
+	String analyzer;
+
+	/** Percent of confidence in the detection result, ranging from 0 to 100 */
 	int confidence;
 }

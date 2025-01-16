@@ -21,6 +21,10 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 public final class GuardRequest extends BaseRequest {
 
+	/** Prompt content and role array */
 	@NonNull
 	List<Message> messages;
+
+	/** Specific analyzers to be used in the call */
+	List<String> analyzers;
 }

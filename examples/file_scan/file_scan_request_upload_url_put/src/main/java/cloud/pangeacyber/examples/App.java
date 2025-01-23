@@ -34,7 +34,7 @@ public class App {
             cfg = Config.fromEnvironment(FileScanClient.serviceName);
            	// To enable sync mode, set queuedRetryEnabled to true and set a timeout
             cfg.setQueuedRetryEnabled(true);
-            cfg.setPollResultTimeout(120 * 1000);
+            cfg.setPollResultTimeout(120);
         } catch (ConfigException e) {
             System.out.println(e);
             System.exit(1);

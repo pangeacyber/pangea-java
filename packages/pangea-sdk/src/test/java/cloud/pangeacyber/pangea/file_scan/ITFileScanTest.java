@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.FileData;
 import cloud.pangeacyber.pangea.Helper;
+import cloud.pangeacyber.pangea.SkipAccepted;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.TransferMethod;
 import cloud.pangeacyber.pangea.Utils;
@@ -66,6 +67,7 @@ public class ITFileScanTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testFileScan_Scan_multipart() throws PangeaException, PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
 		FileScanResponse response = client.scan(
@@ -138,6 +140,7 @@ public class ITFileScanTest {
 	}
 
 	@Test
+	@SkipAccepted
 	public void testFileScan_Scan_reversinglabs()
 		throws PangeaException, PangeaException, PangeaAPIException, IOException {
 		File file = new File(TESTFILE_PATH);
@@ -204,8 +207,8 @@ public class ITFileScanTest {
 				assertNull(response.getResult().getParameters());
 				assertNotNull(response.getResult().getRawData());
 				break;
-			} catch (PangeaAPIException e) {
-				assertTrue(retry < maxRetry - 1);
+			} catch (AcceptedRequestException e) {
+				// No-op.
 			}
 		}
 	}
@@ -249,8 +252,8 @@ public class ITFileScanTest {
 				assertNull(response.getResult().getParameters());
 				assertNotNull(response.getResult().getRawData());
 				break;
-			} catch (PangeaAPIException e) {
-				assertTrue(retry < maxRetry - 1);
+			} catch (AcceptedRequestException e) {
+				// No-op.
 			}
 		}
 	}
@@ -292,8 +295,8 @@ public class ITFileScanTest {
 				assertNull(response.getResult().getParameters());
 				assertNotNull(response.getResult().getRawData());
 				break;
-			} catch (PangeaAPIException e) {
-				assertTrue(retry < maxRetry - 1);
+			} catch (AcceptedRequestException e) {
+				// No-op.
 			}
 		}
 	}

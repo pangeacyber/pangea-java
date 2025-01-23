@@ -4,6 +4,7 @@ import cloud.pangeacyber.pangea.file_scan.FileScanClient;
 import cloud.pangeacyber.pangea.file_scan.models.FileScanData;
 import cloud.pangeacyber.pangea.file_scan.requests.FileScanRequest;
 import cloud.pangeacyber.pangea.file_scan.responses.FileScanResponse;
+import cloud.pangeacyber.pangea.exceptions.AcceptedRequestException;
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
 
 import java.io.File;
@@ -22,7 +23,7 @@ public class App {
             cfg = Config.fromEnvironment(FileScanClient.serviceName);
            	// To enable sync mode, set queuedRetryEnabled to true and set a timeout
             cfg.setQueuedRetryEnabled(true);
-            cfg.setPollResultTimeout(120 * 1000);
+            cfg.setPollResultTimeout(120);
         } catch (ConfigException e) {
             System.out.println(e);
             System.exit(1);
@@ -40,7 +41,9 @@ public class App {
                             .raw(true)
                             .build(),
                     file);
-
+		} catch (AcceptedRequestException e) {
+			System.out.println("Request will be completed at a later time.");
+			System.exit(0);
         } catch (Exception e) {
             System.out.println("Failed to perform request: " + e);
             System.exit(1);

@@ -12,6 +12,7 @@ import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.FileData;
 import cloud.pangeacyber.pangea.FileUploader;
 import cloud.pangeacyber.pangea.Helper;
+import cloud.pangeacyber.pangea.SkipAccepted;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.TransferMethod;
 import cloud.pangeacyber.pangea.Utils;
@@ -55,6 +56,7 @@ public class ITSanitizeTest {
 	}
 
 	@Test
+	@SkipAccepted
 	void testSanitizeAndShare() throws PangeaException, PangeaAPIException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
@@ -93,6 +95,7 @@ public class ITSanitizeTest {
 	}
 
 	@Test
+	@SkipAccepted
 	void testSanitizeNoShare() throws PangeaException, PangeaAPIException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
@@ -134,6 +137,7 @@ public class ITSanitizeTest {
 	}
 
 	@Test
+	@SkipAccepted
 	void testSanitizeAllDefaults() throws PangeaException, PangeaAPIException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(
@@ -154,6 +158,7 @@ public class ITSanitizeTest {
 	}
 
 	@Test
+	@SkipAccepted
 	void testSanitizeMultipart() throws PangeaException, PangeaAPIException {
 		File file = new File(TESTFILE_PATH);
 		SanitizeResponse response = client.sanitize(

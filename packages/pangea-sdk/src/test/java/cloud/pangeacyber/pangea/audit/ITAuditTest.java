@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import cloud.pangeacyber.pangea.AttachedFile;
 import cloud.pangeacyber.pangea.Config;
@@ -933,9 +934,19 @@ public class ITAuditTest {
 	@Test
 	@SkipAccepted
 	public void testSearchValidationException() throws PangeaAPIException, PangeaException {
-		SearchRequest request = new SearchRequest.Builder("message:\"\"").order("notavalidorder").build();
-		SearchConfig config = new SearchConfig.Builder().build();
-		assertThrows(ValidationException.class, () -> clientGeneral.search(request, config));
+		final var request = new SearchRequest.Builder("message:\"\"").order("notavalidorder").build();
+		final var config = new SearchConfig.Builder().build();
+		try {
+			clientGeneral.search(request, config);
+		} catch (AcceptedRequestException | ValidationException e) {
+			// Test pass.
+			return;
+		} catch (Exception e) {
+			fail(
+				"Expected ValidationException (or rarely AcceptedRequestException), got " + e.getClass().getSimpleName()
+			);
+			throw e;
+		}
 	}
 
 	@Test

@@ -26,7 +26,7 @@ final class TestClient extends BaseClient {
 
 	public TestClient(String domain) {
 		super(
-			new BaseClient.Builder<>(new Config.Builder("token", domain).enviroment("local").insecure(true).build()),
+			new BaseClient.Builder<>(new Config.Builder("token", domain).environment("local").insecure(true).build()),
 			"test"
 		);
 	}

@@ -4,122 +4,73 @@ import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import java.net.URI;
 import java.time.Duration;
 
+@lombok.Builder
+@lombok.Data
 public final class Config {
 
-	// The Bearer token used to authenticate requests.
+	/** The Bearer token used to authenticate requests. */
+	@lombok.NonNull
 	String token;
 
-	// Base domain for API requests.
+	/** Base domain for API requests. */
+	@lombok.NonNull
 	String domain;
 
-	// Project config id need for multi-config projects
 	/**
+	 * Project config id need for multi-config projects
 	 * @deprecated set configID in service builder.
 	 */
 	@Deprecated
 	String configID;
 
-	// Set to true to use plain http
-	boolean insecure;
+	/** Set to true to use plain HTTP */
+	@lombok.Builder.Default
+	boolean insecure = false;
 
-	// Timeout for connections
-	Duration connectionTimeout;
+	/** Timeout for connections */
+	@lombok.Builder.Default
+	Duration connectionTimeout = Duration.ofSeconds(20);
 
-	// Set to "local" to debug
-	String enviroment;
+	/**
+	 * Pangea environment. If set to "local", then `domain` must be the full
+	 * host (i.e., hostname and port) for the Pangea service that this `Config`
+	 * will be used for.
+	 */
+	@lombok.Builder.Default
+	String environment = "production";
 
-	// Extra custom user-agent to send on requests
-	String customUserAgent;
+	/** @deprecated Use `environment` instead. */
+	@lombok.Builder.Default
+	@Deprecated
+	String enviroment = "production";
 
-	// Enable queued request retry support
-	boolean queuedRetryEnabled;
+	/** Extra custom user-agent to send on requests */
+	@lombok.Builder.Default
+	String customUserAgent = "";
 
-	// Timeout used to poll results after 202 (in secs)
-	long pollResultTimeout;
+	/** Enable queued request retry support */
+	@lombok.Builder.Default
+	boolean queuedRetryEnabled = true;
+
+	/** Timeout used to poll results after 202 (in seconds) */
+	@lombok.Builder.Default
+	long pollResultTimeout = 240;
 
 	/** Maximum number of allowed retries on server errors. */
-	final int maxRetries;
+	@lombok.Builder.Default
+	int maxRetries = 3;
 
 	/** Retry interval between subsequent requests. */
-	final Duration retryInterval;
+	@lombok.Builder.Default
+	Duration retryInterval = Duration.ofSeconds(5);
 
 	/** Maximum number of total HTTP connections. */
-	private final int maxTotalConnections;
+	@lombok.Builder.Default
+	int maxTotalConnections = 50;
 
 	/** Maximum number of HTTP requests per route. */
-	private final int maxConnectionsPerRoute;
-
-	protected Config(Builder builder) {
-		this.domain = builder.domain;
-		this.token = builder.token;
-		this.enviroment = builder.enviroment;
-		this.insecure = builder.insecure;
-		this.connectionTimeout = builder.connectionTimeout;
-		this.customUserAgent = builder.customUserAgent;
-		this.queuedRetryEnabled = builder.queuedRetryEnabled;
-		this.pollResultTimeout = builder.pollResultTimeout;
-		this.configID = builder.configID;
-		this.maxRetries = builder.maxRetries;
-		this.retryInterval = builder.retryInterval;
-		this.maxTotalConnections = builder.maxTotalConnections;
-		this.maxConnectionsPerRoute = builder.maxConnectionsPerRoute;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public String getDomain() {
-		return domain;
-	}
-
-	public String getEnviroment() {
-		return enviroment;
-	}
-
-	public boolean isInsecure() {
-		return insecure;
-	}
-
-	public Duration getConnectionTimeout() {
-		return connectionTimeout;
-	}
-
-	public String getCustomUserAgent() {
-		return customUserAgent;
-	}
-
-	public boolean isQueuedRetryEnabled() {
-		return queuedRetryEnabled;
-	}
-
-	public long getPollResultTimeout() {
-		return pollResultTimeout;
-	}
-
-	public String getConfigID() {
-		return configID;
-	}
-
-	/** @return Maximum number of allowed retries on server errors. */
-	public final int getMaxRetries() {
-		return this.maxRetries;
-	}
-
-	/** @return Retry interval between subsequent requests. */
-	public final Duration getRetryInterval() {
-		return this.retryInterval;
-	}
-
-	/** @return Maximum number of total HTTP connections. */
-	public final int getMaxTotalConnections() {
-		return this.maxTotalConnections;
-	}
-
-	/** @return Maximum number of HTTP requests per route. */
-	public final int getMaxConnectionsPerRoute() {
-		return this.maxConnectionsPerRoute;
-	}
+	@lombok.Builder.Default
+	int maxConnectionsPerRoute = 50;
 
 	URI getServiceUrl(String serviceName, String path) {
 		StringBuilder b = new StringBuilder();
@@ -128,7 +79,7 @@ public final class Config {
 			b.append(domain);
 		} else {
 			b.append(insecure ? "http://" : "https://");
-			if (!enviroment.equals("local")) {
+			if (!environment.equalsIgnoreCase("local") && !enviroment.equalsIgnoreCase("local")) {
 				b.append(serviceName);
 				b.append('.');
 			}
@@ -224,112 +175,12 @@ public final class Config {
 		return loadEnvVar(envVarName);
 	}
 
-	public void setQueuedRetryEnabled(boolean queuedRetryEnabled) {
-		this.queuedRetryEnabled = queuedRetryEnabled;
-	}
-
-	public void setPollResultTimeout(long pollResultTimeout) {
-		this.pollResultTimeout = pollResultTimeout;
-	}
-
-	public static class Builder {
-
-		String token;
-		String domain;
-		boolean insecure = false;
-		Duration connectionTimeout;
-		String enviroment;
-		String customUserAgent;
-		boolean queuedRetryEnabled;
-		long pollResultTimeout;
-		String configID;
-		int maxRetries;
-		Duration retryInterval;
-
-		/** Maximum number of total HTTP connections. */
-		int maxTotalConnections = 50;
-
-		/** Maximum number of HTTP requests per route. */
-		int maxConnectionsPerRoute = 50;
+	// Legacy alias.
+	public static class Builder extends ConfigBuilder {
 
 		public Builder(String token, String domain) {
-			this.token = token;
-			this.domain = domain;
-			this.insecure = false;
-			this.enviroment = "production";
-			this.connectionTimeout = Duration.ofSeconds(20);
-			this.customUserAgent = "";
-			this.queuedRetryEnabled = true;
-			this.pollResultTimeout = 240;
-			this.maxRetries = 3;
-			this.retryInterval = Duration.ofSeconds(5);
-		}
-
-		public Builder queuedRetryEnabled(boolean queuedRetryEnabled) {
-			this.queuedRetryEnabled = queuedRetryEnabled;
-			return this;
-		}
-
-		public Builder pollResultTimeout(long pollResultTimeout) {
-			this.pollResultTimeout = pollResultTimeout;
-			return this;
-		}
-
-		public Builder insecure(boolean insecure) {
-			this.insecure = insecure;
-			return this;
-		}
-
-		public Builder connectionTimeout(Duration connectionTimeout) {
-			this.connectionTimeout = connectionTimeout;
-			return this;
-		}
-
-		public Builder enviroment(String enviroment) {
-			this.enviroment = enviroment;
-			return this;
-		}
-
-		public Builder customUserAgent(String customUserAgent) {
-			this.customUserAgent = customUserAgent;
-			return this;
-		}
-
-		/**
-		 * @deprecated set configID in service builder.
-		 */
-		@Deprecated
-		public Builder configID(String configID) {
-			this.configID = configID;
-			return this;
-		}
-
-		/** Set the maximum number of allowed retries on server errors. */
-		public Builder maxRetries(int maxRetries) {
-			this.maxRetries = maxRetries;
-			return this;
-		}
-
-		/** Set the retry interval between subsequent requests. */
-		public Builder retryInterval(Duration retryInterval) {
-			this.retryInterval = retryInterval;
-			return this;
-		}
-
-		/** Set the maximum number of total HTTP connections. */
-		public Builder maxTotalConnections(int maxTotalConnections) {
-			this.maxTotalConnections = maxTotalConnections;
-			return this;
-		}
-
-		/** Set the maximum number of HTTP requests per route. */
-		public Builder maxConnectionsPerRoute(int maxConnectionsPerRoute) {
-			this.maxConnectionsPerRoute = maxConnectionsPerRoute;
-			return this;
-		}
-
-		public Config build() {
-			return new Config(this);
+			this.token(token);
+			this.domain(domain);
 		}
 	}
 }

@@ -21,10 +21,21 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 public final class GuardRequest extends BaseRequest {
 
-	/** Prompt content and role array */
+	/**
+	 * Prompt content and role array. The content is the text that will be
+	 * analyzed for redaction.
+	 */
 	@NonNull
 	List<Message> messages;
 
 	/** Specific analyzers to be used in the call */
 	List<String> analyzers;
+
+	/** Boolean to enable classification of the content */
+	boolean classify;
+
+	/**
+	 * Threshold for the confidence score to consider the prompt as malicious
+	 */
+	double threshold;
 }

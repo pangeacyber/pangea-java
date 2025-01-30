@@ -23,9 +23,8 @@ public final class Classification {
 	@NonNull
 	String category;
 
-	/** Classification label */
-	@NonNull
-	String label;
+	/** Classification detection result */
+	boolean detected;
 
 	/** Confidence score for the classification */
 	double confidence;

@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor
-public final class PiiEntity {
+public final class LanguageDetectionResult {
 
-	String type;
-	String value;
+	String language;
 	DetectorAction action;
-	int startPos;
 }

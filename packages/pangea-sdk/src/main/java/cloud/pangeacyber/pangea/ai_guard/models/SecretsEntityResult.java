@@ -3,6 +3,7 @@ package cloud.pangeacyber.pangea.ai_guard.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,10 +11,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor
-public final class PiiEntity {
+public final class SecretsEntityResult {
 
-	String type;
-	String value;
-	DetectorAction action;
-	int startPos;
+	List<SecretsEntity> entities;
 }

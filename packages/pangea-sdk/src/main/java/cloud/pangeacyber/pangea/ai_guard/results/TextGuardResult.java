@@ -11,8 +11,16 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor
-public final class TextGuardResult {
+public final class TextGuardResult<TMessages> {
 
+	/** Result of the recipe analyzing and input prompt. */
 	TextGuardDetectors detectors;
-	String prompt;
+
+	/** Updated prompt text, if applicable. */
+	String promptText;
+
+	/** Updated structured prompt, if applicable. */
+	TMessages promptMessages;
+
+	boolean blocked;
 }

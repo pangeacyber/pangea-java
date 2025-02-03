@@ -11,6 +11,8 @@ import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.ai_guard.requests.TextGuardRequest;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import java.util.List;
+import lombok.Value;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,8 +39,10 @@ public class ITAIGuardTest {
 		);
 		assertTrue(response.isOk());
 		var result = response.getResult();
-		assertNotNull(result.getPrompt());
-		assertFalse(result.getDetectors().getMaliciousEntity().isDetected());
+		assertNotNull(result.getPromptText());
+		if (result.getDetectors().getMaliciousEntity() != null) {
+			assertFalse(result.getDetectors().getMaliciousEntity().isDetected());
+		}
 		assertFalse(result.getDetectors().getPiiEntity().isDetected());
 		assertFalse(result.getDetectors().getPromptInjection().isDetected());
 
@@ -48,8 +52,25 @@ public class ITAIGuardTest {
 			);
 		assertTrue(response.isOk());
 		result = response.getResult();
-		assertNotNull(result.getPrompt());
+		assertNotNull(result.getPromptText());
 		assertTrue(result.getDetectors().getPiiEntity().isDetected());
 		assertEquals(1, result.getDetectors().getPiiEntity().getData().getEntities().size());
+	}
+
+	@Test
+	void testGuardTextMessage() throws PangeaException, PangeaAPIException {
+		var response = client.guardText(
+			TextGuardRequest.<List<Message>>builder().messages(List.of(new Message("user", "what was pangea?"))).build()
+		);
+		assertTrue(response.isOk());
+		var result = response.getResult();
+		assertNotNull(result.getPromptMessages());
+	}
+
+	@Value
+	private class Message {
+
+		String role;
+		String content;
 	}
 }

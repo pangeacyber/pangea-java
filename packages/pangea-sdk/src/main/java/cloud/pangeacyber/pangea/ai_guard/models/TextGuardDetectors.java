@@ -15,4 +15,9 @@ public final class TextGuardDetectors {
 	TextGuardDetector<PromptInjectionResult> promptInjection;
 	TextGuardDetector<PiiEntityResult> piiEntity;
 	TextGuardDetector<MaliciousEntityResult> maliciousEntity;
+	TextGuardDetector<SecretsEntityResult> secretsDetection;
+	TextGuardDetector<Object> profanityAndToxicity;
+	TextGuardDetector<Object> customEntity;
+	TextGuardDetector<LanguageDetectionResult> languageDetection;
+	TextGuardDetector<CodeDetectionResult> codeDetection;
 }

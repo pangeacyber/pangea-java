@@ -13,5 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class PromptInjectionResult {
 
+	DetectorAction action;
+
+	/** Triggered prompt injection analyzers. */
 	List<AnalyzerResponse> analyzerResponses;
 }

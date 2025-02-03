@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
-@SuperBuilder
+@SuperBuilder(builderMethodName = "")
 public class BaseRequest {
 
 	@JsonInclude(Include.NON_NULL)

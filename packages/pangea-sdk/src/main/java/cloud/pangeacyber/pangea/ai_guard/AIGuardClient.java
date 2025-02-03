@@ -6,6 +6,7 @@ import cloud.pangeacyber.pangea.ai_guard.requests.TextGuardRequest;
 import cloud.pangeacyber.pangea.ai_guard.responses.TextGuardResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 /** AI Guard API client. */
 public class AIGuardClient extends BaseClient {
@@ -43,7 +44,8 @@ public class AIGuardClient extends BaseClient {
 	 * final var response = client.guardText(TextGuardRequest.builder().text("hello world").build());
 	 * }
 	 */
-	public TextGuardResponse guardText(final TextGuardRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/text/guard", request, TextGuardResponse.class);
+	public <TMessages> TextGuardResponse<TMessages> guardText(final TextGuardRequest<TMessages> request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/text/guard", request, new TypeReference<TextGuardResponse<TMessages>>() {});
 	}
 }

@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor
-public final class PiiEntity {
+public final class SecretsEntity {
 
 	String type;
 	String value;
 	DetectorAction action;
 	int startPos;
+	String redactedValue;
 }

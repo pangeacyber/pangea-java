@@ -33,9 +33,4 @@ public final class GuardRequest extends BaseRequest {
 
 	/** Boolean to enable classification of the content */
 	boolean classify;
-
-	/**
-	 * Threshold for the confidence score to consider the prompt as malicious
-	 */
-	double threshold;
 }

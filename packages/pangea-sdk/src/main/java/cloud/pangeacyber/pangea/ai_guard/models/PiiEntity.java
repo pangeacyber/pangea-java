@@ -14,6 +14,6 @@ public final class PiiEntity {
 
 	String type;
 	String value;
-	DetectorAction action;
+	String action;
 	int startPos;
 }

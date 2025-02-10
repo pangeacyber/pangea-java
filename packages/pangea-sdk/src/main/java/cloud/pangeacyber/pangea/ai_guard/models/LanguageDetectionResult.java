@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public final class LanguageDetectionResult {
 
 	String language;
-	DetectorAction action;
+	String action;
 }

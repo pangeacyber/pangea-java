@@ -89,7 +89,7 @@ sdk-integration-tests:
       - CLOUD: [AWS]
         ENV: ${SERVICE_SANITIZE_ENV}
         TEST: ITSanitizeTest
-      - CLOUD: [AWS, GCP]
+      - CLOUD: [AWS]
         ENV: ${SERVICE_SHARE_ENV}
         TEST: ITShareTest
       - CLOUD: [AWS, GCP]

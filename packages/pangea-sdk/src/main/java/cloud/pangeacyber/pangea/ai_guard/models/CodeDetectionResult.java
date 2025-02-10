@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public final class CodeDetectionResult {
 
 	String language;
-	DetectorAction action;
+	String action;
 }

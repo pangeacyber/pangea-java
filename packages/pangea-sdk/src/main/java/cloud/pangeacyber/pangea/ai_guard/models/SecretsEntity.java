@@ -14,7 +14,7 @@ public final class SecretsEntity {
 
 	String type;
 	String value;
-	DetectorAction action;
+	String action;
 	int startPos;
 	String redactedValue;
 }

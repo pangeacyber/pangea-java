@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Deprecated `Config.enviroment` (typo) in favor of `Config.environment`.
 - Clarified what `Config.environment` affects.
 - AI Guard: replaced `redacted` with `action`.
+- AI Guard: updated to v1.
 
 ## 4.4.0-beta-2 - 2025-01-21
 

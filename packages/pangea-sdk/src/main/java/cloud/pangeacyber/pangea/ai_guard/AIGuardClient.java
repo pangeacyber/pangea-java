@@ -33,9 +33,9 @@ public class AIGuardClient extends BaseClient {
 	}
 
 	/**
-	 * Text guard (Beta)
+	 * Text guard
 	 * @pangea.description Guard text.
-	 * @pangea.operationId ai_guard_post_v1beta_text_guard
+	 * @pangea.operationId ai_guard_post_v1_text_guard
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -46,6 +46,6 @@ public class AIGuardClient extends BaseClient {
 	 */
 	public <TMessages> TextGuardResponse<TMessages> guardText(final TextGuardRequest<TMessages> request)
 		throws PangeaException, PangeaAPIException {
-		return post("/v1beta/text/guard", request, new TypeReference<TextGuardResponse<TMessages>>() {});
+		return post("/v1/text/guard", request, new TypeReference<TextGuardResponse<TMessages>>() {});
 	}
 }

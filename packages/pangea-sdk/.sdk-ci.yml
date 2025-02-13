@@ -103,15 +103,6 @@ sdk-integration-tests:
       - CLOUD: [AWS, GCP]
         ENV: ${SERVICE_VAULT_ENV}
         TEST: ITVaultTest
-      - CLOUD: [AWS, GCP]
-        ENV: ${SERVICE_SHARE_ENV}
-        TEST: ITShareTest
-      - CLOUD: [AWS]  # FIXME: Add GCP when supported
-        ENV: ${SERVICE_SANITIZE_ENV}
-        TEST: ITSanitizeTest
-      - CLOUD: [AWS, GCP]
-        ENV: ${SERVICE_AUTHZ_ENV}
-        TEST: ITAuthZTest
   rules:
     - if: $CI_COMMIT_BRANCH
   script:

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
@@ -27,11 +26,18 @@ public final class TextGuardRequest<TMessages> extends BaseRequest {
 	String text;
 
 	/**
-	 * Structured data to be scanned by AI Guard for PII, sensitive data,
-	 * malicious content, and other data types defined by the configuration.
-	 * Supports processing up to 10KB of text.
+	 * Structured messages data to be scanned by AI Guard for PII, sensitive
+	 * data, malicious content, and other data types defined by the
+	 * configuration. Supports processing up to 10KB of JSON text.
 	 */
 	TMessages messages;
+
+	/**
+	 * Structured full llm payload data to be scanned by AI Guard for PII,
+	 * sensitive data, malicious content, and other data types defined by the
+	 * configuration. Supports processing up to 10KB of JSON text.
+	 */
+	TMessages llmInput;
 
 	/**
 	 * Recipe key of a configuration of data types and settings defined in the

@@ -32,9 +32,9 @@ public class PromptGuardClient extends BaseClient {
 	}
 
 	/**
-	 * Guard (Beta)
+	 * Guard
 	 * @pangea.description Guard messages.
-	 * @pangea.operationId prompt_guard_post_v1beta_guard
+	 * @pangea.operationId prompt_guard_post_v1_guard
 	 * @param request Request parameters.
 	 * @throws PangeaException Thrown if an error occurs during the operation.
 	 * @throws PangeaAPIException Thrown if the API returns an error response.
@@ -46,6 +46,6 @@ public class PromptGuardClient extends BaseClient {
 	 * }
 	 */
 	public GuardResponse guard(final GuardRequest request) throws PangeaException, PangeaAPIException {
-		return post("/v1beta/guard", request, GuardResponse.class);
+		return post("/v1/guard", request, GuardResponse.class);
 	}
 }

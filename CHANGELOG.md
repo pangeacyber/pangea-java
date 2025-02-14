@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prompt Guard: `classify` parameter.
 - AI Guard: support for structured input.
 - AI Guard: more detectors.
+- AI Guard: support for `llm_input`, `llm_info`, and `log_fields`.
 
 ### Changed
 

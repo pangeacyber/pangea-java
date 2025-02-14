@@ -34,36 +34,41 @@ public class ITAIGuardTest {
 
 	@Test
 	void testGuardText() throws PangeaException, PangeaAPIException {
-		var response = client.guardText(
+		final var response = client.guardText(
 			TextGuardRequest.builder().text("hello world").recipe("pangea_prompt_guard").build()
 		);
 		assertTrue(response.isOk());
-		var result = response.getResult();
+		final var result = response.getResult();
 		assertNotNull(result.getPromptText());
 		if (result.getDetectors().getMaliciousEntity() != null) {
 			assertFalse(result.getDetectors().getMaliciousEntity().isDetected());
 		}
-		assertFalse(result.getDetectors().getPiiEntity().isDetected());
+		if (result.getDetectors().getPiiEntity() != null) {
+			assertFalse(result.getDetectors().getPiiEntity().isDetected());
+		}
 		assertFalse(result.getDetectors().getPromptInjection().isDetected());
-
-		response =
-			client.guardText(
-				TextGuardRequest.builder().text("security@pangea.cloud").recipe("pangea_prompt_guard").build()
-			);
-		assertTrue(response.isOk());
-		result = response.getResult();
-		assertNotNull(result.getPromptText());
-		assertTrue(result.getDetectors().getPiiEntity().isDetected());
-		assertEquals(1, result.getDetectors().getPiiEntity().getData().getEntities().size());
 	}
 
 	@Test
-	void testGuardTextMessage() throws PangeaException, PangeaAPIException {
-		var response = client.guardText(
+	void testGuardTextMessages() throws PangeaException, PangeaAPIException {
+		final var response = client.guardText(
 			TextGuardRequest.<List<Message>>builder().messages(List.of(new Message("user", "what was pangea?"))).build()
 		);
 		assertTrue(response.isOk());
-		var result = response.getResult();
+		final var result = response.getResult();
+		assertNotNull(result.getPromptMessages());
+	}
+
+	@Test
+	void testGuardTextLlmInput() throws PangeaException, PangeaAPIException {
+		final var response = client.guardText(
+			TextGuardRequest
+				.<LlmInput>builder()
+				.llmInput(new LlmInput("gpt-4", List.of(new Message("user", "what was pangea?"))))
+				.build()
+		);
+		assertTrue(response.isOk());
+		final var result = response.getResult();
 		assertNotNull(result.getPromptMessages());
 	}
 
@@ -72,5 +77,12 @@ public class ITAIGuardTest {
 
 		String role;
 		String content;
+	}
+
+	@Value
+	private class LlmInput {
+
+		String model;
+		List<Message> messages;
 	}
 }

@@ -13,14 +13,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class TextGuardResult<TMessages> {
 
-	/** Result of the recipe analyzing and input prompt. */
-	TextGuardDetectors detectors;
-
 	/** Updated prompt text, if applicable. */
 	String promptText;
 
 	/** Updated structured prompt, if applicable. */
 	TMessages promptMessages;
 
+	/** Whether or not the prompt triggered a block detection. */
 	boolean blocked;
+
+	/** The Recipe that was used. */
+	String recipe;
+
+	/** Result of the recipe analyzing and input prompt. */
+	TextGuardDetectors detectors;
+
+	/**
+	 * If an FPE redaction method returned results, this will be the context
+	 * passed to unredact.
+	 */
+	String fpeContext;
 }

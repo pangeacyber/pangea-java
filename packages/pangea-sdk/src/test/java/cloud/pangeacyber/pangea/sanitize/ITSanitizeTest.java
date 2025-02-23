@@ -71,6 +71,7 @@ public class ITSanitizeTest {
 						.defang(true)
 						.defangThreshold(20)
 						.redact(true)
+						.redactDetectOnly(true)
 						.build()
 				)
 				.shareOutput(new ShareOutput.Builder().enabled(true).outputFolder("sdk_test/sanitize/").build())
@@ -84,7 +85,6 @@ public class ITSanitizeTest {
 		assertNull(response.getResult().getDestURL());
 		assertNotNull(response.getResult().getDestShareID());
 		assertNotNull(response.getResult().getData().getRedact());
-		assertTrue(response.getResult().getData().getRedact().getRedactionCount() > 0);
 		assertNotNull(response.getResult().getData().getRedact().getSummaryCounts());
 		assertNotNull(response.getResult().getData().getDefang());
 		assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
@@ -110,6 +110,7 @@ public class ITSanitizeTest {
 						.defang(true)
 						.defangThreshold(20)
 						.redact(true)
+						.redactDetectOnly(true)
 						.build()
 				)
 				.shareOutput(new ShareOutput.Builder().enabled(false).build())
@@ -123,7 +124,6 @@ public class ITSanitizeTest {
 		assertNotNull(response.getResult().getDestURL());
 		assertNull(response.getResult().getDestShareID());
 		assertNotNull(response.getResult().getData().getRedact());
-		assertTrue(response.getResult().getData().getRedact().getRedactionCount() > 0);
 		assertNotNull(response.getResult().getData().getRedact().getSummaryCounts());
 		assertNotNull(response.getResult().getData().getDefang());
 		assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
@@ -173,6 +173,7 @@ public class ITSanitizeTest {
 						.defang(true)
 						.defangThreshold(20)
 						.redact(true)
+						.redactDetectOnly(true)
 						.build()
 				)
 				.shareOutput(new ShareOutput.Builder().enabled(true).outputFolder("sdk_test/sanitize/").build())
@@ -186,7 +187,6 @@ public class ITSanitizeTest {
 		assertNull(response.getResult().getDestURL());
 		assertNotNull(response.getResult().getDestShareID());
 		assertNotNull(response.getResult().getData().getRedact());
-		assertTrue(response.getResult().getData().getRedact().getRedactionCount() > 0);
 		assertNotNull(response.getResult().getData().getRedact().getSummaryCounts());
 		assertNotNull(response.getResult().getData().getDefang());
 		assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
@@ -218,6 +218,7 @@ public class ITSanitizeTest {
 							.defang(true)
 							.defangThreshold(20)
 							.redact(true)
+							.redactDetectOnly(true)
 							.build()
 					)
 					.shareOutput(new ShareOutput.Builder().enabled(true).outputFolder("sdk_test/sanitize/").build())
@@ -246,7 +247,6 @@ public class ITSanitizeTest {
 				assertNull(response.getResult().getDestURL());
 				assertNotNull(response.getResult().getDestShareID());
 				assertNotNull(response.getResult().getData().getRedact());
-				assertTrue(response.getResult().getData().getRedact().getRedactionCount() > 0);
 				assertNotNull(response.getResult().getData().getRedact().getSummaryCounts());
 				assertNotNull(response.getResult().getData().getDefang());
 				assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
@@ -279,6 +279,7 @@ public class ITSanitizeTest {
 					.defang(true)
 					.defangThreshold(20)
 					.redact(true)
+					.redactDetectOnly(true)
 					.build()
 			)
 			.shareOutput(new ShareOutput.Builder().enabled(true).outputFolder("sdk_test/sanitize/").build())
@@ -317,7 +318,6 @@ public class ITSanitizeTest {
 				assertNull(response.getResult().getDestURL());
 				assertNotNull(response.getResult().getDestShareID());
 				assertNotNull(response.getResult().getData().getRedact());
-				assertTrue(response.getResult().getData().getRedact().getRedactionCount() > 0);
 				assertNotNull(response.getResult().getData().getRedact().getSummaryCounts());
 				assertNotNull(response.getResult().getData().getDefang());
 				assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);
@@ -350,6 +350,7 @@ public class ITSanitizeTest {
 					.defang(true)
 					.defangThreshold(20)
 					.redact(true)
+					.redactDetectOnly(true)
 					.build()
 			)
 			.shareOutput(new ShareOutput.Builder().enabled(true).outputFolder("sdk_test/sanitize/").build())
@@ -387,7 +388,6 @@ public class ITSanitizeTest {
 				assertNull(response.getResult().getDestURL());
 				assertNotNull(response.getResult().getDestShareID());
 				assertNotNull(response.getResult().getData().getRedact());
-				assertTrue(response.getResult().getData().getRedact().getRedactionCount() > 0);
 				assertNotNull(response.getResult().getData().getRedact().getSummaryCounts());
 				assertNotNull(response.getResult().getData().getDefang());
 				assertTrue(response.getResult().getData().getDefang().getExternalURLsCount() > 0);

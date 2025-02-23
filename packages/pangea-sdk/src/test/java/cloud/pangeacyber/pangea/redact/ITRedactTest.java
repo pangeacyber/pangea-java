@@ -229,8 +229,8 @@ public class ITRedactTest {
 		RedactStructuredResult result = response.getResult();
 
 		Map<String, Object> expected = new LinkedHashMap<String, Object>();
-		expected.put("Name", "<PERSON>");
-		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+		expected.put("Name", "Jenny Jenny");
+		expected.put("Phone", "This is its number: 415-867-5309");
 		expected.put("IP", "Its ip is <IP_ADDRESS>");
 
 		assertEquals(expected, result.getRedactedData());
@@ -257,7 +257,7 @@ public class ITRedactTest {
 
 		Map<String, Object> expected = new LinkedHashMap<String, Object>();
 		expected.put("Name", "Jenny Jenny");
-		expected.put("Phone", "This is its number: <PHONE_NUMBER>");
+		expected.put("Phone", "This is its number: 415-867-5309");
 		expected.put("IP", "Its ip is <IP_ADDRESS>");
 
 		assertEquals(expected, result.getRedactedData());

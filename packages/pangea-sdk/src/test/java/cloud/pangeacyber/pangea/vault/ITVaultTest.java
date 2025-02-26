@@ -10,6 +10,7 @@ import cloud.pangeacyber.pangea.CryptoUtils;
 import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.Utils;
+import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
@@ -40,9 +41,11 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import org.apache.commons.codec.binary.Base64;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 
 public class ITVaultTest {
 
@@ -50,7 +53,7 @@ public class ITVaultTest {
 	static TestEnvironment environment;
 	String time;
 	Random random;
-	final String actor = "JavaSDKTest";
+	final static public String actor = "JavaSDKTest";
 
 	@BeforeAll
 	public static void setUpClass() throws Exception {
@@ -63,6 +66,41 @@ public class ITVaultTest {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 		time = dtf.format(LocalDateTime.now());
 		this.random = new Random();
+	}
+
+	@AfterAll
+	public static void tearDownClass() throws PangeaException, PangeaAPIException, ConfigException {
+		VaultClient client = new VaultClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
+		int item_counter = 0;
+		int list_call_counter = 0;
+		String last = null;
+		long time_start = System.currentTimeMillis();
+
+		while (item_counter < 500) {
+			// List
+			Map<String, String> filter = new LinkedHashMap<String, String>(1);
+			filter.put("name__contains", ITVaultTest.actor);
+
+			final var listResp = client.list(ListRequest.builder().filter(filter).last(last).build());
+			list_call_counter++;
+			System.out.printf("List call %d\n", list_call_counter);
+
+			last = listResp.getResult().getLast();
+
+			for (var item : listResp.getResult().getItems()) {
+				// Delete
+				client.delete(item.getId());
+				item_counter++;
+			}
+
+			if (listResp.getResult().getItems().size() == 0) {
+				break;
+			}
+		}
+		long time_end = System.currentTimeMillis();
+		System.out.printf("Deleted %d items\n", item_counter);
+		System.out.printf("List and delete took %d ms\n", time_end - time_start);
+		System.out.printf("Items deleted per second: %f\n", (double) item_counter / ((time_end - time_start) / 1000));
 	}
 
 	private String getRandomID() {
@@ -86,35 +124,32 @@ public class ITVaultTest {
 
 		// Rotate
 		final var rotateResponse = client.keyRotate(
-			KeyRotateRequest.builder().id(id).rotationState(ItemVersionState.SUSPENDED).build()
-		);
+				KeyRotateRequest.builder().id(id).rotationState(ItemVersionState.SUSPENDED).build());
 		assertEquals(Integer.valueOf(2), rotateResponse.getResult().getItemVersions().get(0).getVersion());
 		assertEquals(id, rotateResponse.getResult().getId());
 
 		// Encrypt 2
 		final var encryptResponse2 = client.encrypt(
-			EncryptRequest.builder().id(id).plainText(dataB64).version(2).build()
-		);
+				EncryptRequest.builder().id(id).plainText(dataB64).version(2).build());
 		assertEquals(id, encryptResponse1.getResult().getId());
 		assertEquals(Integer.valueOf(2), encryptResponse2.getResult().getVersion());
 		assertNotNull(encryptResponse2.getResult().getCipherText());
 
 		// Decrypt 1
 		DecryptResponse decryptResponse1 = client.decrypt(
-			DecryptRequest.builder().id(id).cipherText(encryptResponse1.getResult().getCipherText()).version(1).build()
-		);
+				DecryptRequest.builder().id(id).cipherText(encryptResponse1.getResult().getCipherText()).version(1)
+						.build());
 		assertEquals(dataB64, decryptResponse1.getResult().getPlainText());
 
 		// Decrypt 2
 		DecryptResponse decryptResponse2 = client.decrypt(
-			DecryptRequest.builder().id(id).cipherText(encryptResponse2.getResult().getCipherText()).version(2).build()
-		);
+				DecryptRequest.builder().id(id).cipherText(encryptResponse2.getResult().getCipherText()).version(2)
+						.build());
 		assertEquals(dataB64, decryptResponse2.getResult().getPlainText());
 
 		// Decrypt default
 		DecryptResponse decryptResponseDefault = client.decrypt(
-			DecryptRequest.builder().id(id).cipherText(encryptResponse2.getResult().getCipherText()).build()
-		);
+				DecryptRequest.builder().id(id).cipherText(encryptResponse2.getResult().getCipherText()).build());
 		assertEquals(dataB64, decryptResponseDefault.getResult().getPlainText());
 
 		// Add failure cases. Wrong ID, wrong version, etc
@@ -125,8 +160,8 @@ public class ITVaultTest {
 
 		// Decrypt after revoke
 		DecryptResponse decryptResponseAfterSuspend = client.decrypt(
-			DecryptRequest.builder().id(id).cipherText(encryptResponse1.getResult().getCipherText()).version(1).build()
-		);
+				DecryptRequest.builder().id(id).cipherText(encryptResponse1.getResult().getCipherText()).version(1)
+						.build());
 		assertEquals(dataB64, decryptResponseAfterSuspend.getResult().getPlainText());
 	}
 
@@ -136,14 +171,13 @@ public class ITVaultTest {
 
 		// Encrypt 1
 		final var encryptResponse1 = client.encryptTransform(
-			EncryptTransformRequest
-				.builder()
-				.id(id)
-				.plainText(plainText)
-				.alphabet(TransformAlphabet.ALPHANUMERIC)
-				.tweak(tweak)
-				.build()
-		);
+				EncryptTransformRequest
+						.builder()
+						.id(id)
+						.plainText(plainText)
+						.alphabet(TransformAlphabet.ALPHANUMERIC)
+						.tweak(tweak)
+						.build());
 		assertEquals(id, encryptResponse1.getResult().getId());
 		assertEquals(1, encryptResponse1.getResult().getVersion());
 		assertNotNull(encryptResponse1.getResult().getCipherText());
@@ -151,15 +185,14 @@ public class ITVaultTest {
 
 		// Decrypt 1
 		DecryptTransformResponse decryptResponse1 = client.decryptTransform(
-			DecryptTransformRequest
-				.builder()
-				.id(id)
-				.cipherText(encryptResponse1.getResult().getCipherText())
-				.tweak(tweak)
-				.alphabet(TransformAlphabet.ALPHANUMERIC)
-				.version(1)
-				.build()
-		);
+				DecryptTransformRequest
+						.builder()
+						.id(id)
+						.cipherText(encryptResponse1.getResult().getCipherText())
+						.tweak(tweak)
+						.alphabet(TransformAlphabet.ALPHANUMERIC)
+						.version(1)
+						.build());
 		assertEquals(plainText, decryptResponse1.getResult().getPlainText());
 	}
 
@@ -174,8 +207,7 @@ public class ITVaultTest {
 
 		// Rotate
 		final var rotateResponse = client.keyRotate(
-			KeyRotateRequest.builder().id(id).rotationState(ItemVersionState.SUSPENDED).build()
-		);
+				KeyRotateRequest.builder().id(id).rotationState(ItemVersionState.SUSPENDED).build());
 		assertEquals(Integer.valueOf(2), rotateResponse.getResult().getItemVersions().get(0).getVersion());
 
 		// Sign 2
@@ -206,11 +238,10 @@ public class ITVaultTest {
 
 		// Verify after revoke
 		VerifyResponse verifyResponseAfterSuspend = client.verify(
-			id,
-			data,
-			signResponse1.getResult().getSignature(),
-			1
-		);
+				id,
+				data,
+				signResponse1.getResult().getSignature(),
+				1);
 		assertEquals(Integer.valueOf(1), verifyResponseAfterSuspend.getResult().getVersion());
 		assertTrue(verifyResponseAfterSuspend.getResult().isValidSignature());
 	}
@@ -224,8 +255,7 @@ public class ITVaultTest {
 
 		// Rotate
 		final var rotateResponse = client.keyRotate(
-			KeyRotateRequest.builder().id(id).rotationState(ItemVersionState.SUSPENDED).build()
-		);
+				KeyRotateRequest.builder().id(id).rotationState(ItemVersionState.SUSPENDED).build());
 		assertEquals(Integer.valueOf(2), rotateResponse.getResult().getItemVersions().get(0).getVersion());
 
 		// Sign 2
@@ -270,8 +300,7 @@ public class ITVaultTest {
 
 		// Rotate
 		final var rotateResponse = client.keyRotate(
-			KeyRotateRequest.builder().id(id).rotationState(ItemVersionState.SUSPENDED).build()
-		);
+				KeyRotateRequest.builder().id(id).rotationState(ItemVersionState.SUSPENDED).build());
 		assertEquals(Integer.valueOf(2), rotateResponse.getResult().getItemVersions().get(0).getVersion());
 
 		// Sign 2
@@ -298,11 +327,11 @@ public class ITVaultTest {
 	@Test
 	public void testSymmetricEncryptionGenerate() throws PangeaException, PangeaAPIException {
 		SymmetricAlgorithm[] algorithms = new SymmetricAlgorithm[] {
-			SymmetricAlgorithm.AES128_CBC,
-			SymmetricAlgorithm.AES256_CBC,
-			SymmetricAlgorithm.AES128_CFB,
-			SymmetricAlgorithm.AES256_CFB,
-			SymmetricAlgorithm.AES256_GCM,
+				SymmetricAlgorithm.AES128_CBC,
+				SymmetricAlgorithm.AES256_CBC,
+				SymmetricAlgorithm.AES128_CFB,
+				SymmetricAlgorithm.AES256_CFB,
+				SymmetricAlgorithm.AES256_GCM,
 		};
 		boolean failed = false;
 		KeyPurpose purpose = KeyPurpose.ENCRYPTION;
@@ -311,11 +340,11 @@ public class ITVaultTest {
 			String name = getName();
 			try {
 				final var generateRequest = SymmetricGenerateRequest
-					.builder()
-					.algorithm(algorithm)
-					.purpose(purpose)
-					.name(name)
-					.build();
+						.builder()
+						.algorithm(algorithm)
+						.purpose(purpose)
+						.name(name)
+						.build();
 
 				client.symmetricGenerate(generateRequest);
 			} catch (PangeaAPIException e) {
@@ -329,28 +358,28 @@ public class ITVaultTest {
 	@Test
 	public void testAsymmetricSigningGenerate() throws PangeaException, PangeaAPIException {
 		AsymmetricAlgorithm[] algorithms = new AsymmetricAlgorithm[] {
-			AsymmetricAlgorithm.ED25519,
-			AsymmetricAlgorithm.RSA2048_PKCS1V15_SHA256,
-			AsymmetricAlgorithm.ES256K,
-			AsymmetricAlgorithm.RSA2048_PSS_SHA256,
-			AsymmetricAlgorithm.RSA3072_PSS_SHA256,
-			AsymmetricAlgorithm.RSA4096_PSS_SHA256,
-			AsymmetricAlgorithm.RSA4096_PSS_SHA512,
-			AsymmetricAlgorithm.Ed25519_DILITHIUM2_BETA,
-			AsymmetricAlgorithm.Ed448_DILITHIUM3_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_128F_SHAKE256_SIMPLE_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_128F_SHAKE256_ROBUST_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_192F_SHAKE256_SIMPLE_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_192F_SHAKE256_ROBUST_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_256F_SHAKE256_SIMPLE_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_256F_SHAKE256_ROBUST_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_128F_SHA256_SIMPLE_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_128F_SHA256_ROBUST_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_192F_SHA256_SIMPLE_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_192F_SHA256_ROBUST_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_256F_SHA256_SIMPLE_BETA,
-			AsymmetricAlgorithm.SPHINCSPLUS_256F_SHA256_ROBUST_BETA,
-			AsymmetricAlgorithm.FALCON_1024_BETA,
+				AsymmetricAlgorithm.ED25519,
+				AsymmetricAlgorithm.RSA2048_PKCS1V15_SHA256,
+				AsymmetricAlgorithm.ES256K,
+				AsymmetricAlgorithm.RSA2048_PSS_SHA256,
+				AsymmetricAlgorithm.RSA3072_PSS_SHA256,
+				AsymmetricAlgorithm.RSA4096_PSS_SHA256,
+				AsymmetricAlgorithm.RSA4096_PSS_SHA512,
+				AsymmetricAlgorithm.Ed25519_DILITHIUM2_BETA,
+				AsymmetricAlgorithm.Ed448_DILITHIUM3_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_128F_SHAKE256_SIMPLE_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_128F_SHAKE256_ROBUST_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_192F_SHAKE256_SIMPLE_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_192F_SHAKE256_ROBUST_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_256F_SHAKE256_SIMPLE_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_256F_SHAKE256_ROBUST_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_128F_SHA256_SIMPLE_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_128F_SHA256_ROBUST_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_192F_SHA256_SIMPLE_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_192F_SHA256_ROBUST_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_256F_SHA256_SIMPLE_BETA,
+				AsymmetricAlgorithm.SPHINCSPLUS_256F_SHA256_ROBUST_BETA,
+				AsymmetricAlgorithm.FALCON_1024_BETA,
 		};
 		boolean failed = false;
 		KeyPurpose purpose = KeyPurpose.SIGNING;
@@ -359,11 +388,11 @@ public class ITVaultTest {
 			String name = getName();
 			try {
 				final var generateRequest = AsymmetricGenerateRequest
-					.builder()
-					.algorithm(algorithm)
-					.purpose(purpose)
-					.name(name)
-					.build();
+						.builder()
+						.algorithm(algorithm)
+						.purpose(purpose)
+						.name(name)
+						.build();
 
 				// Generate
 				client.asymmetricGenerate(generateRequest);
@@ -378,14 +407,14 @@ public class ITVaultTest {
 	@Test
 	public void testAsymmetricEncryptionGenerate() throws PangeaException, PangeaAPIException {
 		AsymmetricAlgorithm[] algorithms = new AsymmetricAlgorithm[] {
-			AsymmetricAlgorithm.RSA2048_OAEP_SHA1,
-			AsymmetricAlgorithm.RSA2048_OAEP_SHA512,
-			AsymmetricAlgorithm.RSA3072_OAEP_SHA1,
-			AsymmetricAlgorithm.RSA3072_OAEP_SHA256,
-			AsymmetricAlgorithm.RSA3072_OAEP_SHA512,
-			AsymmetricAlgorithm.RSA4096_OAEP_SHA1,
-			AsymmetricAlgorithm.RSA4096_OAEP_SHA256,
-			AsymmetricAlgorithm.RSA4096_OAEP_SHA512,
+				AsymmetricAlgorithm.RSA2048_OAEP_SHA1,
+				AsymmetricAlgorithm.RSA2048_OAEP_SHA512,
+				AsymmetricAlgorithm.RSA3072_OAEP_SHA1,
+				AsymmetricAlgorithm.RSA3072_OAEP_SHA256,
+				AsymmetricAlgorithm.RSA3072_OAEP_SHA512,
+				AsymmetricAlgorithm.RSA4096_OAEP_SHA1,
+				AsymmetricAlgorithm.RSA4096_OAEP_SHA256,
+				AsymmetricAlgorithm.RSA4096_OAEP_SHA512,
 		};
 		boolean failed = false;
 		KeyPurpose purpose = KeyPurpose.ENCRYPTION;
@@ -394,11 +423,11 @@ public class ITVaultTest {
 			String name = getName();
 			try {
 				final var generateRequest = AsymmetricGenerateRequest
-					.builder()
-					.algorithm(algorithm)
-					.purpose(purpose)
-					.name(name)
-					.build();
+						.builder()
+						.algorithm(algorithm)
+						.purpose(purpose)
+						.name(name)
+						.build();
 
 				// Generate
 				client.asymmetricGenerate(generateRequest);
@@ -413,22 +442,22 @@ public class ITVaultTest {
 	@Test
 	public void testAESEncryptingLifeCycle() throws PangeaException, PangeaAPIException {
 		SymmetricAlgorithm[] algorithms = new SymmetricAlgorithm[] {
-			SymmetricAlgorithm.AES128_CBC,
-			SymmetricAlgorithm.AES256_CBC,
-			SymmetricAlgorithm.AES128_CFB,
-			SymmetricAlgorithm.AES256_CFB,
-			SymmetricAlgorithm.AES256_GCM,
+				SymmetricAlgorithm.AES128_CBC,
+				SymmetricAlgorithm.AES256_CBC,
+				SymmetricAlgorithm.AES128_CFB,
+				SymmetricAlgorithm.AES256_CFB,
+				SymmetricAlgorithm.AES256_GCM,
 		};
 
 		for (SymmetricAlgorithm algorithm : algorithms) {
 			String name = getName();
 			try {
 				final var generateRequest = SymmetricGenerateRequest
-					.builder()
-					.algorithm(algorithm)
-					.purpose(KeyPurpose.ENCRYPTION)
-					.name(name)
-					.build();
+						.builder()
+						.algorithm(algorithm)
+						.purpose(KeyPurpose.ENCRYPTION)
+						.name(name)
+						.build();
 
 				SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
 				assertNotNull(generateResp.getResult().getId());
@@ -445,19 +474,19 @@ public class ITVaultTest {
 	@Test
 	public void testFPEEncryptingLifeCycle() throws PangeaException, PangeaAPIException {
 		SymmetricAlgorithm[] algorithms = new SymmetricAlgorithm[] {
-			SymmetricAlgorithm.AES128_FF3_1,
-			SymmetricAlgorithm.AES256_FF3_1,
+				SymmetricAlgorithm.AES128_FF3_1,
+				SymmetricAlgorithm.AES256_FF3_1,
 		};
 
 		for (SymmetricAlgorithm algorithm : algorithms) {
 			String name = getName();
 			try {
 				final var generateRequest = SymmetricGenerateRequest
-					.builder()
-					.algorithm(algorithm)
-					.purpose(KeyPurpose.FPE)
-					.name(name)
-					.build();
+						.builder()
+						.algorithm(algorithm)
+						.purpose(KeyPurpose.FPE)
+						.name(name)
+						.build();
 
 				SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
 				assertNotNull(generateResp.getResult().getId());
@@ -476,11 +505,11 @@ public class ITVaultTest {
 		String name = getName();
 		try {
 			final var generateRequest = AsymmetricGenerateRequest
-				.builder()
-				.algorithm(AsymmetricAlgorithm.ED25519)
-				.purpose(KeyPurpose.SIGNING)
-				.name(name)
-				.build();
+					.builder()
+					.algorithm(AsymmetricAlgorithm.ED25519)
+					.purpose(KeyPurpose.SIGNING)
+					.name(name)
+					.build();
 
 			// Generate
 			AsymmetricGenerateResponse generateResp = client.asymmetricGenerate(generateRequest);
@@ -497,20 +526,20 @@ public class ITVaultTest {
 	public void testJWTasymES256SigningLifeCycle() throws PangeaException, PangeaAPIException {
 		KeyPurpose purpose = KeyPurpose.JWT;
 		AsymmetricAlgorithm[] algorithms = new AsymmetricAlgorithm[] {
-			AsymmetricAlgorithm.ES256,
-			AsymmetricAlgorithm.ES384,
-			AsymmetricAlgorithm.ES512,
+				AsymmetricAlgorithm.ES256,
+				AsymmetricAlgorithm.ES384,
+				AsymmetricAlgorithm.ES512,
 		};
 
 		for (AsymmetricAlgorithm algorithm : algorithms) {
 			String name = getName();
 			try {
 				final var generateRequest = AsymmetricGenerateRequest
-					.builder()
-					.algorithm(algorithm)
-					.purpose(purpose)
-					.name(name)
-					.build();
+						.builder()
+						.algorithm(algorithm)
+						.purpose(purpose)
+						.name(name)
+						.build();
 
 				// Generate
 				AsymmetricGenerateResponse generateResp = client.asymmetricGenerate(generateRequest);
@@ -529,20 +558,20 @@ public class ITVaultTest {
 	public void testJWTsymHS256SigningLifeCycle() throws PangeaException, PangeaAPIException {
 		KeyPurpose purpose = KeyPurpose.JWT;
 		SymmetricAlgorithm[] algorithms = new SymmetricAlgorithm[] {
-			SymmetricAlgorithm.HS256,
-			SymmetricAlgorithm.HS384,
-			SymmetricAlgorithm.HS512,
+				SymmetricAlgorithm.HS256,
+				SymmetricAlgorithm.HS384,
+				SymmetricAlgorithm.HS512,
 		};
 
 		for (SymmetricAlgorithm algorithm : algorithms) {
 			String name = getName();
 			try {
 				final var generateRequest = SymmetricGenerateRequest
-					.builder()
-					.algorithm(algorithm)
-					.purpose(purpose)
-					.name(name)
-					.build();
+						.builder()
+						.algorithm(algorithm)
+						.purpose(purpose)
+						.name(name)
+						.build();
 
 				// Generate
 				SymmetricGenerateResponse generateResp = client.symmetricGenerate(generateRequest);
@@ -569,13 +598,12 @@ public class ITVaultTest {
 			assertNotNull(storeResponse.getResult().getId());
 
 			final var rotateResponse = client.secretRotate(
-				SecretRotateRequest
-					.builder()
-					.id(storeResponse.getResult().getId())
-					.secret(secretV2)
-					.rotationState(ItemVersionState.SUSPENDED)
-					.build()
-			);
+					SecretRotateRequest
+							.builder()
+							.id(storeResponse.getResult().getId())
+							.secret(secretV2)
+							.rotationState(ItemVersionState.SUSPENDED)
+							.build());
 
 			assertEquals(2, rotateResponse.getResult().getItemVersions().get(0).getVersion());
 			assertEquals(storeResponse.getResult().getId(), rotateResponse.getResult().getId());
@@ -584,16 +612,14 @@ public class ITVaultTest {
 			assertNotNull(getResponse.getResult().getItemVersions());
 
 			final var stateChangeResponse = client.stateChange(
-				storeResponse.getResult().getId(),
-				ItemVersionState.DEACTIVATED,
-				1,
-				null
-			);
+					storeResponse.getResult().getId(),
+					ItemVersionState.DEACTIVATED,
+					1,
+					null);
 			assertEquals(storeResponse.getResult().getId(), stateChangeResponse.getResult().getId());
 			assertEquals(
-				ItemVersionState.DEACTIVATED,
-				stateChangeResponse.getResult().getItemVersions().get(0).getState()
-			);
+					ItemVersionState.DEACTIVATED,
+					stateChangeResponse.getResult().getItemVersions().get(0).getState());
 		} catch (PangeaAPIException e) {
 			System.out.println(e.toString());
 			assertTrue(false);
@@ -612,15 +638,13 @@ public class ITVaultTest {
 		try {
 			// Create parent
 			final var createParentResp = client.folderCreate(
-				FolderCreateRequest.builder().name(FOLDER_PARENT).folder("/").build()
-			);
+					FolderCreateRequest.builder().name(FOLDER_PARENT).folder("/").build());
 			String parentID = createParentResp.getResult().getId();
 			assertNotNull(parentID);
 
 			// Create folder
 			final var createFolderResp = client.folderCreate(
-				FolderCreateRequest.builder().name(FOLDER_NAME).folder(FOLDER_PARENT).build()
-			);
+					FolderCreateRequest.builder().name(FOLDER_NAME).folder(FOLDER_PARENT).build());
 			String folderID = createFolderResp.getResult().getId();
 			assertNotNull(folderID);
 
@@ -652,29 +676,29 @@ public class ITVaultTest {
 
 	@Test
 	public void testEncryptStructured()
-		throws JsonProcessingException, JsonMappingException, PangeaException, PangeaAPIException {
+			throws JsonProcessingException, JsonMappingException, PangeaException, PangeaAPIException {
 		// Test data.
 		String payload = "{ \"field1\": [\"1\", \"2\", \"true\", \"false\"], \"field2\": \"data\" }";
-		var data = new ObjectMapper().readValue(payload, new TypeReference<Map<String, Object>>() {});
+		var data = new ObjectMapper().readValue(payload, new TypeReference<Map<String, Object>>() {
+		});
 
 		// Generate an encryption key.
 		var generateRequest = SymmetricGenerateRequest
-			.builder()
-			.algorithm(SymmetricAlgorithm.AES256_CFB)
-			.purpose(KeyPurpose.ENCRYPTION)
-			.name(getName())
-			.build();
+				.builder()
+				.algorithm(SymmetricAlgorithm.AES256_CFB)
+				.purpose(KeyPurpose.ENCRYPTION)
+				.name(getName())
+				.build();
 		var generateResp = client.symmetricGenerate(generateRequest);
 		var key = generateResp.getResult().getId();
 		assertNotNull(key);
 
 		// Encrypt.
 		var request = new EncryptStructuredRequest.Builder<String, Object, Map<String, Object>>(
-			key,
-			data,
-			"$.field1[2:4]"
-		)
-			.build();
+				key,
+				data,
+				"$.field1[2:4]")
+				.build();
 		var encrypted = client.encryptStructured(request);
 		assertNotNull(encrypted);
 		assertEquals(key, encrypted.getResult().getId());
@@ -682,12 +706,10 @@ public class ITVaultTest {
 		assertEquals("data", encrypted.getResult().getStructuredData().get("field2"));
 
 		// Decrypt what we encrypted.
-		request =
-			new EncryptStructuredRequest.Builder<String, Object, Map<String, Object>>(
+		request = new EncryptStructuredRequest.Builder<String, Object, Map<String, Object>>(
 				key,
 				encrypted.getResult().getStructuredData(),
-				"$.field1[2:4]"
-			)
+				"$.field1[2:4]")
 				.build();
 		var decrypted = client.decryptStructured(request);
 		assertNotNull(decrypted);
@@ -698,15 +720,16 @@ public class ITVaultTest {
 
 	@Test
 	void testExport()
-		throws PangeaException, PangeaAPIException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+			throws PangeaException, PangeaAPIException, NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
 		// Generate an exportable key.
 		final var generateRequest = AsymmetricGenerateRequest
-			.builder()
-			.algorithm(AsymmetricAlgorithm.ED25519)
-			.purpose(KeyPurpose.SIGNING)
-			.name(getName())
-			.exportable(true)
-			.build();
+				.builder()
+				.algorithm(AsymmetricAlgorithm.ED25519)
+				.purpose(KeyPurpose.SIGNING)
+				.name(getName())
+				.exportable(true)
+				.build();
 		final var generated = client.asymmetricGenerate(generateRequest);
 		final var key = generated.getResult().getId();
 		assertNotNull(key);
@@ -722,11 +745,11 @@ public class ITVaultTest {
 
 		// Export it.
 		var request = ExportRequest
-			.builder()
-			.id(key)
-			.asymmetricAlgorithm(ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512)
-			.asymmetricPublicKey(publicKey)
-			.build();
+				.builder()
+				.id(key)
+				.asymmetricAlgorithm(ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512)
+				.asymmetricPublicKey(publicKey)
+				.build();
 		var actual = client.export(request);
 		assertNotNull(actual);
 		assertEquals(key, actual.getResult().getId());
@@ -736,21 +759,20 @@ public class ITVaultTest {
 		assertEquals(expectedPublicKey, exportedPublicKey);
 		final var decodedPrivateKey = (new Base64(true)).decode(actual.getResult().getPrivateKey());
 		final var decryptedPrivateKey = CryptoUtils.asymmetricDecrypt(
-			ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512,
-			keyPair.getPrivate(),
-			decodedPrivateKey
-		);
+				ExportEncryptionAlgorithm.RSA4096_OAEP_SHA512,
+				keyPair.getPrivate(),
+				decodedPrivateKey);
 
 		// Store it under a new name, again as exportable.
 		final var storeRequest = AsymmetricStoreRequest
-			.builder()
-			.privateKey(new String(decryptedPrivateKey))
-			.publicKey(expectedPublicKey)
-			.algorithm(AsymmetricAlgorithm.ED25519)
-			.purpose(KeyPurpose.SIGNING)
-			.name(getName())
-			.exportable(true)
-			.build();
+				.builder()
+				.privateKey(new String(decryptedPrivateKey))
+				.publicKey(expectedPublicKey)
+				.algorithm(AsymmetricAlgorithm.ED25519)
+				.purpose(KeyPurpose.SIGNING)
+				.name(getName())
+				.exportable(true)
+				.build();
 		final var stored = client.asymmetricStore(storeRequest);
 		final var storedKey = stored.getResult().getId();
 		assertNotNull(storedKey);
@@ -772,12 +794,12 @@ public class ITVaultTest {
 
 		// Generate an exportable key.
 		final var generateRequest = AsymmetricGenerateRequest
-			.builder()
-			.algorithm(AsymmetricAlgorithm.ED25519)
-			.purpose(KeyPurpose.SIGNING)
-			.name(getName())
-			.exportable(true)
-			.build();
+				.builder()
+				.algorithm(AsymmetricAlgorithm.ED25519)
+				.purpose(KeyPurpose.SIGNING)
+				.name(getName())
+				.exportable(true)
+				.build();
 		final var generated = client.asymmetricGenerate(generateRequest);
 		final var key = generated.getResult().getId();
 		assertNotNull(key);
@@ -791,12 +813,12 @@ public class ITVaultTest {
 
 		// Export with KEM.
 		var request = ExportRequest
-			.builder()
-			.id(key)
-			.asymmetricAlgorithm(ExportEncryptionAlgorithm.RSA_NO_PADDING_4096_KEM)
-			.asymmetricPublicKey(publicKey)
-			.kemPassword("password")
-			.build();
+				.builder()
+				.id(key)
+				.asymmetricAlgorithm(ExportEncryptionAlgorithm.RSA_NO_PADDING_4096_KEM)
+				.asymmetricPublicKey(publicKey)
+				.kemPassword("password")
+				.build();
 		var actual = client.export(request).getResult();
 		assertNotNull(actual);
 		assertEquals(key, actual.getId());

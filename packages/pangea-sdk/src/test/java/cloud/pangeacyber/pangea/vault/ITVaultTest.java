@@ -98,9 +98,8 @@ public class ITVaultTest {
 			}
 		}
 		long time_end = System.currentTimeMillis();
-		System.out.printf("Deleted %d items\n", item_counter);
-		System.out.printf("List and delete took %d ms\n", time_end - time_start);
-		System.out.printf("Items deleted per second: %f\n", (double) item_counter / ((time_end - time_start) / 1000));
+		System.out.printf("Deleted %d items in %d seconds\n", item_counter, (time_end - time_start)/1000);
+		System.out.printf("Average delete time: %f ms\n", ((time_end - time_start) / (double) item_counter));
 	}
 
 	private String getRandomID() {

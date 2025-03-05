@@ -59,30 +59,10 @@ public class ITAIGuardTest {
 		assertNotNull(result.getPromptMessages());
 	}
 
-	@Test
-	void testGuardTextLlmInput() throws PangeaException, PangeaAPIException {
-		final var response = client.guardText(
-			TextGuardRequest
-				.<LlmInput>builder()
-				.llmInput(new LlmInput("gpt-4", List.of(new Message("user", "what was pangea?"))))
-				.build()
-		);
-		assertTrue(response.isOk());
-		final var result = response.getResult();
-		assertNotNull(result.getPromptMessages());
-	}
-
 	@Value
 	private class Message {
 
 		String role;
 		String content;
-	}
-
-	@Value
-	private class LlmInput {
-
-		String model;
-		List<Message> messages;
 	}
 }

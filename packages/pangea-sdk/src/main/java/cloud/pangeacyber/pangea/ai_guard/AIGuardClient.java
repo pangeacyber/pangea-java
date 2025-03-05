@@ -46,8 +46,8 @@ public class AIGuardClient extends BaseClient {
 	 */
 	public <TMessages> TextGuardResponse<TMessages> guardText(final TextGuardRequest<TMessages> request)
 		throws PangeaException, PangeaAPIException {
-		if (request.getText() == null && request.getMessages() == null && request.getLlmInput() == null) {
-			throw new IllegalArgumentException("One of `text`, `messages`, or `llmInput` must be provided");
+		if (request.getText() == null && request.getMessages() == null) {
+			throw new IllegalArgumentException("One of `text` or `messages` must be provided");
 		}
 
 		return post("/v1/text/guard", request, new TypeReference<TextGuardResponse<TMessages>>() {});

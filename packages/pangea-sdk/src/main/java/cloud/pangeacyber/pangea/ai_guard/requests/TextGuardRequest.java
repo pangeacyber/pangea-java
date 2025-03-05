@@ -33,13 +33,6 @@ public final class TextGuardRequest<TMessages> extends BaseRequest {
 	TMessages messages;
 
 	/**
-	 * Structured full llm payload data to be scanned by AI Guard for PII,
-	 * sensitive data, malicious content, and other data types defined by the
-	 * configuration. Supports processing up to 10KB of JSON text.
-	 */
-	TMessages llmInput;
-
-	/**
 	 * Recipe key of a configuration of data types and settings defined in the
 	 * Pangea User Console. It specifies the rules that are to be applied to the
 	 * text, such as defang malicious URLs.

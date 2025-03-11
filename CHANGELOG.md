@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+
+- Redact: models are now built on Lombok.
+
 ### Removed
 
 - AI Guard: `llmInput`.

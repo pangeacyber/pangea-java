@@ -43,7 +43,7 @@ public class ITRedactTest {
 	@Test
 	public void testRedactRequest_1() throws PangeaException, PangeaAPIException {
 		RedactTextResponse response = client.redactText(
-			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").build()
+			RedactTextRequest.builder().text("Jenny Jenny... 415-867-5309").build()
 		);
 		assertTrue(response.isOk());
 
@@ -56,7 +56,7 @@ public class ITRedactTest {
 	@Test
 	public void testRedactRequest_2() throws PangeaException, PangeaAPIException {
 		RedactTextResponse response = client.redactText(
-			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").setDebug(true).build()
+			RedactTextRequest.builder().text("Jenny Jenny... 415-867-5309").debug(true).build()
 		);
 		assertTrue(response.isOk());
 
@@ -68,7 +68,7 @@ public class ITRedactTest {
 	@Test
 	public void testRedactRequest_3() throws PangeaException, PangeaAPIException {
 		RedactTextResponse response = client.redactText(
-			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").setDebug(false).build()
+			RedactTextRequest.builder().text("Jenny Jenny... 415-867-5309").debug(false).build()
 		);
 		assertTrue(response.isOk());
 
@@ -84,7 +84,9 @@ public class ITRedactTest {
 		data.put("Phone", "This is its number: 415-867-5309");
 		data.put("IP", "Its ip is 127.0.0.1");
 
-		RedactStructuredResponse response = client.redactStructured(new RedactStructuredRequest.Builder(data).build());
+		RedactStructuredResponse response = client.redactStructured(
+			RedactStructuredRequest.builder().data(data).build()
+		);
 		assertTrue(response.isOk());
 
 		RedactStructuredResult result = response.getResult();
@@ -107,7 +109,7 @@ public class ITRedactTest {
 		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.Builder(data).setFormat("json").build()
+			RedactStructuredRequest.builder().data(data).format("json").build()
 		);
 		assertTrue(response.isOk());
 
@@ -130,7 +132,7 @@ public class ITRedactTest {
 		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.Builder(data).setDebug(true).build()
+			RedactStructuredRequest.builder().data(data).debug(true).build()
 		);
 		assertTrue(response.isOk());
 
@@ -153,7 +155,7 @@ public class ITRedactTest {
 		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.Builder(data).setDebug(false).build()
+			RedactStructuredRequest.builder().data(data).debug(false).build()
 		);
 		assertTrue(response.isOk());
 
@@ -176,7 +178,7 @@ public class ITRedactTest {
 		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.Builder(data).setFormat("json").setDebug(true).build()
+			RedactStructuredRequest.builder().data(data).format("json").debug(true).build()
 		);
 		assertTrue(response.isOk());
 
@@ -199,7 +201,7 @@ public class ITRedactTest {
 		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.Builder(data).setDebug(true).setJsonp(new String[] { "Phone" }).build()
+			RedactStructuredRequest.builder().data(data).debug(true).jsonp(new String[] { "Phone" }).build()
 		);
 		assertTrue(response.isOk());
 
@@ -222,7 +224,7 @@ public class ITRedactTest {
 		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.Builder(data).setRules(new String[] { "IP_ADDRESS" }).build()
+			RedactStructuredRequest.builder().data(data).rules(new String[] { "IP_ADDRESS" }).build()
 		);
 		assertTrue(response.isOk());
 
@@ -245,10 +247,12 @@ public class ITRedactTest {
 		data.put("IP", "Its ip is 127.0.0.1");
 
 		RedactStructuredResponse response = client.redactStructured(
-			new RedactStructuredRequest.Builder(data)
-				.setDebug(true)
-				.setJsonp(new String[] { "Phone", "IP" })
-				.setRules(new String[] { "IP_ADDRESS" })
+			RedactStructuredRequest
+				.builder()
+				.data(data)
+				.debug(true)
+				.jsonp(new String[] { "Phone", "IP" })
+				.rules(new String[] { "IP_ADDRESS" })
 				.build()
 		);
 		assertTrue(response.isOk());
@@ -271,7 +275,7 @@ public class ITRedactTest {
 		RedactClient fakeClient = new RedactClient.Builder(cfg).build();
 		assertThrows(
 			UnauthorizedException.class,
-			() -> fakeClient.redactText(new RedactTextRequest.Builder("My name is Jenny Jenny").build())
+			() -> fakeClient.redactText(RedactTextRequest.builder().text("My name is Jenny Jenny").build())
 		);
 	}
 
@@ -285,7 +289,7 @@ public class ITRedactTest {
 		data.put("Phone", "This is its number: 415-867-5309");
 		assertThrows(
 			UnauthorizedException.class,
-			() -> fakeClient.redactStructured(new RedactStructuredRequest.Builder(data).build())
+			() -> fakeClient.redactStructured(RedactStructuredRequest.builder().data(data).build())
 		);
 	}
 
@@ -299,7 +303,7 @@ public class ITRedactTest {
 		RedactClient clientMultiConfig = new RedactClient.Builder(cfg).withConfigID(configID).build();
 
 		RedactTextResponse response = clientMultiConfig.redactText(
-			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").build()
+			RedactTextRequest.builder().text("Jenny Jenny... 415-867-5309").build()
 		);
 		assertTrue(response.isOk());
 
@@ -319,7 +323,7 @@ public class ITRedactTest {
 		RedactClient clientMultiConfig = new RedactClient.Builder(cfg).withConfigID(configID).build();
 
 		RedactTextResponse response = clientMultiConfig.redactText(
-			new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").build()
+			RedactTextRequest.builder().text("Jenny Jenny... 415-867-5309").build()
 		);
 		assertTrue(response.isOk());
 
@@ -338,7 +342,7 @@ public class ITRedactTest {
 
 		assertThrows(
 			PangeaAPIException.class,
-			() -> clientMultiConfig.redactText(new RedactTextRequest.Builder("Jenny Jenny... 415-867-5309").build())
+			() -> clientMultiConfig.redactText(RedactTextRequest.builder().text("Jenny Jenny... 415-867-5309").build())
 		);
 	}
 }

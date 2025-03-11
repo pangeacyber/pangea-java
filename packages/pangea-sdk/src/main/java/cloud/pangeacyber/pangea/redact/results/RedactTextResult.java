@@ -3,28 +3,31 @@ package cloud.pangeacyber.pangea.redact.results;
 import cloud.pangeacyber.pangea.redact.models.RedactDebugReport;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.Value;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@Value
 public class RedactTextResult {
 
+	/** Number of redactions present in the text */
 	@JsonProperty("count")
 	int count;
 
+	/** Describes the decision process for redactions */
 	@JsonProperty("report")
 	RedactDebugReport report;
 
+	/** The redacted text */
 	@JsonProperty("redacted_text")
 	String redactedText;
 
-	public int getCount() {
-		return count;
-	}
-
-	public RedactDebugReport getReport() {
-		return report;
-	}
-
-	public String getRedactedText() {
-		return redactedText;
-	}
+	/**
+	 * If an FPE redaction method returned results, this will be the context
+	 * passed to unredact.
+	 */
+	@JsonProperty("fpe_context")
+	String fpeContext;
 }

@@ -6,128 +6,62 @@ import cloud.pangeacyber.pangea.redact.models.VaultParameters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@JsonInclude(Include.NON_NULL)
+@SuperBuilder
 public class RedactTextRequest extends BaseRequest {
 
+	/** The text data to redact */
+	@NonNull
 	@JsonProperty("text")
 	String text;
 
-	@JsonInclude(Include.NON_NULL)
+	/**
+	 * Setting this value to true will provide a detailed analysis of the
+	 * redacted data and the rules that caused redaction
+	 */
+	@Builder.Default
 	@JsonProperty("debug")
 	Boolean debug = null;
 
-	@JsonInclude(Include.NON_NULL)
+	/** An array of redact rule short names */
 	@JsonProperty("rules")
-	String[] rules = null;
+	String[] rules;
 
-	@JsonInclude(Include.NON_NULL)
+	/** An array of redact ruleset short names */
 	@JsonProperty("rulesets")
-	String[] rulesets = null;
+	String[] rulesets;
 
-	@JsonInclude(Include.NON_NULL)
+	/**
+	 * Setting this value to false will omit the redacted result only returning
+	 * count
+	 */
+	@Builder.Default
 	@JsonProperty("return_result")
 	Boolean returnResult = null;
 
-	@JsonInclude(Include.NON_NULL)
+	/**
+	 * This field allows users to specify the redaction method per rule and its
+	 * various parameters.
+	 */
 	@JsonProperty("redaction_method_overrides")
-	RedactionMethodOverrides redactionMethodOverrides = null;
+	Map<String, RedactionMethodOverrides> redactionMethodOverrides;
 
 	/** Is this redact call going to be used in an LLM request? */
-	@JsonInclude(Include.NON_NULL)
+	@Builder.Default
 	@JsonProperty("llm_request")
 	Boolean llmRequest = null;
 
-	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("vault_parameters")
-	VaultParameters vaultParameters = null;
-
-	protected RedactTextRequest(Builder builder) {
-		this.text = builder.text;
-		this.debug = builder.debug;
-		this.rules = builder.rules;
-		this.rulesets = builder.rulesets;
-		this.returnResult = builder.returnResult;
-		this.redactionMethodOverrides = builder.redactionMethodOverrides;
-		this.llmRequest = builder.llmRequest;
-		this.vaultParameters = builder.vaultParameters;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public Boolean getDebug() {
-		return debug;
-	}
-
-	public String[] getRules() {
-		return rules;
-	}
-
-	public String[] getRulesets() {
-		return rulesets;
-	}
-
-	public Boolean getReturnResult() {
-		return returnResult;
-	}
-
-	public static class Builder {
-
-		String text;
-		Boolean debug = null;
-		String[] rules = null;
-		String[] rulesets = null;
-		Boolean returnResult = null;
-		RedactionMethodOverrides redactionMethodOverrides = null;
-		Boolean llmRequest = null;
-		VaultParameters vaultParameters = null;
-
-		public Builder(String text) {
-			this.text = text;
-		}
-
-		public RedactTextRequest build() {
-			return new RedactTextRequest(this);
-		}
-
-		public Builder setDebug(Boolean debug) {
-			this.debug = debug;
-			return this;
-		}
-
-		public Builder setRules(String[] rules) {
-			this.rules = rules;
-			return this;
-		}
-
-		public Builder setRulesets(String[] rulesets) {
-			this.rulesets = rulesets;
-			return this;
-		}
-
-		public Builder setReturnResult(Boolean returnResult) {
-			this.returnResult = returnResult;
-			return this;
-		}
-
-		public Builder setRedactionMethodOverrides(RedactionMethodOverrides rmo) {
-			this.redactionMethodOverrides = rmo;
-			return this;
-		}
-
-		public Builder setLLMRequest(Boolean llmRequest) {
-			this.llmRequest = llmRequest;
-			return this;
-		}
-
-		public Builder setVaultParameters(VaultParameters vp) {
-			this.vaultParameters = vp;
-			return this;
-		}
-	}
-
-	public RedactionMethodOverrides getRedactionMethodOverrides() {
-		return redactionMethodOverrides;
-	}
+	VaultParameters vaultParameters;
 }

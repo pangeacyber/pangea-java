@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - AI Guard: `llmInput`.
+- Config: `configID` field.
 
 ## 4.4.0 - 2025-02-16
 

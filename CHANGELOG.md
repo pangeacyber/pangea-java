@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Config: `baseURLTemplate` support.
+
 ### Changed
 
 - Redact: models are now built on Lombok.
@@ -15,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - AI Guard: `llmInput`.
 - Config: `configID` field.
+- `pangea.file_scan.FileUploader` use `pangea.FileUploader` instead.
+- Config: `domain` and `environment`. User `baseURLTemplate` instead.
 
 ## 4.4.0 - 2025-02-16
 

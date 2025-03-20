@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.FileData;
+import cloud.pangeacyber.pangea.FileUploader;
 import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.SkipAccepted;
 import cloud.pangeacyber.pangea.TestEnvironment;

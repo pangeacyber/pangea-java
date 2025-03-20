@@ -13,7 +13,9 @@ public class FileUploader extends BaseClient {
 
 	public static class Builder extends BaseClient.Builder<Builder> {
 
-		public Builder() {}
+		public Builder() {
+			super(Config.builder().token("").baseURLTemplate("").build());
+		}
 
 		public FileUploader build() {
 			return new FileUploader(this);

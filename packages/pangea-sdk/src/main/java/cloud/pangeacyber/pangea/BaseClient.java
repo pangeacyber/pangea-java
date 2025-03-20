@@ -245,12 +245,6 @@ public abstract class BaseClient {
 			this.customHeaders = null;
 		}
 
-		protected Builder() {
-			this.config = Config.builder().build();
-			this.logger = null;
-			this.customHeaders = null;
-		}
-
 		@SuppressWarnings("unchecked")
 		final B self() {
 			return (B) this;

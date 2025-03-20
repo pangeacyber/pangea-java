@@ -1,7 +1,6 @@
 package cloud.pangeacyber.pangea;
 
 import cloud.pangeacyber.pangea.exceptions.ConfigException;
-import java.net.URI;
 import java.time.Duration;
 
 @lombok.Builder
@@ -12,9 +11,9 @@ public final class Config {
 	@lombok.NonNull
 	String token;
 
-	/** Base domain for API requests. */
+	/** Used to set Pangea domain and protocol and port if needed. It should include the SERVICE_NAME placeholder. */
 	@lombok.NonNull
-	String domain;
+	String baseURLTemplate;
 
 	/** Set to true to use plain HTTP */
 	@lombok.Builder.Default
@@ -65,23 +64,6 @@ public final class Config {
 	@lombok.Builder.Default
 	int maxConnectionsPerRoute = 50;
 
-	URI getServiceUrl(String serviceName, String path) {
-		StringBuilder b = new StringBuilder();
-		if (domain.startsWith("http://") || domain.startsWith("https://")) {
-			// url domain
-			b.append(domain);
-		} else {
-			b.append(insecure ? "http://" : "https://");
-			if (!environment.equalsIgnoreCase("local") && !enviroment.equalsIgnoreCase("local")) {
-				b.append(serviceName);
-				b.append('.');
-			}
-			b.append(domain);
-		}
-		b.append(path);
-		return URI.create(b.toString());
-	}
-
 	public static Config fromEnvironment(String serviceName) throws ConfigException {
 		String tokenEnvVarName = "PANGEA_" + serviceName.toUpperCase() + "_TOKEN";
 		tokenEnvVarName = tokenEnvVarName.replace('-', '_');
@@ -90,33 +72,33 @@ public final class Config {
 			throw new ConfigException("Need to set up " + tokenEnvVarName + " environment variable");
 		}
 
-		String domain = System.getenv("PANGEA_DOMAIN");
-		if (domain == null || domain.isEmpty()) {
-			throw new ConfigException("Need to set up PANGEA_DOMAIN environment variable");
+		String urlTemplate = System.getenv("PANGEA_URL_TEMPLATE");
+		if (urlTemplate == null || urlTemplate.isEmpty()) {
+			throw new ConfigException("Need to set up PANGEA_URL_TEMPLATE environment variable");
 		}
 
-		Config config = new Config.Builder(token, domain).customUserAgent("test").build();
+		Config config = Config.builder().token(token).baseURLTemplate(urlTemplate).customUserAgent("test").build();
 		return config;
 	}
 
 	public static Config fromIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getTestToken(environment);
-		String domain = getTestDomain(environment);
-		Config config = new Config.Builder(token, domain).customUserAgent("test").build();
+		String urlTemplate = getTestURLTemplate(environment);
+		Config config = Config.builder().token(token).baseURLTemplate(urlTemplate).customUserAgent("test").build();
 		return config;
 	}
 
 	public static Config fromVaultIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getVaultSignatureTestToken(environment);
-		String domain = getTestDomain(environment);
-		Config config = new Config.Builder(token, domain).customUserAgent("test").build();
+		String urlTemplate = getTestURLTemplate(environment);
+		Config config = Config.builder().token(token).baseURLTemplate(urlTemplate).customUserAgent("test").build();
 		return config;
 	}
 
 	public static Config fromCustomSchemaIntegrationEnvironment(TestEnvironment environment) throws ConfigException {
 		String token = getCustomSchemaTestToken(environment);
-		String domain = getTestDomain(environment);
-		Config config = new Config.Builder(token, domain).customUserAgent("test").build();
+		String urlTemplate = getTestURLTemplate(environment);
+		Config config = Config.builder().token(token).baseURLTemplate(urlTemplate).customUserAgent("test").build();
 		return config;
 	}
 
@@ -163,17 +145,8 @@ public final class Config {
 		return token;
 	}
 
-	public static String getTestDomain(TestEnvironment environment) throws ConfigException {
-		String envVarName = "PANGEA_INTEGRATION_DOMAIN_" + environment.toString();
+	public static String getTestURLTemplate(TestEnvironment environment) throws ConfigException {
+		String envVarName = "PANGEA_INTEGRATION_URL_TEMPLATE_" + environment.toString();
 		return loadEnvVar(envVarName);
-	}
-
-	// Legacy alias.
-	public static class Builder extends ConfigBuilder {
-
-		public Builder(String token, String domain) {
-			this.token(token);
-			this.domain(domain);
-		}
 	}
 }

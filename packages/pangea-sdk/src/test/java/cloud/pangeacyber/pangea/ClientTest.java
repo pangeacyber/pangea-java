@@ -24,9 +24,17 @@ import org.junit.jupiter.api.Test;
 
 final class TestClient extends BaseClient {
 
-	public TestClient(String domain) {
+	public TestClient(String baseURLTemplate) {
 		super(
-			new BaseClient.Builder<>(new Config.Builder("token", domain).environment("local").insecure(true).build()),
+			new BaseClient.Builder<>(
+				Config
+					.builder()
+					.token("token")
+					.baseURLTemplate(baseURLTemplate)
+					.environment("local")
+					.insecure(true)
+					.build()
+			),
 			"test"
 		);
 	}

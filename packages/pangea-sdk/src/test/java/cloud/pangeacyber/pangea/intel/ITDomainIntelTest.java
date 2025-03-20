@@ -238,7 +238,7 @@ public class ITDomainIntelTest {
 	@Test
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
+		cfg = Config.builder().token("notarealtoken").baseURLTemplate(cfg.getBaseURLTemplate()).build();
 		DomainIntelClient fakeClient = new DomainIntelClient.Builder(cfg).build();
 		assertThrows(
 			UnauthorizedException.class,

@@ -250,7 +250,7 @@ public class ITURLIntelTest {
 	@Test
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
+		cfg = Config.builder().token("notarealtoken").baseURLTemplate(cfg.getBaseURLTemplate()).build();
 		URLIntelClient fakeClient = new URLIntelClient.Builder(cfg).build();
 		assertThrows(
 			UnauthorizedException.class,

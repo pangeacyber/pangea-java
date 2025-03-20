@@ -12,9 +12,9 @@ import cloud.pangeacyber.pangea.sanitize.requests.SanitizeRequest;
 public class App {
     public static void main(String[] args) {
 		var token = System.getenv("PANGEA_SANITIZE_TOKEN");
-		var domain = System.getenv("PANGEA_DOMAIN");
+		var urlTemplate = System.getenv("PANGEA_URL_TEMPLATE");
 
-		var config = new Config.Builder(token, domain).build();
+		var config = Config.builder().token(token).baseURLTemplate(urlTemplate).build();
         var client = new SanitizeClient.Builder(config).build();
 
 		// Pick a file to sanitize.

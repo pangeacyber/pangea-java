@@ -77,7 +77,7 @@ import cloud.pangeacyber.pangea.Config;
 // ...
 
 // Load client configuration from environment variables `PANGEA_AUDIT_TOKEN` and
-// `PANGEA_DOMAIN`.
+// `PANGEA_URL_TEMPLATE`.
 Config cfg = null;
 try {
     cfg = Config.fromEnvironment(AuditClient.serviceName);

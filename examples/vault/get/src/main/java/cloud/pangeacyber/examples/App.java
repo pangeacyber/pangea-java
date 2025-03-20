@@ -40,7 +40,7 @@ public class App {
 			}
 
 			System.out.println("Create Audit client...");
-			Config auditCfg = new Config.Builder(auditToken, cfg.getDomain()).build();
+			Config auditCfg = Config.builder().token(auditToken).baseURLTemplate(cfg.getBaseURLTemplate()).build();
 			AuditClient auditClient = new AuditClient.Builder(auditCfg).build();
 			StandardEvent event = new StandardEvent.Builder("Hello, World!").build();
 			LogResponse response = null;

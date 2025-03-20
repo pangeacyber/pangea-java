@@ -177,6 +177,7 @@ public abstract class BaseClient {
 	protected Config config;
 	protected Logger logger;
 	private final HttpClient httpClient;
+	private String baseURL;
 	String serviceName;
 	Map<String, String> customHeaders = null;
 	String userAgent = "pangea-java/default";
@@ -192,6 +193,8 @@ public abstract class BaseClient {
 		}
 		this.httpClient = builder.httpClient != null ? builder.httpClient : buildClient();
 		this.setUserAgent(config.getCustomUserAgent());
+		String urlTemplate = config.getBaseURLTemplate();
+		this.baseURL = urlTemplate.replace("{SERVICE_NAME}", serviceName);
 	}
 
 	private Logger buildDefaultLogger() {
@@ -243,7 +246,7 @@ public abstract class BaseClient {
 		}
 
 		protected Builder() {
-			this.config = new Config.Builder("", "").build();
+			this.config = Config.builder().build();
 			this.logger = null;
 			this.customHeaders = null;
 		}
@@ -464,7 +467,7 @@ public abstract class BaseClient {
 	 */
 	protected <Req extends BaseRequest> String post(String path, Req request)
 		throws PangeaException, PangeaAPIException {
-		return this.postSingle(this.config.getServiceUrl(this.serviceName, path), request, null).getBody();
+		return this.postSingle(this.getServiceUrl(path), request, null).getBody();
 	}
 
 	/**
@@ -545,7 +548,7 @@ public abstract class BaseClient {
 	}
 
 	private InternalHttpResponse doGet(String path) throws PangeaException {
-		URI uri = config.getServiceUrl(serviceName, path);
+		URI uri = this.getServiceUrl(path);
 		try {
 			this.logger.debug(
 					String.format(
@@ -618,7 +621,7 @@ public abstract class BaseClient {
 			request.setConfigID(this.configID);
 		}
 
-		URI url = config.getServiceUrl(serviceName, path);
+		URI url = this.getServiceUrl(path);
 		InternalHttpResponse response;
 
 		if (
@@ -692,7 +695,7 @@ public abstract class BaseClient {
 
 	protected <Req extends BaseRequest> AcceptedResponse requestPresignedURL(String path, Req request)
 		throws PangeaException, PangeaAPIException {
-		URI url = config.getServiceUrl(serviceName, path);
+		URI url = this.getServiceUrl(path);
 		InternalHttpResponse response = postSingle(url, request, null);
 		AcceptedResponse responseAccepted = checkResponse(response, AcceptedResponse.class, url.toString());
 		return this.pollPresignedURL(responseAccepted);
@@ -1036,5 +1039,12 @@ public abstract class BaseClient {
 
 	public void setLogger(Logger logger) {
 		this.logger = logger;
+	}
+
+	URI getServiceUrl(String path) {
+		StringBuilder b = new StringBuilder();
+		b.append(this.baseURL);
+		b.append(path);
+		return URI.create(b.toString());
 	}
 }

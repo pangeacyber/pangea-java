@@ -59,8 +59,8 @@ public class App {
 
 		// Create a Secure Share client.
 		final var token = System.getenv("PANGEA_VAULT_TOKEN");
-		final var domain = System.getenv("PANGEA_DOMAIN");
-		final var config = new Config.Builder(token, domain).build();
+		final var urlTemplate = System.getenv("PANGEA_URL_TEMPLATE");
+		final var config = Config.builder().token(token).baseURLTemplate(urlTemplate).build();
 		final var client = new ShareClient.Builder(config).build();
 
 		// Upload files.

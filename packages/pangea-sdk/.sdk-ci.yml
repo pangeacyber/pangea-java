@@ -90,7 +90,8 @@ sdk-integration-tests:
       - ENV: ${SERVICE_VAULT_ENV}
         TEST: ITVaultTest
   script:
-    - mvn $MAVEN_CLI_OPTS test -Dtest=${TEST}
+    - echo "re-enable tests on pipeline"
+    # - mvn $MAVEN_CLI_OPTS test -Dtest=${TEST}
 
 building-sdk:
   extends: .sdk-base

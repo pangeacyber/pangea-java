@@ -913,7 +913,7 @@ public class ITAuditTest {
 	public void testRootUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		int treeSize = 1;
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
+		cfg = Config.builder().token("notarealtoken").baseURLTemplate(cfg.getBaseURLTemplate()).build();
 		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
 		assertThrows(UnauthorizedException.class, () -> fakeClient.getRoot(treeSize));
 	}
@@ -922,7 +922,7 @@ public class ITAuditTest {
 	@SkipAccepted
 	public void testLogUnathorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
+		cfg = Config.builder().token("notarealtoken").baseURLTemplate(cfg.getBaseURLTemplate()).build();
 		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
 		StandardEvent event = new StandardEvent("Test msg");
 		assertThrows(
@@ -953,7 +953,7 @@ public class ITAuditTest {
 	@SkipAccepted
 	public void testSearchValidationException2() throws PangeaAPIException, PangeaException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
+		cfg = Config.builder().token("notarealtoken").baseURLTemplate(cfg.getBaseURLTemplate()).build();
 		AuditClient fakeClient = new AuditClient.Builder(cfg).build();
 
 		SearchRequest request = new SearchRequest.Builder("message:\"\"").build();
@@ -976,7 +976,10 @@ public class ITAuditTest {
 	public void testMultiConfig1Log() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
-		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
+		Config cfg = Config
+			.builder()
+			.token(Config.getMultiConfigTestToken(environment))
+			.baseURLTemplate(Config.getTestURLTemplate(environment))
 			.build();
 
 		String configID = Config.getConfigID(environment, "audit", 1);
@@ -1004,7 +1007,10 @@ public class ITAuditTest {
 	public void testMultiConfig2Log() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
-		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
+		Config cfg = Config
+			.builder()
+			.token(Config.getMultiConfigTestToken(environment))
+			.baseURLTemplate(Config.getTestURLTemplate(environment))
 			.build();
 
 		String configID = Config.getConfigID(environment, "audit", 2);
@@ -1032,7 +1038,10 @@ public class ITAuditTest {
 	public void testMultiConfigWithoutConfigID() throws PangeaException, PangeaAPIException, ConfigException {
 		StandardEvent event = new StandardEvent.Builder(MSG_NO_SIGNED).actor(ACTOR).status(STATUS_NO_SIGNED).build();
 
-		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
+		Config cfg = Config
+			.builder()
+			.token(Config.getMultiConfigTestToken(environment))
+			.baseURLTemplate(Config.getTestURLTemplate(environment))
 			.build();
 		AuditClient client = new AuditClient.Builder(cfg).build();
 
@@ -1180,10 +1189,10 @@ public class ITAuditTest {
 		input.setLogs(List.of(logStreamEvent));
 
 		// Client setup.
-		final var config = new Config.Builder(
-			Config.getMultiConfigTestToken(environment),
-			Config.getTestDomain(environment)
-		)
+		final var config = Config
+			.builder()
+			.token(Config.getMultiConfigTestToken(environment))
+			.baseURLTemplate(Config.getTestURLTemplate(environment))
 			.build();
 		final var configId = Config.getConfigID(environment, "audit", 3);
 		final var client = new AuditClient.Builder(config).withConfigID(configId).build();

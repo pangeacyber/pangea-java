@@ -8,3 +8,4 @@ pangea_sdk_logs.json
 *.gz
 *.csv
 packages/pangea-sdk/download/
+examples/.m2/repository/

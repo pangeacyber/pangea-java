@@ -7,6 +7,7 @@ stages:
   - build
   - integration_tests
   - publish
+  - install
   - examples
 
 include:

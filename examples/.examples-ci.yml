@@ -1,6 +1,28 @@
+variables:
+  SETTINGS_FILE: ${CI_PROJECT_DIR}/examples/.m2/settings.xml
+
+pangea-sdk-install:
+  extends: .sdk-base
+  image: maven:3.9.9-eclipse-temurin-21
+  stage: install
+  cache:
+    key: maven-cache
+    paths:
+      - ${CI_PROJECT_DIR}/examples/.m2/
+  script:
+    - echo ${CI_PROJECT_DIR}
+    - pwd
+    - mvn -gs ${SETTINGS_FILE} install -DskipTests -DskipITs
+
 examples:
   stage: examples
   retry: 2
+  needs:
+    - pangea-sdk-install
+  cache:
+    key: maven-cache
+    paths:
+      - ${CI_PROJECT_DIR}/examples/.m2/
   parallel:
     matrix:
       - JAVA_VERSION: [21]
@@ -70,7 +92,7 @@ examples:
     - export PANGEA_AUTHN_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
     - export PANGEA_AUTHZ_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
     - export PANGEA_DOMAIN_INTEL_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
-    - export PANGEA_DOMAIN="$(eval echo \$PANGEA_INTEGRATION_DOMAIN_LVE_AWS)"
+    - export PANGEA_URL_TEMPLATE="$(eval echo \$PANGEA_INTEGRATION_URL_TEMPLATE_LVE_AWS)"
     - export PANGEA_EMBARGO_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
     - export PANGEA_FILE_INTEL_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
     - export PANGEA_FILE_SCAN_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
@@ -83,8 +105,10 @@ examples:
     - export PANGEA_USER_INTEL_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
     - export PANGEA_VAULT_TOKEN="$(eval echo \$PANGEA_INTEGRATION_TOKEN_LVE_AWS)"
   script:
-    - cd examples/${EXAMPLE}
-    - mvn -B compile
+    - cd packages/pangea-sdk
+    - mvn -gs ${SETTINGS_FILE} install -DskipTests -DskipITs
+    - cd ${CI_PROJECT_DIR}/examples/${EXAMPLE}
+    - mvn -B -gs ${SETTINGS_FILE} compile
     - mvn -B exec:java -Dexec.mainClass=cloud.pangeacyber.examples.App
   rules:
     - if: $CI_COMMIT_BRANCH

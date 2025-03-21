@@ -79,7 +79,7 @@ public class ITEmbargoTest {
 	@Test
 	public void testUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
+		cfg = Config.builder().token("notarealtoken").baseURLTemplate(cfg.getBaseURLTemplate()).build();
 		EmbargoClient fakeClient = new EmbargoClient.Builder(cfg).build();
 		assertThrows(UnauthorizedException.class, () -> fakeClient.ipCheck("1.1.1.1"));
 	}

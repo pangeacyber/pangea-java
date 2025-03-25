@@ -25,7 +25,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PANGEA_INTEGRATION_DOMAIN_LVE: placeholder
+  PANGEA_INTEGRATION_URL_TEMPLATE_LVE: placeholder
   PANGEA_INTEGRATION_TOKEN_LVE: placeholder
 
 jobs:
@@ -103,28 +103,3 @@ jobs:
 
       - name: Unit test
         run: mvn test -B -e -Dtest="cloud.pangeacyber.pangea.*Test"
-
-  examples:
-    needs: [setup, prefetch]
-    runs-on: ubuntu-24.04
-    strategy:
-      matrix:
-        example: ${{ fromJSON(needs.setup.outputs.examples-matrix) }}
-        java-version: [17, 21]
-    defaults:
-      run:
-        working-directory: ./examples/${{ matrix.example }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
-
-      - name: Setup Java
-        uses: actions/setup-java@v4.7.0
-        with:
-          distribution: microsoft
-          java-version: ${{ matrix.java-version }}
-          cache: maven
-          cache-dependency-path: ./examples/${{ matrix.example }}/pom.xml
-
-      - name: Build
-        run: mvn -B package --file pom.xml

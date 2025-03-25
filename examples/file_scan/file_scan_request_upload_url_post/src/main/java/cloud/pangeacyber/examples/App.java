@@ -14,7 +14,7 @@ import cloud.pangeacyber.pangea.Utils;
 import cloud.pangeacyber.pangea.file_scan.models.FileParams;
 import cloud.pangeacyber.pangea.file_scan.requests.FileScanUploadURLRequest;
 import cloud.pangeacyber.pangea.FileData;
-import cloud.pangeacyber.pangea.file_scan.FileUploader;
+import cloud.pangeacyber.pangea.FileUploader;
 import cloud.pangeacyber.pangea.TransferMethod;
 import java.util.Map;
 

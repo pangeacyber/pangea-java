@@ -8,16 +8,16 @@ import cloud.pangeacyber.pangea.redact.responses.RedactTextResponse;
 public class App {
     public static void main(String[] args) {
         String token = System.getenv("PANGEA_REDACT_MULTICONFIG_TOKEN");
-        String domain = System.getenv("PANGEA_DOMAIN");
+        String urlTemplate = System.getenv("PANGEA_URL_TEMPLATE");
         String configId = System.getenv("PANGEA_REDACT_CONFIG_ID");
 
-        Config cfg = new Config.Builder(token, domain).build();
+        Config cfg = Config.builder().token(token).baseURLTemplate(urlTemplate).build();
 
         RedactClient client = new RedactClient.Builder(cfg).withConfigID(configId).build();
         String text = "Hello, my phone number is 123-456-7890";
         RedactTextResponse response = null;
         try {
-            response = client.redactText(new RedactTextRequest.Builder(text).build());
+            response = client.redactText(RedactTextRequest.builder().text(text).build());
         } catch (Exception e) {
             System.out.println("Failed to perform redact: " + e);
             System.exit(1);

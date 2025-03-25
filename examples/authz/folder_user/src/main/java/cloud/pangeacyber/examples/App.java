@@ -19,9 +19,9 @@ import cloud.pangeacyber.pangea.exceptions.PangeaException;
 public class App {
     public static void main(String[] args) {
 		var token = System.getenv("PANGEA_AUTHZ_TOKEN");
-		var domain = System.getenv("PANGEA_DOMAIN");
+		var urlTemplate = System.getenv("PANGEA_URL_TEMPLATE");
 
-		var config = new Config.Builder(token, domain).build();
+		var config = Config.builder().token(token).baseURLTemplate(urlTemplate).build();
         var client = new AuthZClient.Builder(config).build();
 
 		// Mock data.

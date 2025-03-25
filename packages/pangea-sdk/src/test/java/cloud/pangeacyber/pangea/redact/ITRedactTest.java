@@ -271,7 +271,7 @@ public class ITRedactTest {
 	@Test
 	public void testRedactTextUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
+		cfg = Config.builder().token("notarealtoken").baseURLTemplate(cfg.getBaseURLTemplate()).build();
 		RedactClient fakeClient = new RedactClient.Builder(cfg).build();
 		assertThrows(
 			UnauthorizedException.class,
@@ -282,7 +282,7 @@ public class ITRedactTest {
 	@Test
 	public void testRedactStructuredUnauthorized() throws PangeaException, PangeaAPIException, ConfigException {
 		Config cfg = Config.fromIntegrationEnvironment(environment);
-		cfg = new Config.Builder("notarealtoken", cfg.getDomain()).build();
+		cfg = Config.builder().token("notarealtoken").baseURLTemplate(cfg.getBaseURLTemplate()).build();
 		RedactClient fakeClient = new RedactClient.Builder(cfg).build();
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
 		data.put("Name", "Jenny Jenny");
@@ -295,7 +295,10 @@ public class ITRedactTest {
 
 	@Test
 	public void testMultiConfig1Redact() throws PangeaException, PangeaAPIException, ConfigException {
-		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
+		Config cfg = Config
+			.builder()
+			.token(Config.getMultiConfigTestToken(environment))
+			.baseURLTemplate(Config.getTestURLTemplate(environment))
 			.build();
 
 		String configID = Config.getConfigID(environment, "redact", 1);
@@ -315,7 +318,10 @@ public class ITRedactTest {
 
 	@Test
 	public void testMultiConfig2Redact() throws PangeaException, PangeaAPIException, ConfigException {
-		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
+		Config cfg = Config
+			.builder()
+			.token(Config.getMultiConfigTestToken(environment))
+			.baseURLTemplate(Config.getTestURLTemplate(environment))
 			.build();
 
 		String configID = Config.getConfigID(environment, "redact", 2);
@@ -335,7 +341,10 @@ public class ITRedactTest {
 
 	@Test
 	public void testMultiConfigWithoutConfigID() throws PangeaException, PangeaAPIException, ConfigException {
-		Config cfg = new Config.Builder(Config.getMultiConfigTestToken(environment), Config.getTestDomain(environment))
+		Config cfg = Config
+			.builder()
+			.token(Config.getMultiConfigTestToken(environment))
+			.baseURLTemplate(Config.getTestURLTemplate(environment))
 			.build();
 
 		RedactClient clientMultiConfig = new RedactClient.Builder(cfg).build();

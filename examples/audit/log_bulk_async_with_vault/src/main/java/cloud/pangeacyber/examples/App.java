@@ -41,8 +41,8 @@ public class App {
 		}
 		String auditToken = getResponse.getResult().getItems().get(0).getItemVersions().get(0).getToken();
 
-		String domain = System.getenv("PANGEA_DOMAIN");
-		Config auditCfg = new Config.Builder(auditToken, domain).customUserAgent("test").build();
+		String urlTemplate = System.getenv("PANGEA_URL_TEMPLATE");
+		Config auditCfg = Config.builder().token(auditToken).baseURLTemplate(urlTemplate).customUserAgent("test").build();
 		AuditClient audit = new AuditClient.Builder(auditCfg).build();
 		StandardEvent event1 = new StandardEvent.Builder("Sign up")
 				.actor("java-sdk")

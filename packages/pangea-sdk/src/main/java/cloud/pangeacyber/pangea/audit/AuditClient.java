@@ -152,7 +152,7 @@ public class AuditClient extends BaseClient {
 	 *
 	 * @pangea.code
 	 * {@code
-	 * final var config = new Config.Builder(token, domain).build();
+	 * final var config = Config.builder().token(token).baseURLTemplate(urlTemplate).build();
 	 * final var client = new AuditClient.Builder(config).build();
 	 * }
 	 */

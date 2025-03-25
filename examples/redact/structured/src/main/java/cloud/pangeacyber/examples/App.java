@@ -27,7 +27,7 @@ public class App
         data.put("Name", "My name is Andres");
         data.put("Contact", "My phone number is 123-456-7890");
         try {
-            response = client.redactStructured(new RedactStructuredRequest.Builder(data).build());
+            response = client.redactStructured(RedactStructuredRequest.builder().data(data).build());
         } catch (Exception e){
             System.out.println("Failed to perform redact: " + e);
             System.exit(1);

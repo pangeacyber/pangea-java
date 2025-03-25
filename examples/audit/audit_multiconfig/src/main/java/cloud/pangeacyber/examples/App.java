@@ -9,10 +9,10 @@ import cloud.pangeacyber.pangea.audit.responses.LogResponse;
 public class App {
     public static void main(String[] args) {
         String token = System.getenv("PANGEA_AUDIT_MULTICONFIG_TOKEN");
-        String domain = System.getenv("PANGEA_DOMAIN");
+        String urlTemplate = System.getenv("PANGEA_URL_TEMPLATE");
         String configId = System.getenv("PANGEA_AUDIT_CONFIG_ID");
 
-        Config cfg = new Config.Builder(token, domain).build();
+        Config cfg = Config.builder().token(token).baseURLTemplate(urlTemplate).build();
 
         // Set config_id in service builder
         AuditClient client = new AuditClient.Builder(cfg).withConfigID(configId).build();

@@ -11,8 +11,8 @@ import lombok.Value;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @Value
-public final class TextGuardDetector<T> {
+public final class TopicDetectionResult {
 
-	boolean detected;
-	T data;
+	/** The action taken by this Detector */
+	String action;
 }

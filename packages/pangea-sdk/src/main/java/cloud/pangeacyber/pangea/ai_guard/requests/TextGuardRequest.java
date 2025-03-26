@@ -1,6 +1,8 @@
 package cloud.pangeacyber.pangea.ai_guard.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
+import cloud.pangeacyber.pangea.ai_guard.models.LogFields;
+import cloud.pangeacyber.pangea.ai_guard.models.Overrides;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -44,4 +46,9 @@ public final class TextGuardRequest<TMessages> extends BaseRequest {
 	 * data
 	 */
 	boolean debug;
+
+	Overrides overrides;
+
+	/** Additional fields to include in activity log. */
+	LogFields logFields;
 }

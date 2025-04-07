@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - AI Guard: detector overrides.
 - AI Guard: topic detector.
+- AI Guard: `ignore_recipe` in detector overrides.
 
 ### Changed
 

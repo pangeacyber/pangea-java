@@ -16,11 +16,17 @@ import lombok.extern.jackson.Jacksonized;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public final class TopicDetectionOverride {
+public class LanguageDetectionOverride {
 
 	@Builder.Default
 	Boolean disabled = null;
 
 	@Builder.Default
+	List<String> allow = null;
+
+	@Builder.Default
 	List<String> block = null;
+
+	@Builder.Default
+	List<String> report = null;
 }

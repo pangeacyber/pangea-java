@@ -17,5 +17,43 @@ import lombok.extern.jackson.Jacksonized;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public final class Overrides {
 
-	TopicDetectionOverride topicDetection;
+	/** Bypass existing Recipe content and create an on-the-fly Recipe. */
+	@Builder.Default
+	Boolean ignoreRecipe = null;
+
+	@Builder.Default
+	CodeDetectionOverride codeDetection = null;
+
+	@Builder.Default
+	CompetitorsOverride competitors = null;
+
+	@Builder.Default
+	GibberishOverride gibberish = null;
+
+	@Builder.Default
+	LanguageDetectionOverride languageDetection = null;
+
+	@Builder.Default
+	MaliciousEntityOverride maliciousEntity = null;
+
+	@Builder.Default
+	PiiEntityOverride piiEntity = null;
+
+	@Builder.Default
+	PromptInjectionOverride promptInjection = null;
+
+	@Builder.Default
+	RoleplayOverride roleplay = null;
+
+	@Builder.Default
+	SecretsDetectionOverride secretsDetection = null;
+
+	@Builder.Default
+	SelfHarmOverride selfharm = null;
+
+	@Builder.Default
+	SentimentOverride sentiment = null;
+
+	@Builder.Default
+	TopicDetectionOverride topicDetection = null;
 }

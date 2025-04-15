@@ -10,6 +10,7 @@ import cloud.pangeacyber.pangea.CryptoUtils;
 import cloud.pangeacyber.pangea.Helper;
 import cloud.pangeacyber.pangea.TestEnvironment;
 import cloud.pangeacyber.pangea.Utils;
+import cloud.pangeacyber.pangea.exceptions.ConfigException;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.vault.models.AsymmetricAlgorithm;
@@ -40,6 +41,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import org.apache.commons.codec.binary.Base64;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +52,7 @@ public class ITVaultTest {
 	static TestEnvironment environment;
 	String time;
 	Random random;
-	final String actor = "JavaSDKTest";
+	public static final String actor = "JavaSDKTest";
 
 	@BeforeAll
 	public static void setUpClass() throws Exception {
@@ -63,6 +65,40 @@ public class ITVaultTest {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 		time = dtf.format(LocalDateTime.now());
 		this.random = new Random();
+	}
+
+	@AfterAll
+	public static void tearDownClass() throws PangeaException, PangeaAPIException, ConfigException {
+		VaultClient client = new VaultClient.Builder(Config.fromIntegrationEnvironment(environment)).build();
+		int item_counter = 0;
+		int list_call_counter = 0;
+		String last = null;
+		long time_start = System.currentTimeMillis();
+
+		while (item_counter < 500) {
+			// List
+			Map<String, String> filter = new LinkedHashMap<String, String>(1);
+			filter.put("name__contains", ITVaultTest.actor);
+
+			final var listResp = client.list(ListRequest.builder().filter(filter).last(last).build());
+			list_call_counter++;
+			System.out.printf("List call %d\n", list_call_counter);
+
+			last = listResp.getResult().getLast();
+
+			for (var item : listResp.getResult().getItems()) {
+				// Delete
+				client.delete(item.getId());
+				item_counter++;
+			}
+
+			if (listResp.getResult().getItems().size() == 0) {
+				break;
+			}
+		}
+		long time_end = System.currentTimeMillis();
+		System.out.printf("Deleted %d items in %d seconds\n", item_counter, (time_end - time_start) / 1000);
+		System.out.printf("Average delete time: %f ms\n", ((time_end - time_start) / (double) item_counter));
 	}
 
 	private String getRandomID() {

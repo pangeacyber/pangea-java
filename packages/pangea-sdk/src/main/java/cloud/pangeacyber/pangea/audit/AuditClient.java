@@ -168,12 +168,8 @@ public class AuditClient extends BaseClient {
 		publishedRoots = new HashMap<Integer, PublishedRoot>();
 		this.customSchemaClass = builder.customSchemaClass;
 		this.schemaValidation = builder.schemaValidation;
-
-		// FIXME: still support config id in PangeaConfig. Remove this code block when totally deprecated
 		if (builder.configID != null && !builder.configID.isEmpty()) {
 			setConfigID(builder.configID);
-		} else if (this.config.getConfigID() != null && !this.config.getConfigID().isEmpty()) {
-			setConfigID(this.config.getConfigID());
 		}
 	}
 

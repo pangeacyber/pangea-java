@@ -6,154 +6,74 @@ import cloud.pangeacyber.pangea.redact.models.VaultParameters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Jacksonized
+@JsonInclude(Include.NON_NULL)
+@SuperBuilder
 public class RedactStructuredRequest extends BaseRequest {
 
+	/** Structured data to redact */
+	@NonNull
 	@JsonProperty("data")
 	Object data;
 
-	@JsonInclude(Include.NON_NULL)
+	/**
+	 * JSON path(s) used to identify the specific JSON fields to redact in the
+	 * structured data. Note: If jsonp parameter is used, the data parameter
+	 * must be in JSON format.
+	 */
 	@JsonProperty("jsonp")
-	String[] jsonp = null;
+	String[] jsonp;
 
-	@JsonInclude(Include.NON_NULL)
+	/** The format of the structured data to redact */
 	@JsonProperty("format")
-	String format = null;
+	String format;
 
-	@JsonInclude(Include.NON_NULL)
+	/**
+	 * Setting this value to true will provide a detailed analysis of the
+	 * redacted data and the rules that caused redaction
+	 */
+	@Builder.Default
 	@JsonProperty("debug")
 	Boolean debug = null;
 
-	@JsonInclude(Include.NON_NULL)
+	/** An array of redact rule short names */
 	@JsonProperty("rules")
-	String[] rules = null;
+	String[] rules;
 
-	@JsonInclude(Include.NON_NULL)
+	/** An array of redact ruleset short names */
 	@JsonProperty("rulesets")
-	String[] rulesets = null;
+	String[] rulesets;
 
-	@JsonInclude(Include.NON_NULL)
+	/**
+	 * Setting this value to false will omit the redacted result only returning
+	 * count
+	 */
+	@Builder.Default
 	@JsonProperty("return_result")
 	Boolean returnResult = null;
 
-	@JsonInclude(Include.NON_NULL)
+	/**
+	 * This field allows users to specify the redaction method per rule and its
+	 * various parameters.
+	 */
 	@JsonProperty("redaction_method_overrides")
-	RedactionMethodOverrides redactionMethodOverrides = null;
+	Map<String, RedactionMethodOverrides> redactionMethodOverrides;
 
 	/** Is this redact call going to be used in an LLM request? */
-	@JsonInclude(Include.NON_NULL)
+	@Builder.Default
 	@JsonProperty("llm_request")
 	Boolean llmRequest = null;
 
-	@JsonInclude(Include.NON_NULL)
 	@JsonProperty("vault_parameters")
-	VaultParameters vaultParameters = null;
-
-	protected RedactStructuredRequest(Builder builder) {
-		this.data = builder.data;
-		this.jsonp = builder.jsonp;
-		this.format = builder.format;
-		this.debug = builder.debug;
-		this.rules = builder.rules;
-		this.returnResult = builder.returnResult;
-		this.rulesets = builder.rulesets;
-		this.redactionMethodOverrides = builder.redactionMethodOverrides;
-		this.llmRequest = builder.llmRequest;
-		this.vaultParameters = builder.vaultParameters;
-	}
-
-	public Object getData() {
-		return data;
-	}
-
-	public String[] getJsonp() {
-		return jsonp;
-	}
-
-	public String getFormat() {
-		return format;
-	}
-
-	public Boolean getDebug() {
-		return debug;
-	}
-
-	public String[] getRules() {
-		return rules;
-	}
-
-	public String[] getRulesets() {
-		return rulesets;
-	}
-
-	public Boolean getReturnResult() {
-		return returnResult;
-	}
-
-	public static class Builder {
-
-		Object data;
-		String[] jsonp = null;
-		String format = null;
-		Boolean debug = null;
-		String[] rules = null;
-		String[] rulesets = null;
-		Boolean returnResult = null;
-		RedactionMethodOverrides redactionMethodOverrides = null;
-		Boolean llmRequest = null;
-		VaultParameters vaultParameters = null;
-
-		public Builder(Object data) {
-			this.data = data;
-		}
-
-		public RedactStructuredRequest build() {
-			return new RedactStructuredRequest(this);
-		}
-
-		public Builder setJsonp(String[] jsonp) {
-			this.jsonp = jsonp;
-			return this;
-		}
-
-		public Builder setFormat(String format) {
-			this.format = format;
-			return this;
-		}
-
-		public Builder setDebug(Boolean debug) {
-			this.debug = debug;
-			return this;
-		}
-
-		public Builder setRules(String[] rules) {
-			this.rules = rules;
-			return this;
-		}
-
-		public Builder setRulesets(String[] rulesets) {
-			this.rulesets = rulesets;
-			return this;
-		}
-
-		public Builder setReturnResult(Boolean returnResult) {
-			this.returnResult = returnResult;
-			return this;
-		}
-
-		public Builder setRedactionMethodOverrides(RedactionMethodOverrides rmo) {
-			this.redactionMethodOverrides = rmo;
-			return this;
-		}
-
-		public Builder setLLMRequest(Boolean llmRequest) {
-			this.llmRequest = llmRequest;
-			return this;
-		}
-
-		public Builder setVaultParameters(VaultParameters vp) {
-			this.vaultParameters = vp;
-			return this;
-		}
-	}
+	VaultParameters vaultParameters;
 }

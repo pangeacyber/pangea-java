@@ -9,10 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Prompt Guard: `classify` parameter.
-- AI Guard: support for structured input.
-- AI Guard: more detectors.
-- AI Guard: support for `llm_input`, `llm_info`, and `log_fields`.
+- AI Guard: detector overrides.
+- AI Guard: topic detector.
+- AI Guard: `ignore_recipe` in detector overrides.
+
+### Changed
+
+- Redact: models are now built on Lombok.
+
+### Removed
+
+- AI Guard: `llmInput`.
+- Config: `configID` field.
+
+## 4.4.0 - 2025-02-16
+
+### Added
+
+- AI Guard and Prompt Guard services.
 
 ### Changed
 

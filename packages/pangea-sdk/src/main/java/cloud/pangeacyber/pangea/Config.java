@@ -16,13 +16,6 @@ public final class Config {
 	@lombok.NonNull
 	String domain;
 
-	/**
-	 * Project config id need for multi-config projects
-	 * @deprecated set configID in service builder.
-	 */
-	@Deprecated
-	String configID;
-
 	/** Set to true to use plain HTTP */
 	@lombok.Builder.Default
 	boolean insecure = false;

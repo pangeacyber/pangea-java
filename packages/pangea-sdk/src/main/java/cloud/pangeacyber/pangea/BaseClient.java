@@ -27,12 +27,14 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
@@ -385,6 +387,24 @@ public abstract class BaseClient {
 	}
 
 	/**
+	 * Perform a HTTP DELETE request.
+	 *
+	 * @param path Request URL path.
+	 * @throws PangeaException
+	 * @throws PangeaAPIException
+	 */
+	protected void deleteRequest(final String path) throws PangeaException, PangeaAPIException {
+		final var url = this.config.getServiceUrl(this.serviceName, path);
+		final var request = new HttpDelete(url);
+		fillHeaders(request);
+		try {
+			executeRequest(request);
+		} catch (Exception e) {
+			throw new PangeaException("Failed to execute DELETE request", e);
+		}
+	}
+
+	/**
 	 * Perform a HTTP POST request.
 	 *
 	 * @param <Req> Request body type.
@@ -481,7 +501,7 @@ public abstract class BaseClient {
 		String path,
 		TypeReference<ResponseType> responseTypeRef
 	) throws PangeaException, PangeaAPIException {
-		InternalHttpResponse response = doGet(path);
+		InternalHttpResponse response = doGet(path, null);
 		return checkResponse(response, responseTypeRef, path);
 	}
 
@@ -497,8 +517,20 @@ public abstract class BaseClient {
 	 */
 	protected <ResponseType extends Response<?>> ResponseType get(String path, Class<ResponseType> responseClass)
 		throws PangeaException, PangeaAPIException {
-		InternalHttpResponse response = doGet(path);
+		InternalHttpResponse response = doGet(path, null);
 		return checkResponse(response, responseClass, path);
+	}
+
+	/**
+	 * Perform a HTTP GET request and return the request body as a string.
+	 *
+	 * @param path Request URL path.
+	 * @return Response body as a string.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	protected String get(String path, Map<String, String> params) throws PangeaException, PangeaAPIException {
+		return doGet(path, params).getBody();
 	}
 
 	public AttachedFile downloadFile(String url) throws PangeaException {
@@ -544,8 +576,20 @@ public abstract class BaseClient {
 		return parts[parts.length - 1].split("\\?")[0];
 	}
 
-	private InternalHttpResponse doGet(String path) throws PangeaException {
-		URI uri = config.getServiceUrl(serviceName, path);
+	private InternalHttpResponse doGet(String path, Map<String, String> params) throws PangeaException {
+		final var uriBuilder = new URIBuilder(config.getServiceUrl(serviceName, path), StandardCharsets.UTF_8);
+		if (params != null) {
+			for (Map.Entry<String, String> entry : params.entrySet()) {
+				uriBuilder.setParameter(entry.getKey(), entry.getValue());
+			}
+		}
+		URI uri;
+		try {
+			uri = uriBuilder.build();
+		} catch (Exception e) {
+			throw new PangeaException("Failed to build URI", e);
+		}
+
 		try {
 			this.logger.debug(
 					String.format(
@@ -554,7 +598,7 @@ public abstract class BaseClient {
 						uri.toString()
 					)
 				);
-			HttpGet httpGet = new HttpGet(uri);
+			final var httpGet = new HttpGet(uri);
 			fillHeaders(httpGet);
 			return executeRequest(httpGet);
 		} catch (Exception e) {
@@ -668,7 +712,7 @@ public abstract class BaseClient {
 
 			retryCounter++;
 			try {
-				InternalHttpResponse httpResponse = doGet(path);
+				InternalHttpResponse httpResponse = doGet(path, null);
 				loopResp = checkResponse(httpResponse, AcceptedResponse.class, path);
 				return loopResp;
 			} catch (AcceptedRequestException e) {
@@ -872,7 +916,7 @@ public abstract class BaseClient {
 			try {
 				Thread.sleep(delay * 1000); // sleep(Duration) is supported on v19. We use v18.
 				EntityUtils.consumeQuietly(response.getResponse().getEntity()); // response need to be consumed
-				response = doGet(path);
+				response = doGet(path, null);
 				retryCounter++;
 			} catch (InterruptedException e) {}
 		}

@@ -193,7 +193,7 @@ public class VaultClient extends BaseClient {
 	 * @throws PangeaAPIException
 	 * @pangea.code
 	 * {@code
-	 * DeleteResponse deleteResponse = client.delele("id");
+	 * DeleteResponse deleteResponse = client.delete("id");
 	 * }
 	 */
 	public DeleteResponse delete(String id) throws PangeaException, PangeaAPIException {

@@ -1,7 +1,7 @@
 package cloud.pangeacyber.pangea.redact.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
-import cloud.pangeacyber.pangea.redact.models.RedactionMethodOverrides;
+import cloud.pangeacyber.pangea.redact.models.Redaction;
 import cloud.pangeacyber.pangea.redact.models.VaultParameters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -55,7 +55,7 @@ public class RedactTextRequest extends BaseRequest {
 	 * various parameters.
 	 */
 	@JsonProperty("redaction_method_overrides")
-	Map<String, RedactionMethodOverrides> redactionMethodOverrides;
+	Map<String, Redaction> redactionMethodOverrides;
 
 	/** Is this redact call going to be used in an LLM request? */
 	@Builder.Default

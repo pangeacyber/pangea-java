@@ -859,4 +859,62 @@ public class AuditClient extends BaseClient {
 			return new Response<Void>(e.getResponse(), e.getAcceptedResult());
 		}
 	}
+
+	/**
+	 * Get a service config.
+	 * @pangea.description Get a service config.
+	 * @pangea.operationId audit_post_v1beta_config
+	 * @param request Request parameters.
+	 */
+	public Response<ServiceConfig> getServiceConfig(final GetServiceConfigRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/config", request, new TypeReference<Response<ServiceConfig>>() {});
+	}
+
+	/**
+	 * Create a service config.
+	 * @pangea.description Create a service config.
+	 * @pangea.operationId audit_post_v1beta_config_create
+	 * @param request Request parameters.
+	 */
+	public Response<ServiceConfig> createServiceConfig(final CreateServiceConfigRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/config/create", request, new TypeReference<Response<ServiceConfig>>() {});
+	}
+
+	/**
+	 * Update a service config.
+	 * @pangea.description Update a service config.
+	 * @pangea.operationId audit_post_v1beta_config_update
+	 * @param request Request parameters.
+	 */
+	public Response<ServiceConfig> updateServiceConfig(final UpdateServiceConfigRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/config/update", request, new TypeReference<Response<ServiceConfig>>() {});
+	}
+
+	/**
+	 * Delete a service config.
+	 * @pangea.description Delete a service config.
+	 * @pangea.operationId audit_post_v1beta_config_delete
+	 * @param id Config ID.
+	 */
+	public Response<ServiceConfig> deleteServiceConfig(final String id) throws PangeaException, PangeaAPIException {
+		return post(
+			"/v1beta/config/delete",
+			DeleteServiceConfigRequest.builder().id(id).build(),
+			new TypeReference<Response<ServiceConfig>>() {}
+		);
+	}
+
+	/**
+	 * List service configs.
+	 * @pangea.description List service configs.
+	 * @pangea.operationId audit_post_v1beta_config_list
+	 * @param request Request parameters.
+	 */
+	public Response<ServiceConfigListResult> listServiceConfigs(final ListServiceConfigsRequest request)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/config/list", request, new TypeReference<Response<ServiceConfigListResult>>() {});
+	}
 }

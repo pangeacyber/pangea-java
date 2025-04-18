@@ -2,8 +2,11 @@ package cloud.pangeacyber.pangea.redact;
 
 import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import cloud.pangeacyber.pangea.redact.models.ServiceConfig;
+import cloud.pangeacyber.pangea.redact.requests.GetServiceConfigRequest;
 import cloud.pangeacyber.pangea.redact.requests.RedactStructuredRequest;
 import cloud.pangeacyber.pangea.redact.requests.RedactTextRequest;
 import cloud.pangeacyber.pangea.redact.requests.UnredactRequest;
@@ -98,5 +101,19 @@ public class RedactClient extends BaseClient {
 	 */
 	public <T> UnredactResponse<T> unredact(UnredactRequest<T> request) throws PangeaException, PangeaAPIException {
 		return post("/v1/unredact", request, new TypeReference<UnredactResponse<T>>() {});
+	}
+
+	/**
+	 * Get a service config.
+	 * @pangea.description Get a service config.
+	 * @pangea.operationId redact_post_v1beta_config
+	 * @param request Request parameters.
+	 */
+	public Response<ServiceConfig> getServiceConfig(final String id) throws PangeaException, PangeaAPIException {
+		return post(
+			"/v1beta/config",
+			GetServiceConfigRequest.builder().id(id).build(),
+			new TypeReference<Response<ServiceConfig>>() {}
+		);
 	}
 }

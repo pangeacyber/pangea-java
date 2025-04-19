@@ -12,30 +12,29 @@ public final class Config {
 	@lombok.NonNull
 	String token;
 
-	/** Base domain for API requests. */
-	@lombok.NonNull
-	String domain;
-
-	/** Set to true to use plain HTTP */
+	/**
+	 * Template for constructing the base URL for API requests. The placeholder
+	 * `{SERVICE_NAME}` will be replaced with the service name slug. This is a
+	 * more powerful version of `domain` that allows for setting more than just
+	 * the host of the API server. Defaults to
+	 * `https://{SERVICE_NAME}.aws.us.pangea.cloud`.
+	 */
 	@lombok.Builder.Default
-	boolean insecure = false;
+	@lombok.NonNull
+	String baseUrlTemplate = "https://{SERVICE_NAME}.aws.us.pangea.cloud";
+
+	/**
+	 * Base domain for API requests. This is a weaker version of
+	 * `baseUrlTemplate` that only allows for setting the host of the API
+	 * server. Use `baseUrlTemplate` for more control over the URL, such as
+	 * setting service-specific paths.
+	 */
+	@lombok.Builder.Default
+	String domain = null;
 
 	/** Timeout for connections */
 	@lombok.Builder.Default
 	Duration connectionTimeout = Duration.ofSeconds(20);
-
-	/**
-	 * Pangea environment. If set to "local", then `domain` must be the full
-	 * host (i.e., hostname and port) for the Pangea service that this `Config`
-	 * will be used for.
-	 */
-	@lombok.Builder.Default
-	String environment = "production";
-
-	/** @deprecated Use `environment` instead. */
-	@lombok.Builder.Default
-	@Deprecated
-	String enviroment = "production";
 
 	/** Extra custom user-agent to send on requests */
 	@lombok.Builder.Default
@@ -65,21 +64,22 @@ public final class Config {
 	@lombok.Builder.Default
 	int maxConnectionsPerRoute = 50;
 
-	URI getServiceUrl(String serviceName, String path) {
-		StringBuilder b = new StringBuilder();
-		if (domain.startsWith("http://") || domain.startsWith("https://")) {
-			// url domain
-			b.append(domain);
+	public String getBaseUrlTemplate() {
+		return this.domain == null ? this.baseUrlTemplate : String.format("https://{SERVICE_NAME}.%s", this.domain);
+	}
+
+	URI getServiceUrl(final String serviceName, String path) {
+		final var url = URI.create(this.getBaseUrlTemplate().replace("{SERVICE_NAME}", serviceName));
+
+		if (path.startsWith("/")) {
+			path = path.replaceAll("//+", "/");
+		} else if (url.getPath().endsWith("/")) {
+			path = url.getPath() + path.replaceAll("//+", "/");
 		} else {
-			b.append(insecure ? "http://" : "https://");
-			if (!environment.equalsIgnoreCase("local") && !enviroment.equalsIgnoreCase("local")) {
-				b.append(serviceName);
-				b.append('.');
-			}
-			b.append(domain);
+			path = url.getPath() + "/" + path.replaceAll("//+", "/");
 		}
-		b.append(path);
-		return URI.create(b.toString());
+
+		return url.resolve(path).normalize();
 	}
 
 	public static Config fromEnvironment(String serviceName) throws ConfigException {

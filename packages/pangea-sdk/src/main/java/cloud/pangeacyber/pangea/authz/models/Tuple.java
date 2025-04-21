@@ -1,37 +1,44 @@
 package cloud.pangeacyber.pangea.authz.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.time.Instant;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
+@Builder
+@Jacksonized
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Tuple {
+@JsonInclude(Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@Value
+public final class Tuple {
 
-	@JsonProperty("resource")
+	@NonNull
 	private Resource resource;
 
-	@JsonProperty("relation")
+	@NonNull
 	private String relation;
 
-	@JsonProperty("subject")
+	@NonNull
 	private Subject subject;
 
+	@Builder.Default
+	private Instant expiresAt = null;
+
 	public Tuple(Resource resource, String relation, Subject subject) {
+		this(resource, relation, subject, null);
+	}
+
+	public Tuple(Resource resource, String relation, Subject subject, Instant expiresAt) {
 		this.resource = resource;
 		this.relation = relation;
 		this.subject = subject;
-	}
-
-	public Tuple() {}
-
-	public Resource getResource() {
-		return resource;
-	}
-
-	public String getRelation() {
-		return relation;
-	}
-
-	public Subject getSubject() {
-		return subject;
+		this.expiresAt = expiresAt;
 	}
 }

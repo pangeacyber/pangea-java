@@ -2,29 +2,42 @@ package cloud.pangeacyber.pangea.authz.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.authz.models.Tuple;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.util.Arrays;
+import java.util.List;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
-public class TupleCreateRequest extends BaseRequest {
+@Jacksonized
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@SuperBuilder
+@Value
+public final class TupleCreateRequest extends BaseRequest {
 
-	@JsonProperty("tuples")
-	private Tuple[] tuples;
+	@NonNull
+	private List<Tuple> tuples;
 
-	private TupleCreateRequest(Builder builder) {
-		this.tuples = builder.tuples;
-	}
+	// Legacy alias.
+	public static class Builder extends TupleCreateRequestBuilder<TupleCreateRequest, TupleCreateRequest.Builder> {
 
-	public Tuple[] getTuples() {
-		return tuples;
-	}
-
-	public static class Builder {
-
-		private Tuple[] tuples;
-
-		public Builder(Tuple[] tuples) {
-			this.tuples = tuples;
+		public Builder(final Tuple[] tuples) {
+			this.tuples(Arrays.asList(tuples));
 		}
 
+		@Override
+		protected Builder self() {
+			return this;
+		}
+
+		@Override
 		public TupleCreateRequest build() {
 			return new TupleCreateRequest(this);
 		}

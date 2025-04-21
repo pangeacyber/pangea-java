@@ -26,8 +26,11 @@ import cloud.pangeacyber.pangea.authz.responses.TupleDeleteResponse;
 import cloud.pangeacyber.pangea.authz.responses.TupleListResponse;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -161,5 +164,22 @@ public class ITAuthZTest {
 
 		assertNotNull(listSubjectsResponse.getResult());
 		assertEquals(1, listSubjectsResponse.getResult().getSubjects().length);
+	}
+
+	@Test
+	public void testExpiresAt() throws PangeaException, PangeaAPIException {
+		final var resource = new Resource.Builder(type_folder).setId(folder1).build();
+		final var subject = new Subject.Builder(type_user).setId(user1).build();
+		final var tuple = Tuple
+			.builder()
+			.resource(resource)
+			.relation(relation_reader)
+			.subject(subject)
+			.expiresAt(Instant.now().plus(Duration.ofDays(30)))
+			.build();
+
+		final var response = client.tupleCreate(TupleCreateRequest.builder().tuples(Arrays.asList(tuple)).build());
+		assertNotNull(response);
+		assertTrue(response.isOk());
 	}
 }

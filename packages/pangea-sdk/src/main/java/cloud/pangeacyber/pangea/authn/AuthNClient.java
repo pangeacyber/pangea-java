@@ -5,24 +5,27 @@ import cloud.pangeacyber.pangea.authn.clients.Agreements;
 import cloud.pangeacyber.pangea.authn.clients.AuthNBaseClient;
 import cloud.pangeacyber.pangea.authn.clients.Client;
 import cloud.pangeacyber.pangea.authn.clients.Flow;
+import cloud.pangeacyber.pangea.authn.clients.Group;
 import cloud.pangeacyber.pangea.authn.clients.Session;
 import cloud.pangeacyber.pangea.authn.clients.User;
 
 public class AuthNClient extends AuthNBaseClient {
 
-	private User user;
-	private Flow flow;
-	private Client client;
-	private Session session;
 	private Agreements agreements;
+	private Client client;
+	private Flow flow;
+	private Group group;
+	private Session session;
+	private User user;
 
-	public AuthNClient(Builder builder) {
+	public AuthNClient(final Builder builder) {
 		super(builder);
-		user = new User(builder);
-		flow = new Flow(builder);
-		client = new Client(builder);
-		session = new Session(builder);
-		agreements = new Agreements(builder);
+		this.agreements = new Agreements(builder);
+		this.client = new Client(builder);
+		this.flow = new Flow(builder);
+		this.group = new Group(builder);
+		this.session = new Session(builder);
+		this.user = new User(builder);
 	}
 
 	public static class Builder extends AuthNBaseClient.Builder<Builder> {
@@ -36,23 +39,27 @@ public class AuthNClient extends AuthNBaseClient {
 		}
 	}
 
-	public User user() {
-		return user;
-	}
-
-	public Flow flow() {
-		return flow;
+	public Agreements agreements() {
+		return this.agreements;
 	}
 
 	public Client client() {
-		return client;
+		return this.client;
+	}
+
+	public Flow flow() {
+		return this.flow;
+	}
+
+	public Group group() {
+		return this.group;
 	}
 
 	public Session session() {
-		return session;
+		return this.session;
 	}
 
-	public Agreements agreements() {
-		return agreements;
+	public User user() {
+		return this.user;
 	}
 }

@@ -3,9 +3,10 @@ package cloud.pangeacyber.pangea.authz.models;
 import cloud.pangeacyber.pangea.filters.Filter;
 import cloud.pangeacyber.pangea.filters.FilterMatch;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.time.Instant;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FilterTupleList extends Filter {
+public final class FilterTupleList extends Filter {
 
 	private FilterMatch<String> _resourceType;
 	private FilterMatch<String> _resourceID;
@@ -13,6 +14,7 @@ public class FilterTupleList extends Filter {
 	private FilterMatch<String> _subjectID;
 	private FilterMatch<String> _subjectAction;
 	private FilterMatch<String> _relation;
+	private FilterMatch<Instant> _expiresAt;
 
 	public FilterTupleList() {
 		_resourceType = new FilterMatch<String>("resource_type", this);
@@ -21,6 +23,7 @@ public class FilterTupleList extends Filter {
 		_subjectID = new FilterMatch<String>("subject_id", this);
 		_subjectAction = new FilterMatch<String>("subject_action", this);
 		_relation = new FilterMatch<String>("relation", this);
+		_expiresAt = new FilterMatch<Instant>("expires_at", this);
 	}
 
 	public FilterMatch<String> resourceType() {
@@ -45,5 +48,9 @@ public class FilterTupleList extends Filter {
 
 	public FilterMatch<String> relation() {
 		return _relation;
+	}
+
+	public FilterMatch<Instant> expiresAt() {
+		return _expiresAt;
 	}
 }

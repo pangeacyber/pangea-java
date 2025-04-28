@@ -65,14 +65,18 @@ final class UserVerifyRequest extends BaseRequest {
 
 public class User extends AuthNBaseClient {
 
-	private UserProfile profile;
+	private UserAuthenticators authenticators;
+	private UserGroup group;
 	private UserInvite invite;
+	private UserProfile profile;
 
 	/** @hidden */
 	public User(AuthNClient.Builder builder) {
 		super(builder);
-		profile = new UserProfile(builder);
-		invite = new UserInvite(builder);
+		this.authenticators = new UserAuthenticators(builder);
+		this.group = new UserGroup(builder);
+		this.invite = new UserInvite(builder);
+		this.profile = new UserProfile(builder);
 	}
 
 	/**
@@ -219,11 +223,19 @@ public class User extends AuthNBaseClient {
 		return post("/v2/user/list", request, UserListResponse.class);
 	}
 
-	public UserProfile profile() {
-		return profile;
+	public UserAuthenticators authenticators() {
+		return this.authenticators;
+	}
+
+	public UserGroup group() {
+		return this.group;
 	}
 
 	public UserInvite invite() {
-		return invite;
+		return this.invite;
+	}
+
+	public UserProfile profile() {
+		return this.profile;
 	}
 }

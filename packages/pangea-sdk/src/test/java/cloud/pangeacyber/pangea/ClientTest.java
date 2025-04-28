@@ -24,9 +24,9 @@ import org.junit.jupiter.api.Test;
 
 final class TestClient extends BaseClient {
 
-	public TestClient(String domain) {
+	public TestClient(final String baseUrlTemplate) {
 		super(
-			new BaseClient.Builder<>(new Config.Builder("token", domain).environment("local").insecure(true).build()),
+			new BaseClient.Builder<>(Config.builder().token("token").baseUrlTemplate(baseUrlTemplate).build()),
 			"test"
 		);
 	}
@@ -70,7 +70,7 @@ public class ClientTest {
 		server = serverBootstrap.create();
 		server.start();
 
-		client = new TestClient("localhost:" + server.getLocalPort());
+		client = new TestClient("http://localhost:" + server.getLocalPort());
 	}
 
 	@AfterEach

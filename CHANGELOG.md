@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 5.2.0-beta-1 - 2025-04-28
+
 ### Added
 
 - Management: new API client.

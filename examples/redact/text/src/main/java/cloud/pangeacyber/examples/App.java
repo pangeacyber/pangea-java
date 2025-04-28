@@ -22,7 +22,7 @@ public class App
         String text = "Hello, my phone number is 123-456-7890";
         RedactTextResponse response = null;
         try {
-            response = client.redactText(new RedactTextRequest.Builder(text).build());
+            response = client.redactText(RedactTextRequest.builder().text(text).build());
         } catch (Exception e){
             System.out.println("Failed to perform redact: " + e);
             System.exit(1);

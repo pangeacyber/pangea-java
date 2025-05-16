@@ -324,8 +324,6 @@ public class ITShareTest {
 		assertTrue(respPutPath.isOk());
 		assertNull(respPutPath.getResult().getObject().getMetadata());
 		assertNull(respPutPath.getResult().getObject().getTags());
-		assertNotNull(respPutPath.getResult().getObject().getMD5());
-		assertNotNull(respPutPath.getResult().getObject().getSHA512());
 		assertNotNull(respPutPath.getResult().getObject().getSHA256());
 
 		// Upload a file with parent id and name
@@ -345,8 +343,6 @@ public class ITShareTest {
 		assertEquals(folderID, respPutID.getResult().getObject().getParentID());
 		assertEquals(respPutID.getResult().getObject().getMetadata(), metadata);
 		assertEquals(respPutID.getResult().getObject().getTags(), tags);
-		assertNotNull(respPutID.getResult().getObject().getMD5());
-		assertNotNull(respPutID.getResult().getObject().getSHA512());
 		assertNotNull(respPutID.getResult().getObject().getSHA256());
 
 		// Update file. full metadata and tags

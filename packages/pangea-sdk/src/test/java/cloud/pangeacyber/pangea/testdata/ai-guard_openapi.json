@@ -1915,7 +1915,6 @@
               "type": "string"
             },
             "state": {
-              "type": "string",
               "enum": ["disabled", "enabled"],
               "default": "disabled"
             },
@@ -1963,56 +1962,46 @@
         "additionalProperties": false,
         "oneOf": [
           {
-            "type": "object",
             "properties": {
               "redaction_type": {
-                "type": "string",
                 "enum": ["mask", "detect_only"]
               }
             }
           },
           {
-            "type": "object",
             "required": ["redaction_value"],
             "properties": {
               "redaction_type": {
-                "type": "string",
                 "const": "replacement"
               }
             }
           },
           {
-            "type": "object",
             "required": ["partial_masking"],
             "properties": {
               "redaction_type": {
-                "type": "string",
                 "const": "partial_masking"
               }
             }
           },
           {
-            "type": "object",
             "required": ["hash"],
             "properties": {
               "hash": {
                 "type": "object"
               },
               "redaction_type": {
-                "type": "string",
                 "const": "hash"
               }
             }
           },
           {
-            "type": "object",
             "required": ["fpe_alphabet"],
             "properties": {
               "fpe_alphabet": {
                 "type": "string"
               },
               "redaction_type": {
-                "type": "string",
                 "const": "fpe"
               }
             }
@@ -2074,7 +2063,7 @@
             }
           },
           "hash": {
-            "type": "object",
+            "type": ["object", "null"],
             "required": ["hash_type"],
             "properties": {
               "hash_type": {
@@ -2139,7 +2128,7 @@
         "$ref": "#/components/schemas/ai-guard-subscription"
       },
       "ai-guard-subscription-data": {
-        "type": "object",
+        "type": ["object", "null"],
         "description": "AI Guard Subscription Data",
         "properties": {
           "triggers": {

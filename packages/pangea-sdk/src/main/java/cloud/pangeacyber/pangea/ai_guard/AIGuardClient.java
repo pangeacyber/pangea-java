@@ -2,8 +2,16 @@ package cloud.pangeacyber.pangea.ai_guard;
 
 import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.Response;
+import cloud.pangeacyber.pangea.ai_guard.models.ServiceConfig;
+import cloud.pangeacyber.pangea.ai_guard.requests.CreateServiceConfigParams;
+import cloud.pangeacyber.pangea.ai_guard.requests.DeleteServiceConfigParams;
+import cloud.pangeacyber.pangea.ai_guard.requests.GetServiceConfigParams;
+import cloud.pangeacyber.pangea.ai_guard.requests.ListServiceConfigsParams;
 import cloud.pangeacyber.pangea.ai_guard.requests.TextGuardRequest;
+import cloud.pangeacyber.pangea.ai_guard.requests.UpdateServiceConfigParams;
 import cloud.pangeacyber.pangea.ai_guard.responses.TextGuardResponse;
+import cloud.pangeacyber.pangea.ai_guard.results.ListServiceConfigsResult;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -51,5 +59,60 @@ public class AIGuardClient extends BaseClient {
 		}
 
 		return post("/v1/text/guard", request, new TypeReference<TextGuardResponse<TMessages>>() {});
+	}
+
+	/**
+	 * @pangea.operationId ai_guard_post_v1beta_config
+	 * @param body Request body.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	public Response<ServiceConfig> getServiceConfig(final GetServiceConfigParams body)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/config", body, new TypeReference<Response<ServiceConfig>>() {});
+	}
+
+	/**
+	 * @pangea.operationId ai_guard_post_v1beta_config_create
+	 * @param body Request body.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	public Response<ServiceConfig> createServiceConfig(final CreateServiceConfigParams body)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/config/create", body, new TypeReference<Response<ServiceConfig>>() {});
+	}
+
+	/**
+	 * @pangea.operationId ai_guard_post_v1beta_config_update
+	 * @param body Request body.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	public Response<ServiceConfig> updateServiceConfig(final UpdateServiceConfigParams body)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/config/update", body, new TypeReference<Response<ServiceConfig>>() {});
+	}
+
+	/**
+	 * @pangea.operationId ai_guard_post_v1beta_config_delete
+	 * @param body Request body.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	public Response<ServiceConfig> deleteServiceConfig(final DeleteServiceConfigParams body)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/config/delete", body, new TypeReference<Response<ServiceConfig>>() {});
+	}
+
+	/**
+	 * @pangea.operationId ai_guard_post_v1beta_config_list
+	 * @param body Request body.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	public Response<ListServiceConfigsResult> listServiceConfigs(final ListServiceConfigsParams body)
+		throws PangeaException, PangeaAPIException {
+		return post("/v1beta/config/list", body, new TypeReference<Response<ListServiceConfigsResult>>() {});
 	}
 }

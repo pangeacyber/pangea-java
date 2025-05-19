@@ -15,6 +15,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.LinkedList;
 import java.util.List;
@@ -171,6 +172,10 @@ public abstract class BaseClient {
 		.builder()
 		.findAndAddModules()
 		.defaultTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC))
+		.withConfigOverride(
+			OffsetDateTime.class,
+			cfg -> cfg.setFormat(JsonFormat.Value.forPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSSX"))
+		)
 		.withConfigOverride(
 			Instant.class,
 			cfg -> cfg.setFormat(JsonFormat.Value.forPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSSX"))

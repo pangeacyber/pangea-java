@@ -104,6 +104,30 @@ jobs:
       - name: Unit test
         run: mvn test -B -e -Dtest="cloud.pangeacyber.pangea.*Test"
 
+  test-integration:
+    needs: [prefetch]
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        java-version: [11, 17, 21]
+    defaults:
+      run:
+        working-directory: ./packages/pangea-sdk
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Java
+        uses: actions/setup-java@v4.7.1
+        with:
+          distribution: microsoft
+          java-version: ${{ matrix.java-version }}
+          cache: maven
+          cache-dependency-path: ./packages/pangea-sdk/pom.xml
+
+      - name: Integration test
+        run: bash ./scripts/test.sh
+
   examples:
     needs: [setup, prefetch]
     runs-on: ubuntu-24.04

@@ -14,9 +14,11 @@ import cloud.pangeacyber.pangea.ai_guard.requests.UpdateServiceConfigParams;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
 import cloud.pangeacyber.pangea.prompt_guard.models.Message;
+import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.TestAbortedException;
 
 final class AIGuardTest {
 
@@ -24,8 +26,18 @@ final class AIGuardTest {
 		? System.getenv("TEST_API_BASE_URL")
 		: "http://localhost:4010";
 
+	private static void checkTestServer() throws TestAbortedException {
+		try {
+			URI.create(BASE_URL).toURL().openConnection().connect();
+		} catch (Exception error) {
+			throw new TestAbortedException("Mock OpenAPI server is not running. Skipping tests.", error);
+		}
+	}
+
 	@Test
 	void guardText() throws PangeaException, PangeaAPIException {
+		checkTestServer();
+
 		final var client = new AIGuardClient.Builder(
 			Config.builder().baseUrlTemplate(BASE_URL).token("my api token").build()
 		)
@@ -39,6 +51,8 @@ final class AIGuardTest {
 
 	@Test
 	void guardMessages() throws PangeaException, PangeaAPIException {
+		checkTestServer();
+
 		final var client = new AIGuardClient.Builder(
 			Config.builder().baseUrlTemplate(BASE_URL).token("my api token").build()
 		)

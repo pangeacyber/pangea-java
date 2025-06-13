@@ -74,7 +74,9 @@ final class AIGuardTest {
 			Config.builder().baseUrlTemplate(BASE_URL).token("my api token").build()
 		)
 			.build();
-		final var response = client.getServiceConfig(GetServiceConfigParams.builder().id("my id").build());
+		final var response = client.getServiceConfig(
+			GetServiceConfigParams.builder().id("pci_l37ztsr7x66mou6o4gp762wmnur6oie6").build()
+		);
 		assertTrue(response.isOk());
 		assertNotNull(response.getResult());
 	}
@@ -97,7 +99,7 @@ final class AIGuardTest {
 		)
 			.build();
 		final var response = client.updateServiceConfig(
-			UpdateServiceConfigParams.builder().id("id").name("name").build()
+			UpdateServiceConfigParams.builder().id("pci_l37ztsr7x66mou6o4gp762wmnur6oie6").name("name").build()
 		);
 		assertTrue(response.isOk());
 		assertNotNull(response.getResult());
@@ -110,7 +112,9 @@ final class AIGuardTest {
 			Config.builder().baseUrlTemplate(BASE_URL).token("my api token").build()
 		)
 			.build();
-		final var response = client.deleteServiceConfig(DeleteServiceConfigParams.builder().id("my id").build());
+		final var response = client.deleteServiceConfig(
+			DeleteServiceConfigParams.builder().id("pci_l37ztsr7x66mou6o4gp762wmnur6oie6").build()
+		);
 		assertTrue(response.isOk());
 		assertNotNull(response.getResult());
 	}
@@ -124,7 +128,13 @@ final class AIGuardTest {
 		final var response = client.listServiceConfigs(
 			ListServiceConfigsParams
 				.builder()
-				.filter(ServiceConfigListFilter.builder().id("my id").createdAt(OffsetDateTime.now()).build())
+				.filter(
+					ServiceConfigListFilter
+						.builder()
+						.id("pci_l37ztsr7x66mou6o4gp762wmnur6oie6")
+						.createdAt(OffsetDateTime.now())
+						.build()
+				)
 				.build()
 		);
 		assertTrue(response.isOk());

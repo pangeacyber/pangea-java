@@ -4,7 +4,9 @@ import cloud.pangeacyber.pangea.BaseClient;
 import cloud.pangeacyber.pangea.Config;
 import cloud.pangeacyber.pangea.Response;
 import cloud.pangeacyber.pangea.ai_guard.models.Message;
+import cloud.pangeacyber.pangea.ai_guard.requests.GuardRequest;
 import cloud.pangeacyber.pangea.ai_guard.requests.TextGuardRequest;
+import cloud.pangeacyber.pangea.ai_guard.results.GuardResult;
 import cloud.pangeacyber.pangea.ai_guard.results.TextGuardResult;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -173,5 +175,18 @@ public class AIGuardClient extends BaseClient {
 		}
 
 		return post("/v1/text/guard", request, new TypeReference<Response<TextGuardResult>>() {});
+	}
+
+	/**
+	 * Guard LLM input and output
+	 * @pangea.description Analyze and redact content to avoid manipulation of
+	 *   the model, addition of malicious content, and other undesirable data transfers.
+	 * @pangea.operationId ai_guard_post_v1_guard
+	 * @param request Request parameters.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	public Response<GuardResult> guard(final GuardRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1/guard", request, new TypeReference<Response<GuardResult>>() {});
 	}
 }

@@ -7,10 +7,12 @@ import cloud.pangeacyber.pangea.ai_guard.models.ServiceConfig;
 import cloud.pangeacyber.pangea.ai_guard.requests.CreateServiceConfigParams;
 import cloud.pangeacyber.pangea.ai_guard.requests.DeleteServiceConfigParams;
 import cloud.pangeacyber.pangea.ai_guard.requests.GetServiceConfigParams;
+import cloud.pangeacyber.pangea.ai_guard.requests.GuardRequest;
 import cloud.pangeacyber.pangea.ai_guard.requests.ListServiceConfigsParams;
 import cloud.pangeacyber.pangea.ai_guard.requests.TextGuardRequest;
 import cloud.pangeacyber.pangea.ai_guard.requests.UpdateServiceConfigParams;
 import cloud.pangeacyber.pangea.ai_guard.responses.TextGuardResponse;
+import cloud.pangeacyber.pangea.ai_guard.results.GuardResult;
 import cloud.pangeacyber.pangea.ai_guard.results.ListServiceConfigsResult;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
 import cloud.pangeacyber.pangea.exceptions.PangeaException;
@@ -59,6 +61,19 @@ public class AIGuardClient extends BaseClient {
 		}
 
 		return post("/v1/text/guard", request, new TypeReference<TextGuardResponse<TMessages>>() {});
+	}
+
+	/**
+	 * Guard LLM input and output
+	 * @pangea.description Analyze and redact content to avoid manipulation of
+	 *   the model, addition of malicious content, and other undesirable data transfers.
+	 * @pangea.operationId ai_guard_post_v1beta_guard
+	 * @param request Request parameters.
+	 * @throws PangeaException Thrown if an error occurs during the operation.
+	 * @throws PangeaAPIException Thrown if the API returns an error response.
+	 */
+	public Response<GuardResult> guard(final GuardRequest request) throws PangeaException, PangeaAPIException {
+		return post("/v1beta/guard", request, new TypeReference<Response<GuardResult>>() {});
 	}
 
 	/**

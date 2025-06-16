@@ -4,10 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.ai_guard.models.ImageContent;
+import cloud.pangeacyber.pangea.ai_guard.models.MultimodalMessage;
 import cloud.pangeacyber.pangea.ai_guard.models.ServiceConfigListFilter;
+import cloud.pangeacyber.pangea.ai_guard.models.TextContent;
 import cloud.pangeacyber.pangea.ai_guard.requests.CreateServiceConfigParams;
 import cloud.pangeacyber.pangea.ai_guard.requests.DeleteServiceConfigParams;
 import cloud.pangeacyber.pangea.ai_guard.requests.GetServiceConfigParams;
+import cloud.pangeacyber.pangea.ai_guard.requests.GuardRequest;
 import cloud.pangeacyber.pangea.ai_guard.requests.ListServiceConfigsParams;
 import cloud.pangeacyber.pangea.ai_guard.requests.TextGuardRequest;
 import cloud.pangeacyber.pangea.ai_guard.requests.UpdateServiceConfigParams;
@@ -61,6 +65,45 @@ final class AIGuardTest {
 			TextGuardRequest
 				.builder()
 				.messages(List.of(new Message("user", "hello world"), new Message("assistant", "hello world")))
+				.recipe("pangea_prompt_guard")
+				.build()
+		);
+		assertTrue(response.isOk());
+		assertNotNull(response.getResult());
+	}
+
+	@Test
+	void guard() throws PangeaException, PangeaAPIException {
+		checkTestServer();
+
+		final var client = new AIGuardClient.Builder(
+			Config.builder().baseUrlTemplate(BASE_URL).token("my api token").build()
+		)
+			.build();
+		final var response = client.guard(
+			GuardRequest
+				.builder()
+				.message(
+					MultimodalMessage
+						.builder()
+						.role("user")
+						.content(TextContent.builder().text("hello world").build())
+						.build()
+				)
+				.message(
+					MultimodalMessage
+						.builder()
+						.role("user")
+						.content(ImageContent.builder().imageSrc(URI.create("https://example.org/favicon.ico")).build())
+						.build()
+				)
+				.message(
+					MultimodalMessage
+						.builder()
+						.role("user")
+						.content(ImageContent.builder().imageSrc(URI.create("data:image/jpeg;base64,000000")).build())
+						.build()
+				)
 				.recipe("pangea_prompt_guard")
 				.build()
 		);

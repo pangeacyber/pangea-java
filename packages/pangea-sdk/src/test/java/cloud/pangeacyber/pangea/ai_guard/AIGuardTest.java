@@ -1,5 +1,6 @@
 package cloud.pangeacyber.pangea.ai_guard;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -87,27 +88,31 @@ final class AIGuardTest {
 					MultimodalMessage
 						.builder()
 						.role("user")
-						.content(TextContent.builder().text("hello world").build())
+						.content(
+							List.of(
+								TextContent.builder().text("hello world").build(),
+								ImageContent.builder().imageSrc(URI.create("https://example.org/favicon.ico")).build()
+							)
+						)
 						.build()
 				)
 				.message(
 					MultimodalMessage
 						.builder()
 						.role("user")
-						.content(ImageContent.builder().imageSrc(URI.create("https://example.org/favicon.ico")).build())
-						.build()
-				)
-				.message(
-					MultimodalMessage
-						.builder()
-						.role("user")
-						.content(ImageContent.builder().imageSrc(URI.create("data:image/jpeg;base64,000000")).build())
+						.content(
+							List.of(
+								TextContent.builder().text("hello world").build(),
+								ImageContent.builder().imageSrc(URI.create("data:image/jpeg;base64,000000")).build()
+							)
+						)
 						.build()
 				)
 				.recipe("pangea_prompt_guard")
 				.build()
 		);
 		assertTrue(response.isOk());
+		assertEquals(200, response.getHttpResponse().getStatusLine().getStatusCode());
 		assertNotNull(response.getResult());
 	}
 

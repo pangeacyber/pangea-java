@@ -42,7 +42,7 @@ compatibility guarantees as stable releases. [Beta changelog][].
 Via Gradle:
 
 ```gradle
-implementation("cloud.pangea:pangea-sdk:4.2.0-beta-1")
+implementation("cloud.pangea:pangea-sdk:5.2.0-beta-2")
 ```
 
 Via Maven:
@@ -51,7 +51,7 @@ Via Maven:
 <dependency>
   <groupId>cloud.pangea</groupId>
   <artifactId>pangea-sdk</artifactId>
-  <version>4.2.0-beta-1</version>
+  <version>5.2.0-beta-2</version>
 </dependency>
 ```
 
@@ -106,9 +106,33 @@ try {
 }
 ```
 
-   [Documentation]: https://pangea.cloud/docs/sdk/java/
-   [GA Examples]: https://github.com/pangeacyber/pangea-java/tree/main/examples
-   [Beta Examples]: https://github.com/pangeacyber/pangea-java/tree/beta/examples
-   [Pangea Console]: https://console.pangea.cloud/
-   [Secure Audit Log]: https://pangea.cloud/docs/audit
-   [Beta changelog]: https://github.com/pangeacyber/pangea-java/blob/beta/CHANGELOG.md
+## Configuration
+
+The SDK supports the following configuration options via `Config`:
+
+- `token` — Pangea API token.
+- `baseUrlTemplate` — Template for constructing the base URL for API requests.
+  The placeholder `{SERVICE_NAME}` will be replaced with the service name slug.
+  This is a more powerful version of `domain` that allows for setting more than
+  just the host of the API server. Defaults to
+  `https://{SERVICE_NAME}.aws.us.pangea.cloud`.
+- `domain` — Base domain for API requests. This is a weaker version of
+  `baseUrlTemplate` that only allows for setting the host of the API server. Use
+  `baseUrlTemplate` for more control over the URL, such as setting
+  service-specific paths.
+- `connectionTimeout` — Timeout for connections. Defaults to 20 seconds.
+- `customUserAgent` — Extra custom user-agent to send on requests.
+- `queuedRetryEnabled` — Enable queued request retry support. Defaults to true.
+- `pollResultTimeout` — Timeout for polling result. Defaults to 240 seconds.
+- `maxRetries` — Maximum number of retries. Defaults to 3.
+- `retryInterval` — Interval between retries. Defaults to 5 seconds.
+- `maxTotalConnections` — Maximum number of total connections. Defaults to 50.
+- `maxConnectionsPerRoute` — Maximum number of connections per route.
+  Defaults to 50.
+
+  [Documentation]: https://pangea.cloud/docs/sdk/java/
+  [GA Examples]: https://github.com/pangeacyber/pangea-java/tree/main/examples
+  [Beta Examples]: https://github.com/pangeacyber/pangea-java/tree/beta/examples
+  [Pangea Console]: https://console.pangea.cloud/
+  [Secure Audit Log]: https://pangea.cloud/docs/audit
+  [Beta changelog]: https://github.com/pangeacyber/pangea-java/blob/beta/CHANGELOG.md

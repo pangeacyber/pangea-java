@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
-import org.apache.http.HttpResponse;
+import org.apache.hc.core5.http.HttpResponse;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response<Result> extends ResponseHeader {

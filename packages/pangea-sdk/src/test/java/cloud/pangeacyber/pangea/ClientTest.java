@@ -8,16 +8,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.bootstrap.HttpServer;
-import org.apache.http.impl.bootstrap.ServerBootstrap;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.protocol.HttpRequestHandler;
+import org.apache.hc.core5.http.ClassicHttpRequest;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.impl.bootstrap.HttpServer;
+import org.apache.hc.core5.http.impl.bootstrap.ServerBootstrap;
+import org.apache.hc.core5.http.io.HttpRequestHandler;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.protocol.HttpContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,12 +42,15 @@ public class ClientTest {
 		private int attempts = 0;
 
 		@Override
-		public void handle(final HttpRequest request, final HttpResponse response, final HttpContext context)
-			throws HttpException, IOException {
+		public void handle(
+			final ClassicHttpRequest request,
+			final ClassicHttpResponse response,
+			final HttpContext context
+		) throws HttpException, IOException {
 			// Fail twice, then succeed from then on.
 			final var success = attempts++ < 2;
 
-			response.setStatusCode(success ? HttpStatus.SC_OK : HttpStatus.SC_BAD_GATEWAY);
+			response.setCode(success ? HttpStatus.SC_OK : HttpStatus.SC_BAD_GATEWAY);
 
 			// Response body.
 			final var responseBody = new ResponseHeader();
@@ -65,8 +67,8 @@ public class ClientTest {
 
 	@BeforeEach
 	public void setUp() throws IOException {
-		serverBootstrap = ServerBootstrap.bootstrap().setServerInfo("TEST/1.1");
-		serverBootstrap.registerHandler("*", new MockServerErrorHandler());
+		serverBootstrap = ServerBootstrap.bootstrap();
+		serverBootstrap.register("*", new MockServerErrorHandler());
 		server = serverBootstrap.create();
 		server.start();
 
@@ -76,7 +78,7 @@ public class ClientTest {
 	@AfterEach
 	public void shutDown() {
 		if (server != null) {
-			server.shutdown(10, TimeUnit.SECONDS);
+			server.close();
 		}
 	}
 

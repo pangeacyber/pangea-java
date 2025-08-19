@@ -48,9 +48,10 @@ public class ClientTest {
 			final HttpContext context
 		) throws HttpException, IOException {
 			// Fail twice, then succeed from then on.
-			final var success = attempts++ < 2;
+			final var success = attempts++ >= 2;
 
 			response.setCode(success ? HttpStatus.SC_OK : HttpStatus.SC_BAD_GATEWAY);
+			response.setHeader("x-request-id", "test-request-id");
 
 			// Response body.
 			final var responseBody = new ResponseHeader();
@@ -68,7 +69,7 @@ public class ClientTest {
 	@BeforeEach
 	public void setUp() throws IOException {
 		serverBootstrap = ServerBootstrap.bootstrap();
-		serverBootstrap.register("*", new MockServerErrorHandler());
+		serverBootstrap.register("localhost", "*", new MockServerErrorHandler());
 		server = serverBootstrap.create();
 		server.start();
 

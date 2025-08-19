@@ -1,7 +1,9 @@
 package cloud.pangeacyber.pangea;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import org.apache.hc.client5.http.HttpRequestRetryStrategy;
 import org.apache.hc.core5.concurrent.CancellableDependency;
 import org.apache.hc.core5.http.HttpRequest;
@@ -80,12 +82,30 @@ public final class ServerErrorRetryStrategy implements HttpRequestRetryStrategy 
 	@Override
 	public final boolean retryRequest(HttpResponse response, int executionCount, HttpContext context) {
 		final var statusCode = response.getCode();
-		return (executionCount <= maxRetries && RETRYABLE_HTTP_CODES.contains(statusCode));
+		final var shouldRetry = executionCount <= maxRetries && RETRYABLE_HTTP_CODES.contains(statusCode);
+		if (shouldRetry) {
+			final var requestIdHeader = response.getFirstHeader("x-request-id");
+			if (requestIdHeader == null) {
+				return shouldRetry;
+			}
+			final var requestId = requestIdHeader.getValue();
+
+			@SuppressWarnings("unchecked")
+			var retriedRequestIds = (Set<String>) context.getAttribute("pangea.retried.request.ids");
+			if (retriedRequestIds == null) {
+				retriedRequestIds = new HashSet<>();
+				context.setAttribute("pangea.retried.request.ids", retriedRequestIds);
+			}
+			retriedRequestIds.add(requestId);
+		}
+		return shouldRetry;
 	}
 
-	/** @return The interval between the subsequent auto-retries. */
+	/** @return The retry interval between subsequent retries. */
 	@Override
 	public final TimeValue getRetryInterval(HttpResponse response, int executionCount, HttpContext context) {
-		return this.retryInterval;
+		final var delaySeconds = Math.min(0.5 * Math.pow(2, executionCount - 1), 8);
+		final var jitter = 1 - ThreadLocalRandom.current().nextDouble() * 0.25;
+		return TimeValue.ofMilliseconds((long) (delaySeconds * jitter * 1000));
 	}
 }

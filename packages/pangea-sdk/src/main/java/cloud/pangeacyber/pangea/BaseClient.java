@@ -300,6 +300,7 @@ public abstract class BaseClient {
 			.setRetryStrategy(
 				new ServerErrorRetryStrategy(this.config.getMaxRetries(), TimeValue.of(this.config.getRetryInterval()))
 			)
+			.addRequestInterceptorLast(new RetryHeaderInterceptor())
 			.build();
 	}
 

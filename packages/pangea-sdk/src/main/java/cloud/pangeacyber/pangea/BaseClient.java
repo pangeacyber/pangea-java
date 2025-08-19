@@ -21,27 +21,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import org.apache.commons.fileupload.MultipartStream;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.FileEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpPut;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.cookie.StandardCookieSpec;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.client5.http.entity.mime.StringBody;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.core5.http.ClassicHttpRequest;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntityContainer;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.FileEntity;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.message.BasicHttpRequest;
+import org.apache.hc.core5.util.TimeValue;
+import org.apache.hc.core5.util.Timeout;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,22 +55,17 @@ import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 final class InternalHttpResponse {
 
-	HttpResponse response;
+	ClassicHttpResponse response;
 	String body;
 	List<AttachedFile> attachedFiles = new LinkedList<>();
 
-	public InternalHttpResponse(HttpResponse response) throws PangeaException {
+	public InternalHttpResponse(final ClassicHttpResponse response) throws IOException {
 		this.response = response;
-		HttpEntity entity = response.getEntity();
+		final var entity = response.getEntity();
 		// Check if the entity is multipart
 		try {
-			if (
-				entity != null &&
-				entity.getContentType() != null &&
-				entity.getContentType().getValue() != null &&
-				entity.getContentType().getValue().contains("multipart")
-			) {
-				String boundary = getBoundary(entity.getContentType().getValue());
+			if (entity != null && entity.getContentType() != null && entity.getContentType().contains("multipart")) {
+				String boundary = getBoundary(entity.getContentType());
 
 				// Get the input stream from the entity
 				try (InputStream inputStream = entity.getContent()) {
@@ -106,7 +102,7 @@ final class InternalHttpResponse {
 				this.body = readBody(response);
 			}
 		} catch (Exception e) {
-			throw new PangeaException(String.format("Failed to parse http response: %s", e.toString()), e);
+			throw new IOException(String.format("Failed to parse http response: %s", e.toString()), e);
 		}
 	}
 
@@ -135,9 +131,9 @@ final class InternalHttpResponse {
 		return value;
 	}
 
-	private String readBody(HttpResponse response) throws PangeaException {
+	private String readBody(final HttpEntityContainer response) throws PangeaException {
 		String body = "";
-		HttpEntity entity = response.getEntity();
+		final var entity = response.getEntity();
 		if (entity == null) {
 			return body;
 		}
@@ -150,7 +146,7 @@ final class InternalHttpResponse {
 		return body;
 	}
 
-	public HttpResponse getResponse() {
+	public ClassicHttpResponse getResponse() {
 		return response;
 	}
 
@@ -286,70 +282,66 @@ public abstract class BaseClient {
 			timeout = (int) config.connectionTimeout.toMillis();
 		}
 
-		final var connectionManager = new PoolingHttpClientConnectionManager();
-		connectionManager.setMaxTotal(config.getMaxConnectionsPerRoute());
-		connectionManager.setDefaultMaxPerRoute(config.getMaxConnectionsPerRoute());
+		final var connectionManager = PoolingHttpClientConnectionManagerBuilder
+			.create()
+			.setMaxConnTotal(config.getMaxTotalConnections())
+			.setMaxConnPerRoute(config.getMaxConnectionsPerRoute())
+			.build();
 
-		RequestConfig config = RequestConfig
+		final var config = RequestConfig
 			.custom()
-			.setConnectTimeout(timeout)
-			.setConnectionRequestTimeout(timeout)
-			.setSocketTimeout(timeout)
-			.setCookieSpec(CookieSpecs.STANDARD)
+			.setConnectionRequestTimeout(Timeout.ofMilliseconds(timeout))
+			.setCookieSpec(StandardCookieSpec.STRICT)
 			.build();
 		return HttpClientBuilder
 			.create()
 			.setConnectionManager(connectionManager)
 			.setDefaultRequestConfig(config)
-			.setServiceUnavailableRetryStrategy(
-				new ServerErrorRetryStrategy(this.config.getMaxRetries(), this.config.getRetryInterval().toMillis())
+			.setRetryStrategy(
+				new ServerErrorRetryStrategy(this.config.getMaxRetries(), TimeValue.of(this.config.getRetryInterval()))
 			)
 			.build();
 	}
 
 	protected HttpPost buildPostRequest(URI url, String body) throws UnsupportedEncodingException {
-		HttpPost httpPost = new HttpPost(url);
+		final var httpPost = new HttpPost(url);
 		httpPost.setEntity(new StringEntity(body, ContentType.APPLICATION_JSON));
 		fillHeaders(httpPost);
 		return httpPost;
 	}
 
 	protected HttpPost buildPostRequest(URI url, String body, FileData fileData) throws UnsupportedEncodingException {
-		HttpPost httpPost = new HttpPost(url);
+		final var httpPost = new HttpPost(url);
 
-		final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-		final StringBody requestBody = new StringBody(body, ContentType.APPLICATION_JSON);
+		final var builder = MultipartEntityBuilder.create();
+		final var requestBody = new StringBody(body, ContentType.APPLICATION_JSON);
 		builder.addPart("request", requestBody);
 		builder.addBinaryBody(fileData.getName(), fileData.getFile(), ContentType.APPLICATION_OCTET_STREAM, "file.exe");
 
-		final HttpEntity entity = builder.build();
+		final var entity = builder.build();
 		httpPost.setEntity(entity);
 		fillHeaders(httpPost);
 
 		return httpPost;
 	}
 
-	protected HttpEntityEnclosingRequestBase buildPresignedURLPutRequest(URI url, FileData fileData)
+	protected HttpUriRequestBase buildPresignedURLPutRequest(URI url, FileData fileData)
 		throws UnsupportedEncodingException {
-		HttpPut httpPut = new HttpPut(url);
-		FileEntity fileEntity = new FileEntity(fileData.getFile(), ContentType.APPLICATION_OCTET_STREAM);
+		final var httpPut = new HttpPut(url);
+		final var fileEntity = new FileEntity(fileData.getFile(), ContentType.APPLICATION_OCTET_STREAM);
 		httpPut.setEntity(fileEntity);
 		return httpPut;
 	}
 
-	protected HttpEntityEnclosingRequestBase buildPresignedURLPostRequest(URI url, FileData fileData)
+	protected HttpUriRequestBase buildPresignedURLPostRequest(URI url, FileData fileData)
 		throws UnsupportedEncodingException {
-		HttpEntityEnclosingRequestBase httpRequest;
-		httpRequest = new HttpPost(url);
-		final MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+		final var httpRequest = new HttpPost(url);
+		final var builder = MultipartEntityBuilder.create();
 
 		if (fileData.getDetails() != null) {
 			for (Map.Entry<String, Object> entry : fileData.getDetails().entrySet()) {
 				if (entry.getValue() instanceof String) {
-					final StringBody requestBody = new StringBody(
-						(String) entry.getValue(),
-						ContentType.APPLICATION_JSON
-					);
+					final var requestBody = new StringBody((String) entry.getValue(), ContentType.APPLICATION_JSON);
 					String key = entry.getKey();
 					builder.addPart(key, requestBody);
 				}
@@ -357,12 +349,12 @@ public abstract class BaseClient {
 		}
 
 		builder.addBinaryBody(fileData.getName(), fileData.getFile(), ContentType.APPLICATION_OCTET_STREAM, "file.exe");
-		final HttpEntity entity = builder.build();
+		final var entity = builder.build();
 		httpRequest.setEntity(entity);
 		return httpRequest;
 	}
 
-	protected HttpUriRequest buildRequestPresignedURL(URI url, TransferMethod transferMethod, FileData fileData)
+	protected HttpUriRequestBase buildRequestPresignedURL(URI url, TransferMethod transferMethod, FileData fileData)
 		throws UnsupportedEncodingException {
 		if (transferMethod == TransferMethod.POST_URL) {
 			return buildPresignedURLPostRequest(url, fileData);
@@ -371,7 +363,7 @@ public abstract class BaseClient {
 		}
 	}
 
-	protected void fillHeaders(HttpRequestBase request) {
+	protected void fillHeaders(final BasicHttpRequest request) {
 		if (customHeaders != null) {
 			for (Map.Entry<String, String> entry : customHeaders.entrySet()) {
 				String key = entry.getKey();
@@ -502,41 +494,35 @@ public abstract class BaseClient {
 	}
 
 	public AttachedFile downloadFile(String url) throws PangeaException {
-		HttpGet httpGet = new HttpGet(url);
-		HttpResponse response;
+		final var httpGet = new HttpGet(url);
 		try {
-			response = httpClient.execute(httpGet);
-		} catch (IOException e) {
+			return httpClient.execute(
+				httpGet,
+				response -> {
+					final var entity = response.getEntity();
+					final var buffer = new ByteArrayOutputStream();
+					entity.writeTo(buffer);
+
+					String filename = null;
+					// FIXME: Read filename from content disposition first when implemented in backend
+					// Header contentDisposition = response.getFirstHeader("Content-Disposition");
+					// if (contentDisposition != null) {
+					// 	String contentDispositionValue = contentDisposition.getValue();
+					// }
+
+					if (filename == null) {
+						filename = getFilenameFromURL(url);
+					}
+					if (filename == null) {
+						filename = "default_filename";
+					}
+
+					return new AttachedFile(filename, entity.getContentType(), buffer.toByteArray());
+				}
+			);
+		} catch (Exception e) {
 			throw new PangeaException("Failed to download file", e);
 		}
-
-		HttpEntity entity = response.getEntity();
-		if (entity == null) {
-			throw new PangeaException("Failed to download file", null);
-		}
-
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		try {
-			entity.writeTo(buffer);
-		} catch (IOException e) {
-			throw new PangeaException("Failed to read file", e);
-		}
-
-		String filename = null;
-		// FIXME: Read filename from content disposition first when implemented in backend
-		// Header contentDisposition = response.getFirstHeader("Content-Disposition");
-		// if (contentDisposition != null) {
-		// 	String contentDispositionValue = contentDisposition.getValue();
-		// }
-
-		if (filename == null) {
-			filename = getFilenameFromURL(url);
-		}
-		if (filename == null) {
-			filename = "default_filename";
-		}
-
-		return new AttachedFile(filename, entity.getContentType().getValue(), buffer.toByteArray());
 	}
 
 	private String getFilenameFromURL(String url) {
@@ -707,7 +693,7 @@ public abstract class BaseClient {
 			throw new PresignedURLException(String.format("Failed to read presigned URL: %s", url), e, null);
 		}
 
-		HttpUriRequest request;
+		HttpUriRequestBase request;
 		try {
 			request = buildRequestPresignedURL(uri, transferMethod, fileData);
 		} catch (UnsupportedEncodingException e) {
@@ -730,7 +716,7 @@ public abstract class BaseClient {
 			throw new PresignedURLException("Failed to upload to presigned URL", e, null);
 		}
 
-		int statusCode = psURLresponse.getResponse().getStatusLine().getStatusCode();
+		final var statusCode = psURLresponse.getResponse().getCode();
 		if (statusCode < 200 || statusCode >= 300) {
 			throw new PresignedURLException(
 				String.format("Error when uploading to presigned URL. StatusCode: %d", statusCode),
@@ -768,9 +754,12 @@ public abstract class BaseClient {
 		return response;
 	}
 
-	private InternalHttpResponse executeRequest(HttpUriRequest request)
-		throws PangeaException, IOException, ClientProtocolException {
-		return new InternalHttpResponse(httpClient.execute(request));
+	private InternalHttpResponse executeRequest(final ClassicHttpRequest request) throws PangeaException {
+		try {
+			return httpClient.execute(request, response -> new InternalHttpResponse(response));
+		} catch (IOException e) {
+			throw new PangeaException("Failed to execute request", e);
+		}
 	}
 
 	private <Req extends BaseRequest> InternalHttpResponse postSingle(URI url, Req request, FileData fileData)
@@ -835,7 +824,7 @@ public abstract class BaseClient {
 
 	private InternalHttpResponse handleQueued(InternalHttpResponse response) throws PangeaException {
 		if (
-			response.getResponse().getStatusLine().getStatusCode() != 202 ||
+			response.getResponse().getCode() != 202 ||
 			!this.config.isQueuedRetryEnabled() ||
 			this.config.getPollResultTimeout() <= 1
 		) {
@@ -859,7 +848,7 @@ public abstract class BaseClient {
 		String requestId = header.getRequestId();
 		String path = pollResultPath(requestId);
 
-		while (response.getResponse().getStatusLine().getStatusCode() == 202 && !reachedTimeout(start)) {
+		while (response.getResponse().getCode() == 202 && !reachedTimeout(start)) {
 			delay = getDelay(retryCounter, start);
 			this.logger.debug(
 					String.format(
@@ -962,7 +951,7 @@ public abstract class BaseClient {
 				)
 			);
 
-		if (httpResponse.getResponse().getStatusLine().getStatusCode() == 503) {
+		if (httpResponse.getResponse().getCode() == 503) {
 			throw new ServiceTemporarilyUnavailable(httpResponse.getBody());
 		}
 

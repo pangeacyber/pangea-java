@@ -1,17 +1,21 @@
 package cloud.pangeacyber.pangea;
 
+import java.io.IOException;
 import java.util.Set;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.ServiceUnavailableRetryStrategy;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.Args;
+import org.apache.hc.client5.http.HttpRequestRetryStrategy;
+import org.apache.hc.core5.concurrent.CancellableDependency;
+import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.protocol.HttpContext;
+import org.apache.hc.core5.util.Args;
+import org.apache.hc.core5.util.TimeValue;
 
 /**
- * {@link ServiceUnavailableRetryStrategy} implementation that retries HTTP/500,
+ * {@link HttpRequestRetryStrategy} implementation that retries HTTP/500,
  * HTTP/502, HTTP/503, and HTTP/504 responses.
  */
-public final class ServerErrorRetryStrategy implements ServiceUnavailableRetryStrategy {
+public final class ServerErrorRetryStrategy implements HttpRequestRetryStrategy {
 
 	/** HTTP status codes that may be retried. */
 	private static final Set<Integer> RETRYABLE_HTTP_CODES = Set.of(
@@ -24,14 +28,14 @@ public final class ServerErrorRetryStrategy implements ServiceUnavailableRetrySt
 	/** Maximum number of allowed retries. */
 	private final int maxRetries;
 
-	/** Retry interval between subsequent requests, in milliseconds. */
-	private final long retryInterval;
+	/** Retry interval between subsequent requests. */
+	private final TimeValue retryInterval;
 
 	public ServerErrorRetryStrategy() {
-		this(3, 5000);
+		this(3, TimeValue.ofMilliseconds(5000));
 	}
 
-	public ServerErrorRetryStrategy(final int maxRetries, final long retryInterval) {
+	public ServerErrorRetryStrategy(final int maxRetries, final TimeValue retryInterval) {
 		super();
 		Args.positive(maxRetries, "maxRetries");
 		Args.positive(retryInterval, "retryInterval");
@@ -40,21 +44,48 @@ public final class ServerErrorRetryStrategy implements ServiceUnavailableRetrySt
 	}
 
 	/**
-	 * Determines if a method should be retried given the response from the server.
-	 * @param response Response from the server.
+	 * Determines if a method should be retried after an I/O exception occurred
+	 * during execution.
+	 * @param request Request that failed due to an I/O exception.
+	 * @param exception Exception that occurred.
 	 * @param executionCount Number of times this method has been unsuccessfully executed.
 	 * @param context Context for the request execution.
-	 * @return true if the method should be retried, false otherwise.
+	 * @return true if the request should be retried, false otherwise.
+	 */
+	@Override
+	public final boolean retryRequest(
+		HttpRequest request,
+		IOException exception,
+		int executionCount,
+		HttpContext context
+	) {
+		if (executionCount > maxRetries) {
+			return false;
+		}
+
+		if (request instanceof CancellableDependency && ((CancellableDependency) request).isCancelled()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Determines if a method should be retried given the response from the target server.
+	 * @param response Response from the target server.
+	 * @param executionCount Number of times this method has been unsuccessfully executed.
+	 * @param context Context for the request execution.
+	 * @return true if the request should be retried, false otherwise.
 	 */
 	@Override
 	public final boolean retryRequest(HttpResponse response, int executionCount, HttpContext context) {
-		final var statusCode = response.getStatusLine().getStatusCode();
+		final var statusCode = response.getCode();
 		return (executionCount <= maxRetries && RETRYABLE_HTTP_CODES.contains(statusCode));
 	}
 
 	/** @return The interval between the subsequent auto-retries. */
 	@Override
-	public final long getRetryInterval() {
+	public final TimeValue getRetryInterval(HttpResponse response, int executionCount, HttpContext context) {
 		return this.retryInterval;
 	}
 }

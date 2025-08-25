@@ -297,9 +297,7 @@ public abstract class BaseClient {
 			.create()
 			.setConnectionManager(connectionManager)
 			.setDefaultRequestConfig(config)
-			.setRetryStrategy(
-				new ServerErrorRetryStrategy(this.config.getMaxRetries(), TimeValue.of(this.config.getRetryInterval()))
-			)
+			.setRetryStrategy(new ServerErrorRetryStrategy(this.config.getMaxRetries()))
 			.addRequestInterceptorLast(new RetryHeaderInterceptor())
 			.build();
 	}

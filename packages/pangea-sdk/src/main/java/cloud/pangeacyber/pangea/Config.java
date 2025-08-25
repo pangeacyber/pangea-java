@@ -54,6 +54,7 @@ public final class Config {
 
 	/** Retry interval between subsequent requests. */
 	@lombok.Builder.Default
+	@Deprecated
 	Duration retryInterval = Duration.ofSeconds(5);
 
 	/** Maximum number of total HTTP connections. */

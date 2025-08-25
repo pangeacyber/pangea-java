@@ -17,21 +17,6 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
-  <repositories>
-      <repository>
-        <id>ossrh</id>
-        <name>ossrh-snapshot</name>
-        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        <snapshots>
-            <enabled>true</enabled>
-          <updatePolicy>always</updatePolicy>
-        </snapshots>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-      </repository>
-  </repositories>
-
   <dependencies>
     <dependency>
       <groupId>cloud.pangea</groupId>

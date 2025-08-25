@@ -30,19 +30,14 @@ public final class ServerErrorRetryStrategy implements HttpRequestRetryStrategy 
 	/** Maximum number of allowed retries. */
 	private final int maxRetries;
 
-	/** Retry interval between subsequent requests. */
-	private final TimeValue retryInterval;
-
 	public ServerErrorRetryStrategy() {
-		this(3, TimeValue.ofMilliseconds(5000));
+		this(3);
 	}
 
-	public ServerErrorRetryStrategy(final int maxRetries, final TimeValue retryInterval) {
+	public ServerErrorRetryStrategy(final int maxRetries) {
 		super();
 		Args.positive(maxRetries, "maxRetries");
-		Args.positive(retryInterval, "retryInterval");
 		this.maxRetries = maxRetries;
-		this.retryInterval = retryInterval;
 	}
 
 	/**

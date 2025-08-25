@@ -36,26 +36,6 @@
     <url>https://github.com/pangeacyber/pangea-java/tree/main/packages/pangea-sdk</url>
   </scm>
 
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
-  <repositories>
-    <repository>
-      <id>central</id>
-      <name>Maven Central</name>
-      <layout>default</layout>
-      <url>https://repo1.maven.org/maven2</url>
-    </repository>
-  </repositories>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>11</maven.compiler.release>
@@ -204,10 +184,6 @@
           <artifactId>maven-install-plugin</artifactId>
           <version>3.1.4</version>
         </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.1.4</version>
-        </plugin>
         <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
@@ -277,17 +253,6 @@
           </executions>
         </plugin>
         <plugin>
-          <groupId>org.sonatype.plugins</groupId>
-          <artifactId>nexus-staging-maven-plugin</artifactId>
-          <version>1.7.0</version>
-          <extensions>true</extensions>
-          <configuration>
-            <serverId>ossrh</serverId>
-            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-          </configuration>
-        </plugin>
-        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>license-maven-plugin</artifactId>
           <version>2.6.0</version>
@@ -301,6 +266,17 @@
     </pluginManagement>
 
     <plugins>
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.8.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <autoPublish>true</autoPublish>
+          <publishingServerId>central</publishingServerId>
+          <waitUntil>published</waitUntil>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
@@ -343,17 +319,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.7.0</version>
-        <extensions>true</extensions>
-        <configuration>
-          <serverId>ossrh</serverId>
-          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-        </configuration>
       </plugin>
       <!--
       <plugin>

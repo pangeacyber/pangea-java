@@ -1,24 +1,26 @@
 package cloud.pangeacyber.pangea.ai_guard.results;
 
+import cloud.pangeacyber.pangea.ai_guard.models.Message;
 import cloud.pangeacyber.pangea.ai_guard.models.TextGuardDetectors;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.util.List;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-@Value
-public final class TextGuardResult<TMessages> {
+public final class TextGuardResult {
 
 	/** Updated prompt text, if applicable. */
 	String promptText;
 
 	/** Updated structured prompt, if applicable. */
-	TMessages promptMessages;
+	List<Message> promptMessages;
 
 	/** Whether or not the prompt triggered a block detection. */
 	boolean blocked;

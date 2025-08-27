@@ -406,8 +406,21 @@
                               "description": "Updated prompt text, if applicable."
                             },
                             "prompt_messages": {
-                              "type": "object",
-                              "description": "Updated structured prompt, if applicable."
+                              "type": "array",
+                              "description": "Updated structured prompt, if applicable.",
+                              "items": {
+                                "type": "object",
+                                "required": ["role", "content"],
+                                "properties": {
+                                  "role": {
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "string"
+                                  }
+                                },
+                                "additionalProperties": false
+                              }
                             },
                             "blocked": {
                               "type": "boolean",

@@ -2,37 +2,46 @@ package cloud.pangeacyber.pangea.ai_guard.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
 import cloud.pangeacyber.pangea.ai_guard.models.LogFields;
+import cloud.pangeacyber.pangea.ai_guard.models.Message;
 import cloud.pangeacyber.pangea.ai_guard.models.Overrides;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
+import lombok.With;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Jacksonized
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @SuperBuilder
 @Value
-public final class TextGuardRequest<TMessages> extends BaseRequest {
+@With
+public final class TextGuardRequest extends BaseRequest {
 
 	/**
 	 * Text to be scanned by AI Guard for PII, sensitive data, malicious
 	 * content, and other data types defined by the configuration. Supports
 	 * processing up to 10KB of text.
 	 */
-	String text;
+	@Builder.Default
+	String text = null;
 
 	/**
 	 * Structured messages data to be scanned by AI Guard for PII, sensitive
 	 * data, malicious content, and other data types defined by the
 	 * configuration. Supports processing up to 10KB of JSON text.
 	 */
-	TMessages messages;
+	@Builder.Default
+	List<Message> messages = null;
 
 	/**
 	 * Recipe key of a configuration of data types and settings defined in the

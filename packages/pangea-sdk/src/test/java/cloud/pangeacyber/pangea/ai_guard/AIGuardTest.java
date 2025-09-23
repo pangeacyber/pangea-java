@@ -5,7 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import cloud.pangeacyber.pangea.Config;
+import cloud.pangeacyber.pangea.ai_guard.models.ImageAction;
+import cloud.pangeacyber.pangea.ai_guard.models.ImageOverride;
 import cloud.pangeacyber.pangea.ai_guard.models.Message;
+import cloud.pangeacyber.pangea.ai_guard.models.Overrides;
 import cloud.pangeacyber.pangea.ai_guard.requests.GuardRequest;
 import cloud.pangeacyber.pangea.ai_guard.requests.TextGuardRequest;
 import cloud.pangeacyber.pangea.exceptions.PangeaAPIException;
@@ -82,6 +85,12 @@ final class AIGuardTest {
 				.builder()
 				.input(Map.of("messages", List.of(Message.builder().role("user").content("hello world").build())))
 				.recipe("pangea_prompt_guard")
+				.overrides(
+					Overrides
+						.builder()
+						.image(ImageOverride.builder().action(ImageAction.BLOCK).topics(List.of("test")).build())
+						.build()
+				)
 				.build()
 		);
 		assertTrue(response.isOk());

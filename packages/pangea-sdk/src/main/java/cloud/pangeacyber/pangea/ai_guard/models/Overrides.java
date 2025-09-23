@@ -31,6 +31,9 @@ public final class Overrides {
 	GibberishOverride gibberish = null;
 
 	@Builder.Default
+	ImageOverride image = null;
+
+	@Builder.Default
 	LanguageDetectionOverride languageDetection = null;
 
 	@Builder.Default

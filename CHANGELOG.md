@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - AI Guard: `onlyRelevantContent` parameter which allows for sending only
   relevant messages to AI Guard.
 - AI Guard: multimodal guard.
+- AI Guard: image detector override.
 
 ### Changed
 

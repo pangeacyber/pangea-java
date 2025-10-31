@@ -12,6 +12,7 @@ variables:
 
 sdk-integration-tests:
   stage: integration_tests
+  needs: [building-sdk]
   retry: 2
   variables:
     CLOUD: AWS
@@ -95,12 +96,14 @@ sdk-integration-tests:
 building-sdk:
   extends: .sdk-base
   stage: build
+  needs: []
   script:
     - mvn $MAVEN_CLI_OPTS compile
 
 publishing-sdk:
   extends: .sdk-base
   stage: publish
+  needs: [building-sdk]
   script:
     - bash ../../dev/validate_tag.sh $CI_COMMIT_TAG
     - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true

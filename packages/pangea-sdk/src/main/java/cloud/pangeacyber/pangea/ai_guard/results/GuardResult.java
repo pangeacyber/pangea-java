@@ -1,6 +1,6 @@
 package cloud.pangeacyber.pangea.ai_guard.results;
 
-import cloud.pangeacyber.pangea.ai_guard.models.TextGuardDetectors;
+import cloud.pangeacyber.pangea.ai_guard.models.GuardDetectors;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -15,7 +15,7 @@ import lombok.Value;
 public final class GuardResult {
 
 	/** Result of the recipe analyzing and input prompt. */
-	TextGuardDetectors detectors;
+	GuardDetectors detectors;
 
 	/** Result of the recipe evaluating configured rules */
 	Object accessRules;

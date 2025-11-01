@@ -1,12 +1,13 @@
 package cloud.pangeacyber.pangea.ai_guard.requests;
 
 import cloud.pangeacyber.pangea.BaseRequest;
+import cloud.pangeacyber.pangea.ai_guard.models.EventType;
+import cloud.pangeacyber.pangea.ai_guard.models.ExtraInfo;
 import cloud.pangeacyber.pangea.ai_guard.models.Overrides;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import java.util.Map;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -44,11 +45,6 @@ public final class GuardRequest extends BaseRequest {
 	Boolean debug = null;
 
 	Overrides overrides;
-
-	/**
-	 * Name of source application.
-	 */
-	String appName;
 
 	/**
 	 * Underlying LLM. Example: 'OpenAI'.
@@ -97,4 +93,14 @@ public final class GuardRequest extends BaseRequest {
 
 	/** (AIDR) collector instance id. */
 	String collectorInstanceId;
+
+	/** (AIDR) Event Type. */
+	@Builder.Default
+	EventType eventType = EventType.INPUT;
+
+	/** Id of source application/agent */
+	String appId;
+
+	/** (AIDR) Logging schema. */
+	ExtraInfo extraInfo;
 }

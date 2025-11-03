@@ -1,6 +1,6 @@
 package cloud.pangeacyber.pangea.exceptions;
 
-import com.networknt.schema.ValidationMessage;
+import com.networknt.schema.Error;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -10,40 +10,38 @@ import java.util.stream.Collectors;
  */
 public class SchemaValidationException extends RuntimeException {
 
-	private final transient Collection<ValidationMessage> validationMessages;
+	private final transient Collection<Error> errors;
 
-	public SchemaValidationException(Collection<ValidationMessage> validationMessages) {
-		this.validationMessages = validationMessages;
+	public SchemaValidationException(Collection<Error> errors) {
+		this.errors = errors;
 	}
 
 	public SchemaValidationException(String message) {
 		super(message);
-		this.validationMessages = null;
+		this.errors = null;
 	}
 
-	public SchemaValidationException(String message, Collection<ValidationMessage> validationMessages) {
+	public SchemaValidationException(String message, Collection<Error> errors) {
 		super(message);
-		this.validationMessages = validationMessages;
+		this.errors = errors;
 	}
 
 	public SchemaValidationException(Throwable throwable) {
 		super(throwable);
-		this.validationMessages = null;
+		this.errors = null;
 	}
 
 	public SchemaValidationException(String message, Throwable throwable) {
 		super(message, throwable);
-		this.validationMessages = null;
+		this.errors = null;
 	}
 
 	@Override
 	public String getMessage() {
-		return this.validationMessages != null
+		return this.errors != null
 			? super.getMessage() +
 			System.lineSeparator() +
-			this.validationMessages.stream()
-				.map(ValidationMessage::getMessage)
-				.collect(Collectors.joining(System.lineSeparator()))
+			this.errors.stream().map(Error::getMessage).collect(Collectors.joining(System.lineSeparator()))
 			: super.getMessage();
 	}
 }

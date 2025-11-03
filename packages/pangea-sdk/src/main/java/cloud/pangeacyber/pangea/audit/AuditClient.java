@@ -21,11 +21,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.networknt.schema.Error;
 import com.networknt.schema.InputFormat;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
-import com.networknt.schema.SpecVersion.VersionFlag;
-import com.networknt.schema.ValidationMessage;
+import com.networknt.schema.Schema;
+import com.networknt.schema.SchemaRegistry;
+import com.networknt.schema.SpecificationVersion;
 import io.swagger.util.Json;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import io.swagger.v3.parser.core.models.ParseOptions;
@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -127,8 +128,10 @@ public class AuditClient extends BaseClient {
 	/** Name of the schema for Audit events in the OpenAPI spec. */
 	private static final String AUDIT_EVENT_SCHEMA_NAME = "AuditEvent";
 
-	/** JSON schema factory. */
-	private static final JsonSchemaFactory jsonSchemaFactory = JsonSchemaFactory.getInstance(VersionFlag.V202012);
+	/** JSON schema registry. */
+	private static final SchemaRegistry jsonSchemaRegistry = SchemaRegistry.withDefaultDialect(
+		SpecificationVersion.DRAFT_2020_12
+	);
 
 	LogSigner signer;
 	Map<Integer, PublishedRoot> publishedRoots;
@@ -139,7 +142,7 @@ public class AuditClient extends BaseClient {
 	Class<?> customSchemaClass = null;
 
 	/** Cached JSON schema for validating events. */
-	private JsonSchema eventSchema = null;
+	private Schema eventSchema = null;
 
 	/**
 	 * Whether or not to validate events against the OpenAPI schema before
@@ -255,7 +258,7 @@ public class AuditClient extends BaseClient {
 		validateEventSchema(request, Collections.singleton(event));
 	}
 
-	private JsonSchema initEventSchema(LogCommonRequest request) throws PangeaException, PangeaAPIException {
+	private Schema initEventSchema(LogCommonRequest request) throws PangeaException, PangeaAPIException {
 		// Fetch OpenAPI spec.
 		final var rawOpenApiSpec = openapi(request);
 
@@ -276,7 +279,7 @@ public class AuditClient extends BaseClient {
 		} catch (JsonProcessingException error) {
 			throw new SchemaValidationException("Failed to serialize or deserialize event schema.", error);
 		}
-		return jsonSchemaFactory.getSchema(schemaNode);
+		return jsonSchemaRegistry.getSchema(schemaNode);
 	}
 
 	/**
@@ -296,13 +299,16 @@ public class AuditClient extends BaseClient {
 
 		var index = 0;
 		for (var event : events) {
-			Set<ValidationMessage> validationMessages;
+			List<Error> validationMessages;
 			try {
 				validationMessages =
 					localEventSchema.validate(
 						objectMapper.writeValueAsString(event),
 						InputFormat.JSON,
-						executionContext -> executionContext.getExecutionConfig().setFormatAssertionsEnabled(true)
+						executionContext ->
+							executionContext.executionConfig(executionConfig ->
+								executionConfig.formatAssertionsEnabled(true)
+							)
 					);
 			} catch (JsonProcessingException error) {
 				throw new SchemaValidationException("Failed to serialize event.", error);

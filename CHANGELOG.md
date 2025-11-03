@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 5.5.0 - 2025-11-03
+
 ### Added
 
 - AI Guard: topic detector results in the multimodal guard.

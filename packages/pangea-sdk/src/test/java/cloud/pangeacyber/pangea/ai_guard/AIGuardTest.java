@@ -100,5 +100,6 @@ final class AIGuardTest {
 		assertEquals(200, response.getHttpResponse().getCode());
 		assertNotNull(response.getResult());
 		assertNotNull(response.getResult().getDetectors());
+		System.out.println(response.getResult().getDetectors());
 	}
 }

@@ -1,8 +1,10 @@
 package cloud.pangeacyber.pangea.ai_guard.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Value;
@@ -11,14 +13,21 @@ import lombok.Value;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @Value
-public final class GuardDetectors {
+public final class TopicResult {
 
-	GuardDetector<PromptInjectionResult> maliciousPrompt;
-	GuardDetector<RedactEntityResult> confidentialAndPiiEntity;
-	GuardDetector<MaliciousEntityResult> maliciousEntity;
-	GuardDetector<RedactEntityResult> customEntity;
-	GuardDetector<RedactEntityResult> secretAndKeyEntity;
-	GuardDetector<LanguageDetectionResult> language;
-	GuardDetector<LanguageDetectionResult> code;
-	GuardDetector<TopicResult> topic;
+	@JsonProperty("action")
+	String action;
+
+	@JsonProperty("topics")
+	List<Topic> topics;
+
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+	@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+	@Value
+	public static class Topic {
+
+		String topic;
+		Float confidence;
+	}
 }

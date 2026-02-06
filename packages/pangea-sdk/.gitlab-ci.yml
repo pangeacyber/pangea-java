@@ -31,7 +31,6 @@ sdk-integration-tests:
     SERVICE_USER_INTEL_ENV: LVE
     SERVICE_PROMPT_GUARD_ENV: LVE
     SERVICE_REDACT_ENV: LVE
-    SERVICE_SANITIZE_ENV: LVE
     SERVICE_VAULT_ENV: LVE
     SERVICE_SHARE_ENV: LVE
 
@@ -84,8 +83,6 @@ sdk-integration-tests:
         TEST: ITPromptGuardTest
       - ENV: ${SERVICE_REDACT_ENV}
         TEST: ITRedactTest
-      - ENV: ${SERVICE_SANITIZE_ENV}
-        TEST: ITSanitizeTest
       - ENV: ${SERVICE_SHARE_ENV}
         TEST: ITShareTest
       - ENV: ${SERVICE_VAULT_ENV}
